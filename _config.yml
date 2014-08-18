@@ -1,0 +1,6 @@
+name: OpenMach
+markdown: rdiscount
+safe: true
+lsi: false
+pygments: true
+destination: ../www-target
