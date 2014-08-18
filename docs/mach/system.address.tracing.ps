@@ -1,0 +1,5623 @@
+%!PS-Adobe-2.0
+%%Title: tr.mss
+%%DocumentFonts: (atend)
+%%Creator: Brad Chen and Scribe 7(1700)
+%%CreationDate: 4 August 1993 11:10
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale /showpage {} def} bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 0 1
+BS
+0 SI
+16 /Times-Bold AF
+14581 19072 MT
+(Software Methods for System Address Tracing)SH
+13 /Times-Roman AF
+26430 22832 MT
+(J. Bradley Chen)SH
+26772 24562 MT
+(1 August 1993)SH
+26049 26292 MT
+(CMU-CS-93-188)SH
+11 SS 
+24291 31637 MT
+(School of Computer Science)SH
+24429 33034 MT
+(Carnegie Mellon University)SH
+26018 34431 MT
+(5000 Forbes Avenue)SH
+24564 35828 MT
+(Pittsburgh, PA 15213-3890)SH
+23698 47106 MT
+(Appeared in the proceedings of)SH
+/Times-Italic SF
+17813 48503 MT
+(The Fourth Workshop on Workstation Operating Systems)SH
+/Times-Roman SF
+(,)SH
+23422 49900 MT
+(October 14-15, 1993, Napa, CA.)SH
+9000 61955 MT
+(This research was sponsored by the)
+196 W( Avionics Laboratory, Wright Research and Development)195 W
+9000 63350 MT
+(Center, Aeronautical Systems Division \050AFSC\051, U. S. Air Force,)
+208 W( Wright-Patterson AFB, OH)209 W
+9000 64745 MT
+(45433-6543 under)
+4 W( Contract F33615-90-C-1465, Arpa Order No. 7597, and by an equipment grant)3 W
+9000 66140 MT
+(from Digital Equipment Corporation,)SH
+9000 68034 MT
+(The views and conclusions contained in this document are those of)
+61 W( the author and should not be)62 W
+9000 69429 MT
+(interpreted as representing)
+32 W( the official policies, either expressed or implied, of Digital Equipment)31 W
+9000 70824 MT
+(Corporation or the U.S. Government.)SH
+ES
+%%Page: 1 2
+BS
+0 SI
+11 /Times-Bold AF
+9000 61955 MT
+(Keywords)SH
+/Times-Roman SF
+(: operating systems, address tracing)SH
+ES
+%%Page: 2 3
+BS
+0 SI
+14 /Times-Bold AF
+27995 32062 MT
+(Abstract)SH
+11 /Times-Roman AF
+9000 34619 MT
+(This paper discusses the use of software methods to collect)
+63 W( system trace for DEC Ultrix and 3.0)64 W
+9000 36014 MT
+(Mach on a DECstation 5000/200.)
+7 W( We)
+288 W( assert that software methods are a valuable tool for collect-)6 W
+9000 37409 MT
+(ing system trace and understanding)
+122 W( operating system and memory system behavior for modern)123 W
+9000 38804 MT
+(workstation workloads.  Software methods have some well documented shortcomings.  We dis-)92 W
+9000 40199 MT
+(cuss how their impact)
+196 W( was minimized in our system.  We further support the validity of the)197 W
+9000 41594 MT
+(software approach by)
+10 W( comparing behavior predicted by our tracing/simulation system to measure-)9 W
+9000 42989 MT
+(ments made with less intrusive methods.)SH
+ES
+%%Page: 3 4
+BS
+0 SI
+10 /Times-Roman AF
+30350 75600 MT
+(3)SH
+ES
+%%Page: 1 5
+BS
+0 SI
+13 /Times-Bold AF
+9000 18038 MT
+(1. Introduction)SH
+11 /Times-Roman AF
+10000 19435 MT
+(Prior research has established address)
+39 W( tracing and trace-based simulation as important tools for)40 W
+9000 20832 MT
+(understanding memory behavior of modern workstation workloads)2292 W
+9275 22229 MT
+([1, 2, 3, 5, 7, 8, 11, 13, 16, 17, 18, 20].)
+SH( Several)
+595 W( studies have used hardware methods to)
+160 W( collect)161 W
+9000 23626 MT
+(system trace, and have demonstrated the importance of system activity)
+95 W( in understanding overall)94 W
+9 SS 
+27323 24660 MT
+(1)SH
+11 SS 
+9000 25023 MT
+(behavior [1, 10, 20].)
+SH( With)
+364 W( one exception)45 W
+27773 XM
+(. The current system is a direct descendent of the DEC)45 W
+9000 26420 MT
+(WRL system.  The Titan work was not published.  software address tracing has not been)
+49 W( used in)48 W
+9000 27817 MT
+(studies of system behavior.  This paper discusses our experience using software methods to)
+42 W( trace)43 W
+9000 29214 MT
+(DEC Ultrix and Mach)
+7 W( 3.0 systems on a DECstation 5000/200.  We will demonstrate that software)6 W
+9000 30611 MT
+(methods are an important tool for understanding system behavior.)SH
+13 /Times-Bold AF
+9000 34362 MT
+(2. Some Answers)SH
+11 /Times-Roman AF
+10000 35759 MT
+(Many issues were raised)
+166 W( during the development of the tracing system, both by skeptics of)167 W
+9000 37156 MT
+(software tracing methods and skeptics in general.  Now that the system)
+243 W( has been built, the)242 W
+9000 38553 MT
+(answers to)
+2 W( some of their questions are clearer.  Here we present a number of potential weaknesses)3 W
+9000 39950 MT
+(of software methods, and how we have addressed them in our system.)SH
+12680 42300 MT
+(workload)SH
+27038 XM
+(Description)SH
+42283 XM
+(Mach)SH
+46044 XM
+(Ultrix)SH
+42557 43496 MT
+(time)SH
+46380 XM
+(time)SH
+37340 50 11930 44136 LH BX1
+-2990 50 17585 44136 LV BX1
+-2990 50 41624 44136 LV BX1
+-2990 50 45447 44136 LV BX1
+/Times-Italic SF
+12879 45290 MT
+(egrep)SH
+/Times-Roman SF
+17984 XM
+(The pattern search program run three times over a)SH
+43123 XM
+(2.01)SH
+46946 XM
+(1.90)SH
+17984 46486 MT
+(27K input file.)SH
+37340 50 11930 47126 LH BX1
+/Times-Italic SF
+12879 48280 MT
+(gcc)SH
+/Times-Roman SF
+17984 XM
+(The GNU C compiler converts a 17K \050preprocessed\051)SH
+43123 XM
+(3.69)SH
+46946 XM
+(4.20)SH
+17984 49476 MT
+(source file into optimized Sun-3 assembly code.)SH
+37340 50 11930 50116 LH BX1
+/Times-Italic SF
+12879 51270 MT
+(tomcatv)SH
+/Times-Roman SF
+17984 XM
+(A vectorized mesh generation program, in Fortran.)SH
+42023 XM
+(139.42)SH
+45846 XM
+(155.44)SH
+37340 10764 50 11930 51910 BX BX1
+-7774 50 17585 51910 LV BX1
+-7774 50 41624 51910 LV BX1
+-7774 50 45447 51910 LV BX1
+/Times-Bold SF
+23405 53662 MT
+(Table 2-1:)SH
+/Times-Roman SF
+28752 XM
+(Example workloads.)SH
+25835 55414 MT
+(Times are in seconds.)SH
+10000 57365 MT
+(We use three)
+183 W( example workloads during the following discussion.  Table 2-1 describes the)182 W
+9000 58762 MT
+(workloads. Table)
+275 W( 2-2 gives some execution information.)SH
+10800 50 9000 66572 UL
+7 SS 
+9900 68073 MT
+(1)SH
+9 SS 
+10250 68400 MT
+(The exception is the software-based tracing system developed at DEC WRL for WRL Titan [5])SH
+10 SS 
+30350 75600 MT
+(4)SH
+ES
+%%Page: 2 6
+BS
+0 SI
+1 SS 
+5760 9000 12960 PB 
+%%BeginDocument: workloads.ps
+%!PS-Adobe-1.0
+%%Creator: OLIVIA.MACH.CS.CMU.EDU:bchen (Brad Chen)
+%%Title: stdin
+%%CreationDate: Sat Jul 31 21:22:32 1993
+%%DocumentFonts: Times-Roman Times-Italic Times-Bold Symbol Times-Roman DIThacks
+%%%Pages: (atend)
+%%EndComments
+% Start of pscat.pro -- prolog for troff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCS: $Header: pscat.pro,v 2.2 91/02/21 18:00:13 ern Exp $
+%
+% HISTORY
+% $Log: pscat.pro,v $
+% Revision 2.2  91/02/21  18:00:13  ern
+%       orig
+%       [91/02/20  15:27:53  ern]
+% 
+%
+save /pscatsave exch def
+/$pscat 50 dict def
+$pscat begin
+/fm [1 0 0 1 0 0] def
+/xo 0 def /yo 0 def
+/M /moveto load def
+/R /show load def
+/S {exch currentpoint exch pop moveto show}def
+/T {exch currentpoint pop exch moveto show}def
+/U {3 1 roll moveto show}def
+/siz 0 def
+/font 0 def
+/Z {/siz exch def SF}def
+/F {/font exch def SF}def
+/SF{font 0 ne
+    {catfonts font 1 sub get fm 0 siz put fm 3 siz neg put 
+     fm makefont setfont}if}def
+/BP{save/catsv exch def 0 792 translate 72 432 div dup neg scale 
+  xo yo translate 0 0 moveto}def
+/EP{catsv restore showpage}def
+
+% definitions for PPROC callback functions
+% each PPROC is called with the following number on the stack:
+% pointsize charcode railmag pswidth pschar x y wid
+/$pprocs 50 dict def
+/fractm [.65 0 0 .6 0 0] def
+% fractions
+/PS1{gsave $pprocs begin
+    /wid exch def pop pop pop pop pop /ch exch def /size exch def
+    /pair $pprocs ch get def /cf currentfont def
+    cf fractm makefont setfont
+    0 .3 size mul 6 mul 2 copy neg rmoveto pair 0 get show rmoveto
+    currentfont cf setfont (\244) show setfont
+    pair 1 get show grestore wid .06 div 0 rmoveto end}def
+$pprocs begin
+8#34 [(1)(4)] def
+8#36 [(1)(2)] def
+8#46 [(3)(4)] def
+end
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+/rls{rlineto stroke}def
+/currx{currentpoint pop}def
+/dround{transform round exch round exch itransform} def
+end
+end
+/DIThacks exch definefont pop
+/xo -540 def /yo 4470 def
+/catfonts [
+        /Times-Roman findfont
+        /Times-Italic findfont
+        /Times-Bold findfont
+        /Symbol findfont
+        /Times-Roman findfont
+        /DIThacks findfont
+        ] def
+%%EndProlog
+%%%Page: ? 1
+BP
+6 F
+54 Z
+670 -69(i)U
+679(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)S
+959 -3(i)U
+1 F
+1345 0(in)U
+1392(s)S
+1415(t)S
+1433(r)S
+1454(u)S
+1486(ct)S
+1528(io)S
+1573(n)S
+1605(s)S
+2304(d)S
+2334(a)S
+2360(t)S
+2378(a)S
+2422(r)S
+2443(e)S
+2470(f)S
+2490(e)S
+2517(r)S
+2538(e)S
+2565(n)S
+2597(ce)S
+2648(s)S
+6 F
+976 -3(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+670 63(i)U
+1 F
+66(wo)T
+766(r)S
+787(k)S
+817(lo)S
+862(a)S
+888(d)S
+1072(U)S
+1116(lt)S
+1149(r)S
+1170(ix)S
+1343(%sys)S
+1591(M)S
+1644(a)S
+1670(ch)S
+1858(%sys)S
+2088(U)S
+2132(lt)S
+2165(r)S
+2186(ix)S
+2344(%sys)S
+2578(M)S
+2631(a)S
+2657(ch)S
+2830(%sys)S
+6 F
+679 63(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+1 F
+787 132(e)U
+814(gr)S
+862(e)S
+889(p)S
+1057(4)S
+1086(3)S
+1115(4)S
+1144(8)S
+1173(8)S
+1202(1)S
+1231(3)S
+1260(4)S
+1379(4)S
+1408(.0)S
+1572(4)S
+1601(5)S
+1630(0)S
+1659(6)S
+1688(3)S
+1717(0)S
+1746(9)S
+1775(5)S
+1894(7)S
+1923(.4)S
+2087(9)S
+2116(3)S
+2145(9)S
+2174(8)S
+2203(1)S
+2232(8)S
+2261(9)S
+2380(7)S
+2409(.7)S
+2544(1)S
+2573(0)S
+2602(0)S
+2631(6)S
+2660(5)S
+2689(3)S
+2718(8)S
+2747(5)S
+2837(1)S
+2866(3)S
+2895(.8)S
+843 192(gcc)U
+1057(3)S
+1086(3)S
+1115(2)S
+1144(1)S
+1173(2)S
+1202(1)S
+1231(3)S
+1260(1)S
+1350(3)S
+1379(1)S
+1408(.3)S
+1572(3)S
+1601(8)S
+1630(7)S
+1659(9)S
+1688(3)S
+1717(1)S
+1746(0)S
+1775(6)S
+1865(4)S
+1894(1)S
+1923(.2)S
+2058(1)S
+2087(0)S
+2116(1)S
+2145(9)S
+2174(2)S
+2203(4)S
+2232(2)S
+2261(3)S
+2351(2)S
+2380(8)S
+2409(.7)S
+2544(1)S
+2573(3)S
+2602(5)S
+2631(3)S
+2660(9)S
+2689(2)S
+2718(6)S
+2747(1)S
+2837(4)S
+2866(6)S
+2895(.3)S
+2910 252(0)U
+6 F
+670 249(i)U
+1 F
+724 252(t)U
+742(o)S
+772(m)S
+820(ca)S
+870(t)S
+888(v)S
+999(2)S
+1028(0)S
+1057(0)S
+1086(6)S
+1115(4)S
+1144(9)S
+1173(0)S
+1202(5)S
+1231(5)S
+1260(6)S
+1379(1)S
+1408(.0)S
+1514(2)S
+1543(0)S
+1572(0)S
+1601(4)S
+1630(8)S
+1659(6)S
+1688(0)S
+1717(5)S
+1746(4)S
+1775(6)S
+1894(0)S
+1923(.9)S
+2029(9)S
+2058(7)S
+2087(0)S
+2116(3)S
+2145(0)S
+2174(7)S
+2203(7)S
+2232(7)S
+2261(6)S
+2380(0)S
+2409(.7)S
+2515(9)S
+2544(7)S
+2573(0)S
+2602(8)S
+2631(0)S
+2660(4)S
+2689(0)S
+2718(3)S
+2747(2)S
+2866(0)S
+2895(.)S
+6 F
+679 249(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+670(c)S
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+958 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+2002 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+3001 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+EP
+%%Trailer
+pscatsave end restore
+%%%Pages: 1
+
+%%EndDocument
+ PE 11 /Times-Bold AF
+14578 14712 MT
+(Table 2-2:)SH
+/Times-Roman SF
+19925 XM
+(Example Workloads: Instruction and Data Reference Counts)SH
+12 /Times-Bold AF
+9000 18396 MT
+(2.1. Why bother?  Just trace with hardware.)SH
+11 /Times-Roman AF
+10000 19793 MT
+(Using direct measurement of hardware was relatively straightforward for the VAX)
+199 W( 11/780,)200 W
+9000 21190 MT
+(when measurement devices as fast as the CPU were not hard to obtain.)
+45 W( For)
+363 W( the VAX, speed and)44 W
+9000 22587 MT
+(accuracy were)
+134 W( significant advantages of hardware tracing methods.  Computer architecture has)135 W
+9000 23984 MT
+(changed in several fundamental ways since)
+130 W( the VAX 11/780.  Current trends suggest two fun-)129 W
+9000 25381 MT
+(damental limitations of hardware tracing:)SH
+/Symbol SF
+10969 26959 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(The Relative Speed of Memory and CPU:)97 W
+/Times-Roman SF
+32194 XM
+(Any measurement system will be fun-)97 W
+11750 28156 MT
+(damentally limited by the speed at which measurements can be recorded.  It)
+57 W( follows)56 W
+11750 29353 MT
+(that hardware methods are fundamentally limited by the speed of the)
+31 W( memory device)32 W
+11750 30550 MT
+(they use.  Among measurement methodologies, the)
+227 W( data requirements of address)226 W
+11750 31747 MT
+(tracing are extreme.  Though it should)
+73 W( be possible to build a memory device as fast)74 W
+11750 32944 MT
+(as the fastest existing)
+187 W( processor, the cost and engineering talent required to build)186 W
+11750 34141 MT
+(such a device increases as computer architectures become complex)
+76 W( and as semicon-)77 W
+11750 35338 MT
+(ductor processes become exotic.)
+39 W( This)
+352 W( has direct impact on use of hardware methods)38 W
+11750 36535 MT
+(to collect address trace.  In contrast, software methods scale with)
+36 W( the performance of)37 W
+11750 37732 MT
+(the subject machine.  They benefit)
+70 W( fully from the subject machine's memory hierar-)69 W
+11750 38929 MT
+(chy, while avoiding the engineering effort required to build it.)SH
+11750 40625 MT
+(A further advantage of software methods for address tracing)
+5 W( is that trace can be made)6 W
+11750 41822 MT
+(significantly more compact than trace from hardware methods.)SH
+/Symbol SF
+10969 43518 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(On-Chip Structures:)195 W
+/Times-Roman SF
+22162 XM
+(Another aspect)
+195 W( of modern architectures that interferes with)194 W
+11750 44715 MT
+(hardware measurement is the movement of more functionality inside)
+92 W( of sealed chip)93 W
+11750 45912 MT
+(packages. This)
+465 W( limits the signals that are)
+95 W( realistically available for measurement to)94 W
+11750 47109 MT
+(those appearing on the chip's output pins.  A straightforward example of)
+344 W( the)345 W
+11750 48306 MT
+(problems this creates is on-chip caches.  Normally an on-chip)
+48 W( cache will prevent the)47 W
+11750 49503 MT
+(majority of memory references from ever appearing on)
+80 W( chip output pins.  It follows)81 W
+11750 50700 MT
+(that on-chip)
+159 W( caches much be disabled when a hardware monitor is used to collect)158 W
+9 SS 
+17566 51558 MT
+(2)SH
+11 SS 
+11750 51921 MT
+(address trace)107 W
+18016 XM
+(. Other)
+489 W( structures, such)
+107 W( as write buffers, instruction prefetch buffers,)108 W
+11750 53118 MT
+(or translation buffers, may simply be inaccessible.)SH
+11750 54814 MT
+(Even when counters or accurate timers are available to)
+6 W( measure events or cycles for a)5 W
+11750 56011 MT
+(given sequence of instructions, using)
+75 W( the counters can be tricky.  In general, system)76 W
+11750 57208 MT
+(modifications/reconfiguration are required)
+63 W( to delimit each code sequence of interest.)62 W
+11750 58405 MT
+(The problem becomes)
+79 W( more complex when contributions from various system com-)80 W
+11750 59602 MT
+(ponents \050i-cache, d-cache, write buffer, etc.\051 need to be isolated in the)
+14 W( measurements.)13 W
+11750 60799 MT
+(All such measurements are straightforward with a software simulator.)SH
+10800 50 9000 64544 UL
+7 SS 
+9900 66045 MT
+(2)SH
+9 SS 
+10250 66372 MT
+(Note that disabling caches will also have impact on)
+22 W( the time to execute a traced workload.  However, as the time to)23 W
+9000 67386 MT
+(analyze trace tends to be an)
+122 W( order of magnitude more than the time required to collect it, by hardware or software)121 W
+9000 68400 MT
+(methods, the time to collect trace is not an important issue.)SH
+10 SS 
+30350 75600 MT
+(2)SH
+ES
+%%Page: 3 7
+BS
+0 SI
+1 SS 
+30600 9000 37800 PB 
+%%BeginDocument: overview.tr.idraw
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Courier Helvetica-Bold Helvetica-Oblique
+%%%Pages: 1
+%%BoundingBox: 42 1 418 296
+%%EndComments
+
+50 dict begin
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+/patternGrayLevel idef
+patternGrayLevel -1 eq {
+/patternString idef
+} if
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+/fontDict printFont findfont printSize scalefont dup setfont def
+/descender fontDict begin 0 [FontBBox] 1 get FontMatrix end
+transform exch pop def
+/vertoffset 0 descender sub printSize sub printFont /Courier ne
+printFont /Courier-Bold ne and { 1 add } if def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 3 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 7 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.923077 0 0 0.923077 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Poly
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.929323 0 0 0.724138 22.7551 0.258675 ] concat
+%I 4
+28 6
+28 438
+460 438
+460 6
+4 Poly
+End
+
+Begin %I CBSpl
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.999219 0 0 0.753425 9.85531 -2.75385 ] concat
+%I 14
+235 239
+390 239
+433 239
+433 205
+433 58
+433 23
+399 23
+79 23
+45 23
+45 58
+45 205
+45 239
+79 239
+235 239
+14 CBSpl
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -4.99997 -26 ] concat
+%I
+295 92 373 196 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -4.99997 -26 ] concat
+%I
+304 84 382 187 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -4.99997 -26 ] concat
+%I
+313 75 390 179 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -4.99997 -26 ] concat
+%I
+321 66 399 170 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -4.99997 -26 ] concat
+%I
+330 58 408 161 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -4.99997 -26 ] concat
+%I
+338 49 416 153 Rect
+End
+
+Begin %I CBSpl
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.629771 0 0 0.682635 55.0042 15.9595 ] concat
+%I 15
+485 420
+588 420
+614 420
+614 394
+605 282
+605 256
+580 256
+381 256
+355 256
+355 282
+364 394
+364 420
+390 420
+485 420
+485 420
+15 CBSpl
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-courier-medium-r-normal--10-100-*
+/Courier 10 SetF
+%I t
+[ 1 0 0 1 100 288 ] concat
+%I
+[
+(0x402018)
+(0x1001f2ec)
+(0x1001f2f0)
+(0x1001f304)
+(0x40202c)
+(0x402054)
+(.  .  .)
+] Text
+End
+
+Begin %I MLine
+%I b 65535
+1 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -81 -52 ] concat
+%I 3
+212 251
+212 191
+359 191
+3 MLine
+End
+
+Begin %I MLine
+%I b 65535
+1 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -150 -52 ] concat
+%I 2
+557 208
+557 260
+2 MLine
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-bold-r-normal--12-120-*
+/Helvetica-Bold 12 SetF
+%I t
+[ 1 0 0 1 178 253 ] concat
+%I
+[
+(Traced)
+(user)
+(workload)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-140-*
+/Helvetica-Oblique 14 SetF
+%I t
+[ 1 0 0 1 163 116 ] concat
+%I
+[
+(System)
+(trace)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-bold-r-normal--12-120-*
+/Helvetica-Bold 12 SetF
+%I t
+[ 1 0 0 1 79 54 ] concat
+%I
+[
+(Traced System)
+(\(Kernel + System Servers\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-bold-r-normal--12-120-*
+/Helvetica-Bold 12 SetF
+%I t
+[ 1 0 0 1 307 238 ] concat
+%I
+[
+(Analysis)
+(Program)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-courier-medium-r-normal--10-100-*
+/Courier 10 SetF
+%I t
+[ 1 0 0 1 338 122 ] concat
+%I
+[
+(0x80032014)
+(0x80300120)
+(0x80030124)
+(0x80030128)
+(0x80032060)
+(0x80045cfc)
+(0x80300200)
+(0x8003020c)
+(. . .)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 16 -81 ] concat
+%I
+81 288 150 374 Rect
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -10 -63 ] concat
+%I
+167 314 95 60 Elli
+End
+
+Begin %I Line
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1.19565 0 0 1 -64.7826 -63 ] concat
+%I
+236 167 279 167 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -10 -54 ] concat
+%I
+279 158 288 158 Line
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ PE 11 /Times-Bold AF
+20673 39552 MT
+(Figure 2-1:)SH
+/Times-Roman SF
+26446 XM
+(Overview of the tracing system.)SH
+12 /Times-Bold AF
+9000 43236 MT
+(2.2. Software methods don't work with operating system code.)SH
+11 /Times-Roman AF
+10000 44633 MT
+(Software methods have been used to trace DEC)
+33 W( Ultrix and 3.0 Mach, running on a DECstation)34 W
+9000 46030 MT
+(5000/200. The)
+633 W( tracing)
+179 W( system is based on a design developed at DEC WRL, and is a direct)178 W
+9000 47427 MT
+(descendent of earlier WRL tracing systems)
+44 W( [5].)
+SH( The)
+363 W( system)
+44 W( is based on an object-code rewriting)45 W
+9000 48824 MT
+(tool called epoxie)
+198 W( [21].)
+SH( Epoxie)
+671 W( rewrites programs)
+198 W( such that they generate address trace as a)197 W
+9000 50221 MT
+(side-effect of program execution.  See Figure 2-1 for a high-level diagram of the tracing system.)SH
+10000 52117 MT
+(There are)
+29 W( three kinds of entities in the tracing system: traced user workloads, the traced kernel,)30 W
+9000 53514 MT
+(and an analysis program to consume the trace.  The kernel is also involved)
+159 W( in controlling the)158 W
+9000 54911 MT
+(tracing system.  Appropriate mechanisms are employed to avoid tracing kernel activity that oc-)104 W
+9000 56308 MT
+(curs on behalf of the tracing system.)SH
+10000 58204 MT
+(At any instant during tracing the system is in one of two modes:  trace-generation or trace-)148 W
+9000 59601 MT
+(analysis. During)
+338 W( trace-generation, references from a given user workload goes into a per-process)32 W
+9000 60998 MT
+(buffer. When)
+531 W( that buffer)
+128 W( becomes full, a kernel trap occurs and the per-process trace is trans-)127 W
+9000 62395 MT
+(ferred to the large)
+43 W( in-kernel buffer.  When the in-kernel buffer becomes full, the system switches)44 W
+9000 63792 MT
+(from trace-generation to trace-analysis, during which an analysis program \050such)
+177 W( as a memory)176 W
+9000 65189 MT
+(system simulator\051 digests the trace.  Analysis continues until all pending trace)
+46 W( has been analyzed)47 W
+9000 66586 MT
+(and the in-kernel buffer is empty, at which time trace-generation resumes.)
+40 W( To)
+353 W( preserve the inter-)39 W
+9000 67983 MT
+(leaving of trace from)
+10 W( kernel and user processes, transfer of trace into the kernel buffer also occurs)11 W
+9000 69380 MT
+(each time the kernel is activated.)SH
+10 SS 
+30350 75600 MT
+(3)SH
+ES
+%%Page: 4 8
+BS
+0 SI
+12 /Times-Bold AF
+9000 8004 MT
+(2.3. Locore is too complicated and delicate to trace.)SH
+11 /Times-Roman AF
+10000 9401 MT
+(Everything is traced.  Epoxie instrumentation is used for all user workloads and for)
+60 W( all system)59 W
+9000 10798 MT
+(code written in C. Some system code written in assembler is instrumented by hand.)SH
+10000 12694 MT
+(Tracing interrupt and exception handling code is tricky but it's not impossible.  When)
+88 W( epoxie)89 W
+9000 14091 MT
+(instrumentation cannot be used, code)
+206 W( is instrumented by hand.  The high-level strategy is to)205 W
+9000 15488 MT
+(execute as much of the routine as is necessary to put the)
+114 W( machine in a 'clean' state, then write)115 W
+9000 16885 MT
+(enough machine state to the in-kernel trace buffer to)
+75 W( regenerate all memory references.  Four or)74 W
+9000 18282 MT
+(five words of trace was sufficient for most of the hand traced routines.)SH
+/Courier SF
+10000 19679 MT
+(Wbflush\050\051)SH
+/Times-Roman SF
+(, which flushes the write buffer, is)
+67 W( one routine that could not be instrumented by)68 W
+9000 21076 MT
+(epoxie. The)
+275 W( code for)SH
+/Courier SF
+18650 XM
+(wbflush\050\051)SH
+/Times-Roman SF
+24865 XM
+(looks something like this:)SH
+/Courier-Bold SF
+19560 23041 MT
+(LEAF\050wbflush\051)SH
+19560 24265 MT
+(1:)SH
+24840 25489 MT
+(bc0f 1b)1980 W
+24840 26713 MT
+(nop)SH
+24840 27937 MT
+(j ra)3960 W
+24840 29161 MT
+(nop)SH
+24840 30385 MT
+(END\050wbflush\051)SH
+/Times-Roman SF
+10000 32364 MT
+(This routine has two basic blocks of two instructions each.  In the first basic block,)
+123 W( the first)122 W
+9000 33761 MT
+(instruction \050)91 W
+/Courier SF
+(bc0f)SH
+/Times-Roman SF
+(\051 tests if the write buffer is empty.)
+91 W( The)459 W
+/Courier SF
+35494 XM
+(nop)SH
+/Times-Roman SF
+37841 XM
+(that follows fills a branch delay)92 W
+9000 35158 MT
+(slot. Epoxie)
+363 W( instrumentation inserts a)
+44 W( call to the basic block trace routine at the beginning of the)43 W
+9000 36555 MT
+(first basic block.  Unfortunately, the basic block)
+40 W( trace routine does two writes, so when it returns)41 W
+9000 37952 MT
+(and the)SH
+/Courier SF
+12482 XM
+(bc0f)SH
+/Times-Roman SF
+15397 XM
+(instruction checks the state of the write buffer, it is never empty.)SH
+10000 39848 MT
+(Another situation)
+77 W( in which epoxie instrumentation fails is when the machine runs with caches)76 W
+9000 41245 MT
+(isolated. Cache)
+561 W( isolation is used during cache flush routines.)
+143 W( In)
+563 W( this mode, cache misses fail)144 W
+9000 42642 MT
+(without going to memory.  Although)
+62 W( it may have been possible to fix the trace routines to refer-)61 W
+9000 44039 MT
+(ence memory through the uncached segment when the machine runs with caches isolated, in-)170 W
+9000 45436 MT
+(strumenting them by hand was straightforward and probably an easier solution.)SH
+10000 47332 MT
+(A further case where epoxie instrumentation can't)
+155 W( be used is the general exception handler.)154 W
+9000 48729 MT
+(The overall high-level strategy applies.  A further problem occurs because the)
+170 W( machine could)171 W
+9000 50126 MT
+(have been executing either epoxie-instrumented)
+195 W( or hand-instrumented code at the time of the)194 W
+9000 51523 MT
+(exception. This)
+275 W( creates in a certain amount of additional state that must be maintained.)SH
+10000 53419 MT
+(For the traced Ultrix)
+136 W( kernel there are 866 lines of hand-instrumented assembler.  The traced)137 W
+9000 54816 MT
+(Mach kernel required 711 lines of hand-instrumented assembler.)SH
+12 /Times-Bold AF
+9000 58500 MT
+(2.4. An operating system instrumented by software methods will introduce excessive)SH
+11100 59897 MT
+(distortion into trace data.  The resulting system will be so complicated, you)SH
+11100 61294 MT
+(can't tell if the trace is good or not.)SH
+11 /Times-Roman AF
+10000 62691 MT
+(There are two principle sources of distortion when tracing the system)
+86 W( with software methods:)85 W
+9000 64088 MT
+(memory dilation)
+19 W( and time dilation.  Memory dilation occurs because object code expands when it)20 W
+9000 65485 MT
+(is instrumented.)
+97 W( For)
+467 W( user programs and system servers, this text growth can result in increased)96 W
+9000 66882 MT
+(I/O, paging and TLB miss rates)
+24 W( [9].)
+SH( Memory)
+323 W( dilation is not an issue for kernel text, as the kernel)24 W
+9000 68279 MT
+(is loaded at boot time, and runs in unmapped, unpaged memory [12].)SH
+10 SS 
+30350 75600 MT
+(4)SH
+ES
+%%Page: 5 9
+BS
+0 SI
+11 /Times-Roman AF
+10000 7955 MT
+(The instrumentation)
+190 W( tools were modified extensively to minimize text expansion.  The text)189 W
+9000 9352 MT
+(growth factor)
+17 W( is observed to range between 1.9 and 2.3.  This compares very favorably with other)18 W
+9000 10749 MT
+(instrumentation tools.  Text commonly grows by a factor of five with the original epoxie.  When)46 W
+9000 12146 MT
+(used for address)
+91 W( tracing, the pixie tool from MIPS Computer Systems)
+92 W( [19])
+SH( commonly increases)92 W
+9 SS 
+20638 13180 MT
+(3)SH
+11 SS 
+9000 13543 MT
+(text size by a factor of six)46 W
+21088 XM
+(. Text)
+367 W( growth for QPT)
+46 W( [4, 14])
+SH( ranges from four to six)
+46 W( [15].)
+SH( It)
+365 W( should)45 W
+9000 14940 MT
+(be noted that, excepting the modified epoxie, minimal text growth was not a design objective for)43 W
+9000 16337 MT
+(any of the these tools.)SH
+10000 18233 MT
+(Limiting text growth reduces the impact of memory dilation.  The)
+11 W( impact of memory dilation is)10 W
+9000 19630 MT
+(further minimized by collecting trace on a machine with sufficient)
+59 W( memory to avoid paging, and)60 W
+9000 21027 MT
+(by simulating calls to)
+62 W( the user TLB miss handler, rather than tracing TLB misses with expanded)61 W
+9000 22424 MT
+(text.)SH
+10000 24320 MT
+(A second source of distortion is time dilation, which causes)
+75 W( an apparent speedup for behavior)76 W
+9000 25717 MT
+(independent of CPU speed: clock interrupts, scheduler policy)
+41 W( and I/O delays.  Instrumented code)40 W
+9000 27114 MT
+(runs slower than uninstrumented code by a factor of approximately)
+33 W( fifteen, so any activity whose)34 W
+9000 28511 MT
+(latency is independent of CPU speed appears to complete)
+111 W( about fifteen times faster.  For clock)110 W
+9000 29908 MT
+(interrupts, the clock)
+122 W( interrupt rate was slowed by a factor of fifteen.  Scheduler policy is more)123 W
+9000 31305 MT
+(difficult to adapt, as it depends significantly)
+50 W( on behavior and slowdown of individual workloads.)49 W
+9000 32702 MT
+(To avoid this source of distortion, we concentrate on workloads)
+240 W( where scheduler activity is)241 W
+9000 34099 MT
+(dominated by client-server relationships, such that scheduler)
+43 W( policy has no impact.  Similarly, no)42 W
+9000 35496 MT
+(special modifications were made to adapt I/O delays.  While it would be possible)
+102 W( to artificially)103 W
+9000 36893 MT
+(slow down I/O devices during tracing, I/O delays are)
+19 W( spent in the idle loop for our restricted class)18 W
+9000 38290 MT
+(of workloads, and thus have limited impact on memory system behavior.)SH
+10000 40186 MT
+(Additional trace analysis techniques provide)
+90 W( a high degree of confidence in the quality of the)91 W
+9000 41583 MT
+(trace generated by the instrumented)
+112 W( system.  Using a kernel with a user TLB miss counter, we)111 W
+9000 42980 MT
+(compared the TLB)
+357 W( miss counts predicted by the simulator to TLB miss counts from an)358 W
+9000 44377 MT
+(uninstrumented system \050See Table 2-3\051.)SH
+1 SS 
+5760 9000 51333 PB 
+%%BeginDocument: tlb.ps
+%!PS-Adobe-1.0
+%%Creator: OLIVIA.MACH.CS.CMU.EDU:bchen (Brad Chen)
+%%Title: stdin
+%%CreationDate: Sat Jul 31 21:22:37 1993
+%%DocumentFonts: Times-Roman Times-Italic Times-Bold Symbol Times-Roman DIThacks
+%%%Pages: (atend)
+%%EndComments
+% Start of pscat.pro -- prolog for troff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCS: $Header: pscat.pro,v 2.2 91/02/21 18:00:13 ern Exp $
+%
+% HISTORY
+% $Log: pscat.pro,v $
+% Revision 2.2  91/02/21  18:00:13  ern
+%       orig
+%       [91/02/20  15:27:53  ern]
+% 
+%
+save /pscatsave exch def
+/$pscat 50 dict def
+$pscat begin
+/fm [1 0 0 1 0 0] def
+/xo 0 def /yo 0 def
+/M /moveto load def
+/R /show load def
+/S {exch currentpoint exch pop moveto show}def
+/T {exch currentpoint pop exch moveto show}def
+/U {3 1 roll moveto show}def
+/siz 0 def
+/font 0 def
+/Z {/siz exch def SF}def
+/F {/font exch def SF}def
+/SF{font 0 ne
+    {catfonts font 1 sub get fm 0 siz put fm 3 siz neg put 
+     fm makefont setfont}if}def
+/BP{save/catsv exch def 0 792 translate 72 432 div dup neg scale 
+  xo yo translate 0 0 moveto}def
+/EP{catsv restore showpage}def
+
+% definitions for PPROC callback functions
+% each PPROC is called with the following number on the stack:
+% pointsize charcode railmag pswidth pschar x y wid
+/$pprocs 50 dict def
+/fractm [.65 0 0 .6 0 0] def
+% fractions
+/PS1{gsave $pprocs begin
+    /wid exch def pop pop pop pop pop /ch exch def /size exch def
+    /pair $pprocs ch get def /cf currentfont def
+    cf fractm makefont setfont
+    0 .3 size mul 6 mul 2 copy neg rmoveto pair 0 get show rmoveto
+    currentfont cf setfont (\244) show setfont
+    pair 1 get show grestore wid .06 div 0 rmoveto end}def
+$pprocs begin
+8#34 [(1)(4)] def
+8#36 [(1)(2)] def
+8#46 [(3)(4)] def
+end
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+/rls{rlineto stroke}def
+/currx{currentpoint pop}def
+/dround{transform round exch round exch itransform} def
+end
+end
+/DIThacks exch definefont pop
+/xo -600 def /yo 4470 def
+/catfonts [
+        /Times-Roman findfont
+        /Times-Italic findfont
+        /Times-Bold findfont
+        /Symbol findfont
+        /Times-Roman findfont
+        /DIThacks findfont
+        ] def
+%%EndProlog
+%%%Page: ? 1
+BP
+6 F
+54 Z
+1188 -69(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+1477 -3(i)U
+1 F
+1621 0(p)U
+1650(r)S
+1671(e)S
+1698(d)S
+1728(ict)S
+1785(e)S
+1812(d)S
+2124(m)S
+2172(e)S
+2199(a)S
+2225(s)S
+2248(u)S
+2280(r)S
+2301(e)S
+2328(d)S
+6 F
+1484 -3(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+1188 63(i)U
+1 F
+66(wo)T
+1284(r)S
+1305(k)S
+1335(lo)S
+1380(a)S
+1406(d)S
+1538(M)S
+1591(a)S
+1617(ch)S
+1803(U)S
+1847(lt)S
+1880(r)S
+1901(ix)S
+2066(M)S
+2119(a)S
+2145(ch)S
+2313(U)S
+2357(lt)S
+2390(r)S
+2411(ix)S
+6 F
+1214 63(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+1 F
+1305 132(e)U
+1332(gr)S
+1380(e)S
+1407(p)S
+1575(6)S
+1604(4)S
+1633(3)S
+1662(0)S
+1859(1)S
+1888(7)S
+1917(6)S
+2085(6)S
+2114(1)S
+2143(2)S
+2172(2)S
+2369(1)S
+2398(9)S
+2427(1)S
+1361 192(gcc)U
+1546(5)S
+1575(3)S
+1604(3)S
+1633(8)S
+1662(9)S
+1801(3)S
+1830(2)S
+1859(6)S
+1888(1)S
+1917(7)S
+2056(4)S
+2085(8)S
+2114(3)S
+2143(5)S
+2172(5)S
+2311(3)S
+2340(0)S
+2369(5)S
+2398(7)S
+2427(4)S
+2427 252(0)U
+6 F
+1188 249(i)U
+1 F
+1242 252(t)U
+1260(o)S
+1290(m)S
+1338(ca)S
+1388(t)S
+1406(v)S
+1517(3)S
+1546(4)S
+1575(0)S
+1604(9)S
+1633(6)S
+1662(8)S
+1772(3)S
+1801(1)S
+1830(7)S
+1859(8)S
+1888(3)S
+1917(9)S
+2027(3)S
+2056(5)S
+2085(9)S
+2114(9)S
+2143(7)S
+2172(6)S
+2282(3)S
+2311(1)S
+2340(4)S
+2369(9)S
+2398(5)S
+6 F
+1214 249(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+1188(c)S
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+1476 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+1986 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+2483 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+EP
+%%Trailer
+pscatsave end restore
+%%%Pages: 1
+
+%%EndDocument
+ PE 11 /Times-Bold AF
+19648 53085 MT
+(Table 2-3:)SH
+/Times-Roman SF
+24995 XM
+(TLB misses, measured and predicted.)SH
+10000 55036 MT
+(One source of error in the TLB miss predictions)
+93 W( is explicit TLB writes from the kernel.  The)92 W
+9000 56433 MT
+(kernel sometimes avoids a user TLB miss by writing the TLB)
+85 W( explicitly, using)86 W
+/Courier SF
+44940 XM
+(tlbdropin\050\051)SH
+/Times-Roman SF
+9000 57830 MT
+(in Ultrix or)71 W
+/Courier SF
+14438 XM
+(tlb_map_random\050\051)SH
+/Times-Roman SF
+25344 XM
+(in Mach.  In the simulator, which)
+71 W( doesn't know about these)70 W
+9000 59227 MT
+(writes, all TLB fills are caused by TLB misses.  Kernel)
+202 W( instruction reference counts for)203 W
+/Times-Italic SF
+50674 XM
+(gcc)SH
+/Times-Roman SF
+9000 60624 MT
+(showed about 1800 calls to)30 W
+/Courier SF
+21401 XM
+(tlbdropin\050\051)SH
+/Times-Roman SF
+28966 XM
+(for Ultrix, and 3700 calls to)30 W
+/Courier SF
+41640 XM
+(tlb_map_random\050\051)SH
+/Times-Roman SF
+9000 62021 MT
+(for Mach.  Overall, the miss rates predicted by the simulator are reasonable.)SH
+10800 50 9000 64544 UL
+7 SS 
+9900 66045 MT
+(3)SH
+9 SS 
+10250 66372 MT
+(For a)6 W
+/Courier SF
+12362 XM
+(gcc)SH
+/Times-Roman SF
+14213 XM
+(binary with 688128 bytes of text,)6 W
+/Courier SF
+26424 XM
+(pixie -t gcc)6 W
+/Times-Roman SF
+33147 XM
+(grows program text to)
+6 W( 4131968 bytes.)5 W
+/Courier SF
+47335 XM
+(Epoxie -t)5 W
+9000 67386 MT
+(gcc)SH
+/Times-Roman SF
+10905 XM
+(grows text to 3780608 bytes.  QPT expands)60 W
+/Times-Italic SF
+27360 XM
+(gcc)SH
+/Times-Roman SF
+28895 XM
+(text by a)
+60 W( factor of 5.5)
+61 W( [15].)
+SH( The)
+347 W( modified epoxie grows text to)61 W
+9000 68400 MT
+(1515520 bytes.)SH
+10 SS 
+30350 75600 MT
+(5)SH
+ES
+%%Page: 6 10
+BS
+0 SI
+11 /Times-Roman AF
+10000 7955 MT
+(We also used a)
+SH( high resolution timer to measure execution times of the workloads.  These times)1 W
+9000 9352 MT
+(are compared to predicted times from the simulator in Table 2-4.)SH
+1 SS 
+5760 9000 16308 PB 
+%%BeginDocument: times.ps
+%!PS-Adobe-1.0
+%%Creator: OLIVIA.MACH.CS.CMU.EDU:bchen (Brad Chen)
+%%Title: stdin
+%%CreationDate: Sat Jul 31 21:22:38 1993
+%%DocumentFonts: Times-Roman Times-Italic Times-Bold Symbol Times-Roman DIThacks
+%%%Pages: (atend)
+%%EndComments
+% Start of pscat.pro -- prolog for troff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCS: $Header: pscat.pro,v 2.2 91/02/21 18:00:13 ern Exp $
+%
+% HISTORY
+% $Log: pscat.pro,v $
+% Revision 2.2  91/02/21  18:00:13  ern
+%       orig
+%       [91/02/20  15:27:53  ern]
+% 
+%
+save /pscatsave exch def
+/$pscat 50 dict def
+$pscat begin
+/fm [1 0 0 1 0 0] def
+/xo 0 def /yo 0 def
+/M /moveto load def
+/R /show load def
+/S {exch currentpoint exch pop moveto show}def
+/T {exch currentpoint pop exch moveto show}def
+/U {3 1 roll moveto show}def
+/siz 0 def
+/font 0 def
+/Z {/siz exch def SF}def
+/F {/font exch def SF}def
+/SF{font 0 ne
+    {catfonts font 1 sub get fm 0 siz put fm 3 siz neg put 
+     fm makefont setfont}if}def
+/BP{save/catsv exch def 0 792 translate 72 432 div dup neg scale 
+  xo yo translate 0 0 moveto}def
+/EP{catsv restore showpage}def
+
+% definitions for PPROC callback functions
+% each PPROC is called with the following number on the stack:
+% pointsize charcode railmag pswidth pschar x y wid
+/$pprocs 50 dict def
+/fractm [.65 0 0 .6 0 0] def
+% fractions
+/PS1{gsave $pprocs begin
+    /wid exch def pop pop pop pop pop /ch exch def /size exch def
+    /pair $pprocs ch get def /cf currentfont def
+    cf fractm makefont setfont
+    0 .3 size mul 6 mul 2 copy neg rmoveto pair 0 get show rmoveto
+    currentfont cf setfont (\244) show setfont
+    pair 1 get show grestore wid .06 div 0 rmoveto end}def
+$pprocs begin
+8#34 [(1)(4)] def
+8#36 [(1)(2)] def
+8#46 [(3)(4)] def
+end
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+/rls{rlineto stroke}def
+/currx{currentpoint pop}def
+/dround{transform round exch round exch itransform} def
+end
+end
+/DIThacks exch definefont pop
+/xo -600 def /yo 4470 def
+/catfonts [
+        /Times-Roman findfont
+        /Times-Italic findfont
+        /Times-Bold findfont
+        /Symbol findfont
+        /Times-Roman findfont
+        /DIThacks findfont
+        ] def
+%%EndProlog
+%%%Page: ? 1
+BP
+6 F
+54 Z
+1216 -69(i)U
+1240(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)S
+1505 -3(i)U
+1 F
+1635 0(p)U
+1664(r)S
+1685(e)S
+1712(d)S
+1742(ict)S
+1799(e)S
+1826(d)S
+2110(m)S
+2158(e)S
+2185(a)S
+2211(s)S
+2234(u)S
+2266(r)S
+2287(e)S
+2314(d)S
+6 F
+1510 -3(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+1216 63(i)U
+1 F
+66(wo)T
+1312(r)S
+1333(k)S
+1363(lo)S
+1408(a)S
+1434(d)S
+1552(M)S
+1605(a)S
+1631(ch)S
+1803(U)S
+1847(lt)S
+1880(r)S
+1901(ix)S
+2052(M)S
+2105(a)S
+2131(ch)S
+2285(U)S
+2329(lt)S
+2362(r)S
+2383(ix)S
+6 F
+1240 63(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+1 F
+1333 132(e)U
+1360(gr)S
+1408(e)S
+1435(p)S
+1603(1)S
+1632(.9)S
+1676(5)S
+1844(1)S
+1873(.8)S
+1917(2)S
+2085(2)S
+2114(.0)S
+2158(1)S
+2326(1)S
+2355(.9)S
+2399(0)S
+1389 192(gcc)U
+1603(2)S
+1632(.6)S
+1676(6)S
+1844(1)S
+1873(.8)S
+1917(4)S
+2085(3)S
+2114(.6)S
+2158(9)S
+2326(4)S
+2355(.2)S
+2399(0)S
+2399 252(4)U
+6 F
+1216 249(i)U
+1 F
+1270 252(t)U
+1288(o)S
+1318(m)S
+1366(ca)S
+1416(t)S
+1434(v)S
+1545(1)S
+1574(3)S
+1603(4)S
+1632(.8)S
+1676(8)S
+1786(1)S
+1815(5)S
+1844(1)S
+1873(.3)S
+1917(6)S
+2027(1)S
+2056(3)S
+2085(9)S
+2114(.4)S
+2158(2)S
+2268(1)S
+2297(5)S
+2326(5)S
+2355(.4)S
+6 F
+1240 249(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+1216(c)S
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+1504 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+1986 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+2455 249(c)U
+201(c)T
+147(c)T
+93(c)T
+39(c)T
+-15(c)T
+EP
+%%Trailer
+pscatsave end restore
+%%%Pages: 1
+
+%%EndDocument
+ PE 11 /Times-Bold AF
+17281 18060 MT
+(Table 2-4:)SH
+/Times-Roman SF
+22628 XM
+(Run Times, measured and predicted, in seconds.)SH
+10 SS 
+11686 19743 MT
+(The simulation system measures delay cycles from the memory system, but does not count)168 W
+11000 20741 MT
+(pipeline stalls from the floating point unit.  The simulator predictions for)42 W
+/Times-Italic SF
+40865 XM
+(tomcatv)SH
+/Times-Roman SF
+44324 XM
+(includes 17.08)43 W
+11000 21739 MT
+(seconds of pipeline stalls, as estimated by pixie.)SH
+11 SS 
+10000 23690 MT
+(When predicting time from simulator events, I/O is reflected by)
+140 W( instructions executed in the)139 W
+9000 25087 MT
+(idle loop.  For long running programs that do little I/O,)
+72 W( the predictions from the simulator show)73 W
+9000 26484 MT
+(good correlation, as in the estimates for)9 W
+/Times-Italic SF
+26719 XM
+(tomcatv)SH
+/Times-Roman SF
+(. When)
+293 W( the ratio of I/O)
+9 W( to computation is high, as)8 W
+9000 27881 MT
+(for)SH
+/Times-Italic SF
+10622 XM
+(egrep)SH
+/Times-Roman SF
+13466 XM
+(and)SH
+/Times-Italic SF
+15394 XM
+(gcc)SH
+/Times-Roman SF
+(, the simulator tends)
+65 W( to underestimate the execution time.  To understand why,)66 W
+9000 29278 MT
+(note that for a given I/O operation, the delay)
+449 W( will be the same for instrumented and)448 W
+9000 30675 MT
+(uninstrumented systems, but in the instrumented system the idle loop will execute)
+425 W( \050ap-)426 W
+9000 32072 MT
+(proximately\051 1/15 as many instructions.  As traced instruction and)
+108 W( data references are the basis)107 W
+9000 33469 MT
+(for the simulator's estimate of elapsed time, low estimates result.)SH
+10000 35365 MT
+(Note that for)40 W
+/Times-Italic SF
+16015 XM
+(gcc)SH
+/Times-Roman SF
+(, the simulator predicts that the Ultrix run will be)
+40 W( faster, but in measured time)41 W
+9000 36762 MT
+(the contrary is true.  This is due to I/O time distortion.)
+71 W( For)416 W
+/Times-Italic SF
+36146 XM
+(gcc)SH
+/Times-Roman SF
+(, counts of idle loop instructions)70 W
+9000 38159 MT
+(show about 1.9 million)
+119 W( instructions for Mach, as compared to 4 million instructions for Ultrix.)120 W
+9000 39556 MT
+(This is due)
+79 W( in part to differences in buffer-cache implementations.  Assuming a factor of fifteen)78 W
+9000 40953 MT
+(slowdown for instruction execution, this implies that, for an untraced)
+168 W( system, the)169 W
+/Times-Italic SF
+46916 XM
+(gcc)SH
+/Times-Roman SF
+48886 XM
+(run ex-)169 W
+9000 42350 MT
+(ecutes about \0501.9)179 W
+/Symbol SF
+16991 XM
+(\264)SH
+/Times-Roman SF
+17745 XM
+(15\051=28 million idle-loop instructions for)
+179 W( Mach, as compared to 60 million)178 W
+9000 43747 MT
+(idle-loop instructions for Ultrix.)
+106 W( Using)
+488 W( an idle-loop CPI of 1, we get that the simulator should)107 W
+9000 45144 MT
+(underestimate Mach I/O)
+217 W( time by about 1 second, and Ultrix I/O time by about 2.2 seconds.)216 W
+9000 46541 MT
+(Adding these corrections to the predicted times)
+42 W( we get 3.7 seconds for Mach and 4.1 seconds for)43 W
+9000 47938 MT
+(Ultrix. With)
+275 W( corrections for I/O time distortion, the predicted run times become quite good.)SH
+10 SS 
+19634 51143 MT
+(Ultrix)SH
+35225 XM
+(Mach 3.0)SH
+15467 52248 MT
+(inst. count)SH
+21052 XM
+(routine)SH
+31058 XM
+(inst. count)SH
+36642 XM
+(routine)SH
+32472 50 14364 53553 UL
+16134 54458 MT
+(2332170)SH
+21052 XM
+(idle)SH
+31725 XM
+(1942951)SH
+36642 XM
+(idle_thread_continue)SH
+16634 55563 MT
+(872736)SH
+21052 XM
+(splclock)SH
+31725 XM
+(1663346)SH
+36642 XM
+(aligned_block_copy)SH
+16634 56668 MT
+(727430)SH
+21052 XM
+(spl0)SH
+32225 XM
+(553547)SH
+36642 XM
+(mipscache_Iflush)SH
+16634 57773 MT
+(642095)SH
+21052 XM
+(bcopy)SH
+32225 XM
+(454014)SH
+36642 XM
+(TRAP_exception)SH
+16634 58878 MT
+(501032)SH
+21052 XM
+(kn01_clean_icache)SH
+32225 XM
+(425088)SH
+36642 XM
+(pmap_zero_page)SH
+16634 59983 MT
+(489288)SH
+21052 XM
+(bzero)SH
+32225 XM
+(308968)SH
+36642 XM
+(TRAP_exception_exit)SH
+16634 61088 MT
+(376999)SH
+21052 XM
+(memall)SH
+32225 XM
+(280808)SH
+36642 XM
+(vm_fault)SH
+16634 62193 MT
+(305919)SH
+21052 XM
+(sz_start)SH
+32225 XM
+(225723)SH
+36642 XM
+(ipc_kmsg_copyin)SH
+16634 63298 MT
+(275892)SH
+21052 XM
+(pagein)SH
+32225 XM
+(222159)SH
+36642 XM
+(vm_fault_page)SH
+16634 64403 MT
+(223608)SH
+21052 XM
+(ascintr)SH
+32225 XM
+(212926)SH
+36642 XM
+(pmap_enter)SH
+33270 16592 50 13965 65726 BX BX1
+11 /Times-Bold AF
+17847 67478 MT
+(Table 2-5:)SH
+/Times-Roman SF
+23194 XM
+(The Ten Most Active Kernel routines for)SH
+/Times-Italic SF
+41551 XM
+(gcc)SH
+/Times-Roman SF
+(.)SH
+10 SS 
+30350 75600 MT
+(6)SH
+ES
+%%Page: 7 11
+BS
+0 SI
+11 /Times-Roman AF
+10000 7955 MT
+(As a further means of verifying the tracing system, we used an analysis program that)
+215 W( did)214 W
+9000 9352 MT
+(reference counts for all the instructions in the kernel.  This made it straightforward to identify)
+10 W( and)11 W
+9000 10749 MT
+(correct situations where tracing code was erroneously generating trace.  Additionally,)
+154 W( the data)153 W
+9000 12146 MT
+(gives a feeling for kernel behavior by identifying active routines.  Table 2-5 shows the ten)
+71 W( most)72 W
+9000 13543 MT
+(active routines in Ultrix and Mach during a run of)SH
+/Times-Italic SF
+31238 XM
+(gcc)SH
+/Times-Roman SF
+(.)SH
+10000 15439 MT
+(This data suggests a number of observations.  Ultrix)
+105 W( spends more time than Mach waiting in)104 W
+9000 16836 MT
+(the idle loop, again a reflection of buffer-cache implementation.  Most of the)
+206 W( Ultrix calls to)207 W
+/Courier SF
+9000 18233 MT
+(splclock\050\051)SH
+/Times-Roman SF
+15938 XM
+(and)SH
+/Courier SF
+17864 XM
+(spl0\050\051)SH
+/Times-Roman SF
+22162 XM
+(occur during)
+63 W( the idle loop.  Mach executes many more instructions)62 W
+9000 19630 MT
+(in the general exception handler than Ultrix.  A closer look at the data shows that 3563 exceptions)4 W
+9000 21027 MT
+(occur during the Ultrix run and 11399 exceptions occur during the Mach run.)
+224 W( Most)
+722 W( of the)223 W
+9000 22424 MT
+(additional exceptions can be attributed to Mach)
+61 W( system call emulation, with three exceptions per)62 W
+9000 23821 MT
+(system call rather)
+108 W( than one.  Both system do similar amounts of zeroing and copying of pages,)107 W
+9000 25218 MT
+(although Mach executes far more instructions for block copies.)SH
+10000 27114 MT
+(The instruction reference counts of Table 2-5 are one example of analysis that)
+117 W( is straightfor-)118 W
+9000 28511 MT
+(ward with address trace data.  Using a cache simulator, we can do)
+118 W( a similar analysis for cache)117 W
+9000 29908 MT
+(misses. Figure)
+309 W( 2-2)
+17 W( shows cache temperature for system \050kernel+server\051 instruction misses during)18 W
+9000 31305 MT
+(a run of)67 W
+/Times-Italic SF
+12896 XM
+(gcc)SH
+/Times-Roman SF
+(. Dark)
+409 W( squares indicate "hot spots," cache lines where a disproportionate)
+67 W( number of)66 W
+9000 32702 MT
+(misses occur.)
+54 W( In)
+385 W( the Ultrix diagram, there is a distinct dark area on the right side, six lines from)55 W
+9000 34099 MT
+(the bottom.)
+189 W( In)
+651 W( this region,)188 W
+/Courier SF
+22107 XM
+(memall\050\051)SH
+/Times-Roman SF
+(,)SH
+/Courier SF
+28125 XM
+(swap\050\051)SH
+/Times-Roman SF
+(, and)188 W
+/Courier SF
+34874 XM
+(tlbmiss\050\051)SH
+/Times-Roman SF
+41277 XM
+(all collide in the cache.)188 W
+9000 35496 MT
+(They were called 660, 253, and 1487 times, respectively.  Similarly, several dark regions)
+173 W( are)174 W
+9000 36893 MT
+(visible in the top line of the Mach diagram.)92 W
+/Courier SF
+29503 XM
+(TRAP_exception\050\051)SH
+/Times-Roman SF
+(,)SH
+/Courier SF
+40705 XM
+(ipc_mqueue_send\050\051)SH
+/Times-Roman SF
+(,)SH
+/Courier SF
+9000 38290 MT
+(vm_map_lookup\050\051)SH
+/Times-Roman SF
+19227 XM
+(and)SH
+/Courier SF
+21142 XM
+(vm_fault\050\051)SH
+/Times-Roman SF
+28069 XM
+(all overlap in this part of the)
+52 W( cache.  These concentra-)53 W
+9000 39687 MT
+(tions of cache)
+205 W( misses suggest situations where instruction cache behavior could be improved)204 W
+9000 41084 MT
+(through better text placement.)SH
+12 /Times-Bold AF
+9000 44768 MT
+(2.5. You'll never get accurate results for I/O-bound workloads.  You can't duplicate)SH
+11100 46165 MT
+(scheduler behavior.  For these reasons, software methods aren't applicable to)SH
+11100 47562 MT
+(complicated multitasking workloads.)SH
+11 /Times-Roman AF
+10000 48959 MT
+(These are problems that have not yet been resolved in the current system.  They may)
+5 W( eventually)4 W
+9000 50356 MT
+(be addressed, although at present we)
+SH( feel there is much to be learned by thoroughly understanding)1 W
+9000 51753 MT
+(the limited class of workloads for which the system works well.)SH
+10000 53649 MT
+(For other classes of workloads, several observations are immediate.  To the degree that perfor-)43 W
+9000 55046 MT
+(mance of I/O bound workloads is)
+17 W( function of I/O device speed, the impact of memory behavior is)18 W
+9000 56443 MT
+(not significant.  For competing compute-bound processes, prior)
+126 W( studies)
+125 W( [16])
+SH( have demonstrated)125 W
+9000 57840 MT
+(that performance degradation will occur.)SH
+13 /Times-Bold AF
+9000 61591 MT
+(3. Epilogue)SH
+11 /Times-Roman AF
+10000 62988 MT
+(Publications are in preparation for our experiments on memory system behavior.)
+88 W( The)
+452 W( tracing)89 W
+9000 64385 MT
+(system has already)
+66 W( helped us understand performance anomalies and discover performance bugs)65 W
+9000 65782 MT
+(in both Ultrix and Mach.  Readers interested in a comprehensive report)
+90 W( should watch for future)91 W
+9000 67179 MT
+(publications [6].)SH
+10 SS 
+30350 75600 MT
+(7)SH
+ES
+%%Page: 8 12
+BS
+0 SI
+1 SS 
+21600 9000 28800 PB 
+%%BeginDocument: ctemp.psf
+%!PS-Adobe-
+%%DocumentFonts: (atend)
+%%Creator: ezd - easy drawing for X11 displays. *EZD-VERSION* 04nov91jfb
+%%EndComments
+% [Rotate] and Translate right 3/8 inch and up 1-3/8 inch
+% 27 99 translate % INCLUDE-DELETE
+40 -25 translate
+% Scale to reflect ?? dpi screen vs. 72 points/inch printer and save
+.9225398936170213 .9225398936170213 scale 1 setlinewidth 0 250 translate 1 -1 scale /xwindowmatrix matrix currentmatrix def
+%%EndProlog
+%%%Page: 0 1
+/windowborderpath { newpath 450 250 moveto -450 0 rlineto 0 -250 rlineto 450 0 rlineto closepath } def
+windowborderpath clip
+gsave xwindowmatrix setmatrix
+/windowborderpath { newpath 450 250 moveto -450 0 rlineto 0 -250 rlineto 450 0 rlineto closepath } def
+windowborderpath clip
+% Scale to reflect user distance and origin
+xwindowmatrix setmatrix 0 0 translate 1 1 scale
+/viewmatrix matrix currentmatrix def
+.4509803921568628 setgray
+newpath 0 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 3 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 6 0 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 27 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 33 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 36 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 39 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 42 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 48 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+0 setgray
+newpath 51 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 57 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 60 0 moveto 132 0 rlineto 0 3 rlineto -132 0 rlineto closepath fill
+newpath 0 3 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 6 moveto 60 0 rlineto 0 3 rlineto -60 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 60 6 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 6 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 78 6 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 93 6 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 114 6 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 132 6 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 144 6 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 147 6 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 150 6 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 153 6 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 156 6 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 159 6 moveto 33 0 rlineto 0 3 rlineto -33 0 rlineto closepath fill
+newpath 0 9 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 12 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 15 moveto 78 0 rlineto 0 3 rlineto -78 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 78 15 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 84 15 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 90 15 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 15 moveto 96 0 rlineto 0 3 rlineto -96 0 rlineto closepath fill
+newpath 0 18 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 21 moveto 96 0 rlineto 0 3 rlineto -96 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 96 21 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 99 21 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 111 21 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 114 21 moveto 39 0 rlineto 0 3 rlineto -39 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 153 21 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 156 21 moveto 36 0 rlineto 0 3 rlineto -36 0 rlineto closepath fill
+newpath 0 24 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 27 moveto 189 0 rlineto 0 3 rlineto -189 0 rlineto closepath fill
+.1490196078431373 setgray
+newpath 189 27 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+newpath 0 30 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 6 30 moveto 186 0 rlineto 0 3 rlineto -186 0 rlineto closepath fill
+newpath 0 33 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 15 33 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 24 33 moveto 168 0 rlineto 0 3 rlineto -168 0 rlineto closepath fill
+newpath 0 36 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 39 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 42 moveto 33 0 rlineto 0 3 rlineto -33 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 33 42 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 42 42 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 45 42 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 48 42 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 57 42 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 42 moveto 96 0 rlineto 0 3 rlineto -96 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 159 42 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 165 42 moveto 27 0 rlineto 0 3 rlineto -27 0 rlineto closepath fill
+newpath 0 45 moveto 117 0 rlineto 0 3 rlineto -117 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 117 45 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 120 45 moveto 72 0 rlineto 0 3 rlineto -72 0 rlineto closepath fill
+newpath 0 48 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 21 48 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 30 48 moveto 39 0 rlineto 0 3 rlineto -39 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 69 48 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 78 48 moveto 114 0 rlineto 0 3 rlineto -114 0 rlineto closepath fill
+newpath 0 51 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 54 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 57 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 60 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 63 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 12 63 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 21 63 moveto 171 0 rlineto 0 3 rlineto -171 0 rlineto closepath fill
+newpath 0 66 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 69 moveto 126 0 rlineto 0 3 rlineto -126 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 126 69 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 135 69 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 141 69 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 147 69 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 171 69 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 180 69 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+newpath 0 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 3 72 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 9 72 moveto 132 0 rlineto 0 3 rlineto -132 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 141 72 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 147 72 moveto 45 0 rlineto 0 3 rlineto -45 0 rlineto closepath fill
+newpath 0 75 moveto 117 0 rlineto 0 3 rlineto -117 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 117 75 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 138 75 moveto 54 0 rlineto 0 3 rlineto -54 0 rlineto closepath fill
+newpath 0 78 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 81 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 84 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 87 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 90 moveto 39 0 rlineto 0 3 rlineto -39 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 39 90 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 45 90 moveto 27 0 rlineto 0 3 rlineto -27 0 rlineto closepath fill
+.6 setgray
+newpath 72 90 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 90 90 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 93 90 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 90 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 108 90 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 111 90 moveto 81 0 rlineto 0 3 rlineto -81 0 rlineto closepath fill
+newpath 0 93 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 96 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 99 moveto 138 0 rlineto 0 3 rlineto -138 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 138 99 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 141 99 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 144 99 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 150 99 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 162 99 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 180 99 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 183 99 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 186 99 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+newpath 0 102 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 3 102 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 9 102 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 33 102 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 36 102 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 54 102 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 102 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 81 102 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 102 102 moveto 90 0 rlineto 0 3 rlineto -90 0 rlineto closepath fill
+newpath 0 105 moveto 177 0 rlineto 0 3 rlineto -177 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 177 105 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 183 105 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+newpath 0 108 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 9 108 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 108 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 30 108 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 45 108 moveto 93 0 rlineto 0 3 rlineto -93 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 138 108 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 141 108 moveto 51 0 rlineto 0 3 rlineto -51 0 rlineto closepath fill
+newpath 0 111 moveto 66 0 rlineto 0 3 rlineto -66 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 66 111 moveto 30 0 rlineto 0 3 rlineto -30 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 111 moveto 96 0 rlineto 0 3 rlineto -96 0 rlineto closepath fill
+newpath 0 114 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 12 114 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 18 114 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 39 114 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 45 114 moveto 147 0 rlineto 0 3 rlineto -147 0 rlineto closepath fill
+newpath 0 117 moveto 51 0 rlineto 0 3 rlineto -51 0 rlineto closepath fill
+.6 setgray
+newpath 51 117 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 60 117 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 78 117 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 81 117 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 84 117 moveto 108 0 rlineto 0 3 rlineto -108 0 rlineto closepath fill
+newpath 0 120 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 123 moveto 153 0 rlineto 0 3 rlineto -153 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 153 123 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 156 123 moveto 36 0 rlineto 0 3 rlineto -36 0 rlineto closepath fill
+newpath 0 126 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 129 moveto 156 0 rlineto 0 3 rlineto -156 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 156 129 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 162 129 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 183 129 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 189 129 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+newpath 0 132 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 24 132 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 30 132 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 33 132 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 39 132 moveto 33 0 rlineto 0 3 rlineto -33 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 72 132 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 75 132 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 81 132 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 105 132 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 117 132 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 123 132 moveto 69 0 rlineto 0 3 rlineto -69 0 rlineto closepath fill
+newpath 0 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 6 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 12 135 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 24 135 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 33 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 39 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 45 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 48 135 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 63 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 66 135 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 78 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 81 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 84 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 90 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 99 135 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 111 135 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 120 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 126 135 moveto 36 0 rlineto 0 3 rlineto -36 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 162 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 165 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 168 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 171 135 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 177 135 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 189 135 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+newpath 0 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 3 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 9 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 15 138 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 24 138 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 33 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 36 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 42 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 45 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 48 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 51 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 54 138 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 66 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 72 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 78 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 81 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 87 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 93 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 96 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 99 138 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 117 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 123 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 126 138 moveto 45 0 rlineto 0 3 rlineto -45 0 rlineto closepath fill
+.6 setgray
+newpath 171 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 177 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 180 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 186 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 0 141 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 3 141 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 6 141 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 12 141 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 15 141 moveto 60 0 rlineto 0 3 rlineto -60 0 rlineto closepath fill
+.6 setgray
+newpath 75 141 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 81 141 moveto 111 0 rlineto 0 3 rlineto -111 0 rlineto closepath fill
+newpath 0 144 moveto 159 0 rlineto 0 3 rlineto -159 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 159 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 165 144 moveto 27 0 rlineto 0 3 rlineto -27 0 rlineto closepath fill
+newpath 0 147 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 6 147 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 147 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 33 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 36 147 moveto 48 0 rlineto 0 3 rlineto -48 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 84 147 moveto 27 0 rlineto 0 3 rlineto -27 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 111 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 114 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 117 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 120 147 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 129 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 132 147 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 138 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 141 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 144 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 147 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 150 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 153 147 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 159 147 moveto 33 0 rlineto 0 3 rlineto -33 0 rlineto closepath fill
+newpath 0 150 moveto 51 0 rlineto 0 3 rlineto -51 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 51 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 150 moveto 93 0 rlineto 0 3 rlineto -93 0 rlineto closepath fill
+.6 setgray
+newpath 147 150 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 153 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 156 150 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 168 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 171 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 174 150 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+newpath 0 153 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 15 153 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 24 153 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 27 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 33 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 39 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 45 153 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 63 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 153 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 72 153 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 81 153 moveto 111 0 rlineto 0 3 rlineto -111 0 rlineto closepath fill
+newpath 0 156 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 24 156 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 39 156 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 51 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 57 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 60 156 moveto 132 0 rlineto 0 3 rlineto -132 0 rlineto closepath fill
+newpath 0 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 6 159 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 9 159 moveto 57 0 rlineto 0 3 rlineto -57 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 66 159 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 78 159 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 81 159 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 90 159 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 93 159 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 102 159 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 105 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 111 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 117 159 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 126 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 132 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 138 159 moveto 54 0 rlineto 0 3 rlineto -54 0 rlineto closepath fill
+newpath 0 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 6 162 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 27 162 moveto 45 0 rlineto 0 3 rlineto -45 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 72 162 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 162 moveto 96 0 rlineto 0 3 rlineto -96 0 rlineto closepath fill
+newpath 0 165 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 3 165 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 9 165 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 12 165 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 18 165 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 21 165 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 42 165 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 48 165 moveto 144 0 rlineto 0 3 rlineto -144 0 rlineto closepath fill
+newpath 0 168 moveto 51 0 rlineto 0 3 rlineto -51 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 51 168 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 168 moveto 84 0 rlineto 0 3 rlineto -84 0 rlineto closepath fill
+.6 setgray
+newpath 141 168 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 144 168 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 153 168 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 162 168 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 165 168 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 171 168 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 174 168 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 177 168 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+newpath 0 171 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 174 moveto 42 0 rlineto 0 3 rlineto -42 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 42 174 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 51 174 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 66 174 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 174 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 84 174 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 90 174 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 99 174 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 102 174 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 111 174 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 117 174 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 132 174 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 138 174 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 147 174 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 150 174 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 153 174 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.1490196078431373 setgray
+newpath 159 174 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 162 174 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.1490196078431373 setgray
+newpath 165 174 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 186 174 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+newpath 0 177 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 24 177 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 30 177 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 45 177 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 177 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 72 177 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 78 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 81 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 84 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 87 177 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 96 177 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 102 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 105 177 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 114 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 117 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 120 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.1490196078431373 setgray
+newpath 123 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 126 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 129 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 132 177 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 138 177 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 150 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 153 177 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.1490196078431373 setgray
+newpath 162 177 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 168 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 171 177 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 177 177 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 180 177 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+newpath 0 180 moveto 30 0 rlineto 0 3 rlineto -30 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 30 180 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 51 180 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 54 180 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 180 moveto 114 0 rlineto 0 3 rlineto -114 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 183 180 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 0 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 3 183 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 9 183 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 15 183 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 30 183 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 54 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 183 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 69 183 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 75 183 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 81 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 84 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 87 183 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 183 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 105 183 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 114 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 117 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 120 183 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 132 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 135 183 moveto 57 0 rlineto 0 3 rlineto -57 0 rlineto closepath fill
+newpath 0 186 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 9 186 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 21 186 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 36 186 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 45 186 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 48 186 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 51 186 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 60 186 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 186 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 81 186 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 87 186 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 90 186 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 105 186 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 114 186 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 126 186 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 138 186 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 162 186 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 165 186 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 168 186 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 180 186 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+newpath 0 189 moveto 78 0 rlineto 0 3 rlineto -78 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 78 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 81 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 84 189 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 189 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 117 189 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 126 189 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 141 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 144 189 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 150 189 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 165 189 moveto 27 0 rlineto 0 3 rlineto -27 0 rlineto closepath fill
+0 setgray
+xwindowmatrix setmatrix /FONT-fixed /Helvetica findfont [ 13.00756756756757 0 0 -13.00756756756757 0 0 ] makefont def viewmatrix setmatrix
+FONT-fixed setfont
+xwindowmatrix setmatrix 0 210 moveto (Ultrix) show viewmatrix setmatrix
+grestore
+gsave xwindowmatrix setmatrix
+/windowborderpath { newpath 450 250 moveto -450 0 rlineto 0 -250 rlineto 450 0 rlineto closepath } def
+windowborderpath clip
+% Scale to reflect user distance and origin
+xwindowmatrix setmatrix 225 0 translate 1 1 scale
+/viewmatrix matrix currentmatrix def
+.6 setgray
+newpath 0 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 3 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 6 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 9 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 15 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 18 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 21 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 24 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.1490196078431373 setgray
+newpath 27 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 30 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 36 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 39 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 42 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 45 0 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 54 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 57 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.1490196078431373 setgray
+newpath 60 0 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 72 0 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 84 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 90 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 93 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 99 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 102 0 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 120 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 123 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 129 0 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 138 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 141 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 144 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 147 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 150 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 156 0 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 162 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 165 0 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 168 0 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 183 0 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 0 3 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 3 3 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.6 setgray
+newpath 24 3 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 27 3 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 36 3 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 3 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.6 setgray
+newpath 78 3 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 81 3 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 93 3 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 99 3 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.6 setgray
+newpath 123 3 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 129 3 moveto 45 0 rlineto 0 3 rlineto -45 0 rlineto closepath fill
+.6 setgray
+newpath 174 3 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 177 3 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 180 3 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 189 3 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+newpath 0 6 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 6 6 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 15 6 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 18 6 moveto 36 0 rlineto 0 3 rlineto -36 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 54 6 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 6 moveto 51 0 rlineto 0 3 rlineto -51 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 120 6 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 132 6 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 138 6 moveto 54 0 rlineto 0 3 rlineto -54 0 rlineto closepath fill
+newpath 0 9 moveto 48 0 rlineto 0 3 rlineto -48 0 rlineto closepath fill
+.6 setgray
+newpath 48 9 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 9 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 60 9 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 9 moveto 45 0 rlineto 0 3 rlineto -45 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 114 9 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 123 9 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 129 9 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 135 9 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 159 9 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 174 9 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+newpath 0 12 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 6 12 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 9 12 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 15 12 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 30 12 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 33 12 moveto 159 0 rlineto 0 3 rlineto -159 0 rlineto closepath fill
+newpath 0 15 moveto 165 0 rlineto 0 3 rlineto -165 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 165 15 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 168 15 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+newpath 0 18 moveto 39 0 rlineto 0 3 rlineto -39 0 rlineto closepath fill
+.6 setgray
+newpath 39 18 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 42 18 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 18 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 60 18 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 18 moveto 123 0 rlineto 0 3 rlineto -123 0 rlineto closepath fill
+newpath 0 21 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 24 moveto 156 0 rlineto 0 3 rlineto -156 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 156 24 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 162 24 moveto 30 0 rlineto 0 3 rlineto -30 0 rlineto closepath fill
+newpath 0 27 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 15 27 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 24 27 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 33 27 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 42 27 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 45 27 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 48 27 moveto 135 0 rlineto 0 3 rlineto -135 0 rlineto closepath fill
+.6 setgray
+newpath 183 27 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 186 27 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 189 27 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 0 30 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 15 30 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 18 30 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 21 30 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 30 30 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 33 30 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 42 30 moveto 150 0 rlineto 0 3 rlineto -150 0 rlineto closepath fill
+newpath 0 33 moveto 33 0 rlineto 0 3 rlineto -33 0 rlineto closepath fill
+.6 setgray
+newpath 33 33 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 39 33 moveto 48 0 rlineto 0 3 rlineto -48 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 87 33 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 111 33 moveto 45 0 rlineto 0 3 rlineto -45 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 156 33 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 162 33 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 186 33 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 189 33 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+newpath 0 36 moveto 63 0 rlineto 0 3 rlineto -63 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 63 36 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 66 36 moveto 126 0 rlineto 0 3 rlineto -126 0 rlineto closepath fill
+newpath 0 39 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 42 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 45 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 48 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 6 48 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 15 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 18 48 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 24 48 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 33 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 36 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 39 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 42 48 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 48 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 51 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 48 moveto 72 0 rlineto 0 3 rlineto -72 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 126 48 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 135 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 138 48 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 144 48 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 165 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 168 48 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 171 48 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+newpath 0 51 moveto 30 0 rlineto 0 3 rlineto -30 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 30 51 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 51 moveto 138 0 rlineto 0 3 rlineto -138 0 rlineto closepath fill
+newpath 0 54 moveto 99 0 rlineto 0 3 rlineto -99 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 99 54 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 108 54 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 111 54 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 117 54 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 120 54 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 132 54 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 135 54 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 144 54 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 147 54 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 159 54 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 165 54 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 168 54 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 171 54 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+newpath 0 57 moveto 30 0 rlineto 0 3 rlineto -30 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 30 57 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 36 57 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 39 57 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 54 57 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 57 moveto 105 0 rlineto 0 3 rlineto -105 0 rlineto closepath fill
+.6 setgray
+newpath 162 57 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 168 57 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 174 57 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+newpath 0 60 moveto 30 0 rlineto 0 3 rlineto -30 0 rlineto closepath fill
+.6 setgray
+newpath 30 60 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 33 60 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 36 60 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 48 60 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 60 60 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 60 moveto 129 0 rlineto 0 3 rlineto -129 0 rlineto closepath fill
+newpath 0 63 moveto 81 0 rlineto 0 3 rlineto -81 0 rlineto closepath fill
+.6 setgray
+newpath 81 63 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 84 63 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 87 63 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 111 63 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 114 63 moveto 78 0 rlineto 0 3 rlineto -78 0 rlineto closepath fill
+newpath 0 66 moveto 30 0 rlineto 0 3 rlineto -30 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 30 66 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 33 66 moveto 81 0 rlineto 0 3 rlineto -81 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 114 66 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 129 66 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 132 66 moveto 36 0 rlineto 0 3 rlineto -36 0 rlineto closepath fill
+.6 setgray
+newpath 168 66 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 180 66 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 183 66 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 186 66 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+newpath 0 69 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 0 72 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 6 72 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 30 72 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 36 72 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 45 72 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 51 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 72 moveto 39 0 rlineto 0 3 rlineto -39 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 93 72 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 99 72 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 111 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 114 72 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 132 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 135 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 138 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 141 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 144 72 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 156 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 159 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 162 72 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 171 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 174 72 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 180 72 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 189 72 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+newpath 0 75 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 6 75 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 75 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 21 75 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 24 75 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 30 75 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 36 75 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 39 75 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 54 75 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 75 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 66 75 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 75 75 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 81 75 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 87 75 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 96 75 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 99 75 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 108 75 moveto 69 0 rlineto 0 3 rlineto -69 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 177 75 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 0 78 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 3 78 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 6 78 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 9 78 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 78 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 21 78 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 30 78 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 39 78 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 78 moveto 51 0 rlineto 0 3 rlineto -51 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 105 78 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 117 78 moveto 75 0 rlineto 0 3 rlineto -75 0 rlineto closepath fill
+newpath 0 81 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 84 moveto 78 0 rlineto 0 3 rlineto -78 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 78 84 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 81 84 moveto 39 0 rlineto 0 3 rlineto -39 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 120 84 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 123 84 moveto 69 0 rlineto 0 3 rlineto -69 0 rlineto closepath fill
+newpath 0 87 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 6 87 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 87 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 24 87 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 33 87 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 36 87 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 39 87 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 54 87 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 87 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 66 87 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 87 moveto 123 0 rlineto 0 3 rlineto -123 0 rlineto closepath fill
+newpath 0 90 moveto 159 0 rlineto 0 3 rlineto -159 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 159 90 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 165 90 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 177 90 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 180 90 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 189 90 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+newpath 0 93 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 3 93 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 27 93 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 33 93 moveto 39 0 rlineto 0 3 rlineto -39 0 rlineto closepath fill
+.6 setgray
+newpath 72 93 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 84 93 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 87 93 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 102 93 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 105 93 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 108 93 moveto 42 0 rlineto 0 3 rlineto -42 0 rlineto closepath fill
+.6 setgray
+newpath 150 93 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 153 93 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 168 93 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 0 96 moveto 48 0 rlineto 0 3 rlineto -48 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 48 96 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 96 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 60 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 96 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 69 96 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 81 96 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 93 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 99 96 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 105 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 108 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 111 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 114 96 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 120 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 123 96 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 129 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 132 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 135 96 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 147 96 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 156 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 159 96 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 162 96 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 168 96 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 174 96 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+newpath 0 99 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 3 99 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 6 99 moveto 96 0 rlineto 0 3 rlineto -96 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 102 99 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 108 99 moveto 84 0 rlineto 0 3 rlineto -84 0 rlineto closepath fill
+newpath 0 102 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 105 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 108 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 111 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 114 moveto 123 0 rlineto 0 3 rlineto -123 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 123 114 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 126 114 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 129 114 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 132 114 moveto 60 0 rlineto 0 3 rlineto -60 0 rlineto closepath fill
+newpath 0 117 moveto 87 0 rlineto 0 3 rlineto -87 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 87 117 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 105 117 moveto 66 0 rlineto 0 3 rlineto -66 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 171 117 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 174 117 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+newpath 0 120 moveto 135 0 rlineto 0 3 rlineto -135 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 135 120 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 141 120 moveto 51 0 rlineto 0 3 rlineto -51 0 rlineto closepath fill
+newpath 0 123 moveto 99 0 rlineto 0 3 rlineto -99 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 99 123 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 111 123 moveto 81 0 rlineto 0 3 rlineto -81 0 rlineto closepath fill
+newpath 0 126 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 129 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 15 129 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 18 129 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 30 129 moveto 162 0 rlineto 0 3 rlineto -162 0 rlineto closepath fill
+newpath 0 132 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 135 moveto 177 0 rlineto 0 3 rlineto -177 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 177 135 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+newpath 0 138 moveto 36 0 rlineto 0 3 rlineto -36 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 36 138 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.6 setgray
+newpath 57 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 60 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 63 138 moveto 39 0 rlineto 0 3 rlineto -39 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 102 138 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 111 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 114 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 117 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 120 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 123 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 129 138 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 138 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 141 138 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 147 138 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 156 138 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 168 138 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 171 138 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 180 138 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+newpath 0 141 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 12 141 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 27 141 moveto 33 0 rlineto 0 3 rlineto -33 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 60 141 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 69 141 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 72 141 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 75 141 moveto 117 0 rlineto 0 3 rlineto -117 0 rlineto closepath fill
+newpath 0 144 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 24 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 30 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 36 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 42 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 48 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 54 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 57 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 60 144 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 69 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 75 144 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 87 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 93 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 144 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 108 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 111 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 114 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 117 144 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.6 setgray
+newpath 141 144 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 156 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 159 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 162 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 165 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 168 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 171 144 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 177 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 180 144 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 183 144 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 0 147 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 9 147 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 27 147 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 39 147 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 48 147 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 66 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 69 147 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 78 147 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 84 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 87 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 90 147 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 102 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 105 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 108 147 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 114 147 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 126 147 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 132 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 135 147 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 144 147 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 156 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 159 147 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 174 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 177 147 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 183 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 186 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 189 147 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 0 150 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 6 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 9 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 12 150 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 18 150 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 33 150 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 45 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 48 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 51 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 57 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 60 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 63 150 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 78 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 81 150 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 87 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 90 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 93 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 96 150 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 102 150 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 114 150 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.3019607843137255 setgray
+newpath 120 150 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 126 150 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 138 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 141 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 144 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 147 150 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 162 150 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 171 150 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 177 150 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 180 150 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 0 153 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 12 153 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 15 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 21 153 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 24 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 30 153 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 42 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 48 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 54 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 60 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 66 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 72 153 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 81 153 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 96 153 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 99 153 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.6 setgray
+newpath 114 153 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 129 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 135 153 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 138 153 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 141 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 147 153 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 159 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 165 153 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 168 153 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.6 setgray
+newpath 186 153 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+newpath 0 156 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 6 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 9 156 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 15 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 18 156 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 24 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 27 156 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.6 setgray
+newpath 48 156 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 63 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 66 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 69 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 72 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 75 156 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 87 156 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 96 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 99 156 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 111 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 114 156 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 120 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 123 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 126 156 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 135 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 138 156 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 147 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 150 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 153 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 156 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 159 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 162 156 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 171 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 174 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 177 156 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 183 156 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 189 156 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+newpath 0 159 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 3 159 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 18 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 24 159 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 33 159 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 42 159 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 45 159 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 159 moveto 108 0 rlineto 0 3 rlineto -108 0 rlineto closepath fill
+.6 setgray
+newpath 162 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 168 159 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 171 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 177 159 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 186 159 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+newpath 0 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 6 162 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 9 162 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 18 162 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 27 162 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 30 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 36 162 moveto 30 0 rlineto 0 3 rlineto -30 0 rlineto closepath fill
+.6 setgray
+newpath 66 162 moveto 24 0 rlineto 0 3 rlineto -24 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 90 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 96 162 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 105 162 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 120 162 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 129 162 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 138 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 144 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 150 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 156 162 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 159 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 165 162 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 168 162 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 171 162 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 177 162 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+newpath 0 165 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 15 165 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 18 165 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 24 165 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 42 165 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 54 165 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 57 165 moveto 135 0 rlineto 0 3 rlineto -135 0 rlineto closepath fill
+newpath 0 168 moveto 42 0 rlineto 0 3 rlineto -42 0 rlineto closepath fill
+.6 setgray
+newpath 42 168 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 48 168 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.6 setgray
+newpath 60 168 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 63 168 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 84 168 moveto 27 0 rlineto 0 3 rlineto -27 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 111 168 moveto 33 0 rlineto 0 3 rlineto -33 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 144 168 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 150 168 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 153 168 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 165 168 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 174 168 moveto 18 0 rlineto 0 3 rlineto -18 0 rlineto closepath fill
+newpath 0 171 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 6 171 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 9 171 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 15 171 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 21 171 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 33 171 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.6 setgray
+newpath 42 171 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 171 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 66 171 moveto 21 0 rlineto 0 3 rlineto -21 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 87 171 moveto 105 0 rlineto 0 3 rlineto -105 0 rlineto closepath fill
+newpath 0 174 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 177 moveto 192 0 rlineto 0 3 rlineto -192 0 rlineto closepath fill
+newpath 0 180 moveto 102 0 rlineto 0 3 rlineto -102 0 rlineto closepath fill
+.6 setgray
+newpath 102 180 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 108 180 moveto 69 0 rlineto 0 3 rlineto -69 0 rlineto closepath fill
+.6 setgray
+newpath 177 180 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 0 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 3 183 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 12 183 moveto 36 0 rlineto 0 3 rlineto -36 0 rlineto closepath fill
+.6 setgray
+newpath 48 183 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 54 183 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 60 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 63 183 moveto 69 0 rlineto 0 3 rlineto -69 0 rlineto closepath fill
+.6 setgray
+newpath 132 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 135 183 moveto 48 0 rlineto 0 3 rlineto -48 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 183 183 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 186 183 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+newpath 0 186 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 15 186 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 27 186 moveto 99 0 rlineto 0 3 rlineto -99 0 rlineto closepath fill
+.6 setgray
+newpath 126 186 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 129 186 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 132 186 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 147 186 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 156 186 moveto 36 0 rlineto 0 3 rlineto -36 0 rlineto closepath fill
+newpath 0 189 moveto 54 0 rlineto 0 3 rlineto -54 0 rlineto closepath fill
+.6 setgray
+newpath 54 189 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 60 189 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 66 189 moveto 15 0 rlineto 0 3 rlineto -15 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 81 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 84 189 moveto 45 0 rlineto 0 3 rlineto -45 0 rlineto closepath fill
+.6 setgray
+newpath 129 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 132 189 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 138 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.4509803921568628 setgray
+newpath 141 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 144 189 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 150 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 153 189 moveto 9 0 rlineto 0 3 rlineto -9 0 rlineto closepath fill
+.8509803921568627 setgray
+newpath 162 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 165 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.6 setgray
+newpath 168 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 171 189 moveto 6 0 rlineto 0 3 rlineto -6 0 rlineto closepath fill
+.6 setgray
+newpath 177 189 moveto 3 0 rlineto 0 3 rlineto -3 0 rlineto closepath fill
+.8980392156862745 setgray
+newpath 180 189 moveto 12 0 rlineto 0 3 rlineto -12 0 rlineto closepath fill
+0 setgray
+FONT-fixed setfont
+xwindowmatrix setmatrix 225 210 moveto (Mach) show viewmatrix setmatrix
+grestore
+showpage % INCLUDE-DELETE
+%%Trailer
+%%DocumentFonts: Helvetica
+
+%%EndDocument
+ PE 11 /Times-Bold AF
+15114 30552 MT
+(Figure 2-2:)SH
+/Times-Roman SF
+20887 XM
+(Cache Temperatures for system instruction cache misses.)SH
+10 SS 
+11686 32235 MT
+(This figure illustrates system misses in)
+122 W( a 64 Kbyte instruction cache during a run of the)123 W
+/Times-Italic SF
+48812 XM
+(gcc)SH
+/Times-Roman SF
+11000 33233 MT
+(benchmark. Each)
+416 W( square represents a sixteen byte cache line,)
+83 W( with a darker square indicating a)82 W
+11000 34231 MT
+(relatively large number of)
+3 W( misses for that line.  The gray level for a given square is determined by)4 W
+11000 35229 MT
+(the percent of total misses occurring in that line.)
+43 W( The)
+335 W( darkest squares indicate cases where more)42 W
+11000 36227 MT
+(than 1% of total misses)
+67 W( occurred in that line.  There are six gray levels, representing 1%, 0.5%,)68 W
+11000 37225 MT
+(0.25%, 0.125% 0.0625% and 0.03125%.)SH
+13 /Times-Bold AF
+9000 40976 MT
+(Acknowledgements)SH
+11 /Times-Roman AF
+10000 42373 MT
+(Thanks to Doug Tygar, David)
+10 W( Steere and Alan Eustace for their useful comments on this paper.)9 W
+9000 43770 MT
+(Brian Bershad, Alessandro Forin, Daniel Stodolsky, and Mary Thompson helped me)
+56 W( with Mach.)57 W
+9000 45167 MT
+(The tracing system is based on Anita Borg's original system for the)
+117 W( DEC WRL Titan, and her)116 W
+9000 46564 MT
+(contributions continued throughout the project.  Thanks to David Wall for providing epoxie, the)73 W
+9000 47961 MT
+(tool which made this work possible.  Thanks also to)
+177 W( Digital Equipment Corporation for their)176 W
+9000 49358 MT
+(generous support.)SH
+13 /Times-Bold AF
+9000 53109 MT
+(References)SH
+11 SS 
+9000 55060 MT
+(1.)SH
+/Times-Roman SF
+10375 XM
+(Anant Agarwal, Richard L. Sites, and Mark Horowitz.  ATUM: A New Technique for Captur-)SH
+9000 56256 MT
+(ing Address Traces Using Microcode.  13th Annual Symposium on Computer Architecture, June,)SH
+9000 57452 MT
+(1986, pp. 119-127.)SH
+/Times-Bold SF
+9000 59403 MT
+(2.)SH
+/Times-Roman SF
+10375 XM
+(Anant Agarwal, John Hennessy, and Mark Horowitz.  "Cache Performance of Operating Sys-)SH
+9000 60599 MT
+(tem and Multiprogramming Workloads".)SH
+/Times-Italic SF
+27597 XM
+(ACM Transactions on Computer Systems 6)SH
+/Times-Roman SF
+(, 4 \050Novem-)SH
+9000 61795 MT
+(ber 1988\051, 393-431.)SH
+/Times-Bold SF
+9000 63746 MT
+(3.)SH
+/Times-Roman SF
+10375 XM
+(Anant Agarwal.)SH
+/Times-Italic SF
+17949 XM
+(Analysis of Cache Performance for Operating Systems and)SH
+9000 64942 MT
+(Multiprogramming)SH
+/Times-Roman SF
+(. Ph.D.)
+275 W( Th., Stanford University, May 1987. Technical Report No. CSL-)SH
+9000 66138 MT
+(TR-87-322.)SH
+10 SS 
+30350 75600 MT
+(8)SH
+ES
+%%Page: 9 13
+BS
+0 SI
+11 /Times-Bold AF
+9000 7955 MT
+(4.)SH
+/Times-Roman SF
+10375 XM
+(Thomas Ball and James R. Larus.  Optimally Profiling and Tracing Programs.  Principles of)SH
+9000 9151 MT
+(Programming Languages, January, 1992.)SH
+/Times-Bold SF
+9000 11102 MT
+(5.)SH
+/Times-Roman SF
+10375 XM
+(Anita Borg, R.E. Kessler, Georgia Lazana, and David Wall.  Long Address Traces from RISC)SH
+9000 12298 MT
+(Machines: Generation and Analysis.  WRL Research Report 89/14, Digital Equipment Western)SH
+9000 13494 MT
+(Research Laboratory, 1989.)SH
+/Times-Bold SF
+9000 15445 MT
+(6.)SH
+/Times-Roman SF
+10375 XM
+(J. Bradley Chen.)SH
+/Times-Italic SF
+18257 XM
+(Memory System Behavior in Modern Operating Systems)SH
+/Times-Roman SF
+(. Ph.D.)
+275 W( Th., Car-)SH
+9000 16641 MT
+(negie Mellon University, 1994. to appear.)SH
+/Times-Bold SF
+9000 18592 MT
+(7.)SH
+/Times-Roman SF
+10375 XM
+(Douglas W. Clark.  "Cache Performance in the VAX-11/780".)SH
+/Times-Italic SF
+38366 XM
+(ACM Transactions on Com-)SH
+9000 19788 MT
+(puter Systems 1)SH
+/Times-Roman SF
+(, 1 \050February 1\051, 24-37.)SH
+/Times-Bold SF
+9000 21739 MT
+(8.)SH
+/Times-Roman SF
+10375 XM
+(Douglas W. Clark and Joel S. Emer.  "Performance of the VAX 11/780 Translation Buffer:)SH
+9000 22935 MT
+(Simulation and Measurement.".)SH
+/Times-Italic SF
+23503 XM
+(ACM Transactions on Computer Systems 3)SH
+/Times-Roman SF
+(, 1 \050February 1985\051.)SH
+/Times-Bold SF
+9000 24886 MT
+(9.)SH
+/Times-Roman SF
+10375 XM
+(M. DeMoney, J. Moore, and J. Mashey.  Operating System Support on a RISC.  Proceedings)SH
+9000 26082 MT
+(of the 31st Computer Society International Conference \050Spring Compcon '86\051, March, 1986, pp.)SH
+9000 27278 MT
+(138--143.)SH
+/Times-Bold SF
+9000 29229 MT
+(10.)SH
+/Times-Roman SF
+10925 XM
+(J. K. Flanagan, B. Nelson, J. Archibald, and K. Grimsrud.  BACH: BYU Address Collection)SH
+9000 30425 MT
+(Hardware; The Collection of Complete Traces.  Proceedings of the 6th International Conference)SH
+9000 31621 MT
+(on Modeling Techniques and Tools for Computer Performance Evaluation, 1992.)SH
+/Times-Bold SF
+9000 33572 MT
+(11.)SH
+/Times-Roman SF
+10925 XM
+(Jeffrey D. Gee, Mark D. Hill, Dionisios N. Pnevmatikatos, and Alan Jay Smith.  Cache)SH
+9000 34768 MT
+(Performance of the SPEC Benchmark Suite.  University of Wisconsin-Madison, 1991.)SH
+/Times-Bold SF
+9000 36719 MT
+(12.)SH
+/Times-Roman SF
+10925 XM
+(Gerry Kane.)SH
+/Times-Italic SF
+16909 XM
+(Mips RISC Architecture.)SH
+/Times-Roman SF
+28304 XM
+(Prentice Hall, Englewood Cliffs, NJ, 1987.)SH
+/Times-Bold SF
+9000 38670 MT
+(13.)SH
+/Times-Roman SF
+10925 XM
+(R.E. Kessler and Mark D. Hill.  "Page Placement Algorithms for Large Real-Indexed)SH
+9000 39866 MT
+(Caches".)SH
+/Times-Italic SF
+13450 XM
+(ACM Transactions on Computer Systems 10)SH
+/Times-Roman SF
+(, 4 \050November 1992\051.)SH
+/Times-Bold SF
+9000 41817 MT
+(14.)SH
+/Times-Roman SF
+10925 XM
+(James R. Larus.  "Abstract Execution: A Technique for Efficiently Tracing Programs".)SH
+/Times-Italic SF
+9000 43013 MT
+(Software Practices and Experience\051 20)SH
+/Times-Roman SF
+(, 12 \050December 1990\051, 1241-1258.)SH
+/Times-Bold SF
+9000 44964 MT
+(15.)SH
+/Times-Roman SF
+10925 XM
+(James R. Larus.  personal communication.)SH
+/Times-Bold SF
+9000 46915 MT
+(16.)SH
+/Times-Roman SF
+10925 XM
+(Jeffrey C. Mogul and Anita Borg.  The Effects of Context Switches on Cache Performance.)SH
+9000 48111 MT
+(Fourth International Conference on Architectural Support for Programming Languages and)SH
+9000 49307 MT
+(Operating Systems, April, 1991.)SH
+/Times-Bold SF
+9000 51258 MT
+(17.)SH
+/Times-Roman SF
+10925 XM
+(Steven A. Przybylski.)SH
+/Times-Italic SF
+21069 XM
+(Cache Design:  A Performance-Directed Approach.)SH
+/Times-Roman SF
+44527 XM
+(Morgan-)SH
+9000 52454 MT
+(Kaufmann, San Mateo, CA, 1990.)SH
+/Times-Bold SF
+9000 54405 MT
+(18.)SH
+/Times-Roman SF
+10925 XM
+(Alan Jay Smith.  "Cache Memories".)SH
+/Times-Italic SF
+27740 XM
+(ACM Computer Surveys 14)SH
+/Times-Roman SF
+(, 3 \050September 1982\051,)SH
+9000 55601 MT
+(473-530.)SH
+/Times-Bold SF
+9000 57552 MT
+(19.)SH
+/Times-Roman SF
+10925 XM
+(Micheal D. Smith.  Tracing with Pixie.  Stanford University, November, 1991.)SH
+/Times-Bold SF
+9000 59503 MT
+(20.)SH
+/Times-Roman SF
+10925 XM
+(Bart C. Vashaw.)SH
+/Times-Italic SF
+18745 XM
+(Address Trace Collection and Trace Driven Simulation of Bus Based,)SH
+9000 60699 MT
+(Shared Memory Multiprocessors)SH
+/Times-Roman SF
+(. Ph.D.)
+275 W( Th., Carnegie Mellon University, 1992. Department of)SH
+9000 61895 MT
+(Electrical and Computer Engineering.)SH
+/Times-Bold SF
+9000 63846 MT
+(21.)SH
+/Times-Roman SF
+10925 XM
+(David W. Wall.  Systems for Late Code Modification.  In)SH
+/Times-Italic SF
+36525 XM
+(Code Generation --- Concepts,)SH
+9000 65042 MT
+(Tools, Techniques)SH
+/Times-Roman SF
+(, Springer-Verlag, 1992, pp. 275-293.)SH
+10 SS 
+30350 75600 MT
+(9)SH
+ES
+%%Page: i 14
+BS
+0 SI
+13 /Times-Bold AF
+25652 8071 MT
+(Table of Contents)SH
+12 SS 
+10800 9327 MT
+(1. Introduction)SH
+51600 XM
+(1)SH
+10800 10583 MT
+(2. Some Answers)SH
+51600 XM
+(1)SH
+11 SS 
+12850 11751 MT
+(2.1. Why bother?  Just trace with hardware.)SH
+51650 XM
+(2)SH
+12850 12919 MT
+(2.2. Software methods don't work with operating system code.)SH
+51650 XM
+(3)SH
+12850 14087 MT
+(2.3. Locore is too complicated and delicate to trace.)SH
+51650 XM
+(4)SH
+12850 15255 MT
+(2.4. An)
+SH( operating system instrumented by)
+186 W( software methods will introduce)187 W
+51650 XM
+(4)SH
+14775 16423 MT
+(excessive distortion into)
+62 W( trace data.  The resulting system will be so com-)61 W
+14775 17591 MT
+(plicated, you can't tell if the trace is good or not.)SH
+12850 18759 MT
+(2.5. You'll)
+SH( never get accurate results)
+177 W( for I/O-bound workloads.  You can't)178 W
+51650 XM
+(7)SH
+14775 19927 MT
+(duplicate scheduler behavior.  For these reasons, software)
+14 W( methods aren't)13 W
+14775 21095 MT
+(applicable to complicated multitasking workloads.)SH
+12 SS 
+10800 22351 MT
+(3. Epilogue)SH
+51600 XM
+(7)SH
+10800 23607 MT
+(Acknowledgements)SH
+51600 XM
+(8)SH
+10800 24863 MT
+(References)SH
+51600 XM
+(8)SH
+10 /Times-Roman AF
+30461 75600 MT
+(i)SH
+ES
+%%Page: ii 15
+BS
+0 SI
+13 /Times-Bold AF
+26556 8071 MT
+(List of Figures)SH
+12 SS 
+10800 9327 MT
+(Figure 2-1:)
+SH( Overview)
+600 W( of the tracing system.)SH
+51600 XM
+(3)SH
+10800 10583 MT
+(Figure 2-2:)
+SH( Cache)
+600 W( Temperatures for system instruction cache misses.)SH
+51600 XM
+(8)SH
+10 /Times-Roman AF
+30322 75600 MT
+(ii)SH
+ES
+%%Page: iii 16
+BS
+0 SI
+13 /Times-Bold AF
+26808 8071 MT
+(List of Tables)SH
+12 SS 
+10800 9327 MT
+(Table 2-1:)
+SH( Example)
+600 W( workloads.)SH
+51600 XM
+(1)SH
+10800 10583 MT
+(Table 2-2:)
+SH( Example)
+600 W( Workloads: Instruction and Data Reference Counts)SH
+51600 XM
+(2)SH
+10800 11839 MT
+(Table 2-3:)
+SH( TLB)
+600 W( misses, measured and predicted.)SH
+51600 XM
+(5)SH
+10800 13095 MT
+(Table 2-4:)
+SH( Run)
+600 W( Times, measured and predicted, in seconds.)SH
+51600 XM
+(6)SH
+10800 14351 MT
+(Table 2-5:)
+SH( The)
+600 W( Ten Most Active Kernel routines for)SH
+/Times-BoldItalic SF
+38168 XM
+(gcc)SH
+/Times-Bold SF
+(.)SH
+51600 XM
+(6)SH
+10 /Times-Roman AF
+30183 75600 MT
+(iii)SH
+ES
+%%Trailer
+%%Pages: 16
+%%DocumentFonts: Times-Roman Times-Bold Times-Italic Symbol Courier Courier-Bold Times-BoldItalic

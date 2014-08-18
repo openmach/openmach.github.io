@@ -1,0 +1,6491 @@
+%!PS-Adobe-2.0
+%%Title: threads.mss
+%%DocumentFonts: (atend)
+%%Creator: Randall Dean and Scribe 7(1700)
+%%CreationDate: 25 February 1993 19:54
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale /showpage {} def} bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: ? 1
+BS
+0 SI
+14 /Times-Bold AF
+12729 8138 MT
+(Using Continuations to Build a User-Level Threads Library)SH
+12 /Times-Roman AF
+26450 11136 MT
+(Randall W. Dean)SH
+11 /Times-Italic AF
+24383 13528 MT
+(School of Computer Science)SH
+24429 14724 MT
+(Carnegie Mellon University)SH
+23526 15920 MT
+(Pittsburgh, Pennsylvania 15213)SH
+/Times-Roman SF
+27163 18312 MT
+(\050412\051 268-7654)SH
+24764 20704 MT
+(Internet: rwd@cs.cmu.edu)SH
+26048 21900 MT
+(Fax: \050412\051 681-5739)SH
+10 /Times-Bold AF
+28739 24763 MT
+(Abstract)SH
+/Times-Roman SF
+13600 27242 MT
+(We have designed and built a)
+177 W( user-level threads library that uses)176 W
+/Times-Italic SF
+41563 XM
+(continuations)SH
+/Times-Roman SF
+47434 XM
+(for)SH
+12600 28619 MT
+(transfers of control.  The use of)2 W
+/Times-Italic SF
+25444 XM
+(continuations)SH
+/Times-Roman SF
+31141 XM
+(reduces the amount of state that needs)
+2 W( to be)3 W
+12600 29996 MT
+(saved and restored at context switch time thereby reducing the instruction count in)
+118 W( the)117 W
+12600 31373 MT
+(critical sections.  Our multiprocessor contention benchmarks indicate that this reduction)81 W
+12600 32750 MT
+(and the use of)54 W
+/Times-Italic SF
+18648 XM
+(Busy Spinning)54 W
+/Times-Roman SF
+(,)SH
+/Times-Italic SF
+25006 XM
+(Busy Waiting)54 W
+/Times-Roman SF
+30725 XM
+(and)SH
+/Times-Italic SF
+32473 XM
+(Spin Polling)54 W
+/Times-Roman SF
+37804 XM
+(increases throughput by as)53 W
+12600 34127 MT
+(much as 75% on a multiprocessor.  In addition, flattening the)
+75 W( locking hierarchy reduces)76 W
+12600 35504 MT
+(context switch latency by 5% to 49% on)
+99 W( both uniprocessors and multiprocessors.  This)98 W
+12600 36881 MT
+(paper describes the library's design)
+56 W( and compares its overall performance characteristics)57 W
+12600 38258 MT
+(to the existing implementation.)SH
+13 /Times-Bold AF
+9000 42009 MT
+(1. Introduction)SH
+11 /Times-Roman AF
+10000 43386 MT
+(Mach 3.0)
+183 W( [8])
+SH( has)
+183 W( been available since 1990 for anonymous FTP as a platform for building)182 W
+9000 44763 MT
+(operating systems and embedded applications.  To support)
+247 W( this development environment, a)248 W
+9000 46140 MT
+(library that implements multiple threads of)
+112 W( control and mutual exclusion is provided.  In Mach)111 W
+9000 47517 MT
+(2.5 [1])
+SH( C-Threads)
+6 W( [6])
+SH( is the library that supplies these needs.  The Mach 2.5 implementation maps)7 W
+9000 48894 MT
+(user threads one-to-one with Mach kernel threads resulting in extensive)
+201 W( usage of kernel data)200 W
+9000 50271 MT
+(structures and expensive kernel context switches.  The)
+101 W( old Mach 3.0 implementation solves the)102 W
+9000 51648 MT
+(one-to-one mapping)
+162 W( problem by multiplexing user threads onto equal or fewer kernel threads.)161 W
+9000 53025 MT
+(The old)
+291 W( implementation uses a complex locking hierarchy suitable for multiprocessors that)292 W
+9000 54402 MT
+(requires a small state machine inside the context switch critical section.  Combined)
+29 W( with the need)28 W
+9000 55779 MT
+(to acquire multiple locks and save full user)
+17 W( register state, this approach results in a relatively high)18 W
+9000 57156 MT
+(latency for user context switching.)SH
+10000 59635 MT
+(The need to save full)
+388 W( register state at context switch time also affects throughput on)387 W
+9000 61012 MT
+(multiprocessors. Regardless)
+287 W( of how finely grained the locking)
+6 W( hierarchy is, it is necessary to hold)7 W
+9000 62389 MT
+(a single central lock during)
+193 W( a context switch to protect the blocking computation from being)192 W
+9000 63766 MT
+(resumed by another thread.)
+86 W( The)
+449 W( time needed to save and restore the user registers becomes the)87 W
+9000 65143 MT
+(lower bound on critical section size.)SH
+10000 67622 MT
+(We have applied)91 W
+/Times-Italic SF
+17938 XM
+(continuations)SH
+/Times-Roman SF
+24294 XM
+(to C-Threads to address)
+91 W( the effects on latency and throughput)90 W
+9000 68999 MT
+(caused by)
+287 W( long critical sections.  Continuations have existed in the programming language)288 W
+9000 70376 MT
+(community as an abstraction for describing a future computation)
+23 W( for many years)
+22 W( [14].)
+SH( They)
+319 W( have)22 W
+9000 71753 MT
+(also been used in the Mach 3.0)
+206 W( kernel)
+207 W( [7])
+SH( as a basis for control transfers between execution)207 W
+ES
+%%Page: ? 2
+BS
+0 SI
+11 /Times-Roman AF
+9000 7955 MT
+(contexts. Their)
+403 W( use in describing control transfers in the kernel reduced)
+64 W( context switching times)63 W
+9000 9332 MT
+(and kernel stack utilization.)SH
+10000 11811 MT
+(In C-Threads, continuations have not)
+268 W( only directly reduced critical section size, but have)269 W
+9000 13188 MT
+(enabled further optimizations.)
+117 W( The)
+508 W( direct effect of applying continuations is a reduction of the)116 W
+9000 14565 MT
+(number of words saved and restored at context)
+78 W( switch time.  By building a continuation when a)79 W
+9000 15942 MT
+(potentially blocking C-Thread call is made,)
+46 W( the thread state needed at context switch time can be)45 W
+9000 17319 MT
+(described with only)
+3 W( 2 words.  The building of the user continuation can be done upon entering the)4 W
+9000 18696 MT
+(C-Threads library so)
+127 W( no lock needs to be held.  This reduction in critical section size makes it)126 W
+9000 20073 MT
+(possible to flatten the locking hierarchy which further reduces the size of the critical section.)
+14 W( The)304 W
+9000 21450 MT
+(net result is a reduction in latency of 5% to 49% on our uniprocessor)
+56 W( context switch benchmark.)55 W
+9000 22827 MT
+(These changes along with)40 W
+/Times-Italic SF
+20828 XM
+(Busy Waiting)40 W
+/Times-Roman SF
+(,)SH
+/Times-Italic SF
+27355 XM
+(Busy Spinning)40 W
+/Times-Roman SF
+(, and)40 W
+/Times-Italic SF
+36213 XM
+(Spin Polling)40 W
+/Times-Roman SF
+42039 XM
+(increase throughput)
+40 W( by)41 W
+9000 24204 MT
+(as much as 75% as measured by our multiprocessor contention benchmark.)SH
+10000 26683 MT
+(Considerable research has been done in the area of user-level thread packages.)
+107 W( Of)
+487 W( particular)106 W
+9000 28060 MT
+(relevance to the work described in this paper is)
+175 W( the work on scheduler activations)
+176 W( [2] [3])
+SH( and)176 W
+9000 29437 MT
+(adaptive spinning strategies)
+286 W( [12].)
+SH( We)
+847 W( believe there would be synergistic benefits)
+286 W( from the)285 W
+9000 30814 MT
+(integration of these efforts.)SH
+10000 33293 MT
+(Section 2 gives an overview)
+236 W( of the C-Threads library interface and describes the relevant)237 W
+9000 34670 MT
+(internal interfaces and implementations.  Section 3 describes how continuations)
+572 W( were)571 W
+9000 36047 MT
+(implemented and used with the new version of C-Threads.)
+37 W( Section)
+350 W( 4 describes the optimizations)38 W
+9000 37424 MT
+(used in implementing the new version.)
+18 W( Section)
+309 W( 5 compares latency and throughput in the old and)17 W
+9000 38801 MT
+(new versions of C-Threads and shows how certain optimizations effected throughput.)SH
+13 /Times-Bold AF
+9000 42552 MT
+(2. C-Thread Internals)SH
+11 /Times-Roman AF
+10000 43929 MT
+(C-Threads [6])
+SH( was originally designed as a threading library that)
+243 W( transparently used Mach)244 W
+9000 45306 MT
+(features to supply parallelism.  Implementations included a version)
+1 W( that used a Mach task for each)SH
+9000 46683 MT
+(C-Thread, a version that used a single thread in a single task to supply)
+63 W( coroutines, and a version)64 W
+9000 48060 MT
+(that used one Mach task with a Mach thread per C-Thread.)
+147 W( The)
+567 W( old Mach 3.0 version of the)146 W
+9000 49437 MT
+(library multiplexes C-Threads onto equal or fewer kernel threads)
+230 W( because of concerns about)231 W
+9000 50814 MT
+(kernel data structure use such as kernel stacks and kernel context switching times.)SH
+10000 53293 MT
+(The remainder of this section outlines the C-Thread external interface.  It)
+6 W( also describes enough)5 W
+9000 54670 MT
+(of the old Mach 3.0 implementation's internal interfaces)
+203 W( and structure to provide a basis for)204 W
+9000 56047 MT
+(understanding the changes made in the new version.)SH
+12 /Times-Bold AF
+9000 59731 MT
+(2.1. Interface)SH
+11 /Times-Roman AF
+10000 61108 MT
+(A detailed)
+43 W( description of the C-Threads interface can be found in the CMU technical report by)42 W
+9000 62485 MT
+(Cooper and Draves)
+146 W( [6].)
+SH( This)
+567 W( section)
+146 W( briefly reviews the interface described in that document.)147 W
+9000 63862 MT
+(Where additions to the interface were made, motivation)
+130 W( and a more detailed description of the)129 W
+9000 65239 MT
+(calls is given.)SH
+ES
+%%Page: ? 3
+BS
+0 SI
+11 /Times-Bold AF
+9000 7937 MT
+(2.1.1. Threads)SH
+/Times-Roman SF
+10000 9314 MT
+(C-Threads are created and managed with the following calls:)SH
+/Symbol SF
+10969 10892 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(cthread_t)SH
+/Times-Italic SF
+16764 XM
+(cthread_fork)SH
+/Times-Bold SF
+(\050cthread_fn_t func, void *argument\051)219 W
+/Times-Roman SF
+40706 XM
+(creates a C-Thread)220 W
+11750 12088 MT
+(that executes function)SH
+/Times-Bold SF
+21677 XM
+(func)SH
+/Times-Roman SF
+24030 XM
+(with argument)SH
+/Times-Bold SF
+30690 XM
+(arg)SH
+/Times-Roman SF
+(.)SH
+/Symbol SF
+10969 13982 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(void)SH
+/Times-Italic SF
+14043 XM
+(cthread_exit)SH
+/Times-Bold SF
+(\050void *status\051)SH
+/Times-Roman SF
+26141 XM
+(exits the current C-Thread returning)SH
+/Times-Bold SF
+42298 XM
+(status)SH
+/Times-Roman SF
+(.)SH
+/Symbol SF
+10969 15876 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(void *)127 W
+/Times-Italic SF
+(cthread_join)SH
+/Times-Bold SF
+(\050cthread_t thread\051)126 W
+/Times-Roman SF
+29512 XM
+(waits for C-Thread)126 W
+/Times-Bold SF
+38533 XM
+(thread)SH
+/Times-Roman SF
+42050 XM
+(to terminate and)126 W
+11750 17072 MT
+(returns the exit)SH
+/Times-Bold SF
+18623 XM
+(status)SH
+/Times-Roman SF
+21648 XM
+(of that thread.)SH
+/Times-Bold SF
+9000 19969 MT
+(2.1.2. Mutexes)SH
+/Times-Roman SF
+10000 21346 MT
+(C-Threads provides a mutual exclusion primitive called mutex that guarantees at)
+202 W( most one)203 W
+9000 22723 MT
+(holder. Mutexes)
+275 W( are manipulated by the following calls:)SH
+/Symbol SF
+10969 24301 MT
+(\267)SH
+/Times-Italic SF
+11750 XM
+(mutex_lock)SH
+/Times-Bold SF
+(\050mutex_t m\051)SH
+/Times-Roman SF
+22804 XM
+(Acquires the mutex)SH
+/Times-Bold SF
+31693 XM
+(m)SH
+/Times-Roman SF
+(.)SH
+/Symbol SF
+10969 26195 MT
+(\267)SH
+/Times-Italic SF
+11750 XM
+(mutex_unlock)SH
+/Times-Bold SF
+(\050mutex_t m\051)SH
+/Times-Roman SF
+23904 XM
+(releases the mutex)SH
+/Times-Bold SF
+32303 XM
+(m)SH
+/Times-Roman SF
+(.)SH
+/Times-Bold SF
+9000 29092 MT
+(2.1.3. Condition Variables)SH
+/Times-Roman SF
+10000 30469 MT
+(Condition variables allow one thread to wait for another)
+11 W( thread to signal that event or change in)10 W
+9000 31846 MT
+(state occurred.  The following calls handle condition variables:)SH
+/Symbol SF
+10969 33424 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(void)SH
+/Times-Italic SF
+14355 XM
+(condition_wait)SH
+/Times-Bold SF
+(\050condition_t c, mutex_t m\051)312 W
+/Times-Roman SF
+34882 XM
+(waits for condition)312 W
+/Times-Bold SF
+44404 XM
+(c)SH
+/Times-Roman SF
+45480 XM
+(releasing)SH
+11750 34620 MT
+(mutex)SH
+/Times-Bold SF
+14942 XM
+(m)SH
+/Times-Roman SF
+16300 XM
+(while waiting.  When the condition is signaled, the mutex is reacquired)167 W
+11750 35816 MT
+(before)SH
+/Times-Italic SF
+14833 XM
+(condition_wait)SH
+/Times-Roman SF
+(\050\051 returns.)SH
+/Symbol SF
+10969 37710 MT
+(\267)SH
+/Times-Italic SF
+11750 XM
+(condition_signal)SH
+/Times-Bold SF
+(\050condition_t c\051)128 W
+/Times-Roman SF
+26490 XM
+(signals condition)128 W
+/Times-Bold SF
+34508 XM
+(c)SH
+/Times-Roman SF
+35399 XM
+(waking up at least one waiting)128 W
+11750 38906 MT
+(thread.)SH
+/Times-Bold SF
+9000 41803 MT
+(2.1.4. Kernel Threads)SH
+/Times-Roman SF
+10000 43180 MT
+(The old C-Thread library)
+104 W( multiplexes multiple C-Threads onto equal or fewer kernel threads.)103 W
+9000 44557 MT
+(The best performance is achieved when pre-emptive kernel)
+281 W( context switching is minimized)282 W
+9000 45934 MT
+(without losing parallelism.  Two new interface calls were added to allow the application)
+29 W( designer)28 W
+9000 47311 MT
+(to control the number of kernel threads used:)SH
+/Symbol SF
+10969 48889 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(void)SH
+/Times-Italic SF
+14080 XM
+(cthread_set_kernel_limit)SH
+/Times-Bold SF
+(\050int limit\051)37 W
+/Times-Roman SF
+29918 XM
+(sets the maximum)
+37 W( number of kernel threads)38 W
+11750 50085 MT
+(that can be created.  A value of zero indicates that there is no limit.)SH
+/Symbol SF
+10969 51979 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(int)SH
+/Times-Italic SF
+13715 XM
+(cthread_kernel_limit)SH
+/Times-Bold SF
+(\050void\051)SH
+/Times-Roman SF
+26372 XM
+(returns the current maximum number of kernel)405 W
+11750 53175 MT
+(threads.)SH
+/Times-Bold SF
+9000 56072 MT
+(2.1.5. Thread Wiring)SH
+/Times-Roman SF
+10000 57449 MT
+(The C-Threads library includes a mechanism to)
+24 W( allow a user to disable C-Threads multiplexing)25 W
+9000 58826 MT
+(on a per C-Thread basis:)SH
+/Symbol SF
+10969 60404 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(void)SH
+/Times-Italic SF
+14043 XM
+(cthread_wire)SH
+/Times-Bold SF
+(\050void\051)SH
+/Times-Roman SF
+22934 XM
+(binds a C-Thread to its underlying kernel thread.)SH
+/Symbol SF
+10969 62298 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(void)SH
+/Times-Italic SF
+14114 XM
+(cthread_unwire)SH
+/Times-Bold SF
+(\050void\051)SH
+/Times-Roman SF
+24176 XM
+(removes the binding making)
+71 W( it possible for multiplexing)70 W
+11750 63494 MT
+(to occur.)SH
+10000 65973 MT
+(Once a thread is)162 W
+/Times-Italic SF
+18038 XM
+(wired)SH
+/Times-Roman SF
+20982 XM
+(it becomes possible for the user to make Mach thread calls such as)163 W
+/Times-Italic SF
+9000 67350 MT
+(thread_priority)SH
+/Times-Roman SF
+(\050\051,)SH
+/Times-Italic SF
+17164 XM
+(thread_assign)SH
+/Times-Roman SF
+(\050\051, or)98 W
+/Times-Italic SF
+26066 XM
+(thread_info)SH
+/Times-Roman SF
+(\050\051 on the kernel thread and have the calls only)97 W
+9000 68727 MT
+(affect the associated C-Thread.  Programs can use this facility to run specialized threads)
+243 W( at)244 W
+9000 70104 MT
+(elevated priority, for example, the BSD 4.3)
+132 W( Single Server)
+131 W( [8])
+SH( uses this for threads that interact)131 W
+9000 71481 MT
+(with kernel devices.)SH
+ES
+%%Page: ? 4
+BS
+0 SI
+12 /Times-Bold AF
+9000 8004 MT
+(2.2. Old Implementations)SH
+11 /Times-Roman AF
+10000 9381 MT
+(The old Mach 3.0 implementation draws from the)
+144 W( Mach 2.5 coroutine and threads versions.)145 W
+9000 10758 MT
+(The coroutine version multiplexes multiple C-Threads onto a single)
+137 W( Mach kernel thread.  This)136 W
+9000 12135 MT
+(requires machine dependent)
+209 W( code for user context switching, per-object queues, and a global)210 W
+9000 13512 MT
+(queue of runnable threads called the)137 W
+/Times-Italic SF
+26008 XM
+(run_queue)SH
+/Times-Roman SF
+(. With)
+548 W( only one kernel thread there can be no)136 W
+9000 14889 MT
+(contention for the internal data structures so no locking is required in)
+44 W( the coroutine version.  The)45 W
+9000 16266 MT
+(threads version binds C-Threads to kernel threads)
+138 W( and has as many kernel threads as there are)137 W
+9000 17643 MT
+(C-Threads. Per-object)
+563 W( queues must now be locked because of pre-emptive scheduling, but)
+144 W( no)145 W
+9000 19020 MT
+(machine dependent context)
+10 W( switching code or global)9 W
+/Times-Italic SF
+32494 XM
+(run_queue)SH
+/Times-Roman SF
+37482 XM
+(is needed since this is all handled)9 W
+9000 20397 MT
+(by the kernel.)SH
+10000 22876 MT
+(From the Mach 2.5 implementations was taken all of the queues, all of the)
+8 W( locking, the multiple)9 W
+9000 24253 MT
+(kernel threads, and)
+67 W( the machine dependent context switching code.  With these two sources also)66 W
+9000 25630 MT
+(came an internal programming layer)
+411 W( called)412 W
+/Times-Italic SF
+30648 XM
+(cprocs)SH
+/Times-Roman SF
+(.)SH
+/Times-Italic SF
+35229 XM
+(Cprocs)SH
+/Times-Roman SF
+39094 XM
+(provides an implementation)412 W
+9000 27007 MT
+(independent virtual processor layer that is used to implement the higher level C-Threads)362 W
+9000 28384 MT
+(primitives. The)
+543 W( differences between the various C-Threads implementations are hidden within)134 W
+9000 29761 MT
+(this layer.  The remainder of)
+60 W( this section will describe interfaces and implementation details that)59 W
+9000 31138 MT
+(reside below the)SH
+/Times-Italic SF
+16483 XM
+(cproc)SH
+/Times-Roman SF
+19262 XM
+(layer.)SH
+/Times-Bold SF
+9000 34035 MT
+(2.2.1. Locking)SH
+/Times-Roman SF
+10000 35412 MT
+(Locking internal C-Threads)
+212 W( data structures cannot be handled with mutexes since they are)213 W
+9000 36789 MT
+(implemented by the library.  Instead,)
+38 W( C-Threads does its locking with)37 W
+/Times-Italic SF
+40237 XM
+(spin_lock)SH
+/Times-Roman SF
+(s.)SH
+/Times-Italic SF
+45780 XM
+(Spin_lock)SH
+/Times-Roman SF
+(s are)37 W
+9000 38166 MT
+(implemented using the)
+108 W( hardware's native test-and-set, compare-and-swap, or exchange-memory)109 W
+9000 39543 MT
+(instruction. On)
+337 W( uniprocessors that do not supply such an instruction, a)
+31 W( kernel-supported software)30 W
+9000 40920 MT
+(restartable-atomic-sequence is used)
+199 W( [4].)
+SH( In)
+673 W( order to minimize bus)
+199 W( contention when locking a)200 W
+/Times-Italic SF
+9000 42297 MT
+(spin_lock)SH
+/Times-Roman SF
+(, we implement them as a)
+17 W( test followed by the atomic operation.  This keeps most of the)16 W
+9000 43674 MT
+(spinning in the cache.)SH
+10000 46153 MT
+(For each mutex and condition variable there is a queue for C-Threads that)
+50 W( are blocked waiting)51 W
+9000 47530 MT
+(on that object.)
+199 W( There)
+671 W( is also a global)198 W
+/Times-Italic SF
+27280 XM
+(run_queue)SH
+/Times-Roman SF
+32457 XM
+(on which a C-Thread is enqueued when it)198 W
+9000 48907 MT
+(becomes runnable.  Each of these queues is protected by a different)137 W
+/Times-Italic SF
+40544 XM
+(spin_lock)SH
+/Times-Roman SF
+(. The)551 W
+/Times-Italic SF
+47984 XM
+(spin_lock)SH
+/Times-Roman SF
+9000 50284 MT
+(guarding the)SH
+/Times-Italic SF
+14804 XM
+(run_queue)SH
+/Times-Roman SF
+19783 XM
+(is called the)SH
+/Times-Italic SF
+25312 XM
+(run_lock)SH
+/Times-Roman SF
+(.)SH
+/Times-Bold SF
+9000 53181 MT
+(2.2.2. Blocking and Resuming)SH
+/Times-Roman SF
+10000 54558 MT
+(The routine invoked when a C-Thread blocks is called)24 W
+/Times-Italic SF
+34377 XM
+(cproc_block)SH
+/Times-Roman SF
+(\050\051. This)
+321 W( routine does one of)23 W
+9000 55935 MT
+(two things depending on whether)
+108 W( or not the blocking thread is)109 W
+/Times-Italic SF
+37782 XM
+(wired)SH
+/Times-Roman SF
+(. If)
+493 W( the thread is wired, it)109 W
+9000 57312 MT
+(blocks by)
+175 W( calling)174 W
+/Times-Italic SF
+17314 XM
+(mach_msg)SH
+/Times-Roman SF
+(\050\051, waiting for a message to wake it up indicating that it can run)174 W
+9000 58689 MT
+(again. If)
+397 W( the thread is not)61 W
+/Times-Italic SF
+20973 XM
+(wired)SH
+/Times-Roman SF
+(, it)
+61 W( checks the)62 W
+/Times-Italic SF
+30049 XM
+(run_queue)SH
+/Times-Roman SF
+35090 XM
+(for another thread to run.  If there is a)62 W
+9000 60066 MT
+(C-Thread present, it contexts switches to that thread.)SH
+10000 62545 MT
+(If a thread is not present,)
+130 W( then the underlying kernel thread must disassociate itself from the)129 W
+9000 63922 MT
+(blocking C-Thread and become idle.  Since the stack that)
+72 W( the kernel thread uses in user space is)73 W
+9000 65299 MT
+(associated with the C-Thread and not the kernel thread, the first thing)
+106 W( necessary is to acquire a)105 W
+9000 66676 MT
+(stack to use.  It is not possible to use the blocking C-Thread's stack, since the blocking thread)117 W
+9000 68053 MT
+(could become runnable and start running)
+7 W( on another kernel thread.  A pool of idle C-Threads with)6 W
+9000 69430 MT
+(small stacks is kept for this purpose.  A C-Thread is pulled from this pool or created)
+24 W( if necessary.)25 W
+9000 70807 MT
+(The blocking C-Thread then context switches to this idle C-Thread invoking the routine)377 W
+ES
+%%Page: ? 5
+BS
+0 SI
+11 /Times-Italic AF
+9000 7955 MT
+(cproc_waiting)SH
+/Times-Roman SF
+(\050\051.)SH
+/Times-Italic SF
+17569 XM
+(Cproc_waiting)SH
+/Times-Roman SF
+(\050\051 simply sits in a loop calling)328 W
+/Times-Italic SF
+39882 XM
+(mach_msg)SH
+/Times-Roman SF
+(\050\051 waiting for a)329 W
+9000 9332 MT
+(message to wake it up.  When it receives)
+172 W( a message, it acquires the)171 W
+/Times-Italic SF
+41090 XM
+(run_lock)SH
+/Times-Roman SF
+45446 XM
+(and checks for)171 W
+9000 10709 MT
+(C-Thread. If)
+513 W( a C-Thread is found, its execution will be resumed.  If not,)
+119 W( the idle thread loops)120 W
+9000 12086 MT
+(back to)SH
+/Times-Italic SF
+12482 XM
+(mach_msg)SH
+/Times-Roman SF
+(\050\051.)SH
+10000 14565 MT
+(When an operation such as)108 W
+/Times-Italic SF
+22664 XM
+(condition_signal)SH
+/Times-Roman SF
+(\050\051 or)107 W
+/Times-Italic SF
+32472 XM
+(mutex_unlock)SH
+/Times-Roman SF
+(\050\051 makes a C-Thread runnable)107 W
+9000 15942 MT
+(again,)SH
+/Times-Italic SF
+11941 XM
+(cproc_ready)SH
+/Times-Roman SF
+(\050\051 is invoked.  This routine inserts the newly runnable)
+9 W( thread on the)10 W
+/Times-Italic SF
+47496 XM
+(run_queue)SH
+/Times-Roman SF
+9000 17319 MT
+(and wakes up any idle kernel threads.)SH
+/Times-Bold SF
+9000 20216 MT
+(2.2.3. The State Machine)SH
+/Times-Roman SF
+10000 21593 MT
+(A small state machine is)
+277 W( used to keep track of each C-Thread.  A thread can be either)276 W
+9000 22970 MT
+(RUNNING, BLOCKED, or SWITCHING.  The)
+122 W( first two states have the obvious meaning and)123 W
+9000 24347 MT
+(are and easy to deal with in)152 W
+/Times-Italic SF
+22373 XM
+(cproc_ready)SH
+/Times-Roman SF
+(\050\051 and)151 W
+/Times-Italic SF
+31103 XM
+(cproc_block)SH
+/Times-Roman SF
+(\050\051. The)
+577 W( third state, SWITCHING,)151 W
+9000 25724 MT
+(occurs when a thread is in the process of)
+66 W( blocking and has released the lock on the queue of the)67 W
+9000 27101 MT
+(object for which it is waiting.)SH
+12 /Times-Bold AF
+9000 30785 MT
+(2.3. Evaluation of Old Implementation)SH
+11 /Times-Roman AF
+10000 32162 MT
+(While the old Mach 3.0 implementation is a great improvement over the)
+457 W( Mach 2.5)456 W
+9000 33539 MT
+(implementations by enabling)
+233 W( user level context switching, we felt that further enhancements)234 W
+9000 34916 MT
+(could be made.)
+180 W( The)
+633 W( old implementation is very aggressive about blocking.  Spinning before)179 W
+9000 36293 MT
+(blocking has)
+169 W( been shown to be superior to just spinning or just blocking)
+170 W( [12].)
+SH( Mach)
+615 W( 3.0 has)170 W
+9000 37670 MT
+(better scheduling primitives for synchronization)
+57 W( then)56 W
+/Times-Italic SF
+32924 XM
+(mach_msg)SH
+/Times-Roman SF
+(\050\051 [5].)
+SH( Finally,)
+387 W( the old Mach 3.0)56 W
+9000 39047 MT
+(code is complex and)
+236 W( hard to maintain.  We created the new implementation to address our)237 W
+9000 40424 MT
+(concerns with the shortcomings of the old implementation.)SH
+13 /Times-Bold AF
+9000 44175 MT
+(3. Continuations)SH
+11 /Times-Roman AF
+10000 45552 MT
+(A continuation is an object that fully describes a future computation.  A continuation can)
+117 W( be)116 W
+9000 46929 MT
+(built, invoked, and passed around as an argument like any)
+27 W( other object.  The Mach 3.0 kernel has)28 W
+9000 48306 MT
+(two types of continuations.  The first type of continuation describes the)
+94 W( user's state and is built)93 W
+9000 49683 MT
+(when the thread crosses the protection boundary from user space to kernel mode.)
+131 W( The)
+539 W( second)132 W
+9000 51060 MT
+(type describes the state that has accumulated since entering the kernel)
+1 W( and is built when the thread)SH
+9000 52437 MT
+(blocks inside the kernel.)SH
+10000 54916 MT
+(As with the kernel)
+96 W( implementation, there are two distinct continuations in the new version of)97 W
+9000 56293 MT
+(the C-Threads library.  A continuation that describes the user's)
+180 W( computation at the time a C-)179 W
+9000 57670 MT
+(Thread routine is called is built upon entrance to the library.  We)
+34 W( call this the)35 W
+/Times-Italic SF
+43669 XM
+(User Continuation)35 W
+/Times-Roman SF
+(.)SH
+9000 59047 MT
+(The other continuation present in this implementation is used)
+423 W( internally to describe the)422 W
+9000 60424 MT
+(computation that should)
+187 W( occur when a C-Thread is resumed after blocking.  We call this the)188 W
+/Times-Italic SF
+9000 61801 MT
+(Internal Continuation)SH
+/Times-Roman SF
+(.)SH
+10000 64280 MT
+(We have two different continuations because, like the kernel, the computations they describe)111 W
+9000 65657 MT
+(are so different.  The)94 W
+/Times-Italic SF
+18936 XM
+(User Continuation)94 W
+/Times-Roman SF
+27620 XM
+(describes the user state that has accumulated up to)
+94 W( the)95 W
+9000 67034 MT
+(point of a)
+52 W( C-Threads operation being invoked.  This is potentially large and difficult to examine,)51 W
+9000 68411 MT
+(because it resides on the user's stack.  Furthermore, the user's state)
+94 W( is machine dependent.  We)95 W
+9000 69788 MT
+(build the)449 W
+/Times-Italic SF
+14054 XM
+(User Continuation)449 W
+/Times-Roman SF
+23448 XM
+(to encapsulate this machine dependent state as a machine)448 W
+9000 71165 MT
+(independent object.)
+101 W( The)478 W
+/Times-Italic SF
+20555 XM
+(Internal Continuation)102 W
+/Times-Roman SF
+30661 XM
+(is a small, easily examined, easily manipulated,)102 W
+9000 72542 MT
+(machine independent object consisting of a function pointer and an argument.)SH
+ES
+%%Page: ? 6
+BS
+0 SI
+12 /Times-Bold AF
+9000 8004 MT
+(3.1. Building and Invoking Continuations)SH
+11 /Times-Roman AF
+10000 9381 MT
+(The kernel has a distinct protection boundary that makes it easy to)
+217 W( build and invoke user)216 W
+9000 10758 MT
+(continuations when the boundary is crossed.  To make it possible for C-Threads to easily build)102 W
+9000 12135 MT
+(user continuations, we supply a wrapper)
+142 W( to potentially blocking C-Thread calls that acts much)141 W
+9000 13512 MT
+(like the user-to-kernel protection boundary crossover.  Building the)135 W
+/Times-Italic SF
+40151 XM
+(User Continuation)135 W
+/Times-Roman SF
+48917 XM
+(is done)136 W
+9000 14889 MT
+(without holding any locks.  The continuation is)
+56 W( built by saving all the callee saved user registers)55 W
+9000 16266 MT
+(on the current stack and)
+15 W( saving the resulting stack pointer.  Upon exit from the C-Threads library,)16 W
+9000 17643 MT
+(this continuation is invoked.  This entails setting the stack pointer to)
+110 W( that saved at continuation)109 W
+9000 19020 MT
+(creation, restoring the user's registers, and returning)
+120 W( to the user routine which originally called)121 W
+9000 20397 MT
+(C-Threads.)SH
+10000 22876 MT
+(With the user's state encapsulated in the)89 W
+/Times-Italic SF
+28613 XM
+(User Continuation)88 W
+/Times-Roman SF
+(, all that is needed to describe the)88 W
+9000 24253 MT
+(state of the library is a single function pointer and argument.  The)114 W
+/Times-Italic SF
+39624 XM
+(Internal Continuation)115 W
+/Times-Roman SF
+('s two)115 W
+9000 25630 MT
+(words are saved inside the)184 W
+/Times-Italic SF
+21801 XM
+(User Continuation)184 W
+/Times-Roman SF
+30665 XM
+(in space reserved for this)
+184 W( purpose.  When this)183 W
+9000 27007 MT
+(thread is)
+272 W( resumed and its continuation is invoked, the function is called with the specified)273 W
+9000 28384 MT
+(argument. The)
+497 W( thread's stack pointer is derived from the address)
+111 W( of the previously saved)110 W
+/Times-Italic SF
+50062 XM
+(User)SH
+9000 29761 MT
+(Continuation)SH
+/Times-Roman SF
+(.)SH
+12 /Times-Bold AF
+9000 33470 MT
+(3.2. The)SH
+/Times-BoldItalic SF
+13400 XM
+(filter)SH
+/Times-Bold SF
+16102 XM
+(Mechanism)SH
+11 /Times-Roman AF
+10000 34847 MT
+(To centralize the manipulation of continuations, a single object called a)188 W
+/Times-Italic SF
+43776 XM
+(filter)SH
+/Times-Roman SF
+46379 XM
+(is used.)
+188 W( All)652 W
+9000 36224 MT
+(manipulations of continuations within C-Threads are done through)
+78 W( this object.  A)77 W
+/Times-Italic SF
+46012 XM
+(filter)SH
+/Times-Roman SF
+48504 XM
+(is a per-)77 W
+9000 37601 MT
+(thread specified function that is invoked each time the)
+350 W( manipulation of a continuation is)351 W
+9000 38978 MT
+(necessary. A)275 W
+/Times-Italic SF
+15168 XM
+(filter)SH
+/Times-Roman SF
+17583 XM
+(takes as a parameter the type of manipulation necessary.  These are:)SH
+/Symbol SF
+10969 40556 MT
+(\267)SH
+/Times-Roman SF
+11750 XM
+(FILTER_USER_BUILD: This is invoked by)
+141 W( the wrapper of a potentially blocking)140 W
+11750 41752 MT
+(C-Thread routine.  It calls the real function, which is passed to it as an argument.)SH
+/Symbol SF
+10969 43646 MT
+(\267)SH
+/Times-Roman SF
+11750 XM
+(FILTER_INTERNAL_BUILD: This)
+33 W( is invoked when a C-Thread actually blocks.  It)34 W
+11750 44842 MT
+(is passed the function and argument that must be invoked when)
+306 W( the C-Thread)305 W
+11750 46038 MT
+(continues. It)
+331 W( calls the FILTER_INTERNAL_INVOKE of the C-Thread that)
+28 W( is being)29 W
+11750 47234 MT
+(resumed.)SH
+/Symbol SF
+10969 49128 MT
+(\267)SH
+/Times-Roman SF
+11750 XM
+(FILTER_INTERNAL_INVOKE: This)
+799 W( is invoked by a)
+262 W( blocking C-Thread from)261 W
+11750 50324 MT
+(FILTER_INTERNAL_BUILD. It)
+672 W( invokes the routine and argument saved in the)199 W
+/Times-Italic SF
+11750 51520 MT
+(Internal Continuation)SH
+/Times-Roman SF
+(.)SH
+/Symbol SF
+10969 53414 MT
+(\267)SH
+/Times-Roman SF
+11750 XM
+(FILTER_USER_INVOKE: This)
+527 W( is invoked upon leaving C-Threads after)
+126 W( entering)125 W
+11750 54610 MT
+(with FILTER_USER_BUILD.  It invokes the)SH
+/Times-Italic SF
+32069 XM
+(User Continuation)SH
+/Times-Roman SF
+(.)SH
+/Symbol SF
+10969 56504 MT
+(\267)SH
+/Times-Roman SF
+11750 XM
+(FILTER_PREPARE: This)
+303 W( is invoked when C-Threads creates a new)
+14 W( C-Thread.  It is)15 W
+11750 57700 MT
+(passed a routine and argument like FILTER_INTERNAL_BUILD that)
+357 W( will be)356 W
+11750 58896 MT
+(invoked when the created C-Thread begins running.  This is)
+80 W( essentially the same as)81 W
+11750 60092 MT
+(FILTER_INTERNAL_BUILD without the invocation of)3162 W
+11750 61288 MT
+(FILTER_INTERNAL_INVOKE upon exit.)SH
+10000 63767 MT
+(Filters can be defined outside)
+404 W( of C-Threads.  The)405 W
+/Times-Italic SF
+35511 XM
+(filter)SH
+/Times-Roman SF
+38331 XM
+(described in the section, the)405 W
+/Times-Italic SF
+9000 65144 MT
+(default_filter)SH
+/Times-Roman SF
+(, is the)31 W
+/Times-Italic SF
+18017 XM
+(filter)SH
+/Times-Roman SF
+20463 XM
+(specified for a thread when it is created.  The)
+31 W( following two calls allow)30 W
+9000 66521 MT
+(the)SH
+/Times-Italic SF
+10619 XM
+(filter)SH
+/Times-Roman SF
+13034 XM
+(for a C-Thread to be examined and changed:)SH
+/Symbol SF
+10969 68099 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(cthread_fn_t)SH
+/Times-Italic SF
+18448 XM
+(cthread_filter)SH
+/Times-Bold SF
+(\050cthread_t thread\051)375 W
+/Times-Roman SF
+34166 XM
+(returns the current filter)
+375 W( for C-)376 W
+11750 69295 MT
+(Thread)SH
+/Times-Bold SF
+15139 XM
+(thread)SH
+/Times-Roman SF
+(.)SH
+ES
+%%Page: ? 7
+BS
+0 SI
+11 /Symbol AF
+10969 8080 MT
+(\267)SH
+/Times-Bold SF
+11750 XM
+(void)SH
+/Times-Italic SF
+14124 XM
+(cthread_set_filter)SH
+/Times-Bold SF
+(\050cthread_t thread, cthread_fn_t)
+81 W( func\051)80 W
+/Times-Roman SF
+40137 XM
+(sets the current)80 W
+/Times-Italic SF
+47310 XM
+(filter)SH
+/Times-Roman SF
+11750 9276 MT
+(for C-Thread)SH
+/Times-Bold SF
+17796 XM
+(thread)SH
+/Times-Roman SF
+21187 XM
+(to)SH
+/Times-Bold SF
+22318 XM
+(func)SH
+/Times-Roman SF
+(.)SH
+742 1000 0 9120 57967 GB 
+%%BeginDocument: continuation.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Times-Roman Times-Bold
+%%%Pages: 1
+%%BoundingBox: 119 349 460 640
+%%EndComments
+
+50 dict begin
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+/patternGrayLevel idef
+patternGrayLevel -1 eq {
+/patternString idef
+} if
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+/fontDict printFont findfont printSize scalefont dup setfont def
+/descender fontDict begin 0 [FontBBox] 1 get FontMatrix end
+transform exch pop def
+/vertoffset 0 descender sub printSize sub printFont /Courier ne
+printFont /Courier-Bold ne and { 1 add } if def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 3 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 7 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.923077 0 0 0.923077 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-medium-r-*-140-*
+/Times-Roman 14 SetF
+%I t
+[ 2.32353 0 0 1.3125 276 690.375 ] concat
+%I
+[
+(Stack)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-medium-r-*-120-*
+/Times-Roman 12 SetF
+%I t
+[ 1 0 0 1 337 656 ] concat
+%I
+[
+(User Computation)
+(               .)
+(               .)
+(               .)
+()
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-medium-r-*-120-*
+/Times-Roman 12 SetF
+%I t
+[ 1 0 0 1 337 578 ] concat
+%I
+[
+(condition_wait\(\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+197 439 231 439 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-medium-r-*-120-*
+/Times-Roman 12 SetF
+%I t
+[ 1 0 0 1 345 561 ] concat
+%I
+[
+(filter\(USER_BUILD\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-bold-r-*-140-*
+/Times-Bold 14 SetF
+%I t
+[ 1 0 0 1 354 518 ] concat
+%I
+[
+(User Continuation)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-bold-r-*-140-*
+/Times-Bold 14 SetF
+%I t
+[ 1 0 0 1 354 484 ] concat
+%I
+[
+(Internal Continuation)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-medium-r-*-120-*
+/Times-Roman 12 SetF
+%I t
+[ 1 0 0 1 345 458 ] concat
+%I
+[
+(condition_wait_real\(\))
+(cthread_block\(\))
+(  filter\(INTERNAL_BUILD\))
+(  filter\(INTERNAL_INVOKE\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0.25 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+214 534 214 258 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0.25 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+214 258 369 258 Line
+End
+
+Begin %I MLine
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I 5
+369 258
+352 249
+352 266
+369 258
+369 258
+5 MLine
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+58 335 197 335 Line
+End
+
+Begin %I MLine
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 -205 209 ] concat
+%I 5
+369 258
+352 249
+352 266
+369 258
+369 258
+5 MLine
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-medium-r-*-120-*
+/Times-Roman 12 SetF
+%I t
+[ 1 0 0 1 173 458 ] concat
+%I
+[
+(mutex_lock_real\(\))
+(filter\(USER_INVOKE\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+197 335 197 283 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+197 283 33 283 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+33 283 33 439 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+33 439 179 439 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+179 439 179 396 Line
+End
+
+Begin %I MLine
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 0 -1 1 0 19 879 ] concat
+%I 5
+369 258
+352 249
+352 266
+369 258
+369 258
+5 MLine
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-times-medium-r-*-120-*
+/Times-Roman 12 SetF
+%I t
+[ 1 0 0 1 155 553 ] concat
+%I
+[
+(User Computation)
+(                 .)
+(                 .)
+(                 .)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0.75 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+197 353 231 413 Rect
+End
+
+Begin %I MLine
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 0 -1 1 0 54 1018 ] concat
+%I 5
+369 258
+352 249
+352 266
+369 258
+369 258
+5 MLine
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0.25 SetP
+%I t
+[ 1 0 0 1 97 131 ] concat
+%I
+197 335 231 353 Rect
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE /Times-Bold SF
+17127 33824 MT
+(Figure 3-1:)SH
+/Times-Roman SF
+22900 XM
+(Example of user blocking with)SH
+/Times-Italic SF
+36739 XM
+(condition_wait)SH
+/Times-Roman SF
+(\050\051)SH
+12 /Times-Bold AF
+9000 37508 MT
+(3.3. Example of Continuation Use)SH
+11 /Times-Roman AF
+10000 38885 MT
+(Figure 3-1 shows the path taken as a user)
+43 W( computation blocks with)44 W
+/Times-Italic SF
+40092 XM
+(condition_wait)SH
+/Times-Roman SF
+(\050\051. The)
+363 W( user)44 W
+9000 40262 MT
+(calls)SH
+/Times-Italic SF
+11381 XM
+(condition_wait)SH
+/Times-Roman SF
+(\050\051 which is)
+90 W( a wrapper that invokes the)89 W
+/Times-Italic SF
+35557 XM
+(filter)SH
+/Times-Roman SF
+38061 XM
+(to build the)89 W
+/Times-Italic SF
+43615 XM
+(User Continuation)89 W
+/Times-Roman SF
+(.)SH
+9000 41639 MT
+(The)SH
+/Times-Italic SF
+11048 XM
+(User Continuation)63 W
+/Times-Roman SF
+19670 XM
+(and space for the)63 W
+/Times-Italic SF
+27678 XM
+(Internal Continuation)63 W
+/Times-Roman SF
+37706 XM
+(appear next on)
+63 W( the stack as built)64 W
+9000 43016 MT
+(by the)24 W
+/Times-Italic SF
+12042 XM
+(filter)SH
+/Times-Roman SF
+(. The)
+323 W( real)24 W
+/Times-Italic SF
+19011 XM
+(condition_wait)SH
+/Times-Roman SF
+(\050\051 is then called and the C-Thread blocks.  When it)
+24 W( blocks it)23 W
+9000 44393 MT
+(invokes the)58 W
+/Times-Italic SF
+14433 XM
+(filter)SH
+/Times-Roman SF
+16907 XM
+(again to build the)59 W
+/Times-Italic SF
+25087 XM
+(Internal Continuation)59 W
+/Times-Roman SF
+(. This)
+393 W( is saved in the space previously)59 W
+9000 45770 MT
+(allocated for it when)
+172 W( the)171 W
+/Times-Italic SF
+20823 XM
+(User Continuation)171 W
+/Times-Roman SF
+29661 XM
+(was built.  The blocking thread then invokes the)171 W
+/Times-Italic SF
+9000 47147 MT
+(Internal Continuation)63 W
+/Times-Roman SF
+19028 XM
+(of the C-Thread to which it is switching,)
+63 W( removing the kernel thread from)64 W
+9000 48524 MT
+(the blocking C-Thread and leaving it blocked.)SH
+10000 51003 MT
+(When the blocked thread is resumed by another)
+77 W( thread invoking the blocked thread's)76 W
+/Times-Italic SF
+48656 XM
+(Internal)SH
+9000 52380 MT
+(Continuation)SH
+/Times-Roman SF
+(,)SH
+/Times-Italic SF
+15403 XM
+(mutex_lock)SH
+/Times-Roman SF
+(\050\051 is called to reacquire the mutex released when it blocked.)
+45 W( Assuming)367 W
+9000 53757 MT
+(this succeeds, the)132 W
+/Times-Italic SF
+17338 XM
+(User Continuation)132 W
+/Times-Roman SF
+26098 XM
+(is invoked and)
+132 W( the user's computation continues with the)131 W
+9000 55134 MT
+(stack back where it originally was when)SH
+/Times-Italic SF
+26929 XM
+(condition_wait)SH
+/Times-Roman SF
+(\050\051 was first called.)SH
+13 /Times-Bold AF
+9000 58885 MT
+(4. Optimizations)SH
+11 /Times-Roman AF
+10000 60262 MT
+(Continuations enabled a number of changes to the new implementation of C-Threads.)
+102 W( These)481 W
+9000 61639 MT
+(include a flattening of the locking hierarchy)
+62 W( and various sorts of spinning when the computation)61 W
+9000 63016 MT
+(is no longer able to make progress.)
+240 W( The)
+756 W( optimizations that require spinning occur only on)241 W
+9000 64393 MT
+(multiprocessors and assume either sequentially consistent)
+669 W( [13])
+SH( or processor)
+669 W( consistent)668 W
+9275 65770 MT
+([9] memory.  This section describes these changes and the motivations behind them.)SH
+ES
+%%Page: ? 8
+BS
+0 SI
+12 /Times-Bold AF
+9000 8004 MT
+(4.1. Locking Techniques)SH
+11 /Times-Roman AF
+10000 9381 MT
+(The old implementation uses separate)207 W
+/Times-Italic SF
+27928 XM
+(spin_lock)SH
+/Times-Roman SF
+(s to protect the)207 W
+/Times-Italic SF
+39755 XM
+(run_queue)SH
+/Times-Roman SF
+44942 XM
+(and the internal)208 W
+9000 10758 MT
+(queue of each mutex)
+156 W( and condition.  The old implementation also requires a state machine to)155 W
+9000 12135 MT
+(keep track of C-Thread state as threads are enqueued and dequeued and)
+226 W( locks are acquired,)227 W
+9000 13512 MT
+(released and reacquired.  By using only a)
+213 W( single)212 W
+/Times-Italic SF
+32235 XM
+(spin_lock)SH
+/Times-Roman SF
+36938 XM
+(to protect all the queues and the)212 W
+9000 14889 MT
+(internal state, we eliminate the need for the SWITCHING state of the state machine.  Once the)100 W
+9000 16266 MT
+(SWITCHING state is removed, there is no longer a reason to have the state machine at all.)SH
+10000 18745 MT
+(While the use)
+43 W( of only one)42 W
+/Times-Italic SF
+21862 XM
+(spin_lock)SH
+/Times-Roman SF
+26395 XM
+(creates a single point of contention, it also makes it easier)42 W
+9000 20122 MT
+(to add contention reducing optimizations.  With this change and the)
+170 W( use of continuations, the)171 W
+9000 21499 MT
+(critical section)
+563 W( of the context switch path actually becomes shorter than in the old)562 W
+9000 22876 MT
+(implementation.)SH
+12 /Times-Bold AF
+9000 26585 MT
+(4.2.)SH
+/Times-BoldItalic SF
+11100 XM
+(Busy Spinning)SH
+/Times-Bold SF
+18703 XM
+(and)SH
+/Times-BoldItalic SF
+20937 XM
+(Busy Waiting)SH
+11 /Times-Italic AF
+10000 27962 MT
+(Busy Spinning)57 W
+/Times-Roman SF
+16714 XM
+(is defined)
+57 W( as spinning until some global state changes when there may be other)58 W
+9000 29339 MT
+(work that the processor could accomplish.  Spinning)
+230 W( before blocking has been shown to be)229 W
+9000 30716 MT
+(superior to only spinning or only blocking)
+135 W( [12].)
+SH( The)
+545 W( new implementation)
+135 W( spins for a constant)136 W
+9000 32093 MT
+(number of iterations before taking action to yield the processor.  The number of)
+33 W( iterations to spin)32 W
+9000 33470 MT
+(is currently a)
+295 W( static, machine-dependent value determined at compile time.)296 W
+/Times-Italic SF
+45579 XM
+(Busy Spinning)296 W
+/Times-Roman SF
+9000 34847 MT
+(currently occurs whenever a)62 W
+/Times-Italic SF
+21950 XM
+(spin_lock)SH
+/Times-Roman SF
+26503 XM
+(must be taken and in)62 W
+/Times-Italic SF
+36192 XM
+(mutex_lock)SH
+/Times-Roman SF
+(\050\051 idle threads.  We only)62 W
+/Times-Italic SF
+9000 36224 MT
+(Busy Spin)318 W
+/Times-Roman SF
+14280 XM
+(on multiprocessors, since spinning would guarantee)
+318 W( the obstruction of work on)319 W
+9000 37601 MT
+(uniprocessors.)SH
+10000 40080 MT
+(In)SH
+/Times-Italic SF
+11233 XM
+(mutex_lock)SH
+/Times-Roman SF
+(\050\051 the)
+42 W( thread spins attempting to acquire the mutex.  If the mutex is acquired, the)41 W
+9000 41457 MT
+(thread returns by invoking the user continuation.  Otherwise, after spinning for)
+167 W( the maximum)168 W
+9000 42834 MT
+(number of)
+309 W( iterations and not acquiring the mutex, the thread then attempts to acquire the)308 W
+/Times-Italic SF
+9000 44211 MT
+(run_lock)SH
+/Times-Roman SF
+(, queue the mutex, and block.)SH
+10000 46690 MT
+(An idle thread spins on the)53 W
+/Times-Italic SF
+22417 XM
+(run_queue)SH
+/Times-Roman SF
+27450 XM
+(without holding the)54 W
+/Times-Italic SF
+36505 XM
+(run_lock)SH
+/Times-Roman SF
+40744 XM
+(waiting for a C-Thread to)54 W
+9000 48067 MT
+(appear that can be run.  If this)
+37 W( occurs, the idle thread attempts to acquire the)36 W
+/Times-Italic SF
+43241 XM
+(run_lock)SH
+/Times-Roman SF
+(, dequeue a)36 W
+9000 49444 MT
+(C-Thread, and switch to it.  After spinning for)
+34 W( the maximum number of iterations and not having)35 W
+9000 50821 MT
+(a C-Thread appear, the idle thread depresses its priority and begins again)
+230 W( [5].)
+SH( This)
+733 W( priority)229 W
+9000 52198 MT
+(depression yields the processor to any runnable kernel thread.  When)
+17 W( there are no runnable kernel)18 W
+9000 53575 MT
+(threads except the depressed thread, the system automatically aborts the priority depression)
+95 W( and)94 W
+9000 54952 MT
+(resumes the idle thread.  We call)
+124 W( this depressed priority spinning or)125 W
+/Times-Italic SF
+40461 XM
+(Busy Waiting)125 W
+/Times-Roman SF
+(. C-Threads)525 W
+9000 56329 MT
+(that are)SH
+/Times-Italic SF
+12542 XM
+(wired)SH
+/Times-Roman SF
+15323 XM
+(also use)SH
+/Times-Italic SF
+19111 XM
+(Busy Waiting)SH
+/Times-Roman SF
+(.)SH
+10000 58808 MT
+(Unfortunately,)SH
+/Times-Italic SF
+16804 XM
+(Busy Waiting)84 W
+/Times-Roman SF
+23144 XM
+(will not work perfectly on a machine with other)
+84 W( tasks running if)83 W
+9000 60185 MT
+(these tasks have compute bound threads.  Once)
+173 W( an idle thread depresses its priority, it would)174 W
+9000 61562 MT
+(never run again)
+117 W( if there were another thread on the system running.  To address this, we use a)116 W
+9000 62939 MT
+(timeout when we depress priority in the general)53 W
+/Times-Italic SF
+30684 XM
+(spin_lock)SH
+/Times-Roman SF
+35229 XM
+(case so that starvation does not occur.)54 W
+9000 64316 MT
+(For the idle thread we keep a queue of the kernel threads currently idle,)
+125 W( and when we insert a)124 W
+9000 65693 MT
+(thread on the)21 W
+/Times-Italic SF
+15080 XM
+(run_queue)SH
+/Times-Roman SF
+(, we call)21 W
+/Times-Italic SF
+23818 XM
+(thread_depress_abort)SH
+/Times-Roman SF
+(\050\051. This)
+319 W( aborts the priority depression and)22 W
+9000 67070 MT
+(returns the thread to its original priority.)SH
+10000 69549 MT
+(The old)
+70 W( Mach 3.0 C-Threads implementation uses)69 W
+/Times-Italic SF
+32846 XM
+(mach_msg)SH
+/Times-Roman SF
+(\050\051 instead of)69 W
+/Times-Italic SF
+43346 XM
+(Busy Waiting)69 W
+/Times-Roman SF
+49656 XM
+(in the)69 W
+9000 70926 MT
+(idle thread.  When)
+78 W( the)79 W
+/Times-Italic SF
+19410 XM
+(run_queue)SH
+/Times-Roman SF
+24468 XM
+(is empty the idle thread waits to receive a message indicating)79 W
+ES
+%%Page: ? 9
+BS
+0 SI
+11 /Times-Roman AF
+9000 7955 MT
+(that a C-Thread has been inserted in the queue.  This disadvantage of this approach)
+7 W( is that it is not)6 W
+9000 9332 MT
+(possible for the idle thread to act on the newly runnable C-Thread)
+132 W( until it receives a message.)133 W
+9000 10709 MT
+(The C-Thread languishes in the)178 W
+/Times-Italic SF
+24033 XM
+(run_queue)SH
+/Times-Roman SF
+29190 XM
+(for the duration of a message send)
+178 W( followed by a)177 W
+9000 12086 MT
+(receive. It)
+623 W( is also the)
+174 W( case that sending a message and receiving a message are considerably)175 W
+9000 13463 MT
+(costlier operations than depressing priority and aborting it.)SH
+12 /Times-Bold AF
+9000 17172 MT
+(4.3.)SH
+/Times-BoldItalic SF
+11100 XM
+(Spin Polling)SH
+11 /Times-Roman AF
+10000 18549 MT
+(In both of the previously described specific cases of)176 W
+/Times-Italic SF
+34705 XM
+(Busy Spinning)175 W
+/Times-Roman SF
+(, one of the termination)175 W
+9000 19926 MT
+(conditions of spinning results in attempting to acquire the)130 W
+/Times-Italic SF
+35805 XM
+(run_lock)SH
+/Times-Roman SF
+(. Since)
+535 W( the)131 W
+/Times-Italic SF
+45400 XM
+(run_lock)SH
+/Times-Roman SF
+49716 XM
+(is the)131 W
+9000 21303 MT
+(only)SH
+/Times-Italic SF
+11606 XM
+(spin_lock)SH
+/Times-Roman SF
+16472 XM
+(protecting state used internally by C-Threads, in a)
+375 W( finely grained parallel)374 W
+9000 22680 MT
+(application contention is likely.  With)221 W
+/Times-Italic SF
+27223 XM
+(mutex_lock)SH
+/Times-Roman SF
+(\050\051 this occurs after a failure to acquire)
+221 W( the)222 W
+9000 24057 MT
+(mutex. With)
+545 W( an idle thread, it occurs when a C-Thread appears)
+135 W( in the)134 W
+/Times-Italic SF
+41797 XM
+(run_queue)SH
+/Times-Roman SF
+(. In)
+543 W( both of)134 W
+9000 25434 MT
+(these cases, instead of only)
+43 W( spinning attempting to acquire the)44 W
+/Times-Italic SF
+36961 XM
+(run_lock)SH
+/Times-Roman SF
+(, we spin both attempting)44 W
+9000 26811 MT
+(to acquire the lock and checking that the condition that)
+130 W( required its acquisition is still true.  If)129 W
+9000 28188 MT
+(after a fixed number of iterations the)
+96 W( thread neither acquire the)97 W
+/Times-Italic SF
+37944 XM
+(run_lock)SH
+/Times-Roman SF
+42226 XM
+(nor determine that the)97 W
+9000 29565 MT
+(thread no longer need to)
+112 W( acquire it, thread yield the processor by depressing our priority.  This)111 W
+9000 30942 MT
+(optimization is called)SH
+/Times-Italic SF
+18747 XM
+(Spin Polling)SH
+/Times-Roman SF
+(.)SH
+12 /Times-Bold AF
+9000 34626 MT
+(4.4. Continuation Recognition)SH
+11 /Times-Roman AF
+10000 36003 MT
+(The)SH
+/Times-Italic SF
+12031 XM
+(default_filter)SH
+/Times-Roman SF
+18098 XM
+(uses continuation recognition, an optimization first)
+46 W( proposed and used in the)47 W
+9000 37380 MT
+(Mach 3.0 kernel)
+68 W( [7].)
+SH( When)
+411 W( the)
+68 W( FILTER_INTERNAL_BUILD call of the)67 W
+/Times-Italic SF
+42388 XM
+(default_filter)SH
+/Times-Roman SF
+48476 XM
+(prepares)SH
+9000 38757 MT
+(to call FILTER_INTERNAL_INVOKE of the thread it)
+73 W( is activating, it checks to see if the)74 W
+/Times-Italic SF
+50060 XM
+(filter)SH
+/Times-Roman SF
+9000 40134 MT
+(of the resuming thread is the)157 W
+/Times-Italic SF
+22772 XM
+(default_filter)SH
+/Times-Roman SF
+(. If)
+589 W( it is, then the)156 W
+/Times-Italic SF
+37403 XM
+(default_filter)SH
+/Times-Roman SF
+43580 XM
+(can manipulate the)156 W
+/Times-Italic SF
+9000 41511 MT
+(Internal Continuation)127 W
+/Times-Roman SF
+19156 XM
+(of the newly activated thread to be resumed directly, without needing)
+127 W( to)128 W
+9000 42888 MT
+(make the generalized FILTER_INTERNAL_INVOKE call.)SH
+10000 45367 MT
+(Another form of continuation recognition occurs within)99 W
+/Times-Italic SF
+35468 XM
+(condition_signal)SH
+/Times-Roman SF
+(\050\051. The)
+471 W( continuation)98 W
+9000 46744 MT
+(of a thread that is being continued by)41 W
+/Times-Italic SF
+25946 XM
+(Condition_signal)SH
+/Times-Roman SF
+33904 XM
+(is)SH
+/Times-Italic SF
+34955 XM
+(mutex_lock_solid)SH
+/Times-Roman SF
+(\050\051. By)
+359 W( examining the)42 W
+/Times-Italic SF
+9000 48121 MT
+(Internal Continuation)413 W
+/Times-Roman SF
+19728 XM
+(and determining the actual mutex)
+413 W( that the blocked thread will be)412 W
+9000 49498 MT
+(attempting to acquire,)122 W
+/Times-Italic SF
+19264 XM
+(condition_signal)SH
+/Times-Roman SF
+(\050\051 can make a better choice about which queue to insert)123 W
+9000 50875 MT
+(the thread into.)
+103 W( If)
+479 W( the mutex is currently held, then the thread is inserted into the mutex queue)102 W
+9000 52252 MT
+(where it will later be resumed when)
+146 W( the mutex is released.  If the mutex is not held, then the)147 W
+9000 53629 MT
+(thread is inserted into the)145 W
+/Times-Italic SF
+21120 XM
+(run_queue)SH
+/Times-Roman SF
+26244 XM
+(with the expectation that it will succeed in)
+145 W( acquiring the)144 W
+9000 55006 MT
+(mutex when resumed.)SH
+13 /Times-Bold AF
+9000 58757 MT
+(5. Performance)SH
+11 /Times-Roman AF
+10000 60134 MT
+(This section describes two benchmarks designed to measure throughput)
+69 W( and latency.  We first)70 W
+9000 61511 MT
+(compare the old and new implementations and then examine the effects)
+304 W( of the previously)303 W
+9000 62888 MT
+(described implementation decisions and optimizations.  Two platforms)
+150 W( are used to show these)151 W
+9000 64265 MT
+(results: a Decstation 5000/20 Workstation with a 20MHz R3000)
+120 W( [11])
+SH( and)
+120 W( a Sequent Symmetry)119 W
+9000 65642 MT
+(with twenty 20MHz 80386's [10].)SH
+ES
+%%Page: ? 10
+BS
+0 SI
+12 /Times-Bold AF
+9000 8004 MT
+(5.1. Latency)SH
+11 /Times-Roman AF
+10000 9381 MT
+(To show the latency)
+141 W( of blocking operations, we use a simple PingPong test that has two C-)142 W
+9000 10758 MT
+(Threads context switch back and)
+91 W( forth via a condition variable.  Three versions of this program)90 W
+9000 12135 MT
+(were created: one that sets the kernel thread limit to two threads, a second that sets the limit)
+97 W( to)98 W
+9000 13512 MT
+(one thread, and a third that does not limit the number of kernel)
+105 W( threads, and)104 W
+/Times-Italic SF
+44021 XM
+(wires)SH
+/Times-Roman SF
+46784 XM
+(each thread.)104 W
+9000 14889 MT
+(Figure 5-1 shows the results of these tests.)SH
+1 1 0 1700 81685 GB 
+%%BeginDocument: table1.epsi
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: 143 585 435 656
+%%BeginPreview: 293 72 1 72
+% 00000000000001000000000000000000000000000014000000000000000000000000000000
+% 00000000000001000000000000000000000000000014000000000000000000000000000000
+% 00000000000001000000000000000000000000000014000000000000000000000000000000
+% 00000000000001000000001f800000300000000000140000000000d8000000000000000000
+% 000000000000010000000008c00101000000000000140000000000c8000001000000000000
+% 000000000000010000000008fffffff7fc00000000140000000000e7fb6ffbc00000000000
+% 0000000000000100000000087e752d14ec000000001400000000007fcb6f59000000000000
+% 000000000000010000000008e23d3d14e4000000001400000000009c4b6849000000000000
+% 000000000000010000000008f7ed6d56e4000000001400000000008eeb6d49400000000000
+% 00000000000001000000001fbffdfffffe00000000140000000000fff9fffdc00000000000
+% 00000000000001000000000000000000000000000014000000000000080000000000000000
+% 000000000000010000000000000000000000000000140000000000001e0000000000000000
+% 00000000000001000000000000000000000000000014000000000000000000000000000000
+% fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8
+% 00000000000000000000000000000000000000000000000000000000000000000000000000
+% 00000000000000000000000000000000000000000000000000000000000000000000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 000000000000010001c0000080000000010000000014000700000000000000004000000000
+% 038800c000000100036c6000803900000103e00c0014000db0c000001c80000041f0030000
+% 019800000000010006342000801900000101302000140018d04000000c8000004098100000
+% 009f7fdef80001000635e000801dfff801013f7de0140018d3c000000ebffe00409bff7800
+% 00df2ed358000100063520008017f6d00101eb2530140018d24000000bbdb40040f2d14c00
+% 00f827d34800010006352000801782f001016f2530140018d24000000ba0bc0040b3d14c00
+% 006d25db480001000635b0008013d36001017b2db0140018d360000009b4d80040bad56c00
+% 006f77fefc00010003eff0008039f1600103bfbfe014000fbfe000001cbc580041dffff800
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 0000000000000100000c000080001e0001000038f0140001e0000000000000004000000000
+% 01c7fc0000c00100e11800008007bc0001001c6de014003bce00000073de000040070e2000
+% 01c5b40000400100e33000008005b00001001c6d8014003b0e00000072d6000040070e6000
+% 00c187ffbfc001006779b7808001fdb781000c6fe014001fc6dbc00030c6df80400306e000
+% 00c185afae400100656db68080010db681000c7c60140018c6db400031cede80400306a000
+% 00c184a43e4001006fe527808003052781000c0c201400184693c00030c69780400307f800
+% 00c184a6af60010061ed358080026d3581000d9b6014001ec69ac00032d69d804003c63000
+% 01e1cff7bfe00100f13ff78080027bf781001ff3c014003f8ffbc0007bdfff804007cf2000
+% 00000000000001000003000080000300010000000014000001800000000180004000000000
+% 00000000000001000002000080000200010000000014000001000000000100004000000000
+% 00000000000001000002000080000200010000000014000001000000000100004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001007800000080001e00010000000014000060000000000600004000000000
+% 03c3fc0000600100f79e00008007bc0001001e3dc0140078cf000000708c000040070f2000
+% 0262dc0000200100c59600008005b0000100162dc014004d8b0000007198000040070b6000
+% 0060c7bffdef0101f19edf808001fdb78100060cc014000fcf6fc00033bcdf8040030fe000
+% 0060c597ed2d0100311ede8080010db681000408c014000f6f6f400032b6de8040030fa000
+% 00c0c4923d2f0100131697808003052781000c18c014001b2b4bc00037f2978040030bf800
+% 01e0c4936dbb0101b2169d8080026d3581000990c014003f6b4ec00030f69d804003cb3000
+% 03e0effbffff0101e21fff8080027bf781000991e014007defffc000789fff804007cf2000
+% 00000000000001000001800080000300010000000014000000c00000000180004000000000
+% 00000000000001000001000080000200010000000014000000800000000100004000000000
+% 00000000000001000001000080000200010000000014000000800000000100004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+% 0000000000000100780000008003cc0001000038601400000f000000000000004000000000
+% 03ffc00600000100f79e000081e7980001001c6cc0140ef79e000000108f0000400f0f1000
+% 01b2000200000100cd9600008136300001001c6d80140e9cd8000000318b000040098b3000
+% 01b6fdfe00000101f8c6df80803ff9b781000c6fc0140618fedbc00073836fc04001837000
+% 00be55f20000010038cede808031edb681000c7f60140618c6db400052826f404001825000
+% 00fc511200000100188697808060e52781000c0f201406318293c000ffe64bc0400306fc00
+% 00cc51bb00000101bd969d8080fded3581000d9b6014067bf69ac00018c44ec04007e41800
+% 004cf9ff00000101e71fff8081ff3ff781001ff1e0140ffffdfbc0001084ffc0400fe41000
+% 000000000000010000018000800003000100000000140000018000000000c0004000000000
+% 00000000000001000001000080000200010000000014000001000000000080004000000000
+% 00000000000001000001000080000200010000000014000001000000000080004000000000
+% 00000000000001000000000080000000010000000014000000000000000000004000000000
+%%EndImage
+%%EndPreview
+%!PS-Adobe-2.0
+%%Creator: dvips by Radical Eye Software
+%%Title: table1.dvi
+%%%Pages: 1 1
+%%BoundingBox: 0 0 612 792
+%%EndComments
+%%BeginDocument: tex.pro
+/TeXDict 200 dict def TeXDict begin /bdf{bind def}def /bop-aux{}bdf /@rigin{
+/@page-height exch def /@page-width exch def 72 Resolution div dup neg scale
+translate}bdf /@letter{Resolution dup -10 mul 8.5 11 @rigin}bdf /@landscape{[
+0 1 -1 0 0 0]concat Resolution dup 8.5 11 @rigin}bdf /@a4{Resolution dup
+-10.6929133858 mul 21 2.54 div 29.7 2.54 div @rigin}bdf /@legal{Resolution dup
+-13 mul 8.5 14 @rigin}bdf /@11x17{statusdict /11x17tray known{statusdict begin
+11x17tray end}if Resolution dup -16 mul 11 17 @rigin}bdf /@manualfeed{
+statusdict /manualfeed true put}bdf /@copies{/#copies exch def}bdf /@draft{
+/bop-aux{gsave initmatrix 72 dup scale @page-width 2 div @page-height 2 div
+translate @page-height @page-width atan rotate /Helvetica-Bold findfont 2
+scalefont setfont(DRAFT)dup stringwidth pop 2 div neg -1 moveto .95 setgray
+show grestore}bdf}bdf /@FontMatrix[1 0 0 -1 0 0]def /@FontBBox[0 0 0 0]def
+/dmystr(ZZf@@@)def /newname{dmystr cvn}bdf /df{/fontname exch def dmystr 2
+fontname cvx(@@@@)cvs putinterval newname 7 dict def newname load begin
+/FontType 3 def /FontMatrix @FontMatrix def /FontBBox @FontBBox def /BitMaps
+256 array def /BuildChar{CharBuilder}def /Encoding IdentityEncoding def end
+fontname{/foo setfont}2 array copy cvx def fontname load 0 dmystr 6 string
+copy cvn cvx put}bdf /dfe{newname dup load definefont setfont}bdf /ch-image{
+ch-data 0 get}bdf /ch-width{ch-data 1 get}bdf /ch-height{ch-data 2 get}bdf
+/ch-xoff{ch-data 3 get}bdf /ch-yoff{ch-data 4 get}bdf /ch-dx{ch-data 5 get}
+bdf /CharBuilder{save 3 1 roll exch /BitMaps get exch get /ch-data exch def
+ch-data null ne{ch-dx 0 ch-xoff ch-yoff neg ch-xoff ch-width add ch-height
+ch-yoff sub setcachedevice ch-width ch-height true[1 0 0 -1 -.1 ch-xoff sub
+ch-height ch-yoff sub .1 add]{ch-image}imagemask}if restore}bdf /dc{/ch-code
+exch def /ch-data exch def newname load /BitMaps get ch-code ch-data put}bdf
+/bop{gsave /SaveImage save def /bop-aux load exec 0 0 moveto}bdf /eop{clear
+SaveImage restore showpage grestore}bdf /@start{/Resolution exch def
+/IdentityEncoding 256 array def 0 1 255{IdentityEncoding exch 1 string dup 0 3
+index put cvn put}for}bdf /p{show}bdf /RuleMatrix[1 0 0 -1 -.1 -.1]def
+/BlackDots 8 string def /v{gsave currentpoint translate false RuleMatrix{
+BlackDots}imagemask grestore}bdf /a{moveto}bdf /delta 0 def /tail{dup /delta
+exch def 0 rmoveto}bdf /b{exch show tail}bdf /c{show delta 4 sub tail}bdf /d{
+show delta 3 sub tail}bdf /e{show delta 2 sub tail}bdf /f{show delta 1 sub
+tail}bdf /g{show delta 0 rmoveto}bdf /h{show delta 1 add tail}bdf /i{show
+delta 2 add tail}bdf /j{show delta 3 add tail}bdf /k{show delta 4 add tail}
+bdf /l{show -4 0 rmoveto}bdf /m{show -3 0 rmoveto}bdf /n{show -2 0 rmoveto}
+bdf /o{show -1 0 rmoveto}bdf /q{show 1 0 rmoveto}bdf /r{show 2 0 rmoveto}bdf
+/s{show 3 0 rmoveto}bdf /t{show 4 0 rmoveto}bdf /w{0 rmoveto}bdf /x{0 exch
+rmoveto}bdf /y{3 2 roll show moveto}bdf /bos{/section save def}bdf /eos{clear
+section restore}bdf end
+%%EndDocument
+%%BeginDocument: texps.pro
+TeXDict begin /rf{655360 div mul Resolution mul 7227 div /PixPerEm exch def
+findfont dup length 1 add dict /newfont exch def{1 index /FID ne{newfont 3 1
+roll put}{pop pop}ifelse}forall 256 dict begin newfont /Encoding get 255 -1 0{
+2 copy get 4 -1 roll 1000 mul PixPerEm div def pop}for pop newfont /Metrics
+currentdict put end /fontname exch def dmystr 2 fontname cvx(@@@@)cvs
+putinterval newname dup newfont definefont[PixPerEm 0 0 PixPerEm neg 0 0]
+makefont def fontname{/foo setfont}2 array copy cvx def fontname load 0 dmystr
+6 string copy cvn cvx put}bdf /ObliqueSlant{dup sin exch cos div neg}bdf
+/SlantFont{/foo exch def[1 0 foo 1 0 0]TransFont}bdf /ExtendFont{/foo exch def
+258 2 roll 0 1 255{pop foo div 256 1 roll}for 258 -2 roll[foo 0 0 1 0 0]
+TransFont}bdf /TransFont{exch findfont exch makefont dup length dict /newfont
+exch def{1 index /FID ne{newfont 3 1 roll put}{pop pop}ifelse}forall dup
+newfont definefont pop}bdf end
+%%EndDocument
+TeXDict begin 300 @start /fa df[<01801801C01C03803803803803803803803807007007
+00700700700700700E00E00E00E00E00E00E00E11E01C21E01C21E03C21E05C43F08C439F07838
+0000380000700000700000700000700000E00000E00000E00000C00000>24 30 1 10 27]22 dc
+dfe /fb 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 11 15
+19 23 23 38 36 15 15 15 23 26 11 15 11 13 23 23 23 23 23 23 23 23 23 23 13 13
+26 26 26 20 42 33 30 30 33 28 25 33 33 15 18 33 28 41 33 33 25 33 30 25 28 33
+33 43 33 33 28 15 13 15 21 23 15 20 23 20 23 20 15 23 23 13 13 23 13 36 23 23
+23 23 15 18 13 23 23 33 23 23 20 22 9 22 25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 15 23 23 8 23 23 23 23 8 20 23 15 15 25 25 0
+23 23 23 11 0 21 16 15 20 20 23 46 46 0 20 0 15 15 15 15 15 15 15 15 0 15 15 0
+15 15 15 46 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 41 0 13 0 0 0 0 28 33 41 14 0 0 0
+0 0 30 0 0 0 13 0 0 13 23 33 23 0 0 0 0 /Times-Roman 1000 720896 rf end
+ TeXDict begin @letter
+%%EndProlog
+%%%Page: 1 1
+ bop 295 267 a 1222 2 v 294 324 a 2 57 v 231 w 2 57 v 8 w 2 57 v 674 307 a fb
+(Decstation)1009 324 y 2 57 v 8 w 2 57 v 1194 307 a(Sequent)1516 324 y 2 57 v
+295 325 a 1222 2 v 10 x 1222 2 v 294 392 a 2 57 v 320 375 a(V)-5 b(ersion)525
+392 y 2 57 v 8 w 2 57 v 582 375 a(Old)697 392 y 2 57 v 736 375 a(New)860 392 y
+2 57 v 886 375 a(Ratio)1009 392 y 2 57 v 8 w 2 57 v 1077 375 a(Old)1204 392 y
+2 57 v 1243 375 a(New)1367 392 y 2 57 v 1393 375 a(Ratio)1516 392 y 2 57 v 295
+394 a 1222 2 v 294 450 a 2 57 v 320 433 a(1)11 b(Thread)525 450 y 2 57 v 8 w 2
+57 v 559 433 a(146)p fa(\026)p fb(s)697 450 y 2 57 v 745 433 a(75)p fa(\026)p
+fb(s)860 450 y 2 57 v 905 433 a(1.95)1009 450 y 2 57 v 8 w 2 57 v 1066 433 a
+(151)p fa(\026)p fb(s)1204 450 y 2 57 v 1229 433 a(133)p fa(\026)p fb(s)1367
+450 y 2 57 v 1412 433 a(1.14)1516 450 y 2 57 v 295 452 a 1222 2 v 294 508 a 2
+57 v 320 491 a(2)g(Threads)525 508 y 2 57 v 8 w 2 57 v 559 491 a(578)p fa(\
+\026)p fb(s)697 508 y 2 57 v 745 491 a(75)p fa(\026)p fb(s)860 508 y 2 57 v
+905 491 a(7.71)1009 508 y 2 57 v 8 w 2 57 v 1066 491 a(268)p fa(\026)p fb(s)
+1204 508 y 2 57 v 1229 491 a(146)p fa(\026)p fb(s)1367 508 y 2 57 v 1412 491 a
+(1.84)1516 508 y 2 57 v 295 510 a 1222 2 v 294 566 a 2 57 v 320 549 a(W)n(ire\
+d)525 566 y 2 57 v 8 w 2 57 v 559 549 a(503)p fa(\026)p fb(s)697 566 y 2 57 v
+723 549 a(256)p fa(\026)p fb(s)860 566 y 2 57 v 905 549 a(1.96)1009 566 y 2 57
+v 8 w 2 57 v 1043 549 a(1225)p fa(\026)p fb(s)1204 566 y 2 57 v 1229 549 a
+(447)p fa(\026)p fb(s)1367 566 y 2 57 v 1412 549 a(2.74)1516 566 y 2 57 v 295
+568 a 1222 2 v eop
+%%Trailer
+ end
+%%EOF
+
+%%EndDocument
+ GE /Times-Bold SF
+21419 24937 MT
+(Figure 5-1:)SH
+/Times-Roman SF
+27192 XM
+(PingPong benchmark results)SH
+10000 27416 MT
+(Running the PingPong)
+101 W( test with one kernel thread measures the latency of context switching.)102 W
+9000 28793 MT
+(This is labeled "1 Thread")
+43 W( in Figure 5-1.  As can be seen, nearly a two-fold improvement is seen)42 W
+9000 30170 MT
+(on the Decstation.  The latency on the Sequent improves also, but not by as much.)
+56 W( This)
+389 W( relative)57 W
+9000 31547 MT
+(difference in improvement might be attributable to differences in the respective memory systems.)SH
+10000 34026 MT
+(Running the PingPong test with the threads)170 W
+/Times-Italic SF
+30533 XM
+(wired)SH
+/Times-Roman SF
+33484 XM
+(measures the cost)
+170 W( of the synchronization)169 W
+9000 35403 MT
+(primitive used by the)
+251 W( underlying kernel.  As described earlier, the old implementation uses)252 W
+/Times-Italic SF
+9000 36780 MT
+(mach_msg)SH
+/Times-Roman SF
+(\050\051 for synchronization, while the)
+99 W( new implementation uses thread priority depression.)98 W
+9000 38157 MT
+(On the uniprocessor Decstation, the differences in synchronization costs)
+71 W( result in nearly a factor)72 W
+9000 39534 MT
+(of two performance)
+257 W( improvement.  The multiprocessor Sequent benefits more since explicit)256 W
+9000 40911 MT
+(synchronization is not actually necessary to)
+484 W( resume the second thread.  With the old)485 W
+9000 42288 MT
+(implementation, the second thread will not run)
+123 W( until it receives a message from the first.  This)122 W
+9000 43665 MT
+(results in dead time during each iteration equivalent to the cost of a message send)
+92 W( and message)93 W
+9000 45042 MT
+(receive. Since)
+547 W( the new implementation uses)136 W
+/Times-Italic SF
+29746 XM
+(Busy Waiting)136 W
+/Times-Roman SF
+36190 XM
+(in)SH
+/Times-Italic SF
+37457 XM
+(wired)SH
+/Times-Roman SF
+40373 XM
+(threads, the second thread)135 W
+9000 46419 MT
+(will begin running immediately upon the condition being signaled.  On)
+190 W( a multiprocessor, the)191 W
+9000 47796 MT
+(execution of the first thread's)149 W
+/Times-Italic SF
+22969 XM
+(thread_depress_abort)SH
+/Times-Roman SF
+(\050\051 overlaps the progress being made in the)148 W
+9000 49173 MT
+(second thread.  There is no equivalent cost to the message receive.)SH
+10000 51652 MT
+(Running the PingPong test with two unwired kernel threads)
+6 W( adds a way for progress to be made)7 W
+9000 53029 MT
+(by allowing user-level context switching to)
+58 W( occur.  On the Decstation, a quantum, the amount of)57 W
+9000 54406 MT
+(time before a)
+18 W( pre-emptive kernel context switch will occur, is 15625)19 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s. It)
+313 W( is possible for a kernel)19 W
+9000 55783 MT
+(thread to execute as many as 200 context switches before the another kernel)
+89 W( thread will be pre-)88 W
+9000 57160 MT
+(emptively scheduled.)
+70 W( In)
+417 W( the PingPong test, when the second kernel thread does run, if it cannot)71 W
+9000 58537 MT
+(make progress, it yields the processor back to the first.  If it can)
+77 W( make progress, it will continue)76 W
+9000 59914 MT
+(processing user-level context switches until another kernel context switch occurs.  In)
+17 W( contrast, the)18 W
+9000 61291 MT
+(old implementation,)
+27 W( with its higher latency and higher synchronization costs, can execute at most)26 W
+9000 62668 MT
+(100 user context switches between kernel context switches.)SH
+12 /Times-Bold AF
+9000 66352 MT
+(5.2. Contention Comparisons)SH
+11 /Times-Roman AF
+10000 67729 MT
+(To measure)
+50 W( throughput, we ran a benchmark that generates lock contention and measures how)51 W
+9000 69106 MT
+(long it takes multiple threads to make progress while contending for these locks.  The)
+41 W( contention)40 W
+9000 70483 MT
+(benchmark creates a set of locks and associates a pool)
+76 W( of threads which each lock.  Each thread)77 W
+9000 71860 MT
+(does some number of units of)
+230 W( simulated work then acquires its lock, increments a common)229 W
+9000 73237 MT
+(counter, and releases the lock.  On the Sequent one unit of work takes 5.2)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s.)SH
+ES
+%%Page: ? 11
+BS
+0 SI
+11 SS 
+300 1000 90 7500 5700 GB 
+%%BeginDocument: plots/PB_2_10.ps
+%!PS-Adobe-2.0
+%%Creator: gnuplot
+%%DocumentFonts: Courier
+%%BoundingBox: 50 50 554 770
+%%%Pages: (atend)
+%%EndComments
+/gnudict 40 dict def
+gnudict begin
+/Color false def
+/gnulinewidth 5.000 def
+/vshift -80 def
+/dl {10 mul} def
+/hpt 31.5 def
+/vpt 31.5 def
+/vpt2 vpt 2 mul def
+/hpt2 hpt 2 mul def
+/Lshow { currentpoint stroke moveto
+  0 vshift rmoveto show } def
+/Rshow { currentpoint stroke moveto
+  dup stringwidth pop neg vshift rmoveto show } def
+/Cshow { currentpoint stroke moveto
+  dup stringwidth pop -2 div vshift rmoveto show } def
+/DL { Color {setrgbcolor [] 0 setdash pop}
+ {pop pop pop 0 setdash} ifelse } def
+/BL { stroke gnulinewidth 2 mul setlinewidth } def
+/AL { stroke gnulinewidth 2 div setlinewidth } def
+/PL { stroke gnulinewidth setlinewidth } def
+/LTb { BL [] 0 0 0 DL } def
+/LTa { AL [1 dl 2 dl] 0 setdash 0 0 0 setrgbcolor } def
+/LT0 { PL [] 0 1 0 DL } def
+/LT1 { PL [4 dl 2 dl] 0 0 1 DL } def
+/LT2 { PL [2 dl 3 dl] 1 0 0 DL } def
+/LT3 { PL [1 dl 1.5 dl] 1 0 1 DL } def
+/LT4 { PL [5 dl 2 dl 1 dl 2 dl] 0 1 1 DL } def
+/LT5 { PL [4 dl 3 dl 1 dl 3 dl] 1 1 0 DL } def
+/LT6 { PL [2 dl 2 dl 2 dl 4 dl] 0 0 0 DL } def
+/LT7 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 1 0.3 0 DL } def
+/LT8 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 0.5 0.5 0.5 DL } def
+/M {moveto} def
+/L {lineto} def
+/P { stroke [] 0 setdash
+  currentlinewidth 2 div sub moveto
+  0 currentlinewidth rlineto  stroke } def
+/D { stroke [] 0 setdash  2 copy  vpt add moveto
+  hpt neg vpt neg rlineto  hpt vpt neg rlineto
+  hpt vpt rlineto  hpt neg vpt rlineto  closepath  stroke
+  P  } def
+/A { stroke [] 0 setdash  vpt sub moveto  0 vpt2 rlineto
+  currentpoint stroke moveto
+  hpt neg vpt neg rmoveto  hpt2 0 rlineto stroke
+  } def
+/B { stroke [] 0 setdash  2 copy  exch hpt sub exch vpt add moveto
+  0 vpt2 neg rlineto  hpt2 0 rlineto  0 vpt2 rlineto
+  hpt2 neg 0 rlineto  closepath  stroke
+  P  } def
+/C { stroke [] 0 setdash  exch hpt sub exch vpt add moveto
+  hpt2 vpt2 neg rlineto  currentpoint  stroke  moveto
+  hpt2 neg 0 rmoveto  hpt2 vpt2 rlineto stroke  } def
+/T { stroke [] 0 setdash  2 copy  vpt 1.12 mul add moveto
+  hpt neg vpt -1.62 mul rlineto
+  hpt 2 mul 0 rlineto
+  hpt neg vpt 1.62 mul rlineto  closepath  stroke
+  P  } def
+/S { 2 copy A C} def
+end
+%%EndProlog
+%%%Page: 1 1
+gnudict begin
+gsave
+50 50 translate
+0.100 0.100 scale
+90 rotate
+0 -5040 translate
+0 setgray
+/Courier findfont 240 scalefont setfont
+newpath
+LTa
+1728 841 M
+6849 841 L
+1728 841 M
+1728 4439 L
+LTb
+1728 841 M
+1791 841 L
+6849 841 M
+6786 841 L
+1584 841 M
+(0) Rshow
+1728 1561 M
+1791 1561 L
+6849 1561 M
+6786 1561 L
+1584 1561 M
+(200) Rshow
+1728 2280 M
+1791 2280 L
+6849 2280 M
+6786 2280 L
+1584 2280 M
+(400) Rshow
+1728 3000 M
+1791 3000 L
+6849 3000 M
+6786 3000 L
+1584 3000 M
+(600) Rshow
+1728 3719 M
+1791 3719 L
+6849 3719 M
+6786 3719 L
+1584 3719 M
+(800) Rshow
+1728 4439 M
+1791 4439 L
+6849 4439 M
+6786 4439 L
+1584 4439 M
+(1000) Rshow
+1728 841 M
+1728 904 L
+1728 4439 M
+1728 4376 L
+1728 601 M
+(0) Cshow
+2752 841 M
+2752 904 L
+2752 4439 M
+2752 4376 L
+2752 601 M
+(20) Cshow
+3776 841 M
+3776 904 L
+3776 4439 M
+3776 4376 L
+3776 601 M
+(40) Cshow
+4801 841 M
+4801 904 L
+4801 4439 M
+4801 4376 L
+4801 601 M
+(60) Cshow
+5825 841 M
+5825 904 L
+5825 4439 M
+5825 4376 L
+5825 601 M
+(80) Cshow
+6849 841 M
+6849 904 L
+6849 4439 M
+6849 4376 L
+6849 601 M
+(100) Cshow
+LTb
+1728 841 M
+6849 841 L
+6849 4439 L
+1728 4439 L
+1728 841 L
+240 2640 M
+currentpoint gsave translate 90 rotate 0 0 moveto
+(uSeconds) Cshow
+grestore
+4288 361 M
+(Units of Work) Cshow
+4288 4679 M
+(2 locks with 10 threads each) Cshow
+LT0
+LT0
+6066 4136 M
+(Old Threads) Rshow
+6210 4136 M
+6642 4136 L
+1728 2423 M
+1728 2423 L
+1779 2785 L
+1830 2915 L
+1882 2970 L
+1933 2999 L
+1984 3042 L
+2035 3060 L
+2086 3083 L
+2138 3104 L
+2189 3104 L
+2240 3074 L
+2291 3083 L
+2343 3072 L
+2394 3054 L
+2445 3052 L
+2496 3029 L
+2547 2982 L
+2599 2979 L
+2650 2952 L
+2701 2893 L
+2752 2871 L
+2803 2949 L
+2855 2955 L
+2906 2924 L
+2957 2863 L
+3008 2800 L
+3059 2746 L
+3111 2691 L
+3162 2639 L
+3213 2565 L
+3264 2494 L
+3316 2448 L
+3367 2254 L
+3418 2238 L
+3469 2187 L
+3520 2182 L
+3572 2169 L
+3623 2146 L
+3674 2132 L
+3725 2129 L
+3776 2120 L
+3828 2115 L
+3879 2118 L
+3930 2127 L
+3981 2133 L
+4032 2134 L
+4084 2147 L
+4135 2150 L
+4186 2161 L
+4237 2174 L
+4289 2185 L
+4340 2205 L
+4391 2213 L
+4442 2226 L
+4493 2242 L
+4545 2254 L
+4596 2266 L
+4647 2282 L
+4698 2299 L
+4749 2313 L
+4801 2328 L
+5313 2502 L
+5825 2679 L
+6337 2861 L
+6849 3049 L
+6354 4136 D
+1728 2423 D
+1779 2785 D
+1830 2915 D
+1882 2970 D
+1933 2999 D
+1984 3042 D
+2035 3060 D
+2086 3083 D
+2138 3104 D
+2189 3104 D
+2240 3074 D
+2291 3083 D
+2343 3072 D
+2394 3054 D
+2445 3052 D
+2496 3029 D
+2547 2982 D
+2599 2979 D
+2650 2952 D
+2701 2893 D
+2752 2871 D
+2803 2949 D
+2855 2955 D
+2906 2924 D
+2957 2863 D
+3008 2800 D
+3059 2746 D
+3111 2691 D
+3162 2639 D
+3213 2565 D
+3264 2494 D
+3316 2448 D
+3367 2254 D
+3418 2238 D
+3469 2187 D
+3520 2182 D
+3572 2169 D
+3623 2146 D
+3674 2132 D
+3725 2129 D
+3776 2120 D
+3828 2115 D
+3879 2118 D
+3930 2127 D
+3981 2133 D
+4032 2134 D
+4084 2147 D
+4135 2150 D
+4186 2161 D
+4237 2174 D
+4289 2185 D
+4340 2205 D
+4391 2213 D
+4442 2226 D
+4493 2242 D
+4545 2254 D
+4596 2266 D
+4647 2282 D
+4698 2299 D
+4749 2313 D
+4801 2328 D
+5313 2502 D
+5825 2679 D
+6337 2861 D
+6849 3049 D
+LT1
+6066 3896 M
+(New Threads) Rshow
+6210 3896 M
+6642 3896 L
+1728 2639 M
+1728 2639 L
+1779 2611 L
+1830 2659 L
+1882 2874 L
+1933 2705 L
+1984 2600 L
+2035 2588 L
+2086 2590 L
+2138 2564 L
+2189 2554 L
+2240 2565 L
+2291 2570 L
+2343 2551 L
+2394 2539 L
+2445 2517 L
+2496 2479 L
+2547 2454 L
+2599 2456 L
+2650 2421 L
+2701 2385 L
+2752 2342 L
+2803 2292 L
+2855 2219 L
+2906 2129 L
+2957 2024 L
+3008 1713 L
+3059 1622 L
+3111 1601 L
+3162 1581 L
+3213 1564 L
+3264 1554 L
+3316 1549 L
+3367 1552 L
+3418 1563 L
+3469 1576 L
+3520 1606 L
+3572 1615 L
+3623 1626 L
+3674 1646 L
+3725 1663 L
+3776 1681 L
+3828 1702 L
+3879 1717 L
+3930 1738 L
+3981 1755 L
+4032 1779 L
+4084 1792 L
+4135 1810 L
+4186 1830 L
+4237 1850 L
+4289 1867 L
+4340 1885 L
+4391 1905 L
+4442 1923 L
+4493 1944 L
+4545 1964 L
+4596 1979 L
+4647 1998 L
+4698 2018 L
+4749 2034 L
+4801 2057 L
+5313 2244 L
+5825 2433 L
+6337 2624 L
+6849 2858 L
+6354 3896 A
+1728 2639 A
+1779 2611 A
+1830 2659 A
+1882 2874 A
+1933 2705 A
+1984 2600 A
+2035 2588 A
+2086 2590 A
+2138 2564 A
+2189 2554 A
+2240 2565 A
+2291 2570 A
+2343 2551 A
+2394 2539 A
+2445 2517 A
+2496 2479 A
+2547 2454 A
+2599 2456 A
+2650 2421 A
+2701 2385 A
+2752 2342 A
+2803 2292 A
+2855 2219 A
+2906 2129 A
+2957 2024 A
+3008 1713 A
+3059 1622 A
+3111 1601 A
+3162 1581 A
+3213 1564 A
+3264 1554 A
+3316 1549 A
+3367 1552 A
+3418 1563 A
+3469 1576 A
+3520 1606 A
+3572 1615 A
+3623 1626 A
+3674 1646 A
+3725 1663 A
+3776 1681 A
+3828 1702 A
+3879 1717 A
+3930 1738 A
+3981 1755 A
+4032 1779 A
+4084 1792 A
+4135 1810 A
+4186 1830 A
+4237 1850 A
+4289 1867 A
+4340 1885 A
+4391 1905 A
+4442 1923 A
+4493 1944 A
+4545 1964 A
+4596 1979 A
+4647 1998 A
+4698 2018 A
+4749 2034 A
+4801 2057 A
+5313 2244 A
+5825 2433 A
+6337 2624 A
+6849 2858 A
+stroke
+grestore
+end
+showpage
+%%Trailer
+%%%Pages: 1
+
+%%EndDocument
+ GE 300 1000 90 29100 5700 GB 
+%%BeginDocument: plots/PB_5_4.ps
+%!PS-Adobe-2.0
+%%Creator: gnuplot
+%%DocumentFonts: Courier
+%%BoundingBox: 50 50 554 770
+%%%Pages: (atend)
+%%EndComments
+/gnudict 40 dict def
+gnudict begin
+/Color false def
+/gnulinewidth 5.000 def
+/vshift -80 def
+/dl {10 mul} def
+/hpt 31.5 def
+/vpt 31.5 def
+/vpt2 vpt 2 mul def
+/hpt2 hpt 2 mul def
+/Lshow { currentpoint stroke moveto
+  0 vshift rmoveto show } def
+/Rshow { currentpoint stroke moveto
+  dup stringwidth pop neg vshift rmoveto show } def
+/Cshow { currentpoint stroke moveto
+  dup stringwidth pop -2 div vshift rmoveto show } def
+/DL { Color {setrgbcolor [] 0 setdash pop}
+ {pop pop pop 0 setdash} ifelse } def
+/BL { stroke gnulinewidth 2 mul setlinewidth } def
+/AL { stroke gnulinewidth 2 div setlinewidth } def
+/PL { stroke gnulinewidth setlinewidth } def
+/LTb { BL [] 0 0 0 DL } def
+/LTa { AL [1 dl 2 dl] 0 setdash 0 0 0 setrgbcolor } def
+/LT0 { PL [] 0 1 0 DL } def
+/LT1 { PL [4 dl 2 dl] 0 0 1 DL } def
+/LT2 { PL [2 dl 3 dl] 1 0 0 DL } def
+/LT3 { PL [1 dl 1.5 dl] 1 0 1 DL } def
+/LT4 { PL [5 dl 2 dl 1 dl 2 dl] 0 1 1 DL } def
+/LT5 { PL [4 dl 3 dl 1 dl 3 dl] 1 1 0 DL } def
+/LT6 { PL [2 dl 2 dl 2 dl 4 dl] 0 0 0 DL } def
+/LT7 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 1 0.3 0 DL } def
+/LT8 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 0.5 0.5 0.5 DL } def
+/M {moveto} def
+/L {lineto} def
+/P { stroke [] 0 setdash
+  currentlinewidth 2 div sub moveto
+  0 currentlinewidth rlineto  stroke } def
+/D { stroke [] 0 setdash  2 copy  vpt add moveto
+  hpt neg vpt neg rlineto  hpt vpt neg rlineto
+  hpt vpt rlineto  hpt neg vpt rlineto  closepath  stroke
+  P  } def
+/A { stroke [] 0 setdash  vpt sub moveto  0 vpt2 rlineto
+  currentpoint stroke moveto
+  hpt neg vpt neg rmoveto  hpt2 0 rlineto stroke
+  } def
+/B { stroke [] 0 setdash  2 copy  exch hpt sub exch vpt add moveto
+  0 vpt2 neg rlineto  hpt2 0 rlineto  0 vpt2 rlineto
+  hpt2 neg 0 rlineto  closepath  stroke
+  P  } def
+/C { stroke [] 0 setdash  exch hpt sub exch vpt add moveto
+  hpt2 vpt2 neg rlineto  currentpoint  stroke  moveto
+  hpt2 neg 0 rmoveto  hpt2 vpt2 rlineto stroke  } def
+/T { stroke [] 0 setdash  2 copy  vpt 1.12 mul add moveto
+  hpt neg vpt -1.62 mul rlineto
+  hpt 2 mul 0 rlineto
+  hpt neg vpt 1.62 mul rlineto  closepath  stroke
+  P  } def
+/S { 2 copy A C} def
+end
+%%EndProlog
+%%%Page: 1 1
+gnudict begin
+gsave
+50 50 translate
+0.100 0.100 scale
+90 rotate
+0 -5040 translate
+0 setgray
+/Courier findfont 240 scalefont setfont
+newpath
+LTa
+1728 841 M
+6849 841 L
+1728 841 M
+1728 4439 L
+LTb
+1728 841 M
+1791 841 L
+6849 841 M
+6786 841 L
+1584 841 M
+(0) Rshow
+1728 1201 M
+1791 1201 L
+6849 1201 M
+6786 1201 L
+1584 1201 M
+(50) Rshow
+1728 1561 M
+1791 1561 L
+6849 1561 M
+6786 1561 L
+1584 1561 M
+(100) Rshow
+1728 1920 M
+1791 1920 L
+6849 1920 M
+6786 1920 L
+1584 1920 M
+(150) Rshow
+1728 2280 M
+1791 2280 L
+6849 2280 M
+6786 2280 L
+1584 2280 M
+(200) Rshow
+1728 2640 M
+1791 2640 L
+6849 2640 M
+6786 2640 L
+1584 2640 M
+(250) Rshow
+1728 3000 M
+1791 3000 L
+6849 3000 M
+6786 3000 L
+1584 3000 M
+(300) Rshow
+1728 3360 M
+1791 3360 L
+6849 3360 M
+6786 3360 L
+1584 3360 M
+(350) Rshow
+1728 3719 M
+1791 3719 L
+6849 3719 M
+6786 3719 L
+1584 3719 M
+(400) Rshow
+1728 4079 M
+1791 4079 L
+6849 4079 M
+6786 4079 L
+1584 4079 M
+(450) Rshow
+1728 4439 M
+1791 4439 L
+6849 4439 M
+6786 4439 L
+1584 4439 M
+(500) Rshow
+1728 841 M
+1728 904 L
+1728 4439 M
+1728 4376 L
+1728 601 M
+(0) Cshow
+2240 841 M
+2240 904 L
+2240 4439 M
+2240 4376 L
+2240 601 M
+(5) Cshow
+2752 841 M
+2752 904 L
+2752 4439 M
+2752 4376 L
+2752 601 M
+(10) Cshow
+3264 841 M
+3264 904 L
+3264 4439 M
+3264 4376 L
+3264 601 M
+(15) Cshow
+3776 841 M
+3776 904 L
+3776 4439 M
+3776 4376 L
+3776 601 M
+(20) Cshow
+4289 841 M
+4289 904 L
+4289 4439 M
+4289 4376 L
+4289 601 M
+(25) Cshow
+4801 841 M
+4801 904 L
+4801 4439 M
+4801 4376 L
+4801 601 M
+(30) Cshow
+5313 841 M
+5313 904 L
+5313 4439 M
+5313 4376 L
+5313 601 M
+(35) Cshow
+5825 841 M
+5825 904 L
+5825 4439 M
+5825 4376 L
+5825 601 M
+(40) Cshow
+6337 841 M
+6337 904 L
+6337 4439 M
+6337 4376 L
+6337 601 M
+(45) Cshow
+6849 841 M
+6849 904 L
+6849 4439 M
+6849 4376 L
+6849 601 M
+(50) Cshow
+LTb
+1728 841 M
+6849 841 L
+6849 4439 L
+1728 4439 L
+1728 841 L
+240 2640 M
+currentpoint gsave translate 90 rotate 0 0 moveto
+(uSeconds) Cshow
+grestore
+4288 361 M
+(Units of Work) Cshow
+4288 4679 M
+(5 locks with 4 threads each) Cshow
+LT0
+LT0
+6066 4136 M
+(Old Threads) Rshow
+6210 4136 M
+6642 4136 L
+1728 1837 M
+1728 1837 L
+1830 2015 L
+1933 1995 L
+2035 2011 L
+2138 2047 L
+2240 2083 L
+2343 2084 L
+2445 2076 L
+2547 2074 L
+2650 2054 L
+2752 2027 L
+2855 2011 L
+2957 1997 L
+3059 2005 L
+3162 2020 L
+3264 2034 L
+3367 2050 L
+3469 2080 L
+3572 2103 L
+3674 2138 L
+3776 2167 L
+4801 2544 L
+5825 2922 L
+6849 3302 L
+6849 3302 L
+6354 4136 D
+1728 1837 D
+1830 2015 D
+1933 1995 D
+2035 2011 D
+2138 2047 D
+2240 2083 D
+2343 2084 D
+2445 2076 D
+2547 2074 D
+2650 2054 D
+2752 2027 D
+2855 2011 D
+2957 1997 D
+3059 2005 D
+3162 2020 D
+3264 2034 D
+3367 2050 D
+3469 2080 D
+3572 2103 D
+3674 2138 D
+3776 2167 D
+4801 2544 D
+5825 2922 D
+6849 3302 D
+LT1
+6066 3896 M
+(New Threads) Rshow
+6210 3896 M
+6642 3896 L
+1728 2002 M
+1728 2002 L
+1830 1952 L
+1933 1886 L
+2035 1805 L
+2138 1722 L
+2240 1618 L
+2343 1555 L
+2445 1523 L
+2547 1474 L
+2650 1451 L
+2752 1409 L
+2855 1409 L
+2957 1441 L
+3059 1473 L
+3162 1512 L
+3264 1549 L
+3367 1582 L
+3469 1621 L
+3572 1670 L
+3674 1699 L
+3776 1735 L
+4801 2119 L
+5825 2490 L
+6849 2875 L
+6849 2875 L
+6354 3896 A
+1728 2002 A
+1830 1952 A
+1933 1886 A
+2035 1805 A
+2138 1722 A
+2240 1618 A
+2343 1555 A
+2445 1523 A
+2547 1474 A
+2650 1451 A
+2752 1409 A
+2855 1409 A
+2957 1441 A
+3059 1473 A
+3162 1512 A
+3264 1549 A
+3367 1582 A
+3469 1621 A
+3572 1670 A
+3674 1699 A
+3776 1735 A
+4801 2119 A
+5825 2490 A
+6849 2875 A
+stroke
+grestore
+end
+showpage
+%%Trailer
+%%%Pages: 1
+
+%%EndDocument
+ GE /Times-Bold SF
+14319 24072 MT
+(Figure 5-2:)SH
+/Times-Roman SF
+20092 XM
+(Comparisons of old and new thread packages on the Sequent)SH
+10000 26551 MT
+(Figure 5-2 shows the contention benchmark on the Sequent)
+292 W( comparing the old and new)293 W
+9000 27928 MT
+(implementations with two different lock and thread parameters.)
+23 W( If)
+320 W( there were no lock contention,)22 W
+9000 29305 MT
+(these graphs would be straight lines with slopes equal to the duration)
+131 W( of one unit of work and)132 W
+9000 30682 MT
+(intercepts equal to the overhead associated with creating and deleting the threads.)
+164 W( As)
+601 W( can be)163 W
+9000 32059 MT
+(seen, the graphs are not straight lines and)
+185 W( contention does exist as the amount of work done)186 W
+9000 33436 MT
+(between acquisitions approaches zero.)SH
+10000 35915 MT
+(The results of this benchmark show the throughput of new implementation is significantly)212 W
+9000 37292 MT
+(greater than that of the old implementation.  The overhead)
+114 W( in the new implementation is lower)115 W
+9000 38669 MT
+(because its primitives for creating and deleting threads are faster.  In the)
+9 W( old implementation there)8 W
+9000 40046 MT
+(is a)
+102 W( higher threshold of work above which contention is insignificant, which further widens the)103 W
+9000 41423 MT
+(performance gap between the two implementations.  When work)
+112 W( approaches zero, the new and)111 W
+9000 42800 MT
+(old implementations perform about equally well.)SH
+300 1000 90 7500 42496 GB 
+%%BeginDocument: plots/E0_1.ps
+%!PS-Adobe-2.0
+%%Creator: gnuplot
+%%DocumentFonts: Courier
+%%BoundingBox: 50 50 554 770
+%%%Pages: (atend)
+%%EndComments
+/gnudict 40 dict def
+gnudict begin
+/Color false def
+/gnulinewidth 5.000 def
+/vshift -80 def
+/dl {10 mul} def
+/hpt 31.5 def
+/vpt 31.5 def
+/vpt2 vpt 2 mul def
+/hpt2 hpt 2 mul def
+/Lshow { currentpoint stroke moveto
+  0 vshift rmoveto show } def
+/Rshow { currentpoint stroke moveto
+  dup stringwidth pop neg vshift rmoveto show } def
+/Cshow { currentpoint stroke moveto
+  dup stringwidth pop -2 div vshift rmoveto show } def
+/DL { Color {setrgbcolor [] 0 setdash pop}
+ {pop pop pop 0 setdash} ifelse } def
+/BL { stroke gnulinewidth 2 mul setlinewidth } def
+/AL { stroke gnulinewidth 2 div setlinewidth } def
+/PL { stroke gnulinewidth setlinewidth } def
+/LTb { BL [] 0 0 0 DL } def
+/LTa { AL [1 dl 2 dl] 0 setdash 0 0 0 setrgbcolor } def
+/LT0 { PL [] 0 1 0 DL } def
+/LT1 { PL [4 dl 2 dl] 0 0 1 DL } def
+/LT2 { PL [2 dl 3 dl] 1 0 0 DL } def
+/LT3 { PL [1 dl 1.5 dl] 1 0 1 DL } def
+/LT4 { PL [5 dl 2 dl 1 dl 2 dl] 0 1 1 DL } def
+/LT5 { PL [4 dl 3 dl 1 dl 3 dl] 1 1 0 DL } def
+/LT6 { PL [2 dl 2 dl 2 dl 4 dl] 0 0 0 DL } def
+/LT7 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 1 0.3 0 DL } def
+/LT8 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 0.5 0.5 0.5 DL } def
+/M {moveto} def
+/L {lineto} def
+/P { stroke [] 0 setdash
+  currentlinewidth 2 div sub moveto
+  0 currentlinewidth rlineto  stroke } def
+/D { stroke [] 0 setdash  2 copy  vpt add moveto
+  hpt neg vpt neg rlineto  hpt vpt neg rlineto
+  hpt vpt rlineto  hpt neg vpt rlineto  closepath  stroke
+  P  } def
+/A { stroke [] 0 setdash  vpt sub moveto  0 vpt2 rlineto
+  currentpoint stroke moveto
+  hpt neg vpt neg rmoveto  hpt2 0 rlineto stroke
+  } def
+/B { stroke [] 0 setdash  2 copy  exch hpt sub exch vpt add moveto
+  0 vpt2 neg rlineto  hpt2 0 rlineto  0 vpt2 rlineto
+  hpt2 neg 0 rlineto  closepath  stroke
+  P  } def
+/C { stroke [] 0 setdash  exch hpt sub exch vpt add moveto
+  hpt2 vpt2 neg rlineto  currentpoint  stroke  moveto
+  hpt2 neg 0 rmoveto  hpt2 vpt2 rlineto stroke  } def
+/T { stroke [] 0 setdash  2 copy  vpt 1.12 mul add moveto
+  hpt neg vpt -1.62 mul rlineto
+  hpt 2 mul 0 rlineto
+  hpt neg vpt 1.62 mul rlineto  closepath  stroke
+  P  } def
+/S { 2 copy A C} def
+end
+%%EndProlog
+%%%Page: 1 1
+gnudict begin
+gsave
+50 50 translate
+0.100 0.100 scale
+90 rotate
+0 -5040 translate
+0 setgray
+/Courier findfont 240 scalefont setfont
+newpath
+LTa
+1728 841 M
+6849 841 L
+1728 841 M
+1728 4439 L
+LTb
+1728 841 M
+1791 841 L
+6849 841 M
+6786 841 L
+1584 841 M
+(0) Rshow
+1728 1698 M
+1791 1698 L
+6849 1698 M
+6786 1698 L
+1584 1698 M
+(500) Rshow
+1728 2554 M
+1791 2554 L
+6849 2554 M
+6786 2554 L
+1584 2554 M
+(1000) Rshow
+1728 3411 M
+1791 3411 L
+6849 3411 M
+6786 3411 L
+1584 3411 M
+(1500) Rshow
+1728 4268 M
+1791 4268 L
+6849 4268 M
+6786 4268 L
+1584 4268 M
+(2000) Rshow
+1728 841 M
+1728 904 L
+1728 4439 M
+1728 4376 L
+1728 601 M
+(0) Cshow
+2240 841 M
+2240 904 L
+2240 4439 M
+2240 4376 L
+2240 601 M
+(2) Cshow
+2752 841 M
+2752 904 L
+2752 4439 M
+2752 4376 L
+2752 601 M
+(4) Cshow
+3264 841 M
+3264 904 L
+3264 4439 M
+3264 4376 L
+3264 601 M
+(6) Cshow
+3776 841 M
+3776 904 L
+3776 4439 M
+3776 4376 L
+3776 601 M
+(8) Cshow
+4289 841 M
+4289 904 L
+4289 4439 M
+4289 4376 L
+4289 601 M
+(10) Cshow
+4801 841 M
+4801 904 L
+4801 4439 M
+4801 4376 L
+4801 601 M
+(12) Cshow
+5313 841 M
+5313 904 L
+5313 4439 M
+5313 4376 L
+5313 601 M
+(14) Cshow
+5825 841 M
+5825 904 L
+5825 4439 M
+5825 4376 L
+5825 601 M
+(16) Cshow
+6337 841 M
+6337 904 L
+6337 4439 M
+6337 4376 L
+6337 601 M
+(18) Cshow
+6849 841 M
+6849 904 L
+6849 4439 M
+6849 4376 L
+6849 601 M
+(20) Cshow
+LTb
+1728 841 M
+6849 841 L
+6849 4439 L
+1728 4439 L
+1728 841 L
+240 2640 M
+currentpoint gsave translate 90 rotate 0 0 moveto
+(uSeconds) Cshow
+grestore
+4288 361 M
+(Processors) Cshow
+4288 4679 M
+(Old Threads Package) Cshow
+LT0
+LT0
+4289 3925 M
+(0 Units of Work) Rshow
+4433 3925 M
+4865 3925 L
+1984 859 M
+1984 859 L
+2240 874 L
+2496 913 L
+2752 960 L
+3008 1026 L
+3264 1110 L
+3520 1233 L
+3776 1378 L
+4032 1549 L
+4289 1732 L
+4545 1933 L
+4801 2160 L
+5057 2437 L
+5313 2702 L
+5569 3003 L
+5825 3262 L
+6081 3165 L
+6337 3407 L
+6593 3746 L
+6849 4063 L
+4577 3925 D
+1984 859 D
+2240 874 D
+2496 913 D
+2752 960 D
+3008 1026 D
+3264 1110 D
+3520 1233 D
+3776 1378 D
+4032 1549 D
+4289 1732 D
+4545 1933 D
+4801 2160 D
+5057 2437 D
+5313 2702 D
+5569 3003 D
+5825 3262 D
+6081 3165 D
+6337 3407 D
+6593 3746 D
+6849 4063 D
+LT1
+4289 3685 M
+(20 Units of Work) Rshow
+4433 3685 M
+4865 3685 L
+1984 1038 M
+1984 1038 L
+2240 1052 L
+2496 1057 L
+2752 1063 L
+3008 1068 L
+3264 1076 L
+3520 1098 L
+3776 1166 L
+4032 1337 L
+4289 1556 L
+4545 1804 L
+4801 2048 L
+5057 2341 L
+5313 2638 L
+5569 2945 L
+5825 3284 L
+6081 3257 L
+6337 3595 L
+6593 3926 L
+6849 4418 L
+4577 3685 A
+1984 1038 A
+2240 1052 A
+2496 1057 A
+2752 1063 A
+3008 1068 A
+3264 1076 A
+3520 1098 A
+3776 1166 A
+4032 1337 A
+4289 1556 A
+4545 1804 A
+4801 2048 A
+5057 2341 A
+5313 2638 A
+5569 2945 A
+5825 3284 A
+6081 3257 A
+6337 3595 A
+6593 3926 A
+6849 4418 A
+LT2
+4289 3445 M
+(40 Units of Work) Rshow
+4433 3445 M
+4865 3445 L
+1984 1218 M
+1984 1218 L
+2240 1232 L
+2496 1237 L
+2752 1242 L
+3008 1246 L
+3264 1252 L
+3520 1258 L
+3776 1266 L
+4032 1277 L
+4289 1294 L
+4545 1328 L
+4801 1402 L
+5057 1589 L
+5313 1932 L
+5569 2350 L
+5825 2759 L
+6081 2754 L
+6337 3129 L
+6593 3529 L
+6849 3920 L
+4577 3445 B
+1984 1218 B
+2240 1232 B
+2496 1237 B
+2752 1242 B
+3008 1246 B
+3264 1252 B
+3520 1258 B
+3776 1266 B
+4032 1277 B
+4289 1294 B
+4545 1328 B
+4801 1402 B
+5057 1589 B
+5313 1932 B
+5569 2350 B
+5825 2759 B
+6081 2754 B
+6337 3129 B
+6593 3529 B
+6849 3920 B
+LT3
+4289 3205 M
+(60 Units of Work) Rshow
+4433 3205 M
+4865 3205 L
+1984 1400 M
+1984 1400 L
+2240 1413 L
+2496 1417 L
+2752 1421 L
+3008 1425 L
+3264 1430 L
+3520 1436 L
+3776 1441 L
+4032 1448 L
+4289 1456 L
+4545 1465 L
+4801 1482 L
+5057 1504 L
+5313 1550 L
+5569 1631 L
+5825 1818 L
+6081 1942 L
+6337 2245 L
+6593 2699 L
+6849 3110 L
+4577 3205 C
+1984 1400 C
+2240 1413 C
+2496 1417 C
+2752 1421 C
+3008 1425 C
+3264 1430 C
+3520 1436 C
+3776 1441 C
+4032 1448 C
+4289 1456 C
+4545 1465 C
+4801 1482 C
+5057 1504 C
+5313 1550 C
+5569 1631 C
+5825 1818 C
+6081 1942 C
+6337 2245 C
+6593 2699 C
+6849 3110 C
+LT4
+4289 2965 M
+(80 Units of Work) Rshow
+4433 2965 M
+4865 2965 L
+1984 1579 M
+1984 1579 L
+2240 1593 L
+2496 1598 L
+2752 1602 L
+3008 1605 L
+3264 1610 L
+3520 1614 L
+3776 1620 L
+4032 1626 L
+4289 1631 L
+4545 1640 L
+4801 1650 L
+5057 1661 L
+5313 1681 L
+5569 1703 L
+5825 1746 L
+6081 1799 L
+6337 1925 L
+6593 2144 L
+6849 2433 L
+4577 2965 T
+1984 1579 T
+2240 1593 T
+2496 1598 T
+2752 1602 T
+3008 1605 T
+3264 1610 T
+3520 1614 T
+3776 1620 T
+4032 1626 T
+4289 1631 T
+4545 1640 T
+4801 1650 T
+5057 1661 T
+5313 1681 T
+5569 1703 T
+5825 1746 T
+6081 1799 T
+6337 1925 T
+6593 2144 T
+6849 2433 T
+stroke
+grestore
+end
+showpage
+%%Trailer
+%%%Pages: 1
+
+%%EndDocument
+ GE 300 1000 90 29100 42496 GB 
+%%BeginDocument: plots/E2_1.ps
+%!PS-Adobe-2.0
+%%Creator: gnuplot
+%%DocumentFonts: Courier
+%%BoundingBox: 50 50 554 770
+%%%Pages: (atend)
+%%EndComments
+/gnudict 40 dict def
+gnudict begin
+/Color false def
+/gnulinewidth 5.000 def
+/vshift -80 def
+/dl {10 mul} def
+/hpt 31.5 def
+/vpt 31.5 def
+/vpt2 vpt 2 mul def
+/hpt2 hpt 2 mul def
+/Lshow { currentpoint stroke moveto
+  0 vshift rmoveto show } def
+/Rshow { currentpoint stroke moveto
+  dup stringwidth pop neg vshift rmoveto show } def
+/Cshow { currentpoint stroke moveto
+  dup stringwidth pop -2 div vshift rmoveto show } def
+/DL { Color {setrgbcolor [] 0 setdash pop}
+ {pop pop pop 0 setdash} ifelse } def
+/BL { stroke gnulinewidth 2 mul setlinewidth } def
+/AL { stroke gnulinewidth 2 div setlinewidth } def
+/PL { stroke gnulinewidth setlinewidth } def
+/LTb { BL [] 0 0 0 DL } def
+/LTa { AL [1 dl 2 dl] 0 setdash 0 0 0 setrgbcolor } def
+/LT0 { PL [] 0 1 0 DL } def
+/LT1 { PL [4 dl 2 dl] 0 0 1 DL } def
+/LT2 { PL [2 dl 3 dl] 1 0 0 DL } def
+/LT3 { PL [1 dl 1.5 dl] 1 0 1 DL } def
+/LT4 { PL [5 dl 2 dl 1 dl 2 dl] 0 1 1 DL } def
+/LT5 { PL [4 dl 3 dl 1 dl 3 dl] 1 1 0 DL } def
+/LT6 { PL [2 dl 2 dl 2 dl 4 dl] 0 0 0 DL } def
+/LT7 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 1 0.3 0 DL } def
+/LT8 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 0.5 0.5 0.5 DL } def
+/M {moveto} def
+/L {lineto} def
+/P { stroke [] 0 setdash
+  currentlinewidth 2 div sub moveto
+  0 currentlinewidth rlineto  stroke } def
+/D { stroke [] 0 setdash  2 copy  vpt add moveto
+  hpt neg vpt neg rlineto  hpt vpt neg rlineto
+  hpt vpt rlineto  hpt neg vpt rlineto  closepath  stroke
+  P  } def
+/A { stroke [] 0 setdash  vpt sub moveto  0 vpt2 rlineto
+  currentpoint stroke moveto
+  hpt neg vpt neg rmoveto  hpt2 0 rlineto stroke
+  } def
+/B { stroke [] 0 setdash  2 copy  exch hpt sub exch vpt add moveto
+  0 vpt2 neg rlineto  hpt2 0 rlineto  0 vpt2 rlineto
+  hpt2 neg 0 rlineto  closepath  stroke
+  P  } def
+/C { stroke [] 0 setdash  exch hpt sub exch vpt add moveto
+  hpt2 vpt2 neg rlineto  currentpoint  stroke  moveto
+  hpt2 neg 0 rmoveto  hpt2 vpt2 rlineto stroke  } def
+/T { stroke [] 0 setdash  2 copy  vpt 1.12 mul add moveto
+  hpt neg vpt -1.62 mul rlineto
+  hpt 2 mul 0 rlineto
+  hpt neg vpt 1.62 mul rlineto  closepath  stroke
+  P  } def
+/S { 2 copy A C} def
+end
+%%EndProlog
+%%%Page: 1 1
+gnudict begin
+gsave
+50 50 translate
+0.100 0.100 scale
+90 rotate
+0 -5040 translate
+0 setgray
+/Courier findfont 240 scalefont setfont
+newpath
+LTa
+1728 841 M
+6849 841 L
+1728 841 M
+1728 4439 L
+LTb
+1728 841 M
+1791 841 L
+6849 841 M
+6786 841 L
+1584 841 M
+(0) Rshow
+1728 1698 M
+1791 1698 L
+6849 1698 M
+6786 1698 L
+1584 1698 M
+(500) Rshow
+1728 2554 M
+1791 2554 L
+6849 2554 M
+6786 2554 L
+1584 2554 M
+(1000) Rshow
+1728 3411 M
+1791 3411 L
+6849 3411 M
+6786 3411 L
+1584 3411 M
+(1500) Rshow
+1728 4268 M
+1791 4268 L
+6849 4268 M
+6786 4268 L
+1584 4268 M
+(2000) Rshow
+1728 841 M
+1728 904 L
+1728 4439 M
+1728 4376 L
+1728 601 M
+(0) Cshow
+2240 841 M
+2240 904 L
+2240 4439 M
+2240 4376 L
+2240 601 M
+(2) Cshow
+2752 841 M
+2752 904 L
+2752 4439 M
+2752 4376 L
+2752 601 M
+(4) Cshow
+3264 841 M
+3264 904 L
+3264 4439 M
+3264 4376 L
+3264 601 M
+(6) Cshow
+3776 841 M
+3776 904 L
+3776 4439 M
+3776 4376 L
+3776 601 M
+(8) Cshow
+4289 841 M
+4289 904 L
+4289 4439 M
+4289 4376 L
+4289 601 M
+(10) Cshow
+4801 841 M
+4801 904 L
+4801 4439 M
+4801 4376 L
+4801 601 M
+(12) Cshow
+5313 841 M
+5313 904 L
+5313 4439 M
+5313 4376 L
+5313 601 M
+(14) Cshow
+5825 841 M
+5825 904 L
+5825 4439 M
+5825 4376 L
+5825 601 M
+(16) Cshow
+6337 841 M
+6337 904 L
+6337 4439 M
+6337 4376 L
+6337 601 M
+(18) Cshow
+6849 841 M
+6849 904 L
+6849 4439 M
+6849 4376 L
+6849 601 M
+(20) Cshow
+LTb
+1728 841 M
+6849 841 L
+6849 4439 L
+1728 4439 L
+1728 841 L
+240 2640 M
+currentpoint gsave translate 90 rotate 0 0 moveto
+(uSeconds) Cshow
+grestore
+4288 361 M
+(Processors) Cshow
+4288 4679 M
+(New Threads Package) Cshow
+LT0
+LT0
+4289 3925 M
+(0 Units of Work) Rshow
+4433 3925 M
+4865 3925 L
+1984 858 M
+1984 858 L
+2240 909 L
+2496 942 L
+2752 984 L
+3008 1032 L
+3264 1092 L
+3520 1175 L
+3776 1275 L
+4032 1376 L
+4289 1469 L
+4545 1631 L
+4801 1718 L
+5057 1833 L
+5313 1974 L
+5569 2115 L
+5825 2250 L
+6081 2353 L
+6337 2446 L
+6593 2547 L
+6849 2683 L
+4577 3925 D
+1984 858 D
+2240 909 D
+2496 942 D
+2752 984 D
+3008 1032 D
+3264 1092 D
+3520 1175 D
+3776 1275 D
+4032 1376 D
+4289 1469 D
+4545 1631 D
+4801 1718 D
+5057 1833 D
+5313 1974 D
+5569 2115 D
+5825 2250 D
+6081 2353 D
+6337 2446 D
+6593 2547 D
+6849 2683 D
+LT1
+4289 3685 M
+(20 Units of Work) Rshow
+4433 3685 M
+4865 3685 L
+1984 1037 M
+1984 1037 L
+2240 1047 L
+2496 1048 L
+2752 1048 L
+3008 1049 L
+3264 1050 L
+3520 1061 L
+3776 1101 L
+4032 1140 L
+4289 1227 L
+4545 1308 L
+4801 1521 L
+5057 1739 L
+5313 1846 L
+5569 2007 L
+5825 2151 L
+6081 2255 L
+6337 2357 L
+6593 2454 L
+6849 2546 L
+4577 3685 A
+1984 1037 A
+2240 1047 A
+2496 1048 A
+2752 1048 A
+3008 1049 A
+3264 1050 A
+3520 1061 A
+3776 1101 A
+4032 1140 A
+4289 1227 A
+4545 1308 A
+4801 1521 A
+5057 1739 A
+5313 1846 A
+5569 2007 A
+5825 2151 A
+6081 2255 A
+6337 2357 A
+6593 2454 A
+6849 2546 A
+LT2
+4289 3445 M
+(40 Units of Work) Rshow
+4433 3445 M
+4865 3445 L
+1984 1218 M
+1984 1218 L
+2240 1228 L
+2496 1228 L
+2752 1229 L
+3008 1230 L
+3264 1230 L
+3520 1231 L
+3776 1232 L
+4032 1234 L
+4289 1233 L
+4545 1235 L
+4801 1242 L
+5057 1261 L
+5313 1312 L
+5569 1401 L
+5825 1943 L
+6081 2160 L
+6337 2351 L
+6593 2517 L
+6849 2617 L
+4577 3445 B
+1984 1218 B
+2240 1228 B
+2496 1228 B
+2752 1229 B
+3008 1230 B
+3264 1230 B
+3520 1231 B
+3776 1232 B
+4032 1234 B
+4289 1233 B
+4545 1235 B
+4801 1242 B
+5057 1261 B
+5313 1312 B
+5569 1401 B
+5825 1943 B
+6081 2160 B
+6337 2351 B
+6593 2517 B
+6849 2617 B
+LT3
+4289 3205 M
+(60 Units of Work) Rshow
+4433 3205 M
+4865 3205 L
+1984 1398 M
+1984 1398 L
+2240 1408 L
+2752 1410 L
+3264 1410 L
+3520 1413 L
+3776 1411 L
+4032 1411 L
+4289 1413 L
+4545 1413 L
+4801 1414 L
+5057 1416 L
+5313 1418 L
+5569 1422 L
+5825 1427 L
+6081 1440 L
+6337 1598 L
+6593 2015 L
+6849 2388 L
+4577 3205 C
+1984 1398 C
+2240 1408 C
+2752 1410 C
+3264 1410 C
+3520 1413 C
+3776 1411 C
+4032 1411 C
+4289 1413 C
+4545 1413 C
+4801 1414 C
+5057 1416 C
+5313 1418 C
+5569 1422 C
+5825 1427 C
+6081 1440 C
+6337 1598 C
+6593 2015 C
+6849 2388 C
+LT4
+4289 2965 M
+(80 Units of Work) Rshow
+4433 2965 M
+4865 2965 L
+1984 1579 M
+1984 1579 L
+4801 1593 L
+5057 1593 L
+5313 1594 L
+5569 1595 L
+5825 1597 L
+6081 1599 L
+6337 1603 L
+6593 1636 L
+6849 1811 L
+4577 2965 T
+1984 1579 T
+4801 1593 T
+5057 1593 T
+5313 1594 T
+5569 1595 T
+5825 1597 T
+6081 1599 T
+6337 1603 T
+6593 1636 T
+6849 1811 T
+stroke
+grestore
+end
+showpage
+%%Trailer
+%%%Pages: 1
+
+%%EndDocument
+ GE /Times-Bold SF
+10546 60868 MT
+(Figure 5-3:)SH
+/Times-Roman SF
+16319 XM
+(Old and New versions varying processors and amount of work on the Sequent)SH
+10000 63347 MT
+(To better show the effect of adding processors to a finely grained application,)
+215 W( we ran the)216 W
+9000 64724 MT
+(contention benchmark)
+26 W( with one lock and a varying number of threads, each doing a fixed amount)25 W
+9000 66101 MT
+(of work.  Figure 5-3 shows these results for a number of different amounts)
+79 W( of work.  As can be)80 W
+9000 67478 MT
+(seen, the new implementation)
+317 W( scales considerably better than the old one.  If there is no)316 W
+9000 68855 MT
+(contention, adding)
+101 W( a thread that can run on an available processor should have no effect on the)102 W
+9000 70232 MT
+(execution time of)
+51 W( the benchmark.  At some number of processors, the amount of time to execute)50 W
+9000 71609 MT
+(this test begins increasing.  With the)
+42 W( old implementation and 40 units of work, contention begins)43 W
+ES
+%%Page: ? 12
+BS
+0 SI
+11 /Times-Roman AF
+9000 7955 MT
+(to affect the execution time at approximately 11 threads.  The new implementation is not)
+21 W( affected)20 W
+9000 9332 MT
+(until approximately 13 threads.  In general, it appears the new implementation can)
+105 W( support two)106 W
+9000 10709 MT
+(more threads without contention than the old one.)SH
+12 /Times-Bold AF
+9000 14393 MT
+(5.3. Effects of Different Techniques)SH
+11 /Times-Roman AF
+10000 15770 MT
+(To examine the effects of)16 W
+/Times-Italic SF
+21593 XM
+(Busy Spinning)15 W
+/Times-Roman SF
+28223 XM
+(and)SH
+/Times-Italic SF
+30101 XM
+(Spin Polling)15 W
+/Times-Roman SF
+(, three versions of the new C-Threads)15 W
+9000 17147 MT
+(implementation were built with one or both of these features disabled.)
+171 W( Figure)
+619 W( 5-4 shows the)172 W
+9000 18524 MT
+(contention benchmark run on the Sequent with 40 threads contending for one lock.)SH
+300 1000 90 7500 18220 GB 
+%%BeginDocument: plots/C4-9_40.ps
+%!PS-Adobe-2.0
+%%Creator: gnuplot
+%%DocumentFonts: Courier
+%%BoundingBox: 50 50 554 770
+%%%Pages: (atend)
+%%EndComments
+/gnudict 40 dict def
+gnudict begin
+/Color false def
+/gnulinewidth 5.000 def
+/vshift -80 def
+/dl {10 mul} def
+/hpt 31.5 def
+/vpt 31.5 def
+/vpt2 vpt 2 mul def
+/hpt2 hpt 2 mul def
+/Lshow { currentpoint stroke moveto
+  0 vshift rmoveto show } def
+/Rshow { currentpoint stroke moveto
+  dup stringwidth pop neg vshift rmoveto show } def
+/Cshow { currentpoint stroke moveto
+  dup stringwidth pop -2 div vshift rmoveto show } def
+/DL { Color {setrgbcolor [] 0 setdash pop}
+ {pop pop pop 0 setdash} ifelse } def
+/BL { stroke gnulinewidth 2 mul setlinewidth } def
+/AL { stroke gnulinewidth 2 div setlinewidth } def
+/PL { stroke gnulinewidth setlinewidth } def
+/LTb { BL [] 0 0 0 DL } def
+/LTa { AL [1 dl 2 dl] 0 setdash 0 0 0 setrgbcolor } def
+/LT0 { PL [] 0 1 0 DL } def
+/LT1 { PL [4 dl 2 dl] 0 0 1 DL } def
+/LT2 { PL [2 dl 3 dl] 1 0 0 DL } def
+/LT3 { PL [1 dl 1.5 dl] 1 0 1 DL } def
+/LT4 { PL [5 dl 2 dl 1 dl 2 dl] 0 1 1 DL } def
+/LT5 { PL [4 dl 3 dl 1 dl 3 dl] 1 1 0 DL } def
+/LT6 { PL [2 dl 2 dl 2 dl 4 dl] 0 0 0 DL } def
+/LT7 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 1 0.3 0 DL } def
+/LT8 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 0.5 0.5 0.5 DL } def
+/M {moveto} def
+/L {lineto} def
+/P { stroke [] 0 setdash
+  currentlinewidth 2 div sub moveto
+  0 currentlinewidth rlineto  stroke } def
+/D { stroke [] 0 setdash  2 copy  vpt add moveto
+  hpt neg vpt neg rlineto  hpt vpt neg rlineto
+  hpt vpt rlineto  hpt neg vpt rlineto  closepath  stroke
+  P  } def
+/A { stroke [] 0 setdash  vpt sub moveto  0 vpt2 rlineto
+  currentpoint stroke moveto
+  hpt neg vpt neg rmoveto  hpt2 0 rlineto stroke
+  } def
+/B { stroke [] 0 setdash  2 copy  exch hpt sub exch vpt add moveto
+  0 vpt2 neg rlineto  hpt2 0 rlineto  0 vpt2 rlineto
+  hpt2 neg 0 rlineto  closepath  stroke
+  P  } def
+/C { stroke [] 0 setdash  exch hpt sub exch vpt add moveto
+  hpt2 vpt2 neg rlineto  currentpoint  stroke  moveto
+  hpt2 neg 0 rmoveto  hpt2 vpt2 rlineto stroke  } def
+/T { stroke [] 0 setdash  2 copy  vpt 1.12 mul add moveto
+  hpt neg vpt -1.62 mul rlineto
+  hpt 2 mul 0 rlineto
+  hpt neg vpt 1.62 mul rlineto  closepath  stroke
+  P  } def
+/S { 2 copy A C} def
+end
+%%EndProlog
+%%%Page: 1 1
+gnudict begin
+gsave
+50 50 translate
+0.100 0.100 scale
+90 rotate
+0 -5040 translate
+0 setgray
+/Courier findfont 240 scalefont setfont
+newpath
+LTa
+1728 841 M
+6849 841 L
+1728 841 M
+1728 4439 L
+LTb
+1728 841 M
+1791 841 L
+6849 841 M
+6786 841 L
+1584 841 M
+(0) Rshow
+1728 1241 M
+1791 1241 L
+6849 1241 M
+6786 1241 L
+1584 1241 M
+(2000) Rshow
+1728 1641 M
+1791 1641 L
+6849 1641 M
+6786 1641 L
+1584 1641 M
+(4000) Rshow
+1728 2040 M
+1791 2040 L
+6849 2040 M
+6786 2040 L
+1584 2040 M
+(6000) Rshow
+1728 2440 M
+1791 2440 L
+6849 2440 M
+6786 2440 L
+1584 2440 M
+(8000) Rshow
+1728 2840 M
+1791 2840 L
+6849 2840 M
+6786 2840 L
+1584 2840 M
+(10000) Rshow
+1728 3240 M
+1791 3240 L
+6849 3240 M
+6786 3240 L
+1584 3240 M
+(12000) Rshow
+1728 3639 M
+1791 3639 L
+6849 3639 M
+6786 3639 L
+1584 3639 M
+(14000) Rshow
+1728 4039 M
+1791 4039 L
+6849 4039 M
+6786 4039 L
+1584 4039 M
+(16000) Rshow
+1728 4439 M
+1791 4439 L
+6849 4439 M
+6786 4439 L
+1584 4439 M
+(18000) Rshow
+1728 841 M
+1728 904 L
+1728 4439 M
+1728 4376 L
+1728 601 M
+(0) Cshow
+2460 841 M
+2460 904 L
+2460 4439 M
+2460 4376 L
+2460 601 M
+(50) Cshow
+3191 841 M
+3191 904 L
+3191 4439 M
+3191 4376 L
+3191 601 M
+(100) Cshow
+3923 841 M
+3923 904 L
+3923 4439 M
+3923 4376 L
+3923 601 M
+(150) Cshow
+4654 841 M
+4654 904 L
+4654 4439 M
+4654 4376 L
+4654 601 M
+(200) Cshow
+5386 841 M
+5386 904 L
+5386 4439 M
+5386 4376 L
+5386 601 M
+(250) Cshow
+6117 841 M
+6117 904 L
+6117 4439 M
+6117 4376 L
+6117 601 M
+(300) Cshow
+6849 841 M
+6849 904 L
+6849 4439 M
+6849 4376 L
+6849 601 M
+(350) Cshow
+LTb
+1728 841 M
+6849 841 L
+6849 4439 L
+1728 4439 L
+1728 841 L
+240 2640 M
+currentpoint gsave translate 90 rotate 0 0 moveto
+(uSeconds) Cshow
+grestore
+4288 361 M
+(Work) Cshow
+4288 4679 M
+(1 Lock with 40 threads each) Cshow
+LT0
+LT0
+6066 4136 M
+(New Threads) Rshow
+6210 4136 M
+6642 4136 L
+1728 1289 M
+1728 1289 L
+1874 1287 L
+2021 1269 L
+2167 1279 L
+2313 1351 L
+2460 1420 L
+2606 1492 L
+2752 1531 L
+2899 1409 L
+3045 1307 L
+3191 1231 L
+3337 1186 L
+3484 1176 L
+3630 1203 L
+3776 1221 L
+3923 1255 L
+4069 1263 L
+4215 1324 L
+4362 1336 L
+4508 1358 L
+4654 1385 L
+4801 1399 L
+4947 1395 L
+5093 1463 L
+5240 1480 L
+5386 1494 L
+5532 1516 L
+5678 1561 L
+5825 1579 L
+5971 1557 L
+6117 1606 L
+6264 1674 L
+6410 1689 L
+6556 1689 L
+6703 1706 L
+6849 1742 L
+6354 4136 D
+1728 1289 D
+1874 1287 D
+2021 1269 D
+2167 1279 D
+2313 1351 D
+2460 1420 D
+2606 1492 D
+2752 1531 D
+2899 1409 D
+3045 1307 D
+3191 1231 D
+3337 1186 D
+3484 1176 D
+3630 1203 D
+3776 1221 D
+3923 1255 D
+4069 1263 D
+4215 1324 D
+4362 1336 D
+4508 1358 D
+4654 1385 D
+4801 1399 D
+4947 1395 D
+5093 1463 D
+5240 1480 D
+5386 1494 D
+5532 1516 D
+5678 1561 D
+5825 1579 D
+5971 1557 D
+6117 1606 D
+6264 1674 D
+6410 1689 D
+6556 1689 D
+6703 1706 D
+6849 1742 D
+LT1
+6066 3896 M
+(New Without Busy Spinning) Rshow
+6210 3896 M
+6642 3896 L
+1728 2712 M
+1728 2712 L
+1874 3087 L
+2021 3440 L
+2167 3852 L
+2313 4085 L
+2460 4169 L
+2606 4165 L
+2752 4064 L
+2899 4018 L
+3045 3897 L
+3191 3942 L
+3337 4300 L
+3484 4258 L
+3630 4299 L
+3776 4284 L
+3923 4198 L
+4069 4117 L
+4215 3804 L
+4362 3318 L
+4508 2770 L
+4654 2173 L
+4801 1883 L
+4947 1645 L
+5093 1627 L
+5240 1522 L
+5386 1533 L
+5532 1539 L
+5678 1543 L
+5825 1560 L
+5971 1571 L
+6117 1609 L
+6264 1599 L
+6410 1621 L
+6556 1655 L
+6703 1657 L
+6849 1689 L
+6354 3896 A
+1728 2712 A
+1874 3087 A
+2021 3440 A
+2167 3852 A
+2313 4085 A
+2460 4169 A
+2606 4165 A
+2752 4064 A
+2899 4018 A
+3045 3897 A
+3191 3942 A
+3337 4300 A
+3484 4258 A
+3630 4299 A
+3776 4284 A
+3923 4198 A
+4069 4117 A
+4215 3804 A
+4362 3318 A
+4508 2770 A
+4654 2173 A
+4801 1883 A
+4947 1645 A
+5093 1627 A
+5240 1522 A
+5386 1533 A
+5532 1539 A
+5678 1543 A
+5825 1560 A
+5971 1571 A
+6117 1609 A
+6264 1599 A
+6410 1621 A
+6556 1655 A
+6703 1657 A
+6849 1689 A
+stroke
+grestore
+end
+showpage
+%%Trailer
+%%%Pages: 1
+
+%%EndDocument
+ GE 300 1000 90 29100 18220 GB 
+%%BeginDocument: plots/C4-7_40.ps
+%!PS-Adobe-2.0
+%%Creator: gnuplot
+%%DocumentFonts: Courier
+%%BoundingBox: 50 50 554 770
+%%%Pages: (atend)
+%%EndComments
+/gnudict 40 dict def
+gnudict begin
+/Color false def
+/gnulinewidth 5.000 def
+/vshift -80 def
+/dl {10 mul} def
+/hpt 31.5 def
+/vpt 31.5 def
+/vpt2 vpt 2 mul def
+/hpt2 hpt 2 mul def
+/Lshow { currentpoint stroke moveto
+  0 vshift rmoveto show } def
+/Rshow { currentpoint stroke moveto
+  dup stringwidth pop neg vshift rmoveto show } def
+/Cshow { currentpoint stroke moveto
+  dup stringwidth pop -2 div vshift rmoveto show } def
+/DL { Color {setrgbcolor [] 0 setdash pop}
+ {pop pop pop 0 setdash} ifelse } def
+/BL { stroke gnulinewidth 2 mul setlinewidth } def
+/AL { stroke gnulinewidth 2 div setlinewidth } def
+/PL { stroke gnulinewidth setlinewidth } def
+/LTb { BL [] 0 0 0 DL } def
+/LTa { AL [1 dl 2 dl] 0 setdash 0 0 0 setrgbcolor } def
+/LT0 { PL [] 0 1 0 DL } def
+/LT1 { PL [4 dl 2 dl] 0 0 1 DL } def
+/LT2 { PL [2 dl 3 dl] 1 0 0 DL } def
+/LT3 { PL [1 dl 1.5 dl] 1 0 1 DL } def
+/LT4 { PL [5 dl 2 dl 1 dl 2 dl] 0 1 1 DL } def
+/LT5 { PL [4 dl 3 dl 1 dl 3 dl] 1 1 0 DL } def
+/LT6 { PL [2 dl 2 dl 2 dl 4 dl] 0 0 0 DL } def
+/LT7 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 1 0.3 0 DL } def
+/LT8 { PL [2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 2 dl 4 dl] 0.5 0.5 0.5 DL } def
+/M {moveto} def
+/L {lineto} def
+/P { stroke [] 0 setdash
+  currentlinewidth 2 div sub moveto
+  0 currentlinewidth rlineto  stroke } def
+/D { stroke [] 0 setdash  2 copy  vpt add moveto
+  hpt neg vpt neg rlineto  hpt vpt neg rlineto
+  hpt vpt rlineto  hpt neg vpt rlineto  closepath  stroke
+  P  } def
+/A { stroke [] 0 setdash  vpt sub moveto  0 vpt2 rlineto
+  currentpoint stroke moveto
+  hpt neg vpt neg rmoveto  hpt2 0 rlineto stroke
+  } def
+/B { stroke [] 0 setdash  2 copy  exch hpt sub exch vpt add moveto
+  0 vpt2 neg rlineto  hpt2 0 rlineto  0 vpt2 rlineto
+  hpt2 neg 0 rlineto  closepath  stroke
+  P  } def
+/C { stroke [] 0 setdash  exch hpt sub exch vpt add moveto
+  hpt2 vpt2 neg rlineto  currentpoint  stroke  moveto
+  hpt2 neg 0 rmoveto  hpt2 vpt2 rlineto stroke  } def
+/T { stroke [] 0 setdash  2 copy  vpt 1.12 mul add moveto
+  hpt neg vpt -1.62 mul rlineto
+  hpt 2 mul 0 rlineto
+  hpt neg vpt 1.62 mul rlineto  closepath  stroke
+  P  } def
+/S { 2 copy A C} def
+end
+%%EndProlog
+%%%Page: 1 1
+gnudict begin
+gsave
+50 50 translate
+0.100 0.100 scale
+90 rotate
+0 -5040 translate
+0 setgray
+/Courier findfont 240 scalefont setfont
+newpath
+LTa
+1728 841 M
+1728 4439 L
+LTb
+1728 841 M
+1791 841 L
+6849 841 M
+6786 841 L
+1584 841 M
+(1600) Rshow
+1728 1201 M
+1791 1201 L
+6849 1201 M
+6786 1201 L
+1584 1201 M
+(1800) Rshow
+1728 1561 M
+1791 1561 L
+6849 1561 M
+6786 1561 L
+1584 1561 M
+(2000) Rshow
+1728 1920 M
+1791 1920 L
+6849 1920 M
+6786 1920 L
+1584 1920 M
+(2200) Rshow
+1728 2280 M
+1791 2280 L
+6849 2280 M
+6786 2280 L
+1584 2280 M
+(2400) Rshow
+1728 2640 M
+1791 2640 L
+6849 2640 M
+6786 2640 L
+1584 2640 M
+(2600) Rshow
+1728 3000 M
+1791 3000 L
+6849 3000 M
+6786 3000 L
+1584 3000 M
+(2800) Rshow
+1728 3360 M
+1791 3360 L
+6849 3360 M
+6786 3360 L
+1584 3360 M
+(3000) Rshow
+1728 3719 M
+1791 3719 L
+6849 3719 M
+6786 3719 L
+1584 3719 M
+(3200) Rshow
+1728 4079 M
+1791 4079 L
+6849 4079 M
+6786 4079 L
+1584 4079 M
+(3400) Rshow
+1728 4439 M
+1791 4439 L
+6849 4439 M
+6786 4439 L
+1584 4439 M
+(3600) Rshow
+1728 841 M
+1728 904 L
+1728 4439 M
+1728 4376 L
+1728 601 M
+(0) Cshow
+2752 841 M
+2752 904 L
+2752 4439 M
+2752 4376 L
+2752 601 M
+(50) Cshow
+3776 841 M
+3776 904 L
+3776 4439 M
+3776 4376 L
+3776 601 M
+(100) Cshow
+4801 841 M
+4801 904 L
+4801 4439 M
+4801 4376 L
+4801 601 M
+(150) Cshow
+5825 841 M
+5825 904 L
+5825 4439 M
+5825 4376 L
+5825 601 M
+(200) Cshow
+6849 841 M
+6849 904 L
+6849 4439 M
+6849 4376 L
+6849 601 M
+(250) Cshow
+LTb
+1728 841 M
+6849 841 L
+6849 4439 L
+1728 4439 L
+1728 841 L
+240 2640 M
+currentpoint gsave translate 90 rotate 0 0 moveto
+(uSeconds) Cshow
+grestore
+4288 361 M
+(Work) Cshow
+4288 4679 M
+(1 Lock with 40 threads each) Cshow
+LT0
+LT0
+6066 4136 M
+(New Threads) Rshow
+6210 4136 M
+6642 4136 L
+1728 1998 M
+1728 1998 L
+1933 1974 L
+2138 1812 L
+2343 1908 L
+2547 2555 L
+2752 3173 L
+2957 3820 L
+3162 4169 L
+3367 3077 L
+3572 2160 L
+3776 1471 L
+3981 1068 L
+4186 978 L
+4391 1224 L
+4596 1381 L
+4801 1692 L
+5005 1758 L
+5210 2309 L
+5415 2417 L
+5620 2615 L
+5825 2861 L
+6030 2982 L
+6234 2951 L
+6439 3563 L
+6644 3712 L
+6849 3838 L
+6849 3838 L
+6354 4136 D
+1728 1998 D
+1933 1974 D
+2138 1812 D
+2343 1908 D
+2547 2555 D
+2752 3173 D
+2957 3820 D
+3162 4169 D
+3367 3077 D
+3572 2160 D
+3776 1471 D
+3981 1068 D
+4186 978 D
+4391 1224 D
+4596 1381 D
+4801 1692 D
+5005 1758 D
+5210 2309 D
+5415 2417 D
+5620 2615 D
+5825 2861 D
+6030 2982 D
+6234 2951 D
+6439 3563 D
+6644 3712 D
+6849 3838 D
+LT1
+6066 3896 M
+(New Without Spin Polling) Rshow
+6210 3896 M
+6642 3896 L
+1728 1938 M
+1728 1938 L
+1933 1944 L
+2138 1776 L
+2343 1949 L
+2547 2658 L
+2752 3293 L
+2957 3946 L
+3162 4385 L
+3367 3396 L
+3572 2106 L
+3776 1530 L
+3981 1165 L
+4186 1032 L
+4391 1296 L
+4596 1453 L
+4801 1746 L
+5005 2028 L
+5210 2219 L
+5415 2250 L
+5620 2658 L
+5825 2975 L
+6030 3047 L
+6234 3180 L
+6439 3455 L
+6644 3701 L
+6849 3887 L
+6849 3887 L
+6354 3896 A
+1728 1938 A
+1933 1944 A
+2138 1776 A
+2343 1949 A
+2547 2658 A
+2752 3293 A
+2957 3946 A
+3162 4385 A
+3367 3396 A
+3572 2106 A
+3776 1530 A
+3981 1165 A
+4186 1032 A
+4391 1296 A
+4596 1453 A
+4801 1746 A
+5005 2028 A
+5210 2219 A
+5415 2250 A
+5620 2658 A
+5825 2975 A
+6030 3047 A
+6234 3180 A
+6439 3455 A
+6644 3701 A
+6849 3887 A
+stroke
+grestore
+end
+showpage
+%%Trailer
+%%%Pages: 1
+
+%%EndDocument
+ GE /Times-Bold SF
+11811 36592 MT
+(Figure 5-4:)SH
+/Times-Roman SF
+17584 XM
+(Effects of)SH
+/Times-Italic SF
+22164 XM
+(Busy Spinning)SH
+/Times-Roman SF
+28764 XM
+(and)SH
+/Times-Italic SF
+30627 XM
+(Spin Polling)SH
+/Times-Roman SF
+36373 XM
+(on throughput on the Sequent)SH
+10000 39071 MT
+(The left graph in Figure 5-4 shows the effect of disabling)150 W
+/Times-Italic SF
+37095 XM
+(Busy Spinning)150 W
+/Times-Roman SF
+(. The)
+575 W( use of)150 W
+/Times-Italic SF
+50062 XM
+(Busy)SH
+9000 40448 MT
+(Spinning)SH
+/Times-Roman SF
+13609 XM
+(provides an order of magnitude performance improvement in)
+422 W( throughput under)423 W
+9000 41825 MT
+(contention. The)
+565 W( right graph shows the effect of disabling)145 W
+/Times-Italic SF
+35956 XM
+(Spin Polling)144 W
+/Times-Roman SF
+(. While)
+563 W( disabling)144 W
+/Times-Italic SF
+50244 XM
+(Spin)SH
+9000 43202 MT
+(Polling)SH
+/Times-Roman SF
+12726 XM
+(alone does not make)
+211 W( a significant difference, disabling both)212 W
+/Times-Italic SF
+41145 XM
+(Busy Spinning)212 W
+/Times-Roman SF
+48169 XM
+(and)SH
+/Times-Italic SF
+50244 XM
+(Spin)SH
+9000 44579 MT
+(Polling)SH
+/Times-Roman SF
+12515 XM
+(degrades performance by two orders of magnitude.)SH
+10000 47058 MT
+(To better quantify)
+61 W( the effects of these optimizations, measurements were made to examine the)60 W
+9000 48435 MT
+(relative frequency of events, such as, acquiring the mutex while)53 W
+/Times-Italic SF
+37874 XM
+(Busy Spinning)53 W
+/Times-Roman SF
+44580 XM
+(or the)53 W
+/Times-Italic SF
+47496 XM
+(run_queue)SH
+/Times-Roman SF
+9000 49812 MT
+(becoming empty while attempting to acquire)
+182 W( the)181 W
+/Times-Italic SF
+31871 XM
+(run_lock)SH
+/Times-Roman SF
+36237 XM
+(in the idle thread.  The contention)181 W
+9000 51189 MT
+(benchmark was run.  on the Sequent using one)
+18 W( lock, 40 threads, and 80 units of work.  As seen in)19 W
+9000 52566 MT
+(Figure 5-4,)
+9 W( 80 units of work is a point of prime contention.  The total number of iterations for this)8 W
+9000 53943 MT
+(test was 100,000 yielding 4,000,000 total attempts to acquire the mutex lock.)
+75 W( Figure)
+427 W( 5-5 shows)76 W
+9000 55320 MT
+(these statistics.)SH
+1 1 0 1700 122116 GB 
+%%BeginDocument: table2.epsi
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: 143 559 435 656
+%%BeginPreview: 293 98 1 98
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080007400000000800000000000000000000
+% 0000000000000000000000000000000000000008000dc00000000800000f80000000000000
+% 000000000000000000000000000000000000000800184000100008000004c0000040000000
+% 000000000000000000000000000000000000000800183f6fbc0008000004fffffef0000000
+% 000000000000000000000000000000000000000800182765900008000007fd67d640000000
+% 00000000000000000000000000000000000000080018276490000800000421221240000000
+% 00000000000000000000000000000000000000080018f764940008000004353f5250000000
+% 0000000000000000000000000000000000000008000fbdffdc000800000e3fbfff70000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 0000000000000000000000000000000000000008001c00060000080000e000000000000000
+% 030e0000187c000c0000000000000000000000080f36ef0c7b80080001b78f00e3f8006000
+% 039c04001ce000040000000000000000000000080b36eb185b80080001b58b00a2d8202000
+% 039f6fff9cedfffc0000000000000000000000080336633c1980080001b18f1fe0cf7f2000
+% 02df64f716e5b7e4000000000000000000000008073e67361180080001f10f1380c9ab2000
+% 02ef64831765fe24000000000000000000000008030663323180080000330b1380c9af2000
+% 02ef65d517656f760000000000000000000000080bcc6bf62180080000626b1b80cdab2000
+% 035ff7ffdafffffe0000000000000000000000080ff8ffde23c0080001c26f1fc0ef3ff800
+% 000000000000000000000000000000000000000800c000c000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000003c00000000000080000300000c0080070c000000000000000
+% 0060000600300061b003e00006c06001800000080f1e673c11800800d987007000c0000000
+% 00e00000001000201003600006c04001000000080b16c72633000800db0700500000000000
+% 00b3fdb6fff0ffbd97837b7fc71fdf7f7c7800080307e30677800800df831ef1fedfffc000
+% 00b265b25f906d2c9783db76838dcd3735b000080705b30656c00800fec31340b65b7f4000
+% 01f225b248902f2494067e73898bdb6f6db00008030d930cfe4008001e431340965fe3c000
+% 011bf5b24dd836249686d7b3099bfaebeae000080bc9b3de1ec0080036f31b409656f6c000
+% 03bffcffeff8167fff8fdfe30f9cdbef6fe000080fc8f7fe13c00800e3f79ee1ffffffc000
+% 0000040000000000000000020010000001e0000800c000c000000800000000000000000000
+% 00000f00000000000000000e0038000001e000080000000000000800000000000000000000
+% 0000000000000000000000000000000000c000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000003c00000000000000000080000000000000800000000000000000000
+% 0060000600300061b006c06007c3f600000000080000f3c79ef0080003c3c0380060000000
+% 00e00000001000201006c04006c1b4000000000800009acdb6b0080006c2c0280000000000
+% 00b3fdb6fff0ffbd97871fdf06df2df1e000000800001bc8e33008000460c7f8ff6fffe000
+% 00b265b25f906d2c97838dcd07b76cd6c000000800001bc8e3200800046084e05b2dbfa000
+% 01f225b248902f2494098bdb0c276db6c0000008000032c8a2600800044184e04b2ff1e000
+% 011bf5b24dd8362496899bfa8c26dfab8000000800007afdb640080006d906e04b2b7b6000
+% 03bffcffeff8167fff8f9cdb9e3f6dbf800000080000fbf71c400800039907f0ffffffe000
+% 00000400000000000000100000000007800000080000003000000800000000000000000000
+% 00000f00000000000000380000000007800000080000000000000800000000000000000000
+% 00000000000000000000000000000003000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 030e00001fe00300300000000000000000000008000fe10139e0080003cf003800c0000000
+% 039c040009a00100100000000000000000000008000f33033960080002c980280000000000
+% 039f6fff89a7f96ff000000000000000000000080006370719e0080000c18f78ffdfffe000
+% 02df64f70fa4c9cf9000000000000000000000080006350519e0080001c189a05b5bbfa000
+% 02ef648309a4c1c890000000000000000000000800066fcfd960080000c309a04b5ff1e000
+% 02ef65d509a6f9edd800000000000000000000080006f1b19960080002f78da04b577b6000
+% 035ff7ffdffffbfff80000000000000000000008000ff1313de0080003ff8f70ffffffe000
+% 00000000000000000000000000000000000000080000003000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 0000000000000000000000000000000000000008000070001e000800700000000000000000
+% 03fc0000601cd8060000000000000000000000080000dbc7bc20081ed8f00e318018018000
+% 02dc0000200848020000000000000000000000080000dac5b0600816d8b00a308008008000
+% 00c7bffdef0bcbde0000000000000000000000080000dbc1fce00806d833de3ebdeb7f8000
+% 00c597ed2d0a4bd20000000000000000000000080000fbc10ca00804f8726832a72e7c8000
+% 00c4923d2f0a4a1200000000000000000000000800001ac305f8080c18326832a70e448000
+% 00c4936dbb0b6b5b000000000000000000000008000032f26c30080836b36836b7ef6ec000
+% 00effbffff1fffdf0000000000000000000000080000e3f278200808e6f3dc1dfdffffc000
+% 00000000000000000000000000000000000000080000003000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% 00e800000000000000000000780000000000000800000000000008000f0000000000000000
+% 01b8ff0000186000000c6c00d81801f07ec0000800007bcf3cf008079e3c01c00018000000
+% 0308b7000008200200040400d81001b03680000800005ac9a6b00804d82601400001000000
+% 030031efff782f7f9ff7e4f0e7f7c1b7a5be7808000018c186300800fe063fc7ffdbfbfc00
+% 030e3165fb4829ea0da5a4f0737341eded9bb008000039c186700800c60627036ac9797400
+% 030031248f4829fa05e4a48132f6c309edb7b008000018c30c300801820c27017bc9413c00
+% 03183124db6c2dda86c4a4d136fea3095bf5e00800005af79eb00803f6de3701b2c9692c00
+% 01f03bfefffc7f7b82cffff1f736e78f6db7e00800007bffbef00807fcfe3f80b3fdfbbc00
+% 000000000000000000000000040000000001e0080000003000000800000000000000000000
+% 0000000000000000000000000e0000000001e0080000000000000800000000000000000000
+% 000000000000000000000000000000000000c0080000000000000800000000000000000000
+% 00000000000000000000000000000000000000080000000000000800000000000000000000
+% fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8
+%%EndImage
+%%EndPreview
+%!PS-Adobe-2.0
+%%Creator: dvips by Radical Eye Software
+%%Title: table2.dvi
+%%%Pages: 1 1
+%%BoundingBox: 0 0 612 792
+%%EndComments
+%%BeginDocument: tex.pro
+/TeXDict 200 dict def TeXDict begin /bdf{bind def}def /bop-aux{}bdf /@rigin{
+/@page-height exch def /@page-width exch def 72 Resolution div dup neg scale
+translate}bdf /@letter{Resolution dup -10 mul 8.5 11 @rigin}bdf /@landscape{[
+0 1 -1 0 0 0]concat Resolution dup 8.5 11 @rigin}bdf /@a4{Resolution dup
+-10.6929133858 mul 21 2.54 div 29.7 2.54 div @rigin}bdf /@legal{Resolution dup
+-13 mul 8.5 14 @rigin}bdf /@11x17{statusdict /11x17tray known{statusdict begin
+11x17tray end}if Resolution dup -16 mul 11 17 @rigin}bdf /@manualfeed{
+statusdict /manualfeed true put}bdf /@copies{/#copies exch def}bdf /@draft{
+/bop-aux{gsave initmatrix 72 dup scale @page-width 2 div @page-height 2 div
+translate @page-height @page-width atan rotate /Helvetica-Bold findfont 2
+scalefont setfont(DRAFT)dup stringwidth pop 2 div neg -1 moveto .95 setgray
+show grestore}bdf}bdf /@FontMatrix[1 0 0 -1 0 0]def /@FontBBox[0 0 0 0]def
+/dmystr(ZZf@@@)def /newname{dmystr cvn}bdf /df{/fontname exch def dmystr 2
+fontname cvx(@@@@)cvs putinterval newname 7 dict def newname load begin
+/FontType 3 def /FontMatrix @FontMatrix def /FontBBox @FontBBox def /BitMaps
+256 array def /BuildChar{CharBuilder}def /Encoding IdentityEncoding def end
+fontname{/foo setfont}2 array copy cvx def fontname load 0 dmystr 6 string
+copy cvn cvx put}bdf /dfe{newname dup load definefont setfont}bdf /ch-image{
+ch-data 0 get}bdf /ch-width{ch-data 1 get}bdf /ch-height{ch-data 2 get}bdf
+/ch-xoff{ch-data 3 get}bdf /ch-yoff{ch-data 4 get}bdf /ch-dx{ch-data 5 get}
+bdf /CharBuilder{save 3 1 roll exch /BitMaps get exch get /ch-data exch def
+ch-data null ne{ch-dx 0 ch-xoff ch-yoff neg ch-xoff ch-width add ch-height
+ch-yoff sub setcachedevice ch-width ch-height true[1 0 0 -1 -.1 ch-xoff sub
+ch-height ch-yoff sub .1 add]{ch-image}imagemask}if restore}bdf /dc{/ch-code
+exch def /ch-data exch def newname load /BitMaps get ch-code ch-data put}bdf
+/bop{gsave /SaveImage save def /bop-aux load exec 0 0 moveto}bdf /eop{clear
+SaveImage restore showpage grestore}bdf /@start{/Resolution exch def
+/IdentityEncoding 256 array def 0 1 255{IdentityEncoding exch 1 string dup 0 3
+index put cvn put}for}bdf /p{show}bdf /RuleMatrix[1 0 0 -1 -.1 -.1]def
+/BlackDots 8 string def /v{gsave currentpoint translate false RuleMatrix{
+BlackDots}imagemask grestore}bdf /a{moveto}bdf /delta 0 def /tail{dup /delta
+exch def 0 rmoveto}bdf /b{exch show tail}bdf /c{show delta 4 sub tail}bdf /d{
+show delta 3 sub tail}bdf /e{show delta 2 sub tail}bdf /f{show delta 1 sub
+tail}bdf /g{show delta 0 rmoveto}bdf /h{show delta 1 add tail}bdf /i{show
+delta 2 add tail}bdf /j{show delta 3 add tail}bdf /k{show delta 4 add tail}
+bdf /l{show -4 0 rmoveto}bdf /m{show -3 0 rmoveto}bdf /n{show -2 0 rmoveto}
+bdf /o{show -1 0 rmoveto}bdf /q{show 1 0 rmoveto}bdf /r{show 2 0 rmoveto}bdf
+/s{show 3 0 rmoveto}bdf /t{show 4 0 rmoveto}bdf /w{0 rmoveto}bdf /x{0 exch
+rmoveto}bdf /y{3 2 roll show moveto}bdf /bos{/section save def}bdf /eos{clear
+section restore}bdf end
+%%EndDocument
+%%BeginDocument: texps.pro
+TeXDict begin /rf{655360 div mul Resolution mul 7227 div /PixPerEm exch def
+findfont dup length 1 add dict /newfont exch def{1 index /FID ne{newfont 3 1
+roll put}{pop pop}ifelse}forall 256 dict begin newfont /Encoding get 255 -1 0{
+2 copy get 4 -1 roll 1000 mul PixPerEm div def pop}for pop newfont /Metrics
+currentdict put end /fontname exch def dmystr 2 fontname cvx(@@@@)cvs
+putinterval newname dup newfont definefont[PixPerEm 0 0 PixPerEm neg 0 0]
+makefont def fontname{/foo setfont}2 array copy cvx def fontname load 0 dmystr
+6 string copy cvn cvx put}bdf /ObliqueSlant{dup sin exch cos div neg}bdf
+/SlantFont{/foo exch def[1 0 foo 1 0 0]TransFont}bdf /ExtendFont{/foo exch def
+258 2 roll 0 1 255{pop foo div 256 1 roll}for 258 -2 roll[foo 0 0 1 0 0]
+TransFont}bdf /TransFont{exch findfont exch makefont dup length dict /newfont
+exch def{1 index /FID ne{newfont 3 1 roll put}{pop pop}ifelse}forall dup
+newfont definefont pop}bdf end
+%%EndDocument
+TeXDict begin 300 @start /fa 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 11 15 19 23 23 38 36 15 15 15 23 31 11 15 11 13 23 23 23 23 23
+23 23 23 23 23 15 15 31 31 31 23 42 28 28 30 33 28 28 33 33 15 20 30 25 38 30
+33 28 33 28 23 25 33 28 38 28 25 25 18 13 18 19 23 15 23 23 20 23 20 13 23 23
+13 13 20 13 33 23 23 23 23 18 18 13 23 20 30 20 20 18 18 13 18 25 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 18 23 23 8 23 23 23 23
+10 25 23 15 15 23 23 0 23 23 23 11 0 24 16 15 25 25 23 41 46 0 23 0 15 15 15
+15 15 15 15 15 0 15 15 0 15 15 15 41 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 41 0 13 0
+0 0 0 25 33 43 14 0 0 0 0 0 30 0 0 0 13 0 0 13 23 30 23 0 0 0 0 /Times-Italic
+1000 720896 rf /fb 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 11 15 19 23 23 38 36 15 15 15 23 26 11 15 11 13 23 23 23 23 23 23 23 23 23
+23 13 13 26 26 26 20 42 33 30 30 33 28 25 33 33 15 18 33 28 41 33 33 25 33 30
+25 28 33 33 43 33 33 28 15 13 15 21 23 15 20 23 20 23 20 15 23 23 13 13 23 13
+36 23 23 23 23 15 18 13 23 23 33 23 23 20 22 9 22 25 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 15 23 23 8 23 23 23 23 8 20 23 15 15
+25 25 0 23 23 23 11 0 21 16 15 20 20 23 46 46 0 20 0 15 15 15 15 15 15 15 15 0
+15 15 0 15 15 15 46 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 41 0 13 0 0 0 0 28 33 41
+14 0 0 0 0 0 30 0 0 0 13 0 0 13 23 33 23 0 0 0 0 /Times-Roman 1000 720896 rf
+end
+ TeXDict begin @letter
+%%EndProlog
+%%%Page: 1 1
+ bop 295 267 a 1222 2 v 294 324 a 2 57 v 653 w 2 57 v 1009 307 a fb(Count)
+1180 324 y 2 57 v 1280 307 a(Percent)1515 324 y 2 57 v 295 325 a 1222 2 v 294
+382 a 2 57 v 320 365 a(Mutex)10 b(Missed)947 382 y 2 57 v 973 365 a(3,913,671)
+1180 382 y 2 57 v 1257 365 a(97.8)h(of)h(T)m(otal)1515 382 y 2 57 v 295 384 a
+1222 2 v 294 440 a 2 57 v 320 423 a(Acquired)f(while)g fa(Busy)g(Spinning)947
+440 y 2 57 v 973 423 a fb(3,761,246)1180 440 y 2 57 v 1228 423 a(96.1)h(of)f
+(misses)1515 440 y 2 57 v 295 442 a 1222 2 v 294 498 a 2 57 v 320 481 a(Acqui\
+red)g(while)g fa(Spin)f(Polling)947 498 y 2 57 v 1030 481 a fb(28,007)1180 498
+y 2 57 v 1251 481 a(0.7)i(of)f(misses)1515 498 y 2 57 v 295 500 a 1222 2 v 294
+556 a 2 57 v 320 539 a(Mutex)f(Blocked)947 556 y 2 57 v 1007 539 a(124,418)
+1180 556 y 2 57 v 1251 539 a(3.2)i(of)f(misses)1515 556 y 2 57 v 295 558 a
+1222 2 v 294 614 a 2 57 v 320 597 a(Threads)g(Idled)947 614 y 2 57 v 1030 597
+a(98,754)1180 614 y 2 57 v 1206 597 a(79.3)g(of)g(blocked)1515 614 y 2 57 v
+295 616 a 1222 2 v 294 672 a 2 57 v 320 656 a(C-Thread)h(lost)e(while)h fa
+(Spin)g(Polling)947 672 y 2 57 v 1030 656 a fb(33,223)1180 672 y 2 57 v 1218
+656 a(25.2)h(of)f(waiters)1515 672 y 2 57 v 295 674 a 1222 2 v eop
+%%Trailer
+ end
+%%EOF
+
+%%EndDocument
+ GE /Times-Bold SF
+16272 67968 MT
+(Figure 5-5:)SH
+/Times-Roman SF
+22045 XM
+(Statistics for the Sequent with 1 lock and 40 threads)SH
+10000 70447 MT
+(As expected from)
+136 W( Figure 5-4, Figure 5-5 shows high contention on the mutex with a 97.8%)135 W
+9000 71824 MT
+(chance of failing to acquire the mutex on the first attempt with 80 units of work.)56 W
+/Times-Italic SF
+45818 XM
+(Busy Spinning)57 W
+ES
+%%Page: ? 13
+BS
+0 SI
+11 /Times-Roman AF
+9000 7955 MT
+(accounts for 96.1% of the cases where the mutex was missed.  This is consistent with the effects)49 W
+9000 9332 MT
+(shown in the first graph in Figure 5-4; removing)31 W
+/Times-Italic SF
+30818 XM
+(Busy Spinning)31 W
+/Times-Roman SF
+37480 XM
+(decreases performance by almost)31 W
+9000 10709 MT
+(an order of magnitude.)245 W
+/Times-Italic SF
+20793 XM
+(Spin Polling)245 W
+/Times-Roman SF
+27028 XM
+(is only beneficial in about 1% of the misses but this)244 W
+9000 12086 MT
+(translates to 18.4%)
+25 W( of the cases where the thread was preparing to block.  The remaining 3.2% of)26 W
+9000 13463 MT
+(the misses result in the thread actually blocking and calling)10 W
+/Times-Italic SF
+35434 XM
+(cthread_block)SH
+/Times-Roman SF
+(\050\051. Of)
+295 W( the calls made)
+10 W( to)9 W
+/Times-Italic SF
+9000 14840 MT
+(cthread_block)SH
+/Times-Roman SF
+(\050\051, almost 80%)
+78 W( result in the kernel thread becoming idle.)79 W
+/Times-Italic SF
+41544 XM
+(Spin Polling)79 W
+/Times-Roman SF
+47448 XM
+(detects the)79 W
+9000 16217 MT
+(emptying of the)SH
+/Times-Italic SF
+16241 XM
+(run_queue)SH
+/Times-Roman SF
+21220 XM
+(before acquiring the)SH
+/Times-Italic SF
+30351 XM
+(run_lock)SH
+/Times-Roman SF
+34536 XM
+(in 25% of the idle threads.)SH
+10000 18696 MT
+(These results show that)134 W
+/Times-Italic SF
+21106 XM
+(Busy Spinning)134 W
+/Times-Roman SF
+27974 XM
+(is extremely important when there is contention)
+134 W( on a)133 W
+9000 20073 MT
+(mutex in order to avoid passing that contention to the)25 W
+/Times-Italic SF
+33020 XM
+(run_lock)SH
+/Times-Roman SF
+(. When)
+325 W( contention is)
+25 W( passed on to)26 W
+9000 21450 MT
+(the)SH
+/Times-Italic SF
+10619 XM
+(run_lock)SH
+/Times-Roman SF
+(,)SH
+/Times-Italic SF
+15079 XM
+(Spin Polling)SH
+/Times-Roman SF
+20825 XM
+(removes the need to acquire the lock in about 1 in 5 cases.)SH
+13 /Times-Bold AF
+9000 25201 MT
+(6. Conclusions)SH
+11 /Times-Roman AF
+10000 26578 MT
+(We have built a C-Threads)
+74 W( library with lower latency and faster throughput than our previous)73 W
+9000 27955 MT
+(implementation. Continuations)
+494 W( decreased critical section size and made a number of important)110 W
+9000 29332 MT
+(performance optimizations possible.  The new C-Threads library allows applications)
+105 W( to be built)104 W
+9000 30709 MT
+(that will run well on both uniprocessors and multiprocessors without need to)
+37 W( recompile or relink.)38 W
+9000 32086 MT
+(In addition, the use of continuations, which allows the removal of the locking)
+80 W( hierarchy and the)79 W
+9000 33463 MT
+(state machine, both make the system faster and greatly simplifies the code.)SH
+13 /Times-Bold AF
+9000 37214 MT
+(7. Acknowledgments)SH
+11 /Times-Roman AF
+10000 38591 MT
+(Thanks go to everyone who helped in the)
+96 W( work and commented on the paper.  These include)97 W
+9000 39968 MT
+(Brian Bershad, Rich Draves, David Golub, Joanne Karohl, Daniel Stodolsky, and Peter Stout.)SH
+ES
+%%Page: ? 14
+BS
+0 SI
+14 /Times-Bold AF
+27334 8138 MT
+(References)SH
+11 /Times-Roman AF
+9000 10695 MT
+([1])SH
+12300 XM
+(Accetta, M.J., Baron, R.V., Bolosky, W., Golub, D.B., Rashid, R.F., Tevanian, A., and)SH
+12300 11891 MT
+(Young, M.W.)SH
+12300 13087 MT
+(Mach: A New Kernel Foundation for UNIX Development.)SH
+12300 14283 MT
+(In)SH
+/Times-Italic SF
+13491 XM
+(Proceedings of Summer Usenix)SH
+/Times-Roman SF
+(. July,)
+275 W( 1986.)SH
+9000 16234 MT
+([2])SH
+12300 XM
+(Anderson, T.E., Bershad, B.N., Lazowska E. D. and Levy, H.M.)SH
+12300 17430 MT
+(Scheduler Activations: Effective Kernel Support for the User-Level Management of)SH
+13950 18626 MT
+(Parallelism.)SH
+12300 19822 MT
+(In)SH
+/Times-Italic SF
+13491 XM
+(Proceedings of the 13th ACM Symposium on Operating Systems Principles)SH
+/Times-Roman SF
+(. October,)275 W
+13950 21018 MT
+(1991.)SH
+9000 22969 MT
+([3])SH
+12300 XM
+(Barton-Davis, P., McNamee, D., Vaswani, R. and Lazowska, E.D.)SH
+12300 24165 MT
+(Adding Scheduler Activations to Mach 3.0.)SH
+12300 25361 MT
+(In)SH
+/Times-Italic SF
+13491 XM
+(Proceesdings of the 3rd Usenix MACH Symposium)SH
+/Times-Roman SF
+(. April,)
+275 W( 1993.)SH
+12300 26557 MT
+(To appear.)SH
+9000 28508 MT
+([4])SH
+12300 XM
+(Bershad, B.N., Redell, D., and Ellis, J.)SH
+12300 29704 MT
+(Mutual Exclusion for Uniprocessors.)SH
+12300 30900 MT
+(In)SH
+/Times-Italic SF
+13491 XM
+(Proceeedings of the Fifth International Conference on Architectural Support for)SH
+13950 32096 MT
+(Programming Languages and Operating Systems)SH
+/Times-Roman SF
+(. October,)
+275 W( 1992.)SH
+9000 34047 MT
+([5])SH
+12300 XM
+(Black, D.L.)SH
+/Times-Italic SF
+12300 35243 MT
+(Scheduling and Resource Management Techniques for Multiprocessors)SH
+/Times-Roman SF
+(.)SH
+12300 36439 MT
+(PhD thesis, Department of Computer Science, Carnegie Mellon University, July, 1990.)SH
+9000 38390 MT
+([6])SH
+12300 XM
+(Cooper, E.C. and Draves, R.P.)SH
+/Times-Italic SF
+12300 39586 MT
+(C Threads)SH
+/Times-Roman SF
+(.)SH
+12300 40782 MT
+(Technical Report CMU-CS-88-154, Department of Computer Science, Carnegie Mellon)SH
+13950 41978 MT
+(University, February, 1988.)SH
+9000 43929 MT
+([7])SH
+12300 XM
+(Draves, R.P., Bershad, B., Rashid, R.F., and Dean, R.W.)SH
+12300 45125 MT
+(Using Continuations to Implement Thread Management and Communication in Operating)SH
+13950 46321 MT
+(Systems.)SH
+12300 47517 MT
+(In)SH
+/Times-Italic SF
+13491 XM
+(Proceedings of the Thirteenth ACM Symposium on Operating Systems Principles)SH
+/Times-Roman SF
+(.)SH
+13950 48713 MT
+(1991.)SH
+9000 50664 MT
+([8])SH
+12300 XM
+(Golub, D., Dean, R.W., Forin, A., and Rashid, R.F.)SH
+12300 51860 MT
+(Unix as an Application Program.)SH
+12300 53056 MT
+(In)SH
+/Times-Italic SF
+13491 XM
+(Proceedings of Summer 1990 USENIX Conference)SH
+/Times-Roman SF
+(. June,)
+275 W( 1990.)SH
+9000 55007 MT
+([9])SH
+12300 XM
+(Goodman, J.R. and Woest, P.)SH
+12300 56203 MT
+(The Wisconsin Multicube: A New Large-Scale Cache-Coherent Multiprocessor.)SH
+12300 57399 MT
+(In)SH
+/Times-Italic SF
+13491 XM
+(Proceedings of the 15th Annual Symposium on Computer Architecture)SH
+/Times-Roman SF
+(, pages 422--431.)SH
+13950 58595 MT
+(Honolulu, Hawaii, June, 1988.)SH
+9000 60546 MT
+([10])SH
+12300 XM
+(Intel.)SH
+/Times-Italic SF
+12300 61742 MT
+(386 Programmer's Reference Manual.)SH
+/Times-Roman SF
+12300 62938 MT
+(Intel, Mt. Prospect, IL, 1990.)SH
+9000 64889 MT
+([11])SH
+12300 XM
+(Gerry Kane.)SH
+/Times-Italic SF
+12300 66085 MT
+(MIPS RISC Architecture.)SH
+/Times-Roman SF
+12300 67281 MT
+(Prentice-Hall, Englewood Cliffs, NJ, 1988.)SH
+ES
+%%Page: ? 15
+BS
+0 SI
+11 /Times-Roman AF
+9000 7955 MT
+([12])SH
+12300 XM
+(Karlin, A.R., Li, K., Manassee, M.S., Owicki, S.)SH
+12300 9151 MT
+(Empirical Studies of Competitive Spinning for Shared-Memory Multiprocessors.)SH
+12300 10347 MT
+(In)SH
+/Times-Italic SF
+13491 XM
+(Proceedings of the Thirteenth ACM Symposium on Operating Systems Principles)SH
+/Times-Roman SF
+(.)SH
+13950 11543 MT
+(1991.)SH
+9000 13494 MT
+([13])SH
+12300 XM
+(Leslie Lamport.)SH
+12300 14690 MT
+(How to Make a Multiprocessor Computer That Correctly Executes Multiprocess)SH
+13950 15886 MT
+(Programs.)SH
+/Times-Italic SF
+12300 17082 MT
+(IEEE Transactions on Computers)SH
+/Times-Roman SF
+27456 XM
+(C-28\0509\051:241-248, September, 1979.)SH
+9000 19033 MT
+([14])SH
+12300 XM
+(Robert Milne and Christopher Strachey.)SH
+/Times-Italic SF
+12300 20229 MT
+(A Theory of Programming Language Semantics.)SH
+/Times-Roman SF
+12300 21425 MT
+(Halsted Press, New York, 1976.)SH
+ES
+%%Page: i 16
+BS
+0 SI
+10 /Times-Roman AF
+30461 4286 MT
+(i)SH
+13 /Times-Bold AF
+25652 8071 MT
+(Table of Contents)SH
+12 SS 
+10800 9327 MT
+(1. Introduction)SH
+10800 10583 MT
+(2. C-Thread Internals)SH
+11 SS 
+12850 11751 MT
+(2.1. Interface)SH
+15050 12919 MT
+(2.1.1. Threads)SH
+15050 14087 MT
+(2.1.2. Mutexes)SH
+15050 15255 MT
+(2.1.3. Condition Variables)SH
+15050 16423 MT
+(2.1.4. Kernel Threads)SH
+15050 17591 MT
+(2.1.5. Thread Wiring)SH
+12850 18759 MT
+(2.2. Old Implementations)SH
+15050 19927 MT
+(2.2.1. Locking)SH
+15050 21095 MT
+(2.2.2. Blocking and Resuming)SH
+15050 22263 MT
+(2.2.3. The State Machine)SH
+12850 23431 MT
+(2.3. Evaluation of Old Implementation)SH
+12 SS 
+10800 24687 MT
+(3. Continuations)SH
+11 SS 
+12850 25855 MT
+(3.1. Building and Invoking Continuations)SH
+12850 27023 MT
+(3.2. The)SH
+/Times-BoldItalic SF
+16884 XM
+(filter)SH
+/Times-Bold SF
+19359 XM
+(Mechanism)SH
+12850 28191 MT
+(3.3. Example of Continuation Use)SH
+12 SS 
+10800 29447 MT
+(4. Optimizations)SH
+11 SS 
+12850 30615 MT
+(4.1. Locking Techniques)SH
+12850 31783 MT
+(4.2.)SH
+/Times-BoldItalic SF
+14775 XM
+(Busy Spinning)SH
+/Times-Bold SF
+21747 XM
+(and)SH
+/Times-BoldItalic SF
+23796 XM
+(Busy Waiting)SH
+/Times-Bold SF
+12850 32951 MT
+(4.3.)SH
+/Times-BoldItalic SF
+14775 XM
+(Spin Polling)SH
+/Times-Bold SF
+12850 34119 MT
+(4.4. Continuation Recognition)SH
+12 SS 
+10800 35375 MT
+(5. Performance)SH
+11 SS 
+12850 36543 MT
+(5.1. Latency)SH
+12850 37711 MT
+(5.2. Contention Comparisons)SH
+12850 38879 MT
+(5.3. Effects of Different Techniques)SH
+12 SS 
+10800 40135 MT
+(6. Conclusions)SH
+10800 41391 MT
+(7. Acknowledgments)SH
+ES
+%%Page: ii 17
+BS
+0 SI
+10 /Times-Roman AF
+30322 4286 MT
+(ii)SH
+13 /Times-Bold AF
+26556 8071 MT
+(List of Figures)SH
+12 SS 
+10800 9327 MT
+(Figure 3-1:)
+SH( Example)
+600 W( of user blocking with)SH
+/Times-BoldItalic SF
+33303 XM
+(condition_wait)SH
+/Times-Bold SF
+(\050\051)SH
+10800 10583 MT
+(Figure 5-1:)
+SH( PingPong)
+600 W( benchmark results)SH
+10800 11839 MT
+(Figure 5-2:)
+SH( Comparisons)
+600 W( of old and new thread packages on the Sequent)SH
+10800 13095 MT
+(Figure 5-3:)
+SH( Old)
+600 W( and New versions varying processors and amount)
+358 W( of)357 W
+17400 14351 MT
+(work on the Sequent)SH
+10800 15607 MT
+(Figure 5-4:)
+SH( Effects)
+600 W( of)150 W
+/Times-BoldItalic SF
+22834 XM
+(Busy Spinning)151 W
+/Times-Bold SF
+30739 XM
+(and)SH
+/Times-BoldItalic SF
+33124 XM
+(Spin Polling)151 W
+/Times-Bold SF
+39896 XM
+(on throughput on)151 W
+17400 16863 MT
+(the Sequent)SH
+10800 18119 MT
+(Figure 5-5:)
+SH( Statistics)
+600 W( for the Sequent with 1 lock and 40 threads)SH
+ES
+%%Trailer
+%%Pages: 17
+%%DocumentFonts: Times-Roman Times-Bold Times-Italic Symbol Times-BoldItalic

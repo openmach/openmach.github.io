@@ -1,0 +1,7035 @@
+%!PS-Adobe-2.0
+%%Title: X.mss
+%%DocumentFonts: (atend)
+%%Creator: Brad Chen and Scribe 7(1700)
+%%CreationDate: 2 November 1993 12:29
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale
+    /showpage {} def
+    /letter {} def
+    /lettersmall {} def
+    /note {} def
+    } bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 1 1
+BS
+0 SI
+10 /Times-Italic AF
+8920 3519 MT
+(To appear in The Proceedings of the USENIX Winter 1994 Technical Conference.)SH
+15 /Times-Bold AF
+16099 13016 MT
+(Memory Behavior of an X11 Window System)SH
+12 /Times-Italic AF
+26717 16430 MT
+(J. Bradley Chen)SH
+23816 17698 MT
+(School of Computer Science)SH
+23865 18966 MT
+(Carnegie Mellon University)SH
+13 /Times-Bold AF
+28181 24513 MT
+(Abstract)SH
+10 /Times-Roman AF
+7920 26886 MT
+(We used memory reference traces)
+16 W( from a DEC Ultrix system running the X11 window system from MIT Project)17 W
+7920 27991 MT
+(Athena and several freely available X11 applications to measure different aspects of memory system)
+94 W( behavior)93 W
+7920 29096 MT
+(and performance.  Our measurements show that memory)
+76 W( behavior for X11 workloads differs in several impor-)77 W
+7920 30201 MT
+(tant ways from)
+7 W( workloads more traditionally used in cache performance studies.  User instruction cache behavior)6 W
+7920 31306 MT
+(is a major component in overall memory system delays,)
+9 W( with significant competition within and between address)10 W
+7920 32411 MT
+(spaces. User)
+736 W( TLB miss rates are up to a factor of two higher)
+243 W( than other ill-behaved integer workloads.)242 W
+7920 33516 MT
+(Write-buffer stalls, data cache behavior, and uncached memory reads)
+54 W( can be problematic for microbenchmarks,)55 W
+7920 34621 MT
+(but they are not an issue for the realistic applications we tested.)SH
+12 /Times-Bold AF
+7920 38305 MT
+(1. Introduction)SH
+10 /Times-Roman AF
+8920 39502 MT
+(We have used memory reference traces from DEC Ultrix, the X11 window system from MIT Project Athena,)37 W
+7920 40699 MT
+(and freely available X11 applications to explore several aspects of)
+4 W( memory system behavior and performance for)5 W
+7920 41896 MT
+(X11 workloads.  We measured behavior)
+147 W( within the system, server and client, as well as interaction between)146 W
+7920 43093 MT
+(address spaces.)SH
+8920 44789 MT
+(Our analysis shows that memory behavior for X11 workloads differs substantially from that of)
+153 W( traditional)154 W
+7920 45986 MT
+(workloads, particularly in the instruction cache and)
+186 W( TLB.  Competition within and between contexts in the)185 W
+7920 47183 MT
+(instruction cache has significant performance impact.  This cache competition appears difficult to avoid in)
+143 W( a)144 W
+7920 48380 MT
+(direct mapped cache, suggesting that higher associativity may be)
+138 W( required.  TLB designs that do not accom-)137 W
+7920 49577 MT
+(modate the demands of large interactive systems may also become performance problems.)SH
+8920 51273 MT
+(X11 workloads, as compared to the SPECmarks)
+171 W( [23])
+SH( and other)
+171 W( more traditional workloads for behavioral)172 W
+7920 52470 MT
+(studies of memory systems, differ in several fundamental ways:)SH
+/Symbol SF
+9710 53923 MT
+(\267)SH
+/Times-Bold SF
+10420 XM
+(Large program text.)98 W
+/Times-Roman SF
+20004 XM
+(Even the largest SPECmarks are)
+98 W( small compared to X11.  At 688 KBytes,)97 W
+8 SS 
+36597 54691 MT
+(1)SH
+10 /Times-Italic AF
+10420 55036 MT
+(gcc)SH
+/Times-Roman SF
+12137 XM
+(stands out among the SPECmarks for its large text segment)79 W
+36997 XM
+(. X11)
+410 W( servers commonly have as)80 W
+10420 56141 MT
+(much as 1.8 megabytes of text, more than twice that of)116 W
+/Times-Italic SF
+33887 XM
+(gcc)SH
+/Times-Roman SF
+(. X11)
+482 W( clients also)
+116 W( tend to have large)115 W
+10420 57246 MT
+(code. The)
+294 W( two real-world X11 clients used in this study,)22 W
+/Times-Italic SF
+33576 XM
+(gs)SH
+/Times-Roman SF
+34737 XM
+(and)SH
+/Times-Italic SF
+36453 XM
+(splot)SH
+/Times-Roman SF
+(, have text sizes of)
+22 W( 946 Kbytes)23 W
+10420 58351 MT
+(and 278 Kbytes respectively.  User text size for)SH
+/Times-Italic SF
+29638 XM
+(gs)SH
+/Times-Roman SF
+30777 XM
+(with the X11 server is over four times that of)SH
+/Times-Italic SF
+49052 XM
+(gcc)SH
+/Times-Roman SF
+(.)SH
+10800 50 7920 61940 UL
+6 SS 
+8720 63279 MT
+(1)SH
+8 SS 
+9020 63588 MT
+(Text sizes are given for Ultrix DECstation executables.)102 W
+/Times-Italic SF
+28016 XM
+(gcc)SH
+/Times-Roman SF
+29428 XM
+(is as built from the SPECmark distribution.  The X11)
+102 W( server size is for)103 W
+/Courier SF
+7920 64512 MT
+(/usr/bin/Xws)SH
+/Times-Roman SF
+13965 XM
+(on an Ultrix)
+85 W( workstation, which includes a number of DEC extensions.  The tracing experiments used a smaller server)84 W
+7920 65436 MT
+(\050958 KBytes\051.  See Section 3 for details on the server used in the tracing experiments.)SH
+7920 67012 MT
+(______________________________)SH
+7920 68309 MT
+(This research was sponsored in by)
+126 W( the Avionics Laboratory, Wright Research and Development Center, Aeronautical Systems Division)125 W
+7920 69107 MT
+(\050AFSC\051, U. S. Air Force, Wright-Patterson AFB, OH 45433-6543 under Contract F33615-90-C-1465, Arpa Order No. 7597, and)
+118 W( by an)119 W
+7920 69905 MT
+(equipment grant from Digital Equipment Corporation.)SH
+7920 71202 MT
+(The views and conclusions contained in this document are those of the authors and)
+95 W( should not be interpreted as representing the official)94 W
+7920 72000 MT
+(policies, either expressed or implied, of Digital Equipment Corporation or the U.S. Government.)SH
+ES
+%%Page: 2 2
+BS
+0 SI
+10 /Symbol AF
+9710 8720 MT
+(\267)SH
+/Times-Bold SF
+10420 XM
+(Three interacting contexts.)147 W
+/Times-Roman SF
+22978 XM
+(Typically, batch-oriented workloads involve two contexts: the)
+147 W( user)146 W
+10420 9825 MT
+(application and the kernel.  For many of these workloads \050scientific workloads are)
+2 W( the most common)3 W
+10420 10930 MT
+(examples\051 kernel activity)
+75 W( is negligible.  In contrast, activity in most X11 workloads is split among)74 W
+10420 12035 MT
+(three contexts: the)
+63 W( client, the X11 server, and the operating system, with significant activity occur-)64 W
+10420 13140 MT
+(ring in all three contexts.  The result is additional resource competition)
+61 W( that does not happen in the)60 W
+10420 14245 MT
+(two-context and single-context case.)SH
+/Symbol SF
+9710 16003 MT
+(\267)SH
+/Times-Bold SF
+10420 XM
+(Mandatory and potentially frequent context switches.)111 W
+/Times-Roman SF
+34529 XM
+(When multi-task)
+111 W( workloads are used in)112 W
+10420 17108 MT
+(memory system studies, they are usually created by)
+75 W( taking unrelated batch-oriented workloads and)74 W
+10420 18213 MT
+(running them simultaneously.)
+291 W( Context)
+834 W( switches for these multi-task workloads can often be)292 W
+10420 19318 MT
+(scheduled arbitrarily.)
+5 W( An)
+259 W( intelligent scheduler may try to make switches infrequent, as a strategy for)4 W
+10420 20423 MT
+(minimizing cache competition.  In contrast,)
+97 W( scheduler policy is irrelevant in client-server systems.)98 W
+10420 21528 MT
+(Context switches are largely determined by client behavior and inter-process communication)
+142 W( im-)141 W
+10420 22633 MT
+(plementations. Depending)
+250 W( on the client, context switches may be frequent.)SH
+/Symbol SF
+9710 24391 MT
+(\267)SH
+/Times-Bold SF
+10420 XM
+(A large)
+52 W( community of users.)53 W
+/Times-Roman SF
+23263 XM
+(The X11 server and clients are used daily and repeatedly by a large)53 W
+10420 25496 MT
+(contingent of the workstation)
+259 W( computing community.  Many of these users make rare use of)258 W
+10420 26601 MT
+(programs such as those in the SPECmarks.)SH
+8920 28297 MT
+(Performance for benchmarks is typically measured in terms)
+173 W( of)174 W
+/Times-Italic SF
+35668 XM
+(throughput)SH
+/Times-Roman SF
+(, with program execution times)174 W
+7920 29494 MT
+(reduced to units such as)
+244 W( MIPS or MFLOPS.  A key distinction between interactive workloads and more)243 W
+7920 30691 MT
+(traditional benchmarks is their sensitivity to)89 W
+/Times-Italic SF
+26287 XM
+(latency)SH
+/Times-Roman SF
+(, which is the time required for the system to respond to a)90 W
+7920 31888 MT
+(given input event.  Analysis of memory system components such)
+9 W( as caches and write buffers is common practice)8 W
+7920 33085 MT
+(for throughput benchmarks)
+114 W( [7, 8, 10].)
+SH( However,)
+478 W( interactive)
+114 W( programs and client-server systems have received)115 W
+7920 34282 MT
+(relatively little attention in recent research.)
+63 W( [3, 20].)
+SH( This)
+376 W( is unfortunate in that, for many computer)
+63 W( users, quick)62 W
+7920 35479 MT
+(response time for latency-critical interactive applications is more)
+107 W( important than the throughput of batch jobs.)108 W
+7920 36676 MT
+(Because of the size)
+109 W( and complexity of server-based systems such as X11, few detailed measurements of their)108 W
+7920 37873 MT
+(behavior have been made.  We think the problem deserves more attention, as memory system delays can have)
+39 W( a)40 W
+7920 39070 MT
+(significant impact on latency for interactive workloads.)SH
+11 /Times-Bold AF
+7920 42687 MT
+(1.1. Related Work)SH
+10 /Times-Roman AF
+8920 43884 MT
+(This research focused primarily on measuring the)
+31 W( behavior and performance of realistic X11 client workloads)30 W
+7920 45081 MT
+(from the perspective of the memory system.)
+78 W( Several)
+407 W( prior studies measure X11 behavior, although they differ)79 W
+7920 46278 MT
+(substantially in that they consider behavior at higher levels of abstraction.  Researchers at the Microelectronics)69 W
+7920 47475 MT
+(Computation and Technology Corporation built a tool called XSCOPE to measure)
+6 W( X11 performance and localize)7 W
+7920 48672 MT
+(performance problems)
+57 W( [22].)
+SH( XSCOPE)
+363 W( provides information about X11 request, reply, error, and event packets.)56 W
+7920 49869 MT
+(Their experience in designing XSCOPE indicated some problems with the syntax of the X11 protocol.)SH
+8920 51565 MT
+(Simple measures of performance, such as operations per second,)
+173 W( are often used when characterizing new)174 W
+7920 52762 MT
+(graphics hardware.)
+46 W( Researchers)
+341 W( at DEC WRL have done significant work in achieving good X11 performance,)45 W
+7920 53959 MT
+(both with simple bit-mapped framebuffers)
+139 W( [16])
+SH( and)
+139 W( more complicated hardware)
+140 W( [17].)
+SH( They)
+530 W( also demonstrate)140 W
+7920 55156 MT
+(software algorithms that permit effective use)
+94 W( of the hardware.  They consider memory reference behavior, but)93 W
+7920 56353 MT
+(strictly as related to frame buffer references;)
+80 W( application performance is beyond the scope their work.  Resear-)81 W
+7920 57550 MT
+(chers at Hewlett Packard used a technique)
+20 W( called Direct Hardware Accesses \050DHA\051 in their Starbase/X11 Merge)19 W
+7920 58747 MT
+(system to enable high performance when Starbase applications access the display. [6, 5])SH
+8920 60443 MT
+(Several other)
+87 W( projects consider memory system performance in a more general context, independent of X11)88 W
+7920 61640 MT
+(applications. MTOOL)
+708 W( [11])
+SH( compares execution time of program segments to predicted)
+229 W( time for a perfect)228 W
+7920 62837 MT
+(memory system.  A large difference between the)
+52 W( predicted and the measured times suggests a possible memory)53 W
+7920 64034 MT
+(system performance problem.  MTOOL has been applied primarily to detecting)
+319 W( memory bottlenecks in)318 W
+7920 65231 MT
+(FORTRAN programs, and is)
+105 W( not appropriate for measuring operating system behavior.  Thus, MTOOL is not)106 W
+7920 66428 MT
+(appropriate for measuring X11 workloads.  MTOOL has been)
+1 W( adapted to work with shared-memory multiproces-)SH
+7920 67625 MT
+(sor programs)
+21 W( [12].)
+SH( Another)
+292 W( project, MemSpy)
+21 W( [15],)
+SH( is based on the Tango)
+21 W( [9])
+SH( simulation and tracing system.)
+21 W( To)294 W
+7920 68822 MT
+(date, Tango is)
+55 W( designed for use with parallel applications and multiprocessor systems, and has not been applied)54 W
+7920 70019 MT
+(to multiprogrammed uniprocessor workloads or measurements of operating system)
+51 W( activity.  The measurements)52 W
+7920 71216 MT
+(for this paper concern aggregate memory system behavior.)
+138 W( In)
+524 W( contrast, both MTOOL and MemSpy identify)137 W
+7920 72413 MT
+(performance problems as specific segments of code \050also data for MemSpy\051 within a workload.)SH
+30350 75600 MT
+(2)SH
+ES
+%%Page: 3 3
+BS
+0 SI
+10 /Times-Roman AF
+8920 8606 MT
+(The remainder of the paper is organized as follows.  The next two sections describe)
+131 W( the experiments, first)132 W
+7920 9803 MT
+(giving details on the tracing and simulation systems, then a qualitative and quantitative characterization of the)91 W
+7920 11000 MT
+(workloads. Next,)
+508 W( in the analysis section, we analyze memory)
+129 W( delays for X11 workload from three points of)130 W
+7920 12197 MT
+(view: memory)
+363 W( penalties by subsystem, cache effects, and TLB behavior.  The paper closes with a brief review)56 W
+7920 13394 MT
+(of our major conclusions.)SH
+12 /Times-Bold AF
+7920 17078 MT
+(2. Tracing and Simulation)SH
+10 /Times-Roman AF
+8920 18275 MT
+(The experiments for this study ran on)
+76 W( a DECstation 5000/200, using an address tracing system developed at)77 W
+7920 19472 MT
+(Carnegie Mellon University and)
+146 W( DEC WRL)
+145 W( [4, 7].)
+SH( The)
+540 W( tracing system uses object code rewriting)
+145 W( [4, 24],)
+SH( in)145 W
+7920 20669 MT
+(which original object code is augmented with instrumentation instructions)
+11 W( such that an address trace is generated)12 W
+7920 21866 MT
+(as a side effect of program execution.  Traces are accurately interleaved both within a single context and)
+47 W( across)46 W
+7920 23063 MT
+(user and system contexts.  Traced addresses are corrected to reflect those of the original and not the traced)158 W
+7920 24260 MT
+(instruction stream.  The Ultrix kernel, the X11 server, and X11 clients were all instrumented and traced.)SH
+8920 25956 MT
+(The DECstation 5000/200 uses a 25 MHz MIPS R3000 CPU with MIPS R3010 floating point unit and MIPS)39 W
+7920 27153 MT
+(R3220 memory buffer.  The DS5000/200 uses a simple eight-bit)
+158 W( frame buffer interface, in which the frame)159 W
+7920 28350 MT
+(buffer appears as memory and is written directly by the)
+133 W( processor.  No special-purpose graphics hardware is)132 W
+7920 29547 MT
+(used. The)
+408 W( X11 server runs as a user process.  Communication between X11 server and)
+79 W( clients occurs through)80 W
+7920 30744 MT
+(the socket interface provided by Ultrix.  The frame)
+61 W( buffer is mapped directly into the address space of the X11)60 W
+7920 31941 MT
+(server, and accesses)
+137 W( to the frame buffer bypass the cache.  This could potentially induce penalties for frame)138 W
+7920 33138 MT
+(buffer reads.  Fortunately such reads are relatively rare.  Frame buffer writes pass through the write-buffer so)102 W
+7920 34335 MT
+(their performance is unaffected.)
+72 W( A)
+396 W( discussion of effective software support of the DECstation 5000/200 frame)73 W
+7920 35532 MT
+(buffer can be found in [16].)SH
+/Times-Bold SF
+18769 38646 MT
+(instruction cache:)SH
+/Times-Roman SF
+26657 XM
+(64 KB, direct-mapped, physical, 16)SH
+18769 39751 MT
+(byte line, 15 cycle miss penalty.)SH
+/Times-Bold SF
+18769 41961 MT
+(data cache:)SH
+/Times-Roman SF
+23879 XM
+(64 KB, direct-mapped, physical, 4 byte line,)SH
+18769 43066 MT
+(write allocate, 15 cycle read miss penalty, read miss fetches)SH
+18769 44171 MT
+(16 aligned bytes.)SH
+/Times-Bold SF
+18769 46381 MT
+(write buffer:)SH
+/Times-Roman SF
+24489 XM
+(six entries, page-mode writes complete)SH
+18769 47486 MT
+(in one cycle, non page-mode writes complete in five cycles;)SH
+18769 48591 MT
+(CPU reads have priority for memory access, but wait for)SH
+18769 49696 MT
+(writes that have already started.  4 KB page size for)SH
+18769 50801 MT
+(page-mode writes.)SH
+/Times-Bold SF
+18769 53011 MT
+(translation buffer:)SH
+/Times-Roman SF
+26935 XM
+(64 entries, 56 random/8 wired)SH
+18769 54116 MT
+(entries, trap to software on TLB miss.  Each TLB entry)SH
+18769 55221 MT
+(maps a 4 KB page.)SH
+/Times-Bold SF
+18769 57431 MT
+(page mapping)SH
+/Times-Roman SF
+(: Deterministic.  The physical page used)SH
+18769 58536 MT
+(to back a given virtual page is determined by the virtual)SH
+18769 59641 MT
+(page number and its address space identifier.  The)SH
+18769 60746 MT
+(deterministic strategy prevents conflicts within any 64 KB)SH
+18769 61851 MT
+(\050cache size\051 range of virtual addresses.)SH
+/Times-Bold SF
+18769 64061 MT
+(kernel memory)SH
+/Times-Roman SF
+(: All)
+250 W( kernel text and most kernel data)SH
+18769 65166 MT
+(is in unmapped, cached physical memory.)SH
+27459 29852 50 16870 66489 BX BX1
+/Times-Bold SF
+20253 68099 MT
+(Table 2-1:)SH
+/Times-Roman SF
+25114 XM
+(Memory system simulation parameters.)SH
+8920 69890 MT
+(We used a DECstation 5000/200 memory system simulator, along with several)
+56 W( other simple tools, to process)55 W
+7920 71087 MT
+(trace generated by the test workloads.  The parameters for the memory system)
+14 W( simulation are given in Table 2-1.)15 W
+30350 75600 MT
+(3)SH
+ES
+%%Page: 4 4
+BS
+0 SI
+10 /Times-Roman AF
+7920 8606 MT
+(We omit several million instructions from the start and end of each simulator experiment)
+7 W( to eliminate startup and)6 W
+7920 9803 MT
+(shutdown effects.  The tracing system extracts page table information from the running kernel to)
+35 W( provide virtual)36 W
+7920 11000 MT
+(to physical page mappings in the simulator.  The Ultrix page allocation code)
+74 W( attempts to assign physical pages)73 W
+7920 12197 MT
+(such that virtual page orderings are preserved in the physical cache.  Kernel text is not mapped.)SH
+12 /Times-Bold AF
+7920 15881 MT
+(3. Workloads)SH
+10 /Times-Roman AF
+8920 17078 MT
+(We used the standard X11R5 distribution from MIT Athena \050available)
+500 W( by anonymous ftp from)501 W
+8 SS 
+28056 17930 MT
+(2)SH
+10 /Courier AF
+7920 18275 MT
+(export.lcs.mit.edu)SH
+/Times-Roman SF
+(\051. The)
+488 W( PEX extension)119 W
+28825 XM
+(was omitted from)
+119 W( the X11 server.  Otherwise, we used the)118 W
+7920 19472 MT
+(default server configuration.  The Ultrix system was)
+9 W( version 4.2 revision 96.  Table 3-1 describes the X11 clients)10 W
+7920 20669 MT
+(used in this study.  All programs are written in C, and compiled with version 2.1 of the DEC/MIPS C compiler.)SH
+14650 22859 MT
+(workload)SH
+30488 XM
+(Description)SH
+45993 XM
+(time)SH
+35613 50 12793 23477 LH BX1
+-1703 50 20284 23477 LV BX1
+-1703 50 45358 23477 LV BX1
+13192 24562 MT
+(micro)SH
+13192 25667 MT
+(benchmarks)SH
+35613 50 12793 26285 LH BX1
+/Times-Italic SF
+13692 27370 MT
+(destroy)SH
+/Times-Roman SF
+20683 XM
+(window destruction, using)SH
+46257 XM
+(2.6)SH
+/Times-Italic SF
+20683 28475 MT
+(x11perf -repeat 5 -reps 10 -subs 10 100 -destroy)SH
+35613 50 12793 29080 LH BX1
+13692 30165 MT
+(resize)SH
+/Times-Roman SF
+20683 XM
+(window resize, using)SH
+46257 XM
+(2.5)SH
+/Times-Italic SF
+20683 31270 MT
+(x11perf -repeat 2 -reps 5 -subs 10 100 -resize)SH
+35613 50 12793 31875 LH BX1
+13692 32960 MT
+(circulate)SH
+/Times-Roman SF
+20683 XM
+(window circulate operations, using)SH
+46257 XM
+(2.8)SH
+/Times-Italic SF
+20683 34065 MT
+(x11perf -repeat 2 reps 5 subs 10 100 -circulate)SH
+35613 50 12793 34670 LH BX1
+13692 35755 MT
+(ftext)SH
+/Times-Roman SF
+20683 XM
+(text painting, using)SH
+46257 XM
+(2.4)SH
+/Times-Italic SF
+20683 36860 MT
+(x11perf -repeat 5 reps 500 -ftext)SH
+35613 50 12793 37465 LH BX1
+13692 38550 MT
+(copy)SH
+/Times-Roman SF
+20683 XM
+(bitmap copy, using)SH
+45757 XM
+(11.4)SH
+/Times-Italic SF
+20683 39655 MT
+(x11perf -repeat 5 reps 250 -copywinwin100)SH
+35613 50 12793 40260 LH BX1
+13692 41345 MT
+(scroll)SH
+/Times-Roman SF
+20683 XM
+(window scrolling, using)SH
+45757 XM
+(23.3)SH
+/Times-Italic SF
+20683 42450 MT
+(x11perf -repeat 2 reps 250 -scroll500)SH
+35613 50 12793 43055 LH BX1
+/Times-Roman SF
+13192 44140 MT
+(X11 clients)SH
+35613 50 12793 44758 LH BX1
+/Times-Italic SF
+13692 45843 MT
+(splot)SH
+/Times-Roman SF
+20683 XM
+(Splot is run four times on four different input files.)SH
+45757 XM
+(12.4)SH
+20683 46948 MT
+(Total size of splot input is 94 Kbytes.)SH
+35613 50 12793 47566 LH BX1
+/Times-Italic SF
+13692 48651 MT
+(gs)SH
+/Times-Roman SF
+20683 XM
+(Ghostscript is used to preview a twenty page)SH
+45757 XM
+(25.9)SH
+20683 49756 MT
+(conference paper.  Input file size is 251 Kbytes.)SH
+35613 50 12793 50374 LH BX1
+13192 51459 MT
+(Other workloads)SH
+35613 50 12793 52077 LH BX1
+/Times-Italic SF
+13692 53162 MT
+(gcc)SH
+/Times-Roman SF
+20683 XM
+(The GNU C compiler converts a 17K \050preprocessed\051 source)SH
+46257 XM
+(3.7)SH
+20683 54267 MT
+(file into optimized Sun-3 assembly code.  Not an X11 client.)SH
+35613 50 12793 54885 LH BX1
+/Times-Italic SF
+13692 55970 MT
+(compress)SH
+/Times-Roman SF
+20683 XM
+(Data compression using Lempel-Ziv encoding.  A 100K)SH
+46257 XM
+(1.3)SH
+20683 57075 MT
+(file is compressed then uncompressed.)SH
+35613 35919 50 12793 57693 BX BX1
+-34216 50 20284 57693 LV BX1
+-34216 50 45358 57693 LV BX1
+/Times-Bold SF
+18560 59303 MT
+(Table 3-1:)SH
+/Times-Roman SF
+23421 XM
+(Experimental workloads.  Times are in seconds.)SH
+/Times-Italic SF
+8920 63152 MT
+(X11perf)SH
+/Times-Roman SF
+12485 XM
+(is a client in the X11R5)
+93 W( distribution.  It measures the time to repeat a given server operation some)92 W
+7920 64349 MT
+(number of times, and is commonly used as a gauge of X11 server)
+85 W( performance.  All the microbenchmarks for)86 W
+7920 65546 MT
+(this paper are runs of)189 W
+/Times-Italic SF
+17557 XM
+(x11perf)SH
+/Times-Roman SF
+21051 XM
+(with different input parameters.)189 W
+/Times-Italic SF
+35160 XM
+(Splot)SH
+/Times-Roman SF
+37655 XM
+(is a program for generating plots for)188 W
+7920 66743 MT
+(PostScript and X11.  It is available by anonymous ftp)
+229 W( from)230 W
+/Courier SF
+34273 XM
+(labrea.stanford.edu)SH
+/Times-Roman SF
+(.)SH
+/Times-Italic SF
+46883 XM
+(Ghostscript)SH
+/Times-Roman SF
+(, by)230 W
+10800 50 7920 69632 UL
+6 SS 
+8720 70971 MT
+(2)SH
+8 SS 
+9020 71280 MT
+(PEX is the PHIGS extension to X11, used for three-dimensional graphics.)SH
+10 SS 
+30350 75600 MT
+(4)SH
+ES
+%%Page: 5 5
+BS
+0 SI
+10 /Times-Roman AF
+7920 8606 MT
+(Aladdin Enterprises, is an X11 previewer for Adobe Systems' PostScript language.  It is distributed with)
+127 W( the)126 W
+7920 9803 MT
+(GNU General Public license, available by anonymous ftp from)9 W
+/Courier SF
+33442 XM
+(athena-dist.mit.edu)SH
+/Times-Roman SF
+(. Version)
+270 W( 2.6.1 of)10 W
+/Times-Italic SF
+52391 XM
+(gs)SH
+/Times-Roman SF
+7920 11000 MT
+(was used.)SH
+/Times-Bold SF
+20393 28214 MT
+(Table 3-2:)SH
+/Times-Roman SF
+25254 XM
+(Instruction and Data Reference Counts)SH
+1 SS 
+16200 7920 28305 PB 
+%%BeginDocument: Xbasetable.ps
+%!PS-Adobe-1.0
+%%Creator: OLIVIA.MACH.CS.CMU.EDU:bchen (Brad Chen)
+%%Title: stdin
+%%CreationDate: Mon Oct 25 11:16:47 1993
+%%DocumentFonts: Times-Roman Times-Italic Times-Bold Symbol Times-Roman DIThacks
+%%%Pages: (atend)
+%%EndComments
+% Start of pscat.pro -- prolog for troff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCS: $Header: pscat.pro,v 2.2 91/02/21 18:00:13 ern Exp $
+%
+% HISTORY
+% $Log: pscat.pro,v $
+% Revision 2.2  91/02/21  18:00:13  ern
+%       orig
+%       [91/02/20  15:27:53  ern]
+% 
+%
+save /pscatsave exch def
+/$pscat 50 dict def
+$pscat begin
+/fm [1 0 0 1 0 0] def
+/xo 0 def /yo 0 def
+/M /moveto load def
+/R /show load def
+/S {exch currentpoint exch pop moveto show}def
+/T {exch currentpoint pop exch moveto show}def
+/U {3 1 roll moveto show}def
+/siz 0 def
+/font 0 def
+/Z {/siz exch def SF}def
+/F {/font exch def SF}def
+/SF{font 0 ne
+    {catfonts font 1 sub get fm 0 siz put fm 3 siz neg put 
+     fm makefont setfont}if}def
+/BP{save/catsv exch def 0 792 translate 72 432 div dup neg scale 
+  xo yo translate 0 0 moveto}def
+/EP{catsv restore showpage}def
+
+% definitions for PPROC callback functions
+% each PPROC is called with the following number on the stack:
+% pointsize charcode railmag pswidth pschar x y wid
+/$pprocs 50 dict def
+/fractm [.65 0 0 .6 0 0] def
+% fractions
+/PS1{gsave $pprocs begin
+    /wid exch def pop pop pop pop pop /ch exch def /size exch def
+    /pair $pprocs ch get def /cf currentfont def
+    cf fractm makefont setfont
+    0 .3 size mul 6 mul 2 copy neg rmoveto pair 0 get show rmoveto
+    currentfont cf setfont (\244) show setfont
+    pair 1 get show grestore wid .06 div 0 rmoveto end}def
+$pprocs begin
+8#34 [(1)(4)] def
+8#36 [(1)(2)] def
+8#46 [(3)(4)] def
+end
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+/rls{rlineto stroke}def
+/currx{currentpoint pop}def
+/dround{transform round exch round exch itransform} def
+end
+end
+/DIThacks exch definefont pop
+/xo -475 def /yo 3888 def
+/catfonts [
+        /Times-Roman findfont
+        /Times-Italic findfont
+        /Times-Bold findfont
+        /Symbol findfont
+        /Times-Roman findfont
+        /DIThacks findfont
+        ] def
+%%EndProlog
+%%%Page: ? 1
+BP
+6 F
+60 Z
+474 -69(i)U
+498(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)S
+1 F
+509 72(w)U
+1010 6(in)U
+1062(st)S
+1107(r)S
+1130(u)S
+1165(ct)S
+1212(io)S
+1262(n)S
+1317(r)S
+1340(e)S
+1370(ad)S
+1431(s)S
+1936(d)S
+1969(at)S
+2017(a)S
+2065(r)S
+2088(e)S
+2118(ad)S
+2179(s)S
+2668(d)S
+2701(at)S
+2749(a)S
+2797(wr)S
+2863(it)S
+2900(e)S
+2930(s)S
+552 72(o)U
+585(r)S
+608(k)S
+641(lo)S
+691(ad)S
+845(id)S
+895(le)S
+972(n)S
+1007(o)S
+1040(n)S
+1075(-)S
+1097(id)S
+1147(le)S
+1254(%)S
+1302(sys)S
+1412(%)S
+1460(X)S
+1507(s)S
+1562(%)S
+1610(X)S
+1657(c)S
+1714(n)S
+1749(o)S
+1782(n)S
+1817(-)S
+1839(id)S
+1889(le)S
+1996(%)S
+2044(sys)S
+2154(%)S
+2202(X)S
+2249(s)S
+2304(%)S
+2352(X)S
+2399(c)S
+2456(n)S
+2491(o)S
+2524(n)S
+2559(-)S
+2581(id)S
+2631(le)S
+2738(%)S
+2786(sys)S
+2896(%)S
+2944(X)S
+2991(s)S
+3046(%)S
+3094(X)S
+3141(c)S
+6 F
+3168 69(i)U
+474(i)S
+498(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)S
+1 F
+558 144(d)U
+591(e)S
+621(st)S
+666(r)S
+689(o)S
+722(y)S
+910(0)S
+1034(3)S
+1066(3)S
+1098(9)S
+1130(9)S
+1162(9)S
+1301(5)S
+1333(.)S
+1350(2)S
+1419(9)S
+1451(1)S
+1483(.)S
+1500(7)S
+1603(3)S
+1635(.)S
+1652(1)S
+1808(7)S
+1840(1)S
+1872(2)S
+1904(8)S
+2043(5)S
+2075(.)S
+2092(5)S
+2161(9)S
+2193(1)S
+2225(.)S
+2242(1)S
+2345(3)S
+2377(.)S
+2394(4)S
+2550(4)S
+2582(5)S
+2614(2)S
+2646(9)S
+2785(7)S
+2817(.)S
+2834(1)S
+2903(8)S
+2935(7)S
+2967(.)S
+2984(9)S
+3087(5)S
+3119(.)S
+3136(1)S
+3136 210(1)U
+528 276(c)U
+599 210(r)U
+622(e)S
+652(si)S
+694(ze)S
+910(0)S
+1034(3)S
+1066(5)S
+1098(9)S
+1130(9)S
+1162(9)S
+1301(2)S
+1333(.)S
+1350(6)S
+1419(9)S
+1451(6)S
+1483(.)S
+1500(9)S
+1603(0)S
+1635(.)S
+1652(5)S
+1808(7)S
+1840(3)S
+1872(8)S
+1904(2)S
+2043(2)S
+2075(.)S
+2092(2)S
+2161(9)S
+2193(7)S
+2225(.)S
+2242(2)S
+2345(0)S
+2377(.)S
+2394(6)S
+2550(2)S
+2582(7)S
+2614(5)S
+2646(9)S
+2785(2)S
+2817(.)S
+2834(8)S
+2903(9)S
+2935(6)S
+2967(.)S
+2984(1)S
+3087(1)S
+3119(.)S
+555 276(ir)U
+595(cu)S
+657(lat)S
+722(e)S
+910(0)S
+1034(4)S
+1066(5)S
+1098(9)S
+1130(9)S
+1162(9)S
+1301(2)S
+1333(.)S
+1350(9)S
+1419(9)S
+1451(6)S
+1483(.)S
+1500(7)S
+1603(0)S
+1635(.)S
+1652(4)S
+1808(9)S
+1840(9)S
+1872(5)S
+1904(8)S
+2043(2)S
+2075(.)S
+2092(2)S
+2161(9)S
+2193(7)S
+2225(.)S
+2242(4)S
+2345(0)S
+2377(.)S
+2394(4)S
+2550(4)S
+2582(2)S
+2614(8)S
+2646(4)S
+2785(3)S
+2817(.)S
+2834(4)S
+2903(9)S
+2935(5)S
+2967(.)S
+2984(9)S
+3087(0)S
+3119(.)S
+3136(6)S
+3136 342(1)U
+627(f)S
+649(t)S
+669(e)S
+699(x)S
+732(t)S
+910(0)S
+1034(6)S
+1066(2)S
+1098(0)S
+1130(0)S
+1162(0)S
+1301(2)S
+1333(.)S
+1350(3)S
+1419(9)S
+1451(6)S
+1483(.)S
+1500(1)S
+1603(1)S
+1635(.)S
+1652(7)S
+1808(7)S
+1840(9)S
+1872(2)S
+1904(1)S
+2043(4)S
+2075(.)S
+2092(2)S
+2161(9)S
+2193(2)S
+2225(.)S
+2242(5)S
+2345(3)S
+2377(.)S
+2394(3)S
+2550(4)S
+2582(8)S
+2614(2)S
+2646(7)S
+2785(4)S
+2817(.)S
+2834(9)S
+2903(9)S
+2935(2)S
+2967(.)S
+2984(0)S
+3087(3)S
+3119(.)S
+630 408(co)U
+690(p)S
+722(y)S
+910(0)S
+1034(9)S
+1066(2)S
+1098(0)S
+1130(0)S
+1162(0)S
+1301(3)S
+1333(.)S
+1350(8)S
+1419(9)S
+1451(5)S
+1483(.)S
+1500(6)S
+1603(0)S
+1635(.)S
+1652(6)S
+1776(1)S
+1808(5)S
+1840(9)S
+1872(1)S
+1904(2)S
+2043(3)S
+2075(.)S
+2092(4)S
+2161(9)S
+2193(5)S
+2225(.)S
+2242(5)S
+2345(1)S
+2377(.)S
+2394(1)S
+2518(1)S
+2550(4)S
+2582(4)S
+2614(5)S
+2646(7)S
+2785(1)S
+2817(.)S
+2834(4)S
+2903(9)S
+2935(7)S
+2967(.)S
+2984(7)S
+3087(1)S
+3119(.)S
+3136(0)S
+3136 474(0)U
+610(sc)S
+662(r)S
+685(o)S
+718(ll)S
+910(0)S
+1002(1)S
+1034(0)S
+1066(5)S
+1098(9)S
+1130(9)S
+1162(9)S
+1301(2)S
+1333(.)S
+1350(0)S
+1419(9)S
+1451(7)S
+1483(.)S
+1500(9)S
+1603(0)S
+1635(.)S
+1652(1)S
+1776(3)S
+1808(2)S
+1840(5)S
+1872(2)S
+1904(8)S
+2043(1)S
+2075(.)S
+2092(2)S
+2161(9)S
+2193(8)S
+2225(.)S
+2242(7)S
+2345(0)S
+2377(.)S
+2394(0)S
+2518(3)S
+2550(1)S
+2582(7)S
+2614(4)S
+2646(0)S
+2785(0)S
+2817(.)S
+2834(5)S
+2903(9)S
+2935(9)S
+2967(.)S
+2984(5)S
+3087(0)S
+3119(.)S
+625 540(sp)U
+682(lo)S
+732(t)S
+814(6)S
+846(9)S
+878(1)S
+910(0)S
+1002(1)S
+1034(4)S
+1066(8)S
+1098(6)S
+1130(1)S
+1162(9)S
+1269(3)S
+1301(3)S
+1333(.)S
+1350(4)S
+1419(3)S
+1451(6)S
+1483(.)S
+1500(0)S
+1571(3)S
+1603(0)S
+1635(.)S
+1652(6)S
+1776(3)S
+1808(0)S
+1840(8)S
+1872(5)S
+1904(2)S
+2011(3)S
+2043(2)S
+2075(.)S
+2092(2)S
+2161(3)S
+2193(4)S
+2225(.)S
+2242(9)S
+2313(3)S
+2345(2)S
+2377(.)S
+2394(9)S
+2518(1)S
+2550(6)S
+2582(3)S
+2614(4)S
+2646(6)S
+2753(4)S
+2785(1)S
+2817(.)S
+2834(6)S
+2903(3)S
+2935(2)S
+2967(.)S
+2984(7)S
+3055(2)S
+3087(5)S
+3119(.)S
+3136(7)S
+3136 606(0)U
+668 672(g)U
+697 606(gs)U
+814(3)S
+846(9)S
+878(9)S
+910(2)S
+1002(4)S
+1034(4)S
+1066(8)S
+1098(0)S
+1130(1)S
+1162(8)S
+1269(1)S
+1301(0)S
+1333(.)S
+1350(0)S
+1419(3)S
+1451(0)S
+1483(.)S
+1500(8)S
+1571(5)S
+1603(9)S
+1635(.)S
+1652(2)S
+1776(9)S
+1808(3)S
+1840(5)S
+1872(8)S
+1904(4)S
+2011(1)S
+2043(1)S
+2075(.)S
+2092(0)S
+2161(2)S
+2193(4)S
+2225(.)S
+2242(6)S
+2313(6)S
+2345(4)S
+2377(.)S
+2394(3)S
+2518(5)S
+2550(0)S
+2582(9)S
+2614(9)S
+2646(4)S
+2753(1)S
+2785(4)S
+2817(.)S
+2834(6)S
+2903(3)S
+2935(3)S
+2967(.)S
+2984(4)S
+3055(5)S
+3087(2)S
+3119(.)S
+698 672(cc)U
+782(6)S
+814(3)S
+846(6)S
+878(8)S
+910(4)S
+1034(2)S
+1066(8)S
+1098(8)S
+1130(9)S
+1162(9)S
+1269(2)S
+1301(1)S
+1333(.)S
+1350(0)S
+1451(0)S
+1483(.)S
+1500(0)S
+1571(7)S
+1603(9)S
+1635(.)S
+1652(0)S
+1808(5)S
+1840(7)S
+1872(1)S
+1904(6)S
+2011(2)S
+2043(0)S
+2075(.)S
+2092(5)S
+2193(0)S
+2225(.)S
+2242(0)S
+2313(7)S
+2345(9)S
+2377(.)S
+2394(5)S
+2550(3)S
+2582(8)S
+2614(1)S
+2646(0)S
+2753(2)S
+2785(8)S
+2817(.)S
+2834(6)S
+2935(0)S
+2967(.)S
+2984(0)S
+3055(7)S
+3087(1)S
+3119(.)S
+3136(4)S
+3136 738(8)U
+6 F
+474 735(i)U
+1 F
+738(co)T
+564(m)S
+617(p)S
+649(r)S
+672(e)S
+702(ss)S
+814(5)S
+846(5)S
+878(5)S
+910(5)S
+1034(1)S
+1066(6)S
+1098(9)S
+1130(3)S
+1162(4)S
+1269(1)S
+1301(9)S
+1333(.)S
+1350(2)S
+1451(0)S
+1483(.)S
+1500(0)S
+1571(8)S
+1603(0)S
+1635(.)S
+1652(8)S
+1808(3)S
+1840(2)S
+1872(4)S
+1904(9)S
+2011(1)S
+2043(8)S
+2075(.)S
+2092(9)S
+2193(0)S
+2225(.)S
+2242(0)S
+2313(8)S
+2345(1)S
+2377(.)S
+2394(1)S
+2550(2)S
+2582(2)S
+2614(2)S
+2646(5)S
+2753(2)S
+2785(9)S
+2817(.)S
+2834(2)S
+2935(0)S
+2967(.)S
+2984(0)S
+3055(7)S
+3087(0)S
+3119(.)S
+6 F
+498 735(iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii)U
+474(c)S
+711(c)T
+651(c)T
+591(c)T
+531(c)T
+471(c)T
+411(c)T
+351(c)T
+291(c)T
+231(c)T
+171(c)T
+111(c)T
+51(c)T
+-9(c)T
+767 735(c)U
+711(c)T
+651(c)T
+591(c)T
+531(c)T
+471(c)T
+411(c)T
+351(c)T
+291(c)T
+231(c)T
+171(c)T
+111(c)T
+51(c)T
+-9(c)T
+1699 735(c)U
+711(c)T
+651(c)T
+591(c)T
+531(c)T
+471(c)T
+411(c)T
+351(c)T
+291(c)T
+231(c)T
+171(c)T
+111(c)T
+51(c)T
+-9(c)T
+2441 735(c)U
+711(c)T
+651(c)T
+591(c)T
+531(c)T
+471(c)T
+411(c)T
+351(c)T
+291(c)T
+231(c)T
+171(c)T
+111(c)T
+51(c)T
+-9(c)T
+3198 735(c)U
+711(c)T
+651(c)T
+591(c)T
+531(c)T
+471(c)T
+411(c)T
+351(c)T
+291(c)T
+231(c)T
+171(c)T
+111(c)T
+51(c)T
+-9(c)T
+EP
+%%Trailer
+pscatsave end restore
+%%%Pages: 1
+
+%%EndDocument
+ PE 9 SS 
+10337 29755 MT
+(This table shows event)
+16 W( counts for each workload, along with the percentage contribution from the system \050%sys\051,)15 W
+9720 30769 MT
+(X11 server \050%Xs\051, and X11 client \050%Xc\051.  The)
+225 W( first column for each workload shows the number of idle)226 W
+9720 31783 MT
+(instructions executed during that workload.  All other counts and percentages are for non-idle)
+67 W( events.  All counts)66 W
+9720 32797 MT
+(are in thousands.)SH
+10 SS 
+8920 35925 MT
+(Two workloads which are not X11 clients,)178 W
+/Times-Italic SF
+27441 XM
+(gcc)SH
+/Times-Roman SF
+29257 XM
+(and)SH
+/Times-Italic SF
+31129 XM
+(compress)SH
+/Times-Roman SF
+(, are)
+178 W( included for comparison between X11)179 W
+7920 37122 MT
+(clients and other workloads.  Among common)
+23 W( integer benchmarks,)22 W
+/Times-Italic SF
+35259 XM
+(compress)SH
+/Times-Roman SF
+39308 XM
+(presents an above average demand)22 W
+7920 38319 MT
+(on the memory system, while)11 W
+/Times-Italic SF
+20030 XM
+(gcc)SH
+/Times-Roman SF
+('s demands are extreme.  More details on the memory system)
+11 W( behavior of these)12 W
+7920 39516 MT
+(workloads can be found in [7].)SH
+8920 41212 MT
+(Table 3-2 gives reference counts for the experimental workloads.)
+77 W( The)
+403 W( low percentage of kernel instructions)76 W
+7920 42409 MT
+(for the microbenchmarks demonstrates that many types of X11 operations require)
+20 W( relatively little kernel activity.)21 W
+7920 43606 MT
+(Higher levels of kernel activity in)226 W
+/Times-Italic SF
+22996 XM
+(splot)SH
+/Times-Roman SF
+25417 XM
+(and)SH
+/Times-Italic SF
+27337 XM
+(gs)SH
+/Times-Roman SF
+28701 XM
+(are attributed \050at least partially\051 to the file I/O that these)225 W
+7920 44803 MT
+(workloads require.)SH
+12 /Times-Bold AF
+7920 48487 MT
+(4. Experiments and Analysis)SH
+11 SS 
+7920 52104 MT
+(4.1. Memory Cycles Per Instruction)SH
+10 /Times-Roman AF
+8920 53301 MT
+(We use data from our simulator to calculate)13 W
+/Times-Italic SF
+26798 XM
+(memory cycles)
+13 W( per instruction)14 W
+/Times-Roman SF
+(, \050)14 W
+/Times-Italic SF
+(MCPI)SH
+/Times-Roman SF
+(\051, which is the total number)14 W
+7920 54498 MT
+(of CPU stall cycles due to the memory)
+87 W( system divided by the total number of instructions executed.)86 W
+/Times-Italic SF
+49833 XM
+(MCPI)SH
+/Times-Roman SF
+52613 XM
+(is)SH
+7920 55695 MT
+(one of several components of cycles per instruction \050)217 W
+/Times-Italic SF
+(CPI)SH
+/Times-Roman SF
+(\051, a metric commonly used to)
+217 W( evaluate computer)218 W
+7920 56892 MT
+(systems [14].)
+SH( Other)
+520 W( components of)135 W
+/Times-Italic SF
+23121 XM
+(CPI)SH
+/Times-Roman SF
+25117 XM
+(that are)
+135 W( not reflected in)134 W
+/Times-Italic SF
+35313 XM
+(MCPI)SH
+/Times-Roman SF
+38141 XM
+(include one cycle per instruction for)134 W
+7920 58089 MT
+(instruction execution by the processor, cycles during interlocked multiply, divide, and)
+47 W( floating point operations,)48 W
+7920 59286 MT
+(and no-ops inserted)
+26 W( by the compiler for load and branch delays.  The other components of)25 W
+/Times-Italic SF
+44565 XM
+(CPI)SH
+/Times-Roman SF
+46451 XM
+(remain relatively)25 W
+7920 60483 MT
+(constant as processor cycle time decreases.  In contrast,)126 W
+/Times-Italic SF
+31520 XM
+(MCPI)SH
+/Times-Roman SF
+34340 XM
+(is a function of the ratio of)
+126 W( memory speed to)127 W
+7920 61680 MT
+(processor speed, and is less dependent of processor architecture.)131 W
+/Times-Italic SF
+35445 XM
+(MCPI)SH
+/Times-Roman SF
+38270 XM
+(will dominate)
+131 W( overall)130 W
+/Times-Italic SF
+47466 XM
+(CPI)SH
+/Times-Roman SF
+49457 XM
+(if current)130 W
+7920 62877 MT
+(trends in processor and memory speed continue.)51 W
+/Times-Italic SF
+28130 XM
+(MCPI)SH
+/Times-Roman SF
+(+1 is a lower bound and a good estimate of overall)51 W
+/Times-Italic SF
+51669 XM
+(CPI)SH
+/Times-Roman SF
+7920 64074 MT
+(for workloads \050such as operating systems\051 in which multiplies, divides and floating-point operations are rare.)SH
+8920 65271 MT
+(Figure 4-1 illustrates)110 W
+/Times-Italic SF
+17833 XM
+(MCPI)SH
+/Times-Roman SF
+20637 XM
+(for the experimental workloads.)
+110 W( For)
+469 W( comparison,)109 W
+/Times-Italic SF
+41484 XM
+(MCPI)SH
+/Times-Roman SF
+44287 XM
+(measurements for)109 W
+/Times-Italic SF
+51892 XM
+(gcc)SH
+/Times-Roman SF
+7920 66468 MT
+(and)SH
+/Times-Italic SF
+9669 XM
+(compress)SH
+/Times-Roman SF
+13752 XM
+(are also shown.  Each bar is shaded to denote different)56 W
+/Times-Italic SF
+36418 XM
+(MCPI)SH
+/Times-Roman SF
+39168 XM
+(components. For visual clarity, the)56 W
+7920 67665 MT
+(system and user contributions are separated by a vertical bar.  Data and instruction cache misses in user and)127 W
+7920 68862 MT
+(system mode are only partially responsible for the total)45 W
+/Times-Italic SF
+30628 XM
+(MCPI)SH
+/Times-Roman SF
+(. Other)
+341 W( components include CPU write-stalls and)46 W
+7920 70059 MT
+(uncached memory reads.  CPU write-stalls are reflected)
+177 W( in the)176 W
+/Times-Italic SF
+34764 XM
+(wbuffer)SH
+/Times-Roman SF
+38246 XM
+(component which show the average)176 W
+7920 71256 MT
+(per-instruction penalty from writes to a full write-buffer, and reads during the)
+61 W( completion of a five-cycle write.)62 W
+30350 75600 MT
+(5)SH
+ES
+%%Page: 6 6
+BS
+0 SI
+10 /Times-Roman AF
+7920 8606 MT
+(TLB misses are not included explicitly in the baseline)174 W
+/Times-Italic SF
+31290 XM
+(MCPI)SH
+/Times-Roman SF
+(. Their)
+598 W( cost appears)
+174 W( as additional instructions)173 W
+7920 9803 MT
+(executed and additional data references, included in the total counts.)SH
+1 SS 
+30240 7920 41148 PB 
+%%BeginDocument: XBaseMCPI.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: -15 -37 454 306
+%%%Pages: 1
+%%DocumentFonts: Helvetica Helvetica-Oblique Helvetica-Bold Helvetica-BoldOblique Times-Roman Times-Italics Times-Bold Times-BoldItalics
+%%EndComments
+-86.400000 -64.800000 translate
+50 dict begin
+/symbolFont 10 dict def
+symbolFont begin
+/FontType 3 def
+/FontMatrix [.001 0 0 .001 0 0] def
+/FontBBox [-500 -500 500 500] def
+/Encoding 256 array def
+0 1 255 {Encoding exch /.notdef put} for
+Encoding 1 /Cross put
+Encoding 2 /Triangle put
+Encoding 3 /Trianglefilled put
+Encoding 4 /Diamond put
+Encoding 5 /Diamondfilled put
+Encoding 6 /Square put
+Encoding 7 /Squarefilled put
+Encoding 8 /Rectan put
+Encoding 9 /Rectanfilled put
+Encoding 10 /Circle put
+Encoding 11 /Circlefilled put
+Encoding 12 /Bullet put
+Encoding 13 /Star put
+Encoding 14 /Plus put
+
+/graphclip {newpath moveto lineto lineto lineto closepath clip } def
+
+/Procs 15 dict def
+Procs begin
+/.notdef {} def
+
+/Cross {
+ newpath -500 -500 moveto 500 500 lineto stroke
+ newpath -500 500 moveto 500 -500 lineto stroke } def
+
+/Triangle {
+ newpath -500 -500 moveto 0 500 lineto 500 -500 lineto closepath stroke } def
+
+/Trianglefilled {
+ newpath -500 -500 moveto 0 500 lineto 500 -500 lineto closepath fill } def
+
+/Diamond {
+  newpath -500 0 moveto 0 500 lineto 500 0 lineto 0 -500 lineto closepath
+ stroke } def
+
+/Diamondfilled {
+  newpath -500 0 moveto 0 500 lineto 500 0 lineto 0 -500 lineto closepath
+  fill } def
+
+/Square {
+ newpath -500 -500 moveto -500 500 lineto 500 500 lineto 500 -500 lineto
+ closepath stroke } def
+
+/Squarefilled {
+ newpath -500 -500 moveto -500 500 lineto 500 500 lineto 500 -500 lineto
+ closepath fill } def
+
+/Rectan {
+ newpath -200 -500 moveto -200 500 lineto 200 500 lineto 200 -500 lineto  
+closepath stroke } def
+
+/Rectanfilled {
+ newpath -200 -500 moveto -200 500 lineto 200 500 lineto 200 -500 lineto  
+closepath fill } def
+
+
+/Circle { newpath 0 0 500 0 360 arc stroke } def
+
+/Circlefilled { newpath 0 0 500 0 360 arc closepath fill } def
+
+
+/Bullet { newpath 0 0 500 0 360 arc closepath fill } def
+
+/Plus {
+ newpath 0 -500 moveto 0 500 lineto stroke
+ newpath -500 0 moveto 500 0 lineto stroke } def
+
+/Star {
+ newpath 0 -500 moveto 0 500 lineto stroke
+ newpath -500 0 moveto 500 0 lineto stroke
+ newpath -500 -500 moveto 500 500 lineto stroke
+ newpath -500 500 moveto 500 -500 lineto stroke } def
+
+end
+
+/BuildChar {
+ 1000 0 -500 -500 500 500 setcachedevice
+ exch begin Encoding exch get Procs exch get end exec } def
+end
+
+/Symbols symbolFont definefont pop
+
+% size SetSym           -> set font to be symbols scaled by 'size'
+/SetSym { /Symbols findfont exch scalefont setfont } def
+
+% size fontname SetTxt          -> set font 'fontname' scaled by 'size'
+/SetTxt { findfont exch scalefont setfont } def
+
+% dashtype thicknes SL
+/SL { setlinewidth 0 setdash } def
+
+/cross {2 copy le {exch pop} {pop} ifelse} def
+
+%9 added to distinguish from other clashing scribe definitions
+% from to L9    -> print line between points 'from' and 'to'
+/L9 { newpath moveto lineto stroke } def
+/S9 { newpath moveto } def
+/M9 { lineto } def
+/D9 { stroke } def
+
+%%%%
+%%%% setscreen is not EPSF compliant, but if you want to cheat
+%%%% you can switch which of the following two definitions of
+%%%% SS9 is commented out.  It would be best to do this by having
+%%%% a seperate version of the prolog file for the user to select.
+%%%%
+%%%% /SS9 { setscreen } def
+/SS9 { pop pop pop } def
+
+/G9 { setgray } def
+/F9 {newpath moveto lineto lineto lineto closepath fill} def
+/E9 {closepath fill} def
+% E9 is fills for incremental curves, while F9 for curve segments
+
+/Landscape {612 0 translate 90 rotate} def
+
+% save current point in global variable psx psy
+/SAVPOS { /psx currentpoint pop def /psy currentpoint exch pop def } def
+
+% string angle xpos ypos TXL    -> print 'string' at pos xpos, ypos
+/TXL { gsave translate rotate 0 0 moveto show SAVPOS grestore } def
+
+% string angle xpos ypos TXR    -> print 'string' at pos xpos, ypos
+/TXR { gsave translate rotate dup stringwidth pop neg 0 moveto show SAVPOS 
+       grestore } def
+
+% string angle xpos ypos TXC    -> print 'string' at pos xpos, ypos
+/TXC { gsave translate rotate dup stringwidth pop 2 div neg 0 moveto show
+       SAVPOS grestore } def
+
+% string angle TXREL    -> print 'string' at xpos ypos translate psx psy rel
+/TXREL { gsave translate rotate psx psy moveto show SAVPOS grestore } def
+
+% char xpos ypos SY     -> print symbol 'char' at position xpos, ypos
+/SY { moveto show } def
+
+/len {dup mul exch dup mul add sqrt}def
+
+
+%%%%%%%%%%%%%%%%%%%%%%%  CURVE SMOOTHING  %%%%%%%%%%%%%%%%%%%%%%
+
+% Curve Smoothing Routines
+%  Ernest Wood  -  Wed Apr 16 09:05:05 1986
+%
+%  These routines will ALWAYS create a smooth curve which
+%  intercepts EVERY point used to generate them.
+%
+%  The definition qA determines the amount of overshoot smoothing
+%  produces around each point.  The distance is the distance to the
+%  next point times aA.  The factor qB scales the amount of overshoot
+%  by the acuteness of the angle around the point.
+%
+%  These values make a square of points into a circle.
+/qA .3 def              % used in qx
+/qB 1 def               % used in afactor
+
+/8a 8 array def
+%
+%  Angle of vector from p0 to p1        p0 p1 polar ang
+/polar{qs neg exch neg atan}def 
+
+%subtract and add points        p0 p1 qs p0-p1
+%                               p0 p1 qa p0+p1
+/qs{exch 3 1 roll sub 3 1 roll sub exch}def
+/qa{exch 3 1 roll add 3 1 roll add exch}def
+
+%  Extract point from 8 point array
+%
+/Pt{2 mul dup 8a exch get exch 1 add 8a exch get}def
+
+%  a0 a1 mirrorang ma
+%       If a0 is the angle from p1 to p0 and a1 is the angle from
+%       p1 to p2 then ma is the mirror angle between p0-p1 and p1-p2.
+%  a0 a1 afactor f
+%       If a0 is the angle from p1 to p0 and a1 is the angle from
+%       p1 to p2 then f is the ratio of the inside angle between a0 and a1
+%       and 180 times qB.  This ratio is saturated at 1 and if qB is 0 then
+%       the value returned is always 1.  Thus the more acute the angle 
+%       the smaller the value of f.
+%
+/mirrorang{2 copy add 2 div 3 1 roll sub 0 lt {90} {-90}ifelse add}def
+/afactor{
+    qB 0 eq
+        { 1 }
+        {sub abs dup 180 gt {360 exch sub} if 180 div qB mul
+         dup 1 gt {pop 1} if}
+    ifelse
+}def
+
+%  a d xya x y
+%       Given angle a and distance d
+%       produce x and y offsets.
+%
+/xya{exch 2 copy cos mul 3 1 roll sin mul}def
+
+%  p0 p1 p2 p3  qx  pp1 pp2 pp3
+%       Given 4 points on a curve produce the pp# values needed by
+%       curveto to draw a smooth curve between p1 and p2.  The slope
+%       of the curve at p1 and p2 will be perpendicular to the bisector
+%       of a angle between p0/p1/p2 or p1/p2/p3.
+%
+/qx{
+    8a astore pop
+    1 Pt 2 Pt qs len qA mul /dist exch def
+    1 Pt 0 Pt polar
+    1 Pt 2 Pt polar
+    2 copy mirrorang
+    3 1 roll afactor dist mul
+    xya 1 Pt qa
+    2 Pt 3 Pt polar
+    2 Pt 1 Pt polar
+    2 copy mirrorang
+    3 1 roll afactor dist mul
+    xya 2 Pt qa
+    2 Pt
+}def
+
+/qp{8 copy 16 -2 roll pop pop}def
+/ns1{4 copy 4 -2 roll 2 copy qa 4 2 roll qs 6 2 roll /ns{ns2}def }def
+/ns2{qp qx curveto}def
+
+%  User definitions for curve smoothing routines.
+%       First (ms), intermediate (ns), and last points with (fs) and
+%       without (nsfs) automatic stroke execution.
+%
+/ms{2 copy newpath moveto /ns{ns1}def}def
+/ns{ns1}def
+/fs{stroke}def
+/nsfs{ns 4 copy 2 copy qa 4 2 roll qs qx curveto}def
+/nsend{4 copy 2 copy qa 4 2 roll qs qx curveto}def
+%%EndProlog
+%%%Page ? 1
+72.000000 72.000000 540.000000 72.000000 540.000000 360.000000 72.000000 360.000000 newpath moveto lineto lineto lineto closepath clip
+72.000000 72.000000 540.000000 72.000000 540.000000 360.000000 72.000000 360.000000 newpath moveto lineto lineto lineto closepath clip
+335.036 250.286 S9
+[] 1.000000 SL
+335.036 264 M9
+345.285 264 M9
+345.285 250.286 M9
+335.036 250.286 M9
+gsave
+D9
+grestore
+30.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+340.161 264 S9
+[] 1.000000 SL
+340.161 346.286 M9
+417.022 346.286 M9
+D9
+345.285 250.286 S9
+[] 1.000000 SL
+345.285 264 M9
+355.533 264 M9
+355.533 250.286 M9
+345.285 250.286 M9
+gsave
+D9
+grestore
+30.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+350.409 264 S9
+[] 1.000000 SL
+350.409 336 M9
+417.022 336 M9
+D9
+355.533 250.286 S9
+[] 1.000000 SL
+355.533 264 M9
+365.781 264 M9
+365.781 250.286 M9
+355.533 250.286 M9
+gsave
+D9
+grestore
+30.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+360.657 264 S9
+[] 1.000000 SL
+360.657 325.714 M9
+417.022 325.714 M9
+D9
+365.781 250.286 S9
+[] 1.000000 SL
+365.781 264 M9
+376.029 264 M9
+376.029 250.286 M9
+365.781 250.286 M9
+gsave
+D9
+grestore
+E9
+370.905 264 S9
+[] 1.000000 SL
+370.905 315.429 M9
+417.022 315.429 M9
+D9
+376.029 250.286 S9
+[] 1.000000 SL
+376.029 264 M9
+386.277 264 M9
+386.277 250.286 M9
+376.029 250.286 M9
+gsave
+D9
+grestore
+30.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+381.153 264 S9
+[] 1.000000 SL
+381.153 305.143 M9
+417.022 305.143 M9
+D9
+386.277 250.286 S9
+[] 1.000000 SL
+386.277 264 M9
+396.526 264 M9
+396.526 250.286 M9
+386.277 250.286 M9
+gsave
+D9
+grestore
+30.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+391.401 264 S9
+[] 1.000000 SL
+391.401 294.857 M9
+417.022 294.857 M9
+D9
+396.526 250.286 S9
+[] 1.000000 SL
+396.526 264 M9
+406.774 264 M9
+406.774 250.286 M9
+396.526 250.286 M9
+gsave
+D9
+grestore
+30.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+401.65 264 S9
+[] 1.000000 SL
+401.65 284.571 M9
+417.022 284.571 M9
+D9
+406.774 250.286 S9
+[] 1.000000 SL
+406.774 264 M9
+417.022 264 M9
+417.022 250.286 M9
+406.774 250.286 M9
+gsave
+D9
+grestore
+E9
+411.898 264 S9
+[] 1.000000 SL
+411.898 274.286 M9
+417.022 274.286 M9
+D9
+376.029 243.429 S9
+376.029 270.857 M9
+D9
+130.073 332.571 S9
+[] 1.000000 SL
+130.073 346.286 M9
+138.613 346.286 M9
+138.613 332.571 M9
+130.073 332.571 M9
+gsave
+D9
+grestore
+45.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+138.613 332.571 S9
+[] 1.000000 SL
+138.613 346.286 M9
+144.66 346.286 M9
+144.66 332.571 M9
+138.613 332.571 M9
+gsave
+D9
+grestore
+45.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+144.66 332.571 S9
+[] 1.000000 SL
+144.66 346.286 M9
+145.172 346.286 M9
+145.172 332.571 M9
+144.66 332.571 M9
+gsave
+D9
+grestore
+45.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+145.172 332.571 S9
+[] 1.000000 SL
+145.172 346.286 M9
+145.548 346.286 M9
+145.548 332.571 M9
+145.172 332.571 M9
+gsave
+D9
+grestore
+E9
+145.548 332.571 S9
+[] 1.000000 SL
+145.548 346.286 M9
+200.068 346.286 M9
+200.068 332.571 M9
+145.548 332.571 M9
+gsave
+D9
+grestore
+45.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+200.068 332.571 S9
+[] 1.000000 SL
+200.068 346.286 M9
+233.511 346.286 M9
+233.511 332.571 M9
+200.068 332.571 M9
+gsave
+D9
+grestore
+45.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+233.511 332.571 S9
+[] 1.000000 SL
+233.511 346.286 M9
+238.328 346.286 M9
+238.328 332.571 M9
+233.511 332.571 M9
+gsave
+D9
+grestore
+45.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+238.328 332.571 S9
+[] 1.000000 SL
+238.328 346.286 M9
+249.43 346.286 M9
+249.43 332.571 M9
+238.328 332.571 M9
+gsave
+D9
+grestore
+E9
+145.548 325.714 S9
+[] 1.000000 SL
+145.548 353.143 M9
+D9
+130.073 305.143 S9
+[] 1.000000 SL
+130.073 318.857 M9
+134.48 318.857 M9
+134.48 305.143 M9
+130.073 305.143 M9
+gsave
+D9
+grestore
+60.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+134.48 305.143 S9
+[] 1.000000 SL
+134.48 318.857 M9
+135.402 318.857 M9
+135.402 305.143 M9
+134.48 305.143 M9
+gsave
+D9
+grestore
+60.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+135.402 305.143 S9
+[] 1.000000 SL
+135.402 318.857 M9
+135.641 318.857 M9
+135.641 305.143 M9
+135.402 305.143 M9
+gsave
+D9
+grestore
+60.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+135.641 305.143 S9
+[] 1.000000 SL
+135.641 318.857 M9
+135.675 318.857 M9
+135.675 305.143 M9
+135.641 305.143 M9
+gsave
+D9
+grestore
+E9
+135.675 305.143 S9
+[] 1.000000 SL
+135.675 318.857 M9
+152.107 318.857 M9
+152.107 305.143 M9
+135.675 305.143 M9
+gsave
+D9
+grestore
+60.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+152.107 305.143 S9
+[] 1.000000 SL
+152.107 318.857 M9
+166.966 318.857 M9
+166.966 305.143 M9
+152.107 305.143 M9
+gsave
+D9
+grestore
+60.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+166.966 305.143 S9
+[] 1.000000 SL
+166.966 318.857 M9
+167.581 318.857 M9
+167.581 305.143 M9
+166.966 305.143 M9
+gsave
+D9
+grestore
+60.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+167.581 305.143 S9
+[] 1.000000 SL
+167.581 318.857 M9
+168.538 318.857 M9
+168.538 305.143 M9
+167.581 305.143 M9
+gsave
+D9
+grestore
+E9
+135.675 298.286 S9
+[] 1.000000 SL
+135.675 325.714 M9
+D9
+130.073 277.714 S9
+[] 1.000000 SL
+130.073 291.429 M9
+135.949 291.429 M9
+135.949 277.714 M9
+130.073 277.714 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+135.949 277.714 S9
+[] 1.000000 SL
+135.949 291.429 M9
+137.315 291.429 M9
+137.315 277.714 M9
+135.949 277.714 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+137.315 277.714 S9
+[] 1.000000 SL
+137.315 291.429 M9
+137.52 291.429 M9
+137.52 277.714 M9
+137.315 277.714 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+137.52 277.714 S9
+[] 1.000000 SL
+137.52 291.429 M9
+137.554 291.429 M9
+137.554 277.714 M9
+137.52 277.714 M9
+gsave
+D9
+grestore
+E9
+137.554 277.714 S9
+[] 1.000000 SL
+137.554 291.429 M9
+148.93 291.429 M9
+148.93 277.714 M9
+137.554 277.714 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+148.93 277.714 S9
+[] 1.000000 SL
+148.93 291.429 M9
+155.591 291.429 M9
+155.591 277.714 M9
+148.93 277.714 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+155.591 277.714 S9
+[] 1.000000 SL
+155.591 291.429 M9
+156.274 291.429 M9
+156.274 277.714 M9
+155.591 277.714 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+156.274 277.714 S9
+[] 1.000000 SL
+156.274 291.429 M9
+157.026 291.429 M9
+157.026 277.714 M9
+156.274 277.714 M9
+gsave
+D9
+grestore
+E9
+137.554 270.857 S9
+[] 1.000000 SL
+137.554 298.286 M9
+D9
+130.073 250.286 S9
+[] 1.000000 SL
+130.073 264 M9
+132.942 264 M9
+132.942 250.286 M9
+130.073 250.286 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+132.942 250.286 S9
+[] 1.000000 SL
+132.942 264 M9
+135.607 264 M9
+135.607 250.286 M9
+132.942 250.286 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+135.607 250.286 S9
+[] 1.000000 SL
+135.607 264 M9
+135.778 264 M9
+135.778 250.286 M9
+135.607 250.286 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+135.778 250.286 S9
+[] 1.000000 SL
+135.778 264 M9
+135.812 264 M9
+135.812 250.286 M9
+135.778 250.286 M9
+gsave
+D9
+grestore
+E9
+135.812 250.286 S9
+[] 1.000000 SL
+135.812 264 M9
+137.998 264 M9
+137.998 250.286 M9
+135.812 250.286 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+137.998 250.286 S9
+[] 1.000000 SL
+137.998 264 M9
+142.917 264 M9
+142.917 250.286 M9
+137.998 250.286 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+142.917 250.286 S9
+[] 1.000000 SL
+142.917 264 M9
+143.088 264 M9
+143.088 250.286 M9
+142.917 250.286 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+143.088 250.286 S9
+[] 1.000000 SL
+143.088 264 M9
+143.225 264 M9
+143.225 250.286 M9
+143.088 250.286 M9
+gsave
+D9
+grestore
+E9
+135.812 243.429 S9
+[] 1.000000 SL
+135.812 270.857 M9
+D9
+130.073 222.857 S9
+[] 1.000000 SL
+130.073 236.571 M9
+131.61 236.571 M9
+131.61 222.857 M9
+130.073 222.857 M9
+gsave
+D9
+grestore
+35.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+131.61 222.857 S9
+[] 1.000000 SL
+131.61 236.571 M9
+133.762 236.571 M9
+133.762 222.857 M9
+131.61 222.857 M9
+gsave
+D9
+grestore
+35.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+133.762 222.857 S9
+[] 1.000000 SL
+133.762 236.571 M9
+133.831 236.571 M9
+133.831 222.857 M9
+133.762 222.857 M9
+gsave
+D9
+grestore
+35.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+133.831 222.857 S9
+[] 1.000000 SL
+133.831 236.571 M9
+133.865 236.571 M9
+133.865 222.857 M9
+133.831 222.857 M9
+gsave
+D9
+grestore
+E9
+133.865 222.857 S9
+[] 1.000000 SL
+133.865 236.571 M9
+137.52 236.571 M9
+137.52 222.857 M9
+133.865 222.857 M9
+gsave
+D9
+grestore
+35.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+137.52 222.857 S9
+[] 1.000000 SL
+137.52 236.571 M9
+158.734 236.571 M9
+158.734 222.857 M9
+137.52 222.857 M9
+gsave
+D9
+grestore
+35.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+158.734 222.857 S9
+[] 1.000000 SL
+158.734 236.571 M9
+240.036 236.571 M9
+240.036 222.857 M9
+158.734 222.857 M9
+gsave
+D9
+grestore
+35.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+240.036 222.857 S9
+[] 1.000000 SL
+240.036 236.571 M9
+491.15 236.571 M9
+491.15 222.857 M9
+240.036 222.857 M9
+gsave
+D9
+grestore
+E9
+133.865 216 S9
+[] 1.000000 SL
+133.865 243.429 M9
+D9
+130.073 195.429 S9
+[] 1.000000 SL
+130.073 209.143 M9
+130.688 209.143 M9
+130.688 195.429 M9
+130.073 195.429 M9
+gsave
+D9
+grestore
+50.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+130.688 195.429 S9
+[] 1.000000 SL
+130.688 209.143 M9
+132.977 209.143 M9
+132.977 195.429 M9
+130.688 195.429 M9
+gsave
+D9
+grestore
+50.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+132.977 195.429 S9
+[] 1.000000 SL
+132.977 209.143 M9
+133.011 209.143 M9
+133.011 195.429 M9
+132.977 195.429 M9
+gsave
+D9
+grestore
+50.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+133.011 195.429 S9
+[] 1.000000 SL
+133.011 209.143 M9
+133.079 209.143 M9
+133.079 195.429 M9
+133.011 195.429 M9
+gsave
+D9
+grestore
+E9
+133.079 195.429 S9
+[] 1.000000 SL
+133.079 209.143 M9
+133.557 209.143 M9
+133.557 195.429 M9
+133.079 195.429 M9
+gsave
+D9
+grestore
+50.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+133.557 195.429 S9
+[] 1.000000 SL
+133.557 209.143 M9
+231.632 209.143 M9
+231.632 195.429 M9
+133.557 195.429 M9
+gsave
+D9
+grestore
+50.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+231.632 195.429 S9
+[] 1.000000 SL
+231.632 209.143 M9
+428.91 209.143 M9
+428.91 195.429 M9
+231.632 195.429 M9
+gsave
+D9
+grestore
+50.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+428.91 195.429 S9
+[] 1.000000 SL
+428.91 209.143 M9
+939.679 209.143 M9
+939.679 195.429 M9
+428.91 195.429 M9
+gsave
+D9
+grestore
+E9
+133.079 188.571 S9
+[] 1.000000 SL
+133.079 216 M9
+D9
+130.073 168 S9
+[] 1.000000 SL
+130.073 181.714 M9
+200.717 181.714 M9
+200.717 168 M9
+130.073 168 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+200.717 168 S9
+[] 1.000000 SL
+200.717 181.714 M9
+213.459 181.714 M9
+213.459 168 M9
+200.717 168 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+213.459 168 S9
+[] 1.000000 SL
+213.459 181.714 M9
+215.065 181.714 M9
+215.065 168 M9
+213.459 168 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+215.065 168 S9
+[] 1.000000 SL
+215.065 181.714 M9
+217.934 181.714 M9
+217.934 168 M9
+215.065 168 M9
+gsave
+D9
+grestore
+E9
+217.934 168 S9
+[] 1.000000 SL
+217.934 181.714 M9
+264.7 181.714 M9
+264.7 168 M9
+217.934 168 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+264.7 168 S9
+[] 1.000000 SL
+264.7 181.714 M9
+271.874 181.714 M9
+271.874 168 M9
+264.7 168 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+271.874 168 S9
+[] 1.000000 SL
+271.874 181.714 M9
+275.187 181.714 M9
+275.187 168 M9
+271.874 168 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+275.187 168 S9
+[] 1.000000 SL
+275.187 181.714 M9
+276.212 181.714 M9
+276.212 168 M9
+275.187 168 M9
+gsave
+D9
+grestore
+E9
+217.934 161.143 S9
+[] 1.000000 SL
+217.934 188.571 M9
+D9
+130.073 140.571 S9
+[] 1.000000 SL
+130.073 154.286 M9
+147.734 154.286 M9
+147.734 140.571 M9
+130.073 140.571 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+147.734 140.571 S9
+[] 1.000000 SL
+147.734 154.286 M9
+151.082 154.286 M9
+151.082 140.571 M9
+147.734 140.571 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+151.082 140.571 S9
+[] 1.000000 SL
+151.082 154.286 M9
+154.19 154.286 M9
+154.19 140.571 M9
+151.082 140.571 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+154.19 140.571 S9
+[] 1.000000 SL
+154.19 154.286 M9
+169.255 154.286 M9
+169.255 140.571 M9
+154.19 140.571 M9
+gsave
+D9
+grestore
+E9
+169.255 140.571 S9
+[] 1.000000 SL
+169.255 154.286 M9
+195.217 154.286 M9
+195.217 140.571 M9
+169.255 140.571 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+195.217 140.571 S9
+[] 1.000000 SL
+195.217 154.286 M9
+217.387 154.286 M9
+217.387 140.571 M9
+195.217 140.571 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+217.387 140.571 S9
+[] 1.000000 SL
+217.387 154.286 M9
+218.344 154.286 M9
+218.344 140.571 M9
+217.387 140.571 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+218.344 140.571 S9
+[] 1.000000 SL
+218.344 154.286 M9
+218.651 154.286 M9
+218.651 140.571 M9
+218.344 140.571 M9
+gsave
+D9
+grestore
+E9
+169.255 133.714 S9
+[] 1.000000 SL
+169.255 161.143 M9
+D9
+130.073 113.143 S9
+[] 1.000000 SL
+130.073 126.857 M9
+165.805 126.857 M9
+165.805 113.143 M9
+130.073 113.143 M9
+gsave
+D9
+grestore
+35.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+165.805 113.143 S9
+[] 1.000000 SL
+165.805 126.857 M9
+171.202 126.857 M9
+171.202 113.143 M9
+165.805 113.143 M9
+gsave
+D9
+grestore
+35.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+171.202 113.143 S9
+[] 1.000000 SL
+171.202 126.857 M9
+179.742 126.857 M9
+179.742 113.143 M9
+171.202 113.143 M9
+gsave
+D9
+grestore
+35.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+179.742 113.143 S9
+[] 1.000000 SL
+179.742 126.857 M9
+214.074 126.857 M9
+214.074 113.143 M9
+179.742 113.143 M9
+gsave
+D9
+grestore
+E9
+214.074 113.143 S9
+[] 1.000000 SL
+214.074 126.857 M9
+276.519 126.857 M9
+276.519 113.143 M9
+214.074 113.143 M9
+gsave
+D9
+grestore
+35.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+276.519 113.143 S9
+[] 1.000000 SL
+276.519 126.857 M9
+289.125 126.857 M9
+289.125 113.143 M9
+276.519 113.143 M9
+gsave
+D9
+grestore
+35.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+289.125 113.143 S9
+[] 1.000000 SL
+289.125 126.857 M9
+292.814 126.857 M9
+292.814 113.143 M9
+289.125 113.143 M9
+gsave
+D9
+grestore
+35.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+292.814 113.143 S9
+[] 1.000000 SL
+292.814 126.857 M9
+292.814 126.857 M9
+292.814 113.143 M9
+292.814 113.143 M9
+gsave
+D9
+grestore
+E9
+214.074 106.286 S9
+[] 1.000000 SL
+214.074 133.714 M9
+D9
+130.073 85.7143 S9
+[] 1.000000 SL
+130.073 99.4286 M9
+150.399 99.4286 M9
+150.399 85.7143 M9
+130.073 85.7143 M9
+gsave
+D9
+grestore
+50.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+150.399 85.7143 S9
+[] 1.000000 SL
+150.399 99.4286 M9
+155.762 99.4286 M9
+155.762 85.7143 M9
+150.399 85.7143 M9
+gsave
+D9
+grestore
+50.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+155.762 85.7143 S9
+[] 1.000000 SL
+155.762 99.4286 M9
+163.038 99.4286 M9
+163.038 85.7143 M9
+155.762 85.7143 M9
+gsave
+D9
+grestore
+50.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+163.038 85.7143 S9
+[] 1.000000 SL
+163.038 99.4286 M9
+198.121 99.4286 M9
+198.121 85.7143 M9
+163.038 85.7143 M9
+gsave
+D9
+grestore
+E9
+198.121 85.7143 S9
+[] 1.000000 SL
+198.121 99.4286 M9
+199.009 99.4286 M9
+199.009 85.7143 M9
+198.121 85.7143 M9
+gsave
+D9
+grestore
+50.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+199.009 85.7143 S9
+[] 1.000000 SL
+199.009 99.4286 M9
+233.511 99.4286 M9
+233.511 85.7143 M9
+199.009 85.7143 M9
+gsave
+D9
+grestore
+50.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+233.511 85.7143 S9
+[] 1.000000 SL
+233.511 99.4286 M9
+236.552 99.4286 M9
+236.552 85.7143 M9
+233.511 85.7143 M9
+gsave
+D9
+grestore
+50.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+236.552 85.7143 S9
+[] 1.000000 SL
+236.552 99.4286 M9
+236.552 99.4286 M9
+236.552 85.7143 M9
+236.552 85.7143 M9
+gsave
+D9
+grestore
+E9
+198.121 78.8571 S9
+[] 1.000000 SL
+198.121 106.286 M9
+D9
+initclip 
+10 /Times-Roman SetTxt
+() 0 306 28 TXC
+(system i-cache misses) 0 417.022 343.543 TXL
+(system d-cache misses) 0 417.022 333.257 TXL
+(system wbuffer waits) 0 417.022 322.971 TXL
+(system uncached reads) 0 417.022 312.686 TXL
+(user i-cache misses) 0 417.022 302.4 TXL
+(user d-cache misses) 0 417.022 292.114 TXL
+(user wbuffer waits) 0 417.022 281.829 TXL
+(user uncached reads) 0 417.022 271.543 TXL
+(MCPI) 0 423.854 253.029 TXL
+(destroy) 0 126.657 332.571 TXR
+(0.35) 0 256.262 335.314 TXL
+(resize) 0 126.657 305.143 TXR
+(0.11) 0 175.37 307.886 TXL
+(circulate) 0 126.657 277.714 TXR
+(0.08) 0 163.858 280.457 TXL
+(ftext) 0 126.657 250.286 TXR
+(0.04) 0 150.057 253.029 TXL
+(copy) 0 126.657 222.857 TXR
+(1.06) 0 497.982 225.6 TXL
+(scroll) 0 126.657 195.429 TXR
+(2.37) 0 522.92 187.2 TXL
+(splot) 0 126.657 168 TXR
+(0.43) 0 283.044 170.743 TXL
+(gs) 0 126.657 140.571 TXR
+(0.26) 0 225.484 143.314 TXL
+(gcc) 0 126.657 113.143 TXR
+(0.48) 0 299.646 115.886 TXL
+(compress) 0 126.657 85.7143 TXR
+(0.31) 0 243.384 88.4571 TXL
+() 0 417.022 333.043 TXL
+() 0 417.022 322.757 TXL
+() 0 417.022 312.471 TXL
+() 0 417.022 302.186 TXL
+() 0 417.022 291.9 TXL
+() 0 417.022 281.614 TXL
+() 0 417.022 271.329 TXL
+() 0 417.022 261.043 TXL
+() 0 423.854 242.529 TXL
+() 0 126.657 322.071 TXR
+() 0 256.262 324.814 TXL
+() 0 126.657 294.643 TXR
+() 0 175.37 297.386 TXL
+() 0 126.657 267.214 TXR
+() 0 163.858 269.957 TXL
+() 0 126.657 239.786 TXR
+() 0 150.057 242.529 TXL
+() 0 126.657 212.357 TXR
+() 0 497.982 215.1 TXL
+() 0 126.657 184.929 TXR
+() 0 522.92 176.7 TXL
+() 0 126.657 157.5 TXR
+() 0 283.044 160.243 TXL
+() 0 126.657 130.071 TXR
+() 0 225.484 132.814 TXL
+() 0 126.657 102.643 TXR
+() 0 299.646 105.386 TXL
+() 0 126.657 75.2143 TXR
+() 0 243.384 77.9571 TXL
+72.000000 72.000000 540.000000 72.000000 540.000000 360.000000 72.000000 360.000000 newpath moveto lineto lineto lineto closepath clip
+72.000000 72.000000 540.000000 72.000000 540.000000 360.000000 72.000000 360.000000 newpath moveto lineto lineto lineto closepath clip
+6 SetSym
+initclip 
+showpage
+%%Trailer
+end
+
+%%EndDocument
+ PE 10 /Times-Bold AF
+24781 41341 MT
+(Figure 4-1:)SH
+/Times-Roman SF
+30030 XM
+(Baseline)SH
+/Times-Italic SF
+33724 XM
+(MCPI)SH
+/Times-Roman SF
+(.)SH
+9 SS 
+10337 42882 MT
+(Each horizontal bar)
+29 W( represents total)30 W
+/Times-Italic SF
+23460 XM
+(MCPI)SH
+/Times-Roman SF
+25915 XM
+(for a given experimental workload, broken down between system/user)30 W
+9720 43896 MT
+(and various components of the memory system.)
+113 W( Contribution)
+449 W( from system and user activity are separated by a)112 W
+9720 44910 MT
+(vertical line.  User activity includes X11 server and X11 client.  The number at the right)
+57 W( of each bar is the)58 W
+/Times-Italic SF
+49280 XM
+(MCPI)SH
+/Times-Roman SF
+9720 45924 MT
+(for that workload.  Startup and shutdown effects were excluded by omitting several million)
+143 W( instructions at the)142 W
+9720 46938 MT
+(beginning and end of each simulation experiment.)59 W
+/Times-Italic SF
+28667 XM
+(MCPI)SH
+/Times-Roman SF
+31151 XM
+(for)SH
+/Times-Italic SF
+32485 XM
+(gcc)SH
+/Times-Roman SF
+34020 XM
+(and)SH
+/Times-Italic SF
+35605 XM
+(compress)SH
+/Times-Roman SF
+39290 XM
+(are included for comparison with)60 W
+9720 47952 MT
+(workloads that are not X11 clients.)SH
+10 SS 
+8920 49743 MT
+(As can be seen from Table 3-2, operating system overhead is)
+169 W( low for the six microbenchmarks.  This is)168 W
+7920 50940 MT
+(reflected in Figure 4-1)
+100 W( as low system)101 W
+/Times-Italic SF
+23705 XM
+(MCPI)SH
+/Times-Roman SF
+(. With)
+452 W( the X11 server accessing the frame buffer directly, kernel)101 W
+7920 52137 MT
+(activity during the microbenchmarks is dominated by TLB faults and socket)
+58 W( communication, both of which are)57 W
+7920 53334 MT
+(relatively inexpensive as compared to the activity of disk I/O intensive)
+33 W( workloads.  In contrast, user-level)34 W
+/Times-Italic SF
+50836 XM
+(MCPI)SH
+/Times-Roman SF
+7920 54531 MT
+(varies significantly across the microbenchmarks, and is dependent on)
+34 W( server activity.  The worst behavior by far)33 W
+7920 55728 MT
+(occurs for)206 W
+/Times-Italic SF
+12608 XM
+(copy)SH
+/Times-Roman SF
+14952 XM
+(and)SH
+/Times-Italic SF
+16852 XM
+(scroll)SH
+/Times-Roman SF
+(, which incur substantial write-buffer and uncached-read penalties due)
+206 W( to a high)207 W
+7920 56925 MT
+(density of frame-buffer references.)SH
+8920 58621 MT
+(Comparing system behavior)
+114 W( for the microbenchmarks to that of)113 W
+/Times-Italic SF
+35630 XM
+(splot)SH
+/Times-Roman SF
+37938 XM
+(and)SH
+/Times-Italic SF
+39745 XM
+(gs)SH
+/Times-Roman SF
+(, there is substantial additional)113 W
+7920 59818 MT
+(system overhead for the)
+201 W( realistic benchmarks.  This reflects greater variation in system activity due to the)202 W
+7920 61015 MT
+(addition of file I/O, and is consistent with behavior observed for system-intensive)
+32 W( and I/O intensive applications)31 W
+7920 62212 MT
+(such as)SH
+/Times-Italic SF
+11086 XM
+(gcc)SH
+/Times-Roman SF
+(.)SH
+8920 63908 MT
+(Turning to)
+174 W( user-level overhead, Figure 4-1 shows that many X11 clients have significant user instruction)175 W
+7920 65105 MT
+(cache)SH
+/Times-Italic SF
+10639 XM
+(MCPI)SH
+/Times-Roman SF
+13526 XM
+(contributions, sometimes higher than system i-cache)193 W
+/Times-Italic SF
+35932 XM
+(MCPI)SH
+/Times-Roman SF
+38819 XM
+(contributions. This)
+635 W( is unusual for)192 W
+8 SS 
+15279 65957 MT
+(3)SH
+10 SS 
+7920 66302 MT
+(integer workloads)166 W
+15929 XM
+([7]. In)
+582 W( the next section we discuss how competition)
+166 W( within and between address spaces)167 W
+7920 67499 MT
+(contributes to poor instruction cache behavior, for both system and user.)SH
+10800 50 7920 69632 UL
+6 SS 
+8720 70971 MT
+(3)SH
+8 /Times-Italic AF
+9020 71280 MT
+(gcc)SH
+/Times-Roman SF
+10330 XM
+(is exceptional in this respect.)SH
+10 SS 
+30350 75600 MT
+(6)SH
+ES
+%%Page: 7 7
+BS
+0 SI
+10 /Times-Roman AF
+8920 8606 MT
+(Penalties from the)
+203 W( write-buffer and uncached memory reads appear problematic in microbenchmarks but)202 W
+7920 9803 MT
+(aren't significant in more realistic)
+248 W( workloads.  For frame-buffer writes, the X11 server benefits from the)249 W
+7920 11000 MT
+(combination of write-buffer and writes through the uncached segment.)
+14 W( Together)
+277 W( they permit frame buffer writes)13 W
+7920 12197 MT
+(to proceed at top speed without disturbing the contents of the data cache.)SH
+11 /Times-Bold AF
+7920 15814 MT
+(4.2. Cache Effects)SH
+10 /Times-Roman AF
+8920 17011 MT
+(We consider two types of cache misses:)SH
+/Symbol SF
+9710 18464 MT
+(\267)SH
+/Times-Italic SF
+10420 XM
+(Inter-Context Competition)44 W
+/Times-Roman SF
+21341 XM
+(occurs when)
+44 W( references from two or more active address spaces displace)45 W
+10420 19569 MT
+(each other in the cache.  Client-server systems such as X11 introduce a)
+40 W( user level server context, in)39 W
+10420 20674 MT
+(addition to the application and system context of a workload such as)132 W
+/Times-Italic SF
+39612 XM
+(gcc)SH
+/Times-Roman SF
+(. The)
+516 W( additional server)133 W
+10420 21779 MT
+(context could induce more competition in the cache.)SH
+/Symbol SF
+9710 23537 MT
+(\267)SH
+/Times-Italic SF
+10420 XM
+(Self-Interference)SH
+/Times-Roman SF
+17429 XM
+(misses occur)
+39 W( when two active instructions in the same address space collide in the)38 W
+10420 24642 MT
+(cache. The)
+667 W( Ultrix page-mapping algorithm ensures that self-interference misses will not occur)209 W
+10420 25747 MT
+(within an address space if a)
+35 W( program's text is smaller than the cache size.  Many of the SPECmarks)34 W
+10420 26852 MT
+(have text smaller than the cache, but the text of X11 server,)50 W
+/Times-Italic SF
+35070 XM
+(gs)SH
+/Times-Roman SF
+36259 XM
+(and)SH
+/Times-Italic SF
+38004 XM
+(splot)SH
+/Times-Roman SF
+40250 XM
+(are all much larger.  With)51 W
+10420 27957 MT
+(localities spread throughout large text, self-interference misses are more likely to occur.)SH
+7920 29296 MT
+(We discuss inter-context competition first.)SH
+/Times-Bold SF
+7920 32126 MT
+(4.2.1. Inter-Context Competition)SH
+/Times-Roman SF
+8920 33323 MT
+(An X11 workload)
+114 W( is composed of three contexts: X11 client, X11 server, and the operating system.  Inter-)113 W
+7920 34520 MT
+(context competition occurs when two or more contexts compete for memory resources \050such as cache)
+132 W( lines\051,)133 W
+7920 35717 MT
+(causing degraded performance.  To simulate a system)
+114 W( without competition, we ran experiments with memory)113 W
+7920 36914 MT
+(reference trace from only one source \050eg. use trace from)
+119 W( the kernel only\051, then summed events over all three)120 W
+7920 38111 MT
+(runs. The)
+666 W( sum represents the behavior of a hypothetical machine where each context has its own private)208 W
+7920 39308 MT
+(memory system, hence a system where all competition has been eliminated.  Figure 4-2 compares)134 W
+/Times-Italic SF
+49285 XM
+(MCPI)SH
+/Times-Roman SF
+52114 XM
+(for)SH
+7920 40505 MT
+(several workloads with and without competition.)SH
+8920 42201 MT
+(Figure 4-2 shows that, for realistic X11 workloads, inter-context competition has a large impact)
+119 W( on overall)118 W
+/Times-Italic SF
+7920 43398 MT
+(MCPI)SH
+/Times-Roman SF
+(. For)
+658 W( both)204 W
+/Times-Italic SF
+15597 XM
+(splot)SH
+/Times-Roman SF
+17996 XM
+(and)SH
+/Times-Italic SF
+19894 XM
+(gs)SH
+/Times-Roman SF
+(, competition is responsible for)
+204 W( a large proportion of system i-cache misses.)205 W
+7920 44595 MT
+(Additionally, eliminating competition from)182 W
+/Times-Italic SF
+26232 XM
+(splot)SH
+/Times-Roman SF
+28609 XM
+(causes a drastic reduction in user i-cache)
+182 W( miss rates.  The)181 W
+7920 45792 MT
+(instruction cache requirements of)190 W
+/Times-Italic SF
+22288 XM
+(destroy)SH
+/Times-Roman SF
+25672 XM
+(microbenchmark are modest, so eliminating competition)
+190 W( has little)191 W
+7920 46989 MT
+(effect. Similarly,)
+250 W( compress shows little benefit when competition is eliminated.)SH
+8920 48685 MT
+(We compared missing instruction addresses in the X11 server to counts of kernel instruction)
+58 W( references for a)57 W
+7920 49882 MT
+(run of)71 W
+/Times-Italic SF
+10728 XM
+(splot)SH
+/Times-Roman SF
+12994 XM
+(to identify probable inter-context conflicts.  An example of such)
+71 W( a conflict was between the Ultrix)72 W
+7920 51079 MT
+(general exception handler,)77 W
+/Courier SF
+18981 XM
+(exception\050\051)SH
+/Times-Roman SF
+(, and the X11)
+77 W( server memory allocation routine,)76 W
+/Courier SF
+45633 XM
+(malloc\050\051)SH
+/Times-Roman SF
+(. Both)402 W
+7920 52276 MT
+(routines are called frequently, and are located in such a way that they overlap)
+161 W( on a 4 Kbyte memory page.)162 W
+7920 53473 MT
+(Kernel text pages are not mapped, so)117 W
+/Courier SF
+23791 XM
+(exception\050\051)SH
+/Times-Roman SF
+30758 XM
+(will always be located in the same)
+117 W( place in the cache.)116 W
+7920 54670 MT
+(User text is mapped, so the location of)144 W
+/Courier SF
+24709 XM
+(malloc\050\051)SH
+/Times-Roman SF
+29903 XM
+(in the)
+144 W( cache will depend on the virtual-to-physical page)145 W
+7920 55867 MT
+(assignment. In)
+544 W( Ultrix the page assignment is a function)
+147 W( of virtual page number and process ID.  Given the)146 W
+7920 57064 MT
+(page-mapping policy and cache parameters for this memory system, the probability that the)
+65 W( above conflict will)66 W
+7920 58261 MT
+(occur is 1/16.  Many)
+40 W( such conflicts were identified for the)39 W
+/Times-Italic SF
+31793 XM
+(splot)SH
+/Times-Roman SF
+34027 XM
+(run. The)
+328 W( large working sets of X11 workloads,)39 W
+7920 59458 MT
+(combined with frequent mandatory context switches, makes competition misses more likely.)SH
+8920 61154 MT
+(These results)
+185 W( confirm earlier research on cache competition, which demonstrated significant penalties for)186 W
+7920 62351 MT
+(warming up the cache)
+194 W( after a context switch)
+193 W( [19].)
+SH( The)
+636 W( earlier study found competition to be important in)193 W
+7920 63548 MT
+(multitasking and compute-bound workloads, but a non-issue in the client-server workload)
+12 W( they tested.  However,)13 W
+7920 64745 MT
+(the earlier)
+95 W( study did not include system behavior, and it used a synthetic client-server workload dominated by)94 W
+7920 65942 MT
+(communication, a workload more similar)
+317 W( to the microbenchmarks used for this study than the realistic)318 W
+7920 67139 MT
+(workloads. Our)
+310 W( work complements the prior study by including system effects in the memory reference)
+30 W( stream,)29 W
+7920 68336 MT
+(and by demonstrating that inter-context competition can also have impact for client-server workloads.)SH
+30350 75600 MT
+(7)SH
+ES
+%%Page: 8 8
+BS
+0 SI
+1 SS 
+23400 7920 31320 PB 
+%%BeginDocument: CompMCPI.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: 7 -37 476 234
+%%%Pages: 1
+%%DocumentFonts: Helvetica Helvetica-Oblique Helvetica-Bold Helvetica-BoldOblique Times-Roman Times-Italics Times-Bold Times-BoldItalics
+%%EndComments
+-64.800000 -64.800000 translate
+50 dict begin
+/symbolFont 10 dict def
+symbolFont begin
+/FontType 3 def
+/FontMatrix [.001 0 0 .001 0 0] def
+/FontBBox [-500 -500 500 500] def
+/Encoding 256 array def
+0 1 255 {Encoding exch /.notdef put} for
+Encoding 1 /Cross put
+Encoding 2 /Triangle put
+Encoding 3 /Trianglefilled put
+Encoding 4 /Diamond put
+Encoding 5 /Diamondfilled put
+Encoding 6 /Square put
+Encoding 7 /Squarefilled put
+Encoding 8 /Rectan put
+Encoding 9 /Rectanfilled put
+Encoding 10 /Circle put
+Encoding 11 /Circlefilled put
+Encoding 12 /Bullet put
+Encoding 13 /Star put
+Encoding 14 /Plus put
+
+/graphclip {newpath moveto lineto lineto lineto closepath clip } def
+
+/Procs 15 dict def
+Procs begin
+/.notdef {} def
+
+/Cross {
+ newpath -500 -500 moveto 500 500 lineto stroke
+ newpath -500 500 moveto 500 -500 lineto stroke } def
+
+/Triangle {
+ newpath -500 -500 moveto 0 500 lineto 500 -500 lineto closepath stroke } def
+
+/Trianglefilled {
+ newpath -500 -500 moveto 0 500 lineto 500 -500 lineto closepath fill } def
+
+/Diamond {
+  newpath -500 0 moveto 0 500 lineto 500 0 lineto 0 -500 lineto closepath
+ stroke } def
+
+/Diamondfilled {
+  newpath -500 0 moveto 0 500 lineto 500 0 lineto 0 -500 lineto closepath
+  fill } def
+
+/Square {
+ newpath -500 -500 moveto -500 500 lineto 500 500 lineto 500 -500 lineto
+ closepath stroke } def
+
+/Squarefilled {
+ newpath -500 -500 moveto -500 500 lineto 500 500 lineto 500 -500 lineto
+ closepath fill } def
+
+/Rectan {
+ newpath -200 -500 moveto -200 500 lineto 200 500 lineto 200 -500 lineto  
+closepath stroke } def
+
+/Rectanfilled {
+ newpath -200 -500 moveto -200 500 lineto 200 500 lineto 200 -500 lineto  
+closepath fill } def
+
+
+/Circle { newpath 0 0 500 0 360 arc stroke } def
+
+/Circlefilled { newpath 0 0 500 0 360 arc closepath fill } def
+
+
+/Bullet { newpath 0 0 500 0 360 arc closepath fill } def
+
+/Plus {
+ newpath 0 -500 moveto 0 500 lineto stroke
+ newpath -500 0 moveto 500 0 lineto stroke } def
+
+/Star {
+ newpath 0 -500 moveto 0 500 lineto stroke
+ newpath -500 0 moveto 500 0 lineto stroke
+ newpath -500 -500 moveto 500 500 lineto stroke
+ newpath -500 500 moveto 500 -500 lineto stroke } def
+
+end
+
+/BuildChar {
+ 1000 0 -500 -500 500 500 setcachedevice
+ exch begin Encoding exch get Procs exch get end exec } def
+end
+
+/Symbols symbolFont definefont pop
+
+% size SetSym           -> set font to be symbols scaled by 'size'
+/SetSym { /Symbols findfont exch scalefont setfont } def
+
+% size fontname SetTxt          -> set font 'fontname' scaled by 'size'
+/SetTxt { findfont exch scalefont setfont } def
+
+% dashtype thicknes SL
+/SL { setlinewidth 0 setdash } def
+
+/cross {2 copy le {exch pop} {pop} ifelse} def
+
+%9 added to distinguish from other clashing scribe definitions
+% from to L9    -> print line between points 'from' and 'to'
+/L9 { newpath moveto lineto stroke } def
+/S9 { newpath moveto } def
+/M9 { lineto } def
+/D9 { stroke } def
+
+%%%%
+%%%% setscreen is not EPSF compliant, but if you want to cheat
+%%%% you can switch which of the following two definitions of
+%%%% SS9 is commented out.  It would be best to do this by having
+%%%% a seperate version of the prolog file for the user to select.
+%%%%
+%%%% /SS9 { setscreen } def
+/SS9 { pop pop pop } def
+
+/G9 { setgray } def
+/F9 {newpath moveto lineto lineto lineto closepath fill} def
+/E9 {closepath fill} def
+% E9 is fills for incremental curves, while F9 for curve segments
+
+/Landscape {612 0 translate 90 rotate} def
+
+% save current point in global variable psx psy
+/SAVPOS { /psx currentpoint pop def /psy currentpoint exch pop def } def
+
+% string angle xpos ypos TXL    -> print 'string' at pos xpos, ypos
+/TXL { gsave translate rotate 0 0 moveto show SAVPOS grestore } def
+
+% string angle xpos ypos TXR    -> print 'string' at pos xpos, ypos
+/TXR { gsave translate rotate dup stringwidth pop neg 0 moveto show SAVPOS 
+       grestore } def
+
+% string angle xpos ypos TXC    -> print 'string' at pos xpos, ypos
+/TXC { gsave translate rotate dup stringwidth pop 2 div neg 0 moveto show
+       SAVPOS grestore } def
+
+% string angle TXREL    -> print 'string' at xpos ypos translate psx psy rel
+/TXREL { gsave translate rotate psx psy moveto show SAVPOS grestore } def
+
+% char xpos ypos SY     -> print symbol 'char' at position xpos, ypos
+/SY { moveto show } def
+
+/len {dup mul exch dup mul add sqrt}def
+
+
+%%%%%%%%%%%%%%%%%%%%%%%  CURVE SMOOTHING  %%%%%%%%%%%%%%%%%%%%%%
+
+% Curve Smoothing Routines
+%  Ernest Wood  -  Wed Apr 16 09:05:05 1986
+%
+%  These routines will ALWAYS create a smooth curve which
+%  intercepts EVERY point used to generate them.
+%
+%  The definition qA determines the amount of overshoot smoothing
+%  produces around each point.  The distance is the distance to the
+%  next point times aA.  The factor qB scales the amount of overshoot
+%  by the acuteness of the angle around the point.
+%
+%  These values make a square of points into a circle.
+/qA .3 def              % used in qx
+/qB 1 def               % used in afactor
+
+/8a 8 array def
+%
+%  Angle of vector from p0 to p1        p0 p1 polar ang
+/polar{qs neg exch neg atan}def 
+
+%subtract and add points        p0 p1 qs p0-p1
+%                               p0 p1 qa p0+p1
+/qs{exch 3 1 roll sub 3 1 roll sub exch}def
+/qa{exch 3 1 roll add 3 1 roll add exch}def
+
+%  Extract point from 8 point array
+%
+/Pt{2 mul dup 8a exch get exch 1 add 8a exch get}def
+
+%  a0 a1 mirrorang ma
+%       If a0 is the angle from p1 to p0 and a1 is the angle from
+%       p1 to p2 then ma is the mirror angle between p0-p1 and p1-p2.
+%  a0 a1 afactor f
+%       If a0 is the angle from p1 to p0 and a1 is the angle from
+%       p1 to p2 then f is the ratio of the inside angle between a0 and a1
+%       and 180 times qB.  This ratio is saturated at 1 and if qB is 0 then
+%       the value returned is always 1.  Thus the more acute the angle 
+%       the smaller the value of f.
+%
+/mirrorang{2 copy add 2 div 3 1 roll sub 0 lt {90} {-90}ifelse add}def
+/afactor{
+    qB 0 eq
+        { 1 }
+        {sub abs dup 180 gt {360 exch sub} if 180 div qB mul
+         dup 1 gt {pop 1} if}
+    ifelse
+}def
+
+%  a d xya x y
+%       Given angle a and distance d
+%       produce x and y offsets.
+%
+/xya{exch 2 copy cos mul 3 1 roll sin mul}def
+
+%  p0 p1 p2 p3  qx  pp1 pp2 pp3
+%       Given 4 points on a curve produce the pp# values needed by
+%       curveto to draw a smooth curve between p1 and p2.  The slope
+%       of the curve at p1 and p2 will be perpendicular to the bisector
+%       of a angle between p0/p1/p2 or p1/p2/p3.
+%
+/qx{
+    8a astore pop
+    1 Pt 2 Pt qs len qA mul /dist exch def
+    1 Pt 0 Pt polar
+    1 Pt 2 Pt polar
+    2 copy mirrorang
+    3 1 roll afactor dist mul
+    xya 1 Pt qa
+    2 Pt 3 Pt polar
+    2 Pt 1 Pt polar
+    2 copy mirrorang
+    3 1 roll afactor dist mul
+    xya 2 Pt qa
+    2 Pt
+}def
+
+/qp{8 copy 16 -2 roll pop pop}def
+/ns1{4 copy 4 -2 roll 2 copy qa 4 2 roll qs 6 2 roll /ns{ns2}def }def
+/ns2{qp qx curveto}def
+
+%  User definitions for curve smoothing routines.
+%       First (ms), intermediate (ns), and last points with (fs) and
+%       without (nsfs) automatic stroke execution.
+%
+/ms{2 copy newpath moveto /ns{ns1}def}def
+/ns{ns1}def
+/fs{stroke}def
+/nsfs{ns 4 copy 2 copy qa 4 2 roll qs qx curveto}def
+/nsend{4 copy 2 copy qa 4 2 roll qs qx curveto}def
+%%EndProlog
+%%%Page ? 1
+72.000000 72.000000 540.000000 72.000000 540.000000 288.000000 72.000000 288.000000 newpath moveto lineto lineto lineto closepath clip
+72.000000 72.000000 540.000000 72.000000 540.000000 288.000000 72.000000 288.000000 newpath moveto lineto lineto lineto closepath clip
+340 75.541 S9
+[] 1.000000 SL
+340 93.2459 M9
+352 93.2459 M9
+352 75.541 M9
+340 75.541 M9
+gsave
+D9
+grestore
+30.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+346 93.2459 S9
+[] 1.000000 SL
+346 199.475 M9
+436 199.475 M9
+D9
+352 75.541 S9
+[] 1.000000 SL
+352 93.2459 M9
+364 93.2459 M9
+364 75.541 M9
+352 75.541 M9
+gsave
+D9
+grestore
+30.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+358 93.2459 S9
+[] 1.000000 SL
+358 186.197 M9
+436 186.197 M9
+D9
+364 75.541 S9
+[] 1.000000 SL
+364 93.2459 M9
+376 93.2459 M9
+376 75.541 M9
+364 75.541 M9
+gsave
+D9
+grestore
+30.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+370 93.2459 S9
+[] 1.000000 SL
+370 172.918 M9
+436 172.918 M9
+D9
+376 75.541 S9
+[] 1.000000 SL
+376 93.2459 M9
+388 93.2459 M9
+388 75.541 M9
+376 75.541 M9
+gsave
+D9
+grestore
+E9
+382 93.2459 S9
+[] 1.000000 SL
+382 159.639 M9
+436 159.639 M9
+D9
+388 75.541 S9
+[] 1.000000 SL
+388 93.2459 M9
+400 93.2459 M9
+400 75.541 M9
+388 75.541 M9
+gsave
+D9
+grestore
+30.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+394 93.2459 S9
+[] 1.000000 SL
+394 146.361 M9
+436 146.361 M9
+D9
+400 75.541 S9
+[] 1.000000 SL
+400 93.2459 M9
+412 93.2459 M9
+412 75.541 M9
+400 75.541 M9
+gsave
+D9
+grestore
+30.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+406 93.2459 S9
+[] 1.000000 SL
+406 133.082 M9
+436 133.082 M9
+D9
+412 75.541 S9
+[] 1.000000 SL
+412 93.2459 M9
+424 93.2459 M9
+424 75.541 M9
+412 75.541 M9
+gsave
+D9
+grestore
+30.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+418 93.2459 S9
+[] 1.000000 SL
+418 119.803 M9
+436 119.803 M9
+D9
+424 75.541 S9
+[] 1.000000 SL
+424 93.2459 M9
+436 93.2459 M9
+436 75.541 M9
+424 75.541 M9
+gsave
+D9
+grestore
+E9
+430 93.2459 S9
+[] 1.000000 SL
+430 106.525 M9
+436 106.525 M9
+D9
+388 66.6885 S9
+388 102.098 M9
+D9
+140 252.59 S9
+[] 1.000000 SL
+140 270.295 M9
+222.72 270.295 M9
+222.72 252.59 M9
+140 252.59 M9
+gsave
+D9
+grestore
+45.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+222.72 252.59 S9
+[] 1.000000 SL
+222.72 270.295 M9
+237.64 270.295 M9
+237.64 252.59 M9
+222.72 252.59 M9
+gsave
+D9
+grestore
+45.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+237.64 252.59 S9
+[] 1.000000 SL
+237.64 270.295 M9
+239.52 270.295 M9
+239.52 252.59 M9
+237.64 252.59 M9
+gsave
+D9
+grestore
+45.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+239.52 252.59 S9
+[] 1.000000 SL
+239.52 270.295 M9
+242.88 270.295 M9
+242.88 252.59 M9
+239.52 252.59 M9
+gsave
+D9
+grestore
+E9
+242.88 252.59 S9
+[] 1.000000 SL
+242.88 270.295 M9
+297.64 270.295 M9
+297.64 252.59 M9
+242.88 252.59 M9
+gsave
+D9
+grestore
+45.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+297.64 252.59 S9
+[] 1.000000 SL
+297.64 270.295 M9
+306.04 270.295 M9
+306.04 252.59 M9
+297.64 252.59 M9
+gsave
+D9
+grestore
+45.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+306.04 252.59 S9
+[] 1.000000 SL
+306.04 270.295 M9
+309.92 270.295 M9
+309.92 252.59 M9
+306.04 252.59 M9
+gsave
+D9
+grestore
+45.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+309.92 252.59 S9
+[] 1.000000 SL
+309.92 270.295 M9
+311.12 270.295 M9
+311.12 252.59 M9
+309.92 252.59 M9
+gsave
+D9
+grestore
+E9
+140 234.885 S9
+[] 1.000000 SL
+140 252.59 M9
+188.2 252.59 M9
+188.2 234.885 M9
+140 234.885 M9
+gsave
+D9
+grestore
+60.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+188.2 234.885 S9
+[] 1.000000 SL
+188.2 252.59 M9
+191.6 252.59 M9
+191.6 234.885 M9
+188.2 234.885 M9
+gsave
+D9
+grestore
+60.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+191.6 234.885 S9
+[] 1.000000 SL
+191.6 252.59 M9
+192.76 252.59 M9
+192.76 234.885 M9
+191.6 234.885 M9
+gsave
+D9
+grestore
+60.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+192.76 234.885 S9
+[] 1.000000 SL
+192.76 252.59 M9
+196.08 252.59 M9
+196.08 234.885 M9
+192.76 234.885 M9
+gsave
+D9
+grestore
+E9
+196.08 234.885 S9
+[] 1.000000 SL
+196.08 252.59 M9
+211.52 252.59 M9
+211.52 234.885 M9
+196.08 234.885 M9
+gsave
+D9
+grestore
+60.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+211.52 234.885 S9
+[] 1.000000 SL
+211.52 252.59 M9
+216.56 252.59 M9
+216.56 234.885 M9
+211.52 234.885 M9
+gsave
+D9
+grestore
+60.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+216.56 234.885 S9
+[] 1.000000 SL
+216.56 252.59 M9
+218.8 252.59 M9
+218.8 234.885 M9
+216.56 234.885 M9
+gsave
+D9
+grestore
+60.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+218.8 234.885 S9
+[] 1.000000 SL
+218.8 252.59 M9
+219.96 252.59 M9
+219.96 234.885 M9
+218.8 234.885 M9
+gsave
+D9
+grestore
+E9
+242.88 243.738 S9
+[] 1.000000 SL
+242.88 279.148 M9
+D9
+196.08 226.033 S9
+196.08 261.443 M9
+D9
+140 199.475 S9
+[] 1.000000 SL
+140 217.18 M9
+160.68 217.18 M9
+160.68 199.475 M9
+140 199.475 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+160.68 199.475 S9
+[] 1.000000 SL
+160.68 217.18 M9
+164.6 217.18 M9
+164.6 199.475 M9
+160.68 199.475 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+164.6 199.475 S9
+[] 1.000000 SL
+164.6 217.18 M9
+168.24 217.18 M9
+168.24 199.475 M9
+164.6 199.475 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+168.24 199.475 S9
+[] 1.000000 SL
+168.24 217.18 M9
+185.88 217.18 M9
+185.88 199.475 M9
+168.24 199.475 M9
+gsave
+D9
+grestore
+E9
+185.88 199.475 S9
+[] 1.000000 SL
+185.88 217.18 M9
+216.28 217.18 M9
+216.28 199.475 M9
+185.88 199.475 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+216.28 199.475 S9
+[] 1.000000 SL
+216.28 217.18 M9
+242.24 217.18 M9
+242.24 199.475 M9
+216.28 199.475 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+242.24 199.475 S9
+[] 1.000000 SL
+242.24 217.18 M9
+243.36 217.18 M9
+243.36 199.475 M9
+242.24 199.475 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+243.36 199.475 S9
+[] 1.000000 SL
+243.36 217.18 M9
+243.72 217.18 M9
+243.72 199.475 M9
+243.36 199.475 M9
+gsave
+D9
+grestore
+E9
+140 181.77 S9
+[] 1.000000 SL
+140 199.475 M9
+150.72 199.475 M9
+150.72 181.77 M9
+140 181.77 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+150.72 181.77 S9
+[] 1.000000 SL
+150.72 199.475 M9
+153.08 199.475 M9
+153.08 181.77 M9
+150.72 181.77 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+153.08 181.77 S9
+[] 1.000000 SL
+153.08 199.475 M9
+156.56 199.475 M9
+156.56 181.77 M9
+153.08 181.77 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+156.56 181.77 S9
+[] 1.000000 SL
+156.56 199.475 M9
+174.28 199.475 M9
+174.28 181.77 M9
+156.56 181.77 M9
+gsave
+D9
+grestore
+E9
+174.28 181.77 S9
+[] 1.000000 SL
+174.28 199.475 M9
+201.72 199.475 M9
+201.72 181.77 M9
+174.28 181.77 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+201.72 181.77 S9
+[] 1.000000 SL
+201.72 199.475 M9
+224.72 199.475 M9
+224.72 181.77 M9
+201.72 181.77 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+224.72 181.77 S9
+[] 1.000000 SL
+224.72 199.475 M9
+226.4 199.475 M9
+226.4 181.77 M9
+224.72 181.77 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+226.4 181.77 S9
+[] 1.000000 SL
+226.4 199.475 M9
+226.76 199.475 M9
+226.76 181.77 M9
+226.4 181.77 M9
+gsave
+D9
+grestore
+E9
+185.88 190.623 S9
+[] 1.000000 SL
+185.88 226.033 M9
+D9
+174.28 172.918 S9
+174.28 208.328 M9
+D9
+140 146.361 S9
+[] 1.000000 SL
+140 164.066 M9
+150 164.066 M9
+150 146.361 M9
+140 146.361 M9
+gsave
+D9
+grestore
+35.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+150 146.361 S9
+[] 1.000000 SL
+150 164.066 M9
+157.08 164.066 M9
+157.08 146.361 M9
+150 146.361 M9
+gsave
+D9
+grestore
+35.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+157.08 146.361 S9
+[] 1.000000 SL
+157.08 164.066 M9
+157.68 164.066 M9
+157.68 146.361 M9
+157.08 146.361 M9
+gsave
+D9
+grestore
+35.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+157.68 146.361 S9
+[] 1.000000 SL
+157.68 164.066 M9
+158.12 164.066 M9
+158.12 146.361 M9
+157.68 146.361 M9
+gsave
+D9
+grestore
+E9
+158.12 146.361 S9
+[] 1.000000 SL
+158.12 164.066 M9
+221.96 164.066 M9
+221.96 146.361 M9
+158.12 146.361 M9
+gsave
+D9
+grestore
+35.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+221.96 146.361 S9
+[] 1.000000 SL
+221.96 164.066 M9
+261.12 164.066 M9
+261.12 146.361 M9
+221.96 146.361 M9
+gsave
+D9
+grestore
+35.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+261.12 146.361 S9
+[] 1.000000 SL
+261.12 164.066 M9
+266.76 164.066 M9
+266.76 146.361 M9
+261.12 146.361 M9
+gsave
+D9
+grestore
+35.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+266.76 146.361 S9
+[] 1.000000 SL
+266.76 164.066 M9
+279.76 164.066 M9
+279.76 146.361 M9
+266.76 146.361 M9
+gsave
+D9
+grestore
+E9
+140 128.656 S9
+[] 1.000000 SL
+140 146.361 M9
+149.52 146.361 M9
+149.52 128.656 M9
+140 128.656 M9
+gsave
+D9
+grestore
+50.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+149.52 128.656 S9
+[] 1.000000 SL
+149.52 146.361 M9
+156.24 146.361 M9
+156.24 128.656 M9
+149.52 128.656 M9
+gsave
+D9
+grestore
+50.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+156.24 128.656 S9
+[] 1.000000 SL
+156.24 146.361 M9
+156.8 146.361 M9
+156.8 128.656 M9
+156.24 128.656 M9
+gsave
+D9
+grestore
+50.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+156.8 128.656 S9
+[] 1.000000 SL
+156.8 146.361 M9
+157.2 146.361 M9
+157.2 128.656 M9
+156.8 128.656 M9
+gsave
+D9
+grestore
+E9
+157.2 128.656 S9
+[] 1.000000 SL
+157.2 146.361 M9
+218.88 146.361 M9
+218.88 128.656 M9
+157.2 128.656 M9
+gsave
+D9
+grestore
+50.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+218.88 128.656 S9
+[] 1.000000 SL
+218.88 146.361 M9
+254.72 146.361 M9
+254.72 128.656 M9
+218.88 128.656 M9
+gsave
+D9
+grestore
+50.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+254.72 128.656 S9
+[] 1.000000 SL
+254.72 146.361 M9
+259.84 146.361 M9
+259.84 128.656 M9
+254.72 128.656 M9
+gsave
+D9
+grestore
+50.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+259.84 128.656 S9
+[] 1.000000 SL
+259.84 146.361 M9
+272.56 146.361 M9
+272.56 128.656 M9
+259.84 128.656 M9
+gsave
+D9
+grestore
+E9
+158.12 137.508 S9
+[] 1.000000 SL
+158.12 172.918 M9
+D9
+157.2 119.803 S9
+157.2 155.213 M9
+D9
+140 93.2459 S9
+[] 1.000000 SL
+140 110.951 M9
+163.8 110.951 M9
+163.8 93.2459 M9
+140 93.2459 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+163.8 93.2459 S9
+[] 1.000000 SL
+163.8 110.951 M9
+170.08 110.951 M9
+170.08 93.2459 M9
+163.8 93.2459 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+170.08 93.2459 S9
+[] 1.000000 SL
+170.08 110.951 M9
+178.6 110.951 M9
+178.6 93.2459 M9
+170.08 93.2459 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+178.6 93.2459 S9
+[] 1.000000 SL
+178.6 110.951 M9
+219.68 110.951 M9
+219.68 93.2459 M9
+178.6 93.2459 M9
+gsave
+D9
+grestore
+E9
+219.68 93.2459 S9
+[] 1.000000 SL
+219.68 110.951 M9
+220.72 110.951 M9
+220.72 93.2459 M9
+219.68 93.2459 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+220.72 93.2459 S9
+[] 1.000000 SL
+220.72 110.951 M9
+261.12 110.951 M9
+261.12 93.2459 M9
+220.72 93.2459 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+261.12 93.2459 S9
+[] 1.000000 SL
+261.12 110.951 M9
+264.68 110.951 M9
+264.68 93.2459 M9
+261.12 93.2459 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+264.68 93.2459 S9
+[] 1.000000 SL
+264.68 110.951 M9
+264.68 110.951 M9
+264.68 93.2459 M9
+264.68 93.2459 M9
+gsave
+D9
+grestore
+E9
+140 75.541 S9
+[] 1.000000 SL
+140 93.2459 M9
+163.48 93.2459 M9
+163.48 75.541 M9
+140 75.541 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+163.48 75.541 S9
+[] 1.000000 SL
+163.48 93.2459 M9
+167.84 93.2459 M9
+167.84 75.541 M9
+163.48 75.541 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+167.84 75.541 S9
+[] 1.000000 SL
+167.84 93.2459 M9
+176.52 93.2459 M9
+176.52 75.541 M9
+167.84 75.541 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+176.52 75.541 S9
+[] 1.000000 SL
+176.52 93.2459 M9
+218.56 93.2459 M9
+218.56 75.541 M9
+176.52 75.541 M9
+gsave
+D9
+grestore
+E9
+218.56 75.541 S9
+[] 1.000000 SL
+218.56 93.2459 M9
+218.8 93.2459 M9
+218.8 75.541 M9
+218.56 75.541 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+218.8 75.541 S9
+[] 1.000000 SL
+218.8 93.2459 M9
+256.72 93.2459 M9
+256.72 75.541 M9
+218.8 75.541 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+256.72 75.541 S9
+[] 1.000000 SL
+256.72 93.2459 M9
+260.08 93.2459 M9
+260.08 75.541 M9
+256.72 75.541 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+260.08 75.541 S9
+[] 1.000000 SL
+260.08 93.2459 M9
+260.08 93.2459 M9
+260.08 75.541 M9
+260.08 75.541 M9
+gsave
+D9
+grestore
+E9
+219.68 84.3934 S9
+[] 1.000000 SL
+219.68 119.803 M9
+D9
+218.56 66.6885 S9
+218.56 102.098 M9
+D9
+initclip 
+10 /Times-Roman SetTxt
+() 0 306 28 TXC
+(system i-cache misses) 0 436 195.934 TXL
+(system d-cache misses) 0 436 182.656 TXL
+(system wbuffer waits) 0 436 169.377 TXL
+(system uncached reads) 0 436 156.098 TXL
+(user i-cache misses) 0 436 142.82 TXL
+(user d-cache misses) 0 436 129.541 TXL
+(user wbuffer waits) 0 436 116.262 TXL
+(user uncached reads) 0 436 102.984 TXL
+(MCPI) 0 450 79.082 TXL
+(splot-base) 0 136 257.902 TXR
+(0.43) 0 319.12 256.131 TXL
+(splot-nocomp) 0 136 240.197 TXR
+(0.20) 0 227.96 238.426 TXL
+(gs-base) 0 136 204.787 TXR
+(0.26) 0 251.72 203.016 TXL
+(gs-nocomp) 0 136 187.082 TXR
+(0.22) 0 234.76 185.311 TXL
+(destroy-base) 0 136 151.672 TXR
+(0.35) 0 287.76 149.902 TXL
+(destroy-nocomp) 0 136 133.967 TXR
+(0.33) 0 280.56 132.197 TXL
+(compress-base) 0 136 98.5574 TXR
+(0.31) 0 272.68 96.7869 TXL
+(compress-nocomp) 0 136 80.8525 TXR
+(0.30) 0 268.08 79.082 TXL
+() 0 436 185.434 TXL
+() 0 436 172.156 TXL
+() 0 436 158.877 TXL
+() 0 436 145.598 TXL
+() 0 436 132.32 TXL
+() 0 436 119.041 TXL
+() 0 436 105.762 TXL
+() 0 436 92.4836 TXL
+() 0 450 68.582 TXL
+() 0 136 247.402 TXR
+() 0 319.12 245.631 TXL
+() 0 136 229.697 TXR
+() 0 227.96 227.926 TXL
+() 0 136 194.287 TXR
+() 0 251.72 192.516 TXL
+() 0 136 176.582 TXR
+() 0 234.76 174.811 TXL
+() 0 136 141.172 TXR
+() 0 287.76 139.402 TXL
+() 0 136 123.467 TXR
+() 0 280.56 121.697 TXL
+() 0 136 88.0574 TXR
+() 0 272.68 86.2869 TXL
+() 0 136 70.3525 TXR
+() 0 268.08 68.582 TXL
+72.000000 72.000000 540.000000 72.000000 540.000000 288.000000 72.000000 288.000000 newpath moveto lineto lineto lineto closepath clip
+72.000000 72.000000 540.000000 72.000000 540.000000 288.000000 72.000000 288.000000 newpath moveto lineto lineto lineto closepath clip
+6 SetSym
+initclip 
+showpage
+%%Trailer
+end
+
+%%EndDocument
+ PE 10 /Times-Bold AF
+17920 32930 MT
+(Figure 4-2:)SH
+/Times-Italic SF
+23169 XM
+(MCPI)SH
+/Times-Roman SF
+25863 XM
+(with and without inter-context competition.)SH
+9 SS 
+10337 34471 MT
+(This figure shows the effect of inter-context competition on)
+80 W( memory system performance.  Each horizontal bar)79 W
+9720 35485 MT
+(represents total)79 W
+/Times-Italic SF
+15578 XM
+(MCPI)SH
+/Times-Roman SF
+18082 XM
+(for a given experimental run, as in Figure 4-1.  We show two)
+79 W( bars for each workload, the)80 W
+9720 36499 MT
+(upper corresponding to the base system, and the)
+9 W( lower representing a system in which competition between address)8 W
+9720 37513 MT
+(spaces has been eliminated by giving each)
+197 W( address space a private memory system.  This figure shows that)198 W
+9720 38527 MT
+(inter-context competition has major impact on instruction cache behavior for realistic X11 workloads.)SH
+10 /Times-Bold AF
+7920 41357 MT
+(4.2.2. Self-Interference misses)SH
+/Times-Roman SF
+8920 42554 MT
+(We measured the)
+105 W( impact of self-interference misses by replacing the direct-mapped caches in the simulator)106 W
+7920 43751 MT
+(with two-way set associative)
+29 W( caches of the same size.  Figure 4-3 illustrates the combined effects of competition)28 W
+7920 44948 MT
+(and associativity on)182 W
+/Times-Italic SF
+16660 XM
+(MCPI)SH
+/Times-Roman SF
+19536 XM
+(for)SH
+/Times-Italic SF
+21134 XM
+(splot)SH
+/Times-Roman SF
+23511 XM
+(and)SH
+/Times-Italic SF
+25387 XM
+(gs)SH
+/Times-Roman SF
+(. To)
+614 W( isolate the)
+182 W( impact of self-interference misses from that of)183 W
+7920 46145 MT
+(competition misses,)
+519 W( compare runs where all competition misses are eliminated \050)518 W
+/Times-Italic SF
+(bench)SH
+/Times-Roman SF
+(-nocomp and)518 W
+/Times-Italic SF
+7920 47342 MT
+(bench)SH
+/Times-Roman SF
+(-a+nocomp\051. In)
+696 W( this comparison, all misses eliminated by associativity are from conflicts within an)224 W
+7920 48539 MT
+(address space.  For both)SH
+/Times-Italic SF
+17807 XM
+(gs)SH
+/Times-Roman SF
+18946 XM
+(and)SH
+/Times-Italic SF
+20640 XM
+(splot)SH
+/Times-Roman SF
+(, associativity eliminates a significant number of self-interference misses.)SH
+8920 50235 MT
+(Figure 4-3 also shows the effect of associativity on inter-context competition.  The)
+102 W( two-way set associative)103 W
+7920 51432 MT
+(caches eliminate some inter-context competition, but not all \050compare)SH
+/Times-Italic SF
+36138 XM
+(bench)SH
+/Times-Roman SF
+(-assoc and)SH
+/Times-Italic SF
+42969 XM
+(bench)SH
+/Times-Roman SF
+(-a+nocomp\051.)SH
+/Times-Bold SF
+7920 54262 MT
+(4.2.3. Summary)SH
+/Times-Roman SF
+8920 55459 MT
+(For the two realistic X11 workloads we)
+63 W( consider, both inter-context competition and self-interference misses)62 W
+7920 56656 MT
+(have significant)
+79 W( impact on memory system behavior, with the most significant effects occurring in the instruc-)80 W
+7920 57853 MT
+(tion cache.  Strategies have been described)
+146 W( [18])
+SH( for avoiding text conflicts within an address space,)
+146 W( but it is)145 W
+7920 59050 MT
+(difficult to envision a practical software system to avoid competition)
+150 W( between address spaces.  The problem)151 W
+7920 60247 MT
+(could potentially be addressed in hardware with cache associativity, although this could have an impact on)180 W
+7920 61444 MT
+(machine cycle time.  Many current systems rely on)
+100 W( good luck to avoid inter-context competition.  As the gap)101 W
+7920 62641 MT
+(between CPU and memory speed grows, and as users demand improved)
+62 W( performance for interactive and multi-)61 W
+7920 63838 MT
+(address space systems, more aggressive cache designs may be required.)
+61 W( The)
+373 W( lack of client/server workloads in)62 W
+7920 65035 MT
+(standard benchmark suites could lead hardware developers to)
+130 W( believe that inter-context competition is a non-)129 W
+7920 66232 MT
+(issue. Our)
+250 W( measurements suggest it deserves more attention.)SH
+30350 75600 MT
+(8)SH
+ES
+%%Page: 9 9
+BS
+0 SI
+1 SS 
+21600 7920 29520 PB 
+%%BeginDocument: ACompMCPI.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%BoundingBox: -15 -37 454 198
+%%%Pages: 1
+%%DocumentFonts: Helvetica Helvetica-Oblique Helvetica-Bold Helvetica-BoldOblique Times-Roman Times-Italics Times-Bold Times-BoldItalics
+%%EndComments
+-86.400000 -64.800000 translate
+50 dict begin
+/symbolFont 10 dict def
+symbolFont begin
+/FontType 3 def
+/FontMatrix [.001 0 0 .001 0 0] def
+/FontBBox [-500 -500 500 500] def
+/Encoding 256 array def
+0 1 255 {Encoding exch /.notdef put} for
+Encoding 1 /Cross put
+Encoding 2 /Triangle put
+Encoding 3 /Trianglefilled put
+Encoding 4 /Diamond put
+Encoding 5 /Diamondfilled put
+Encoding 6 /Square put
+Encoding 7 /Squarefilled put
+Encoding 8 /Rectan put
+Encoding 9 /Rectanfilled put
+Encoding 10 /Circle put
+Encoding 11 /Circlefilled put
+Encoding 12 /Bullet put
+Encoding 13 /Star put
+Encoding 14 /Plus put
+
+/graphclip {newpath moveto lineto lineto lineto closepath clip } def
+
+/Procs 15 dict def
+Procs begin
+/.notdef {} def
+
+/Cross {
+ newpath -500 -500 moveto 500 500 lineto stroke
+ newpath -500 500 moveto 500 -500 lineto stroke } def
+
+/Triangle {
+ newpath -500 -500 moveto 0 500 lineto 500 -500 lineto closepath stroke } def
+
+/Trianglefilled {
+ newpath -500 -500 moveto 0 500 lineto 500 -500 lineto closepath fill } def
+
+/Diamond {
+  newpath -500 0 moveto 0 500 lineto 500 0 lineto 0 -500 lineto closepath
+ stroke } def
+
+/Diamondfilled {
+  newpath -500 0 moveto 0 500 lineto 500 0 lineto 0 -500 lineto closepath
+  fill } def
+
+/Square {
+ newpath -500 -500 moveto -500 500 lineto 500 500 lineto 500 -500 lineto
+ closepath stroke } def
+
+/Squarefilled {
+ newpath -500 -500 moveto -500 500 lineto 500 500 lineto 500 -500 lineto
+ closepath fill } def
+
+/Rectan {
+ newpath -200 -500 moveto -200 500 lineto 200 500 lineto 200 -500 lineto  
+closepath stroke } def
+
+/Rectanfilled {
+ newpath -200 -500 moveto -200 500 lineto 200 500 lineto 200 -500 lineto  
+closepath fill } def
+
+
+/Circle { newpath 0 0 500 0 360 arc stroke } def
+
+/Circlefilled { newpath 0 0 500 0 360 arc closepath fill } def
+
+
+/Bullet { newpath 0 0 500 0 360 arc closepath fill } def
+
+/Plus {
+ newpath 0 -500 moveto 0 500 lineto stroke
+ newpath -500 0 moveto 500 0 lineto stroke } def
+
+/Star {
+ newpath 0 -500 moveto 0 500 lineto stroke
+ newpath -500 0 moveto 500 0 lineto stroke
+ newpath -500 -500 moveto 500 500 lineto stroke
+ newpath -500 500 moveto 500 -500 lineto stroke } def
+
+end
+
+/BuildChar {
+ 1000 0 -500 -500 500 500 setcachedevice
+ exch begin Encoding exch get Procs exch get end exec } def
+end
+
+/Symbols symbolFont definefont pop
+
+% size SetSym           -> set font to be symbols scaled by 'size'
+/SetSym { /Symbols findfont exch scalefont setfont } def
+
+% size fontname SetTxt          -> set font 'fontname' scaled by 'size'
+/SetTxt { findfont exch scalefont setfont } def
+
+% dashtype thicknes SL
+/SL { setlinewidth 0 setdash } def
+
+/cross {2 copy le {exch pop} {pop} ifelse} def
+
+%9 added to distinguish from other clashing scribe definitions
+% from to L9    -> print line between points 'from' and 'to'
+/L9 { newpath moveto lineto stroke } def
+/S9 { newpath moveto } def
+/M9 { lineto } def
+/D9 { stroke } def
+
+%%%%
+%%%% setscreen is not EPSF compliant, but if you want to cheat
+%%%% you can switch which of the following two definitions of
+%%%% SS9 is commented out.  It would be best to do this by having
+%%%% a seperate version of the prolog file for the user to select.
+%%%%
+%%%% /SS9 { setscreen } def
+/SS9 { pop pop pop } def
+
+/G9 { setgray } def
+/F9 {newpath moveto lineto lineto lineto closepath fill} def
+/E9 {closepath fill} def
+% E9 is fills for incremental curves, while F9 for curve segments
+
+/Landscape {612 0 translate 90 rotate} def
+
+% save current point in global variable psx psy
+/SAVPOS { /psx currentpoint pop def /psy currentpoint exch pop def } def
+
+% string angle xpos ypos TXL    -> print 'string' at pos xpos, ypos
+/TXL { gsave translate rotate 0 0 moveto show SAVPOS grestore } def
+
+% string angle xpos ypos TXR    -> print 'string' at pos xpos, ypos
+/TXR { gsave translate rotate dup stringwidth pop neg 0 moveto show SAVPOS 
+       grestore } def
+
+% string angle xpos ypos TXC    -> print 'string' at pos xpos, ypos
+/TXC { gsave translate rotate dup stringwidth pop 2 div neg 0 moveto show
+       SAVPOS grestore } def
+
+% string angle TXREL    -> print 'string' at xpos ypos translate psx psy rel
+/TXREL { gsave translate rotate psx psy moveto show SAVPOS grestore } def
+
+% char xpos ypos SY     -> print symbol 'char' at position xpos, ypos
+/SY { moveto show } def
+
+/len {dup mul exch dup mul add sqrt}def
+
+
+%%%%%%%%%%%%%%%%%%%%%%%  CURVE SMOOTHING  %%%%%%%%%%%%%%%%%%%%%%
+
+% Curve Smoothing Routines
+%  Ernest Wood  -  Wed Apr 16 09:05:05 1986
+%
+%  These routines will ALWAYS create a smooth curve which
+%  intercepts EVERY point used to generate them.
+%
+%  The definition qA determines the amount of overshoot smoothing
+%  produces around each point.  The distance is the distance to the
+%  next point times aA.  The factor qB scales the amount of overshoot
+%  by the acuteness of the angle around the point.
+%
+%  These values make a square of points into a circle.
+/qA .3 def              % used in qx
+/qB 1 def               % used in afactor
+
+/8a 8 array def
+%
+%  Angle of vector from p0 to p1        p0 p1 polar ang
+/polar{qs neg exch neg atan}def 
+
+%subtract and add points        p0 p1 qs p0-p1
+%                               p0 p1 qa p0+p1
+/qs{exch 3 1 roll sub 3 1 roll sub exch}def
+/qa{exch 3 1 roll add 3 1 roll add exch}def
+
+%  Extract point from 8 point array
+%
+/Pt{2 mul dup 8a exch get exch 1 add 8a exch get}def
+
+%  a0 a1 mirrorang ma
+%       If a0 is the angle from p1 to p0 and a1 is the angle from
+%       p1 to p2 then ma is the mirror angle between p0-p1 and p1-p2.
+%  a0 a1 afactor f
+%       If a0 is the angle from p1 to p0 and a1 is the angle from
+%       p1 to p2 then f is the ratio of the inside angle between a0 and a1
+%       and 180 times qB.  This ratio is saturated at 1 and if qB is 0 then
+%       the value returned is always 1.  Thus the more acute the angle 
+%       the smaller the value of f.
+%
+/mirrorang{2 copy add 2 div 3 1 roll sub 0 lt {90} {-90}ifelse add}def
+/afactor{
+    qB 0 eq
+        { 1 }
+        {sub abs dup 180 gt {360 exch sub} if 180 div qB mul
+         dup 1 gt {pop 1} if}
+    ifelse
+}def
+
+%  a d xya x y
+%       Given angle a and distance d
+%       produce x and y offsets.
+%
+/xya{exch 2 copy cos mul 3 1 roll sin mul}def
+
+%  p0 p1 p2 p3  qx  pp1 pp2 pp3
+%       Given 4 points on a curve produce the pp# values needed by
+%       curveto to draw a smooth curve between p1 and p2.  The slope
+%       of the curve at p1 and p2 will be perpendicular to the bisector
+%       of a angle between p0/p1/p2 or p1/p2/p3.
+%
+/qx{
+    8a astore pop
+    1 Pt 2 Pt qs len qA mul /dist exch def
+    1 Pt 0 Pt polar
+    1 Pt 2 Pt polar
+    2 copy mirrorang
+    3 1 roll afactor dist mul
+    xya 1 Pt qa
+    2 Pt 3 Pt polar
+    2 Pt 1 Pt polar
+    2 copy mirrorang
+    3 1 roll afactor dist mul
+    xya 2 Pt qa
+    2 Pt
+}def
+
+/qp{8 copy 16 -2 roll pop pop}def
+/ns1{4 copy 4 -2 roll 2 copy qa 4 2 roll qs 6 2 roll /ns{ns2}def }def
+/ns2{qp qx curveto}def
+
+%  User definitions for curve smoothing routines.
+%       First (ms), intermediate (ns), and last points with (fs) and
+%       without (nsfs) automatic stroke execution.
+%
+/ms{2 copy newpath moveto /ns{ns1}def}def
+/ns{ns1}def
+/fs{stroke}def
+/nsfs{ns 4 copy 2 copy qa 4 2 roll qs qx curveto}def
+/nsend{4 copy 2 copy qa 4 2 roll qs qx curveto}def
+%%EndProlog
+%%%Page ? 1
+72.000000 72.000000 540.000000 72.000000 540.000000 252.000000 72.000000 252.000000 newpath moveto lineto lineto lineto closepath clip
+72.000000 72.000000 540.000000 72.000000 540.000000 252.000000 72.000000 252.000000 newpath moveto lineto lineto lineto closepath clip
+345 75.5294 S9
+[] 1.000000 SL
+345 93.1765 M9
+356.7 93.1765 M9
+356.7 75.5294 M9
+345 75.5294 M9
+gsave
+D9
+grestore
+30.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+350.85 93.1765 S9
+[] 1.000000 SL
+350.85 199.059 M9
+438.6 199.059 M9
+D9
+356.7 75.5294 S9
+[] 1.000000 SL
+356.7 93.1765 M9
+368.4 93.1765 M9
+368.4 75.5294 M9
+356.7 75.5294 M9
+gsave
+D9
+grestore
+30.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+362.55 93.1765 S9
+[] 1.000000 SL
+362.55 185.824 M9
+438.6 185.824 M9
+D9
+368.4 75.5294 S9
+[] 1.000000 SL
+368.4 93.1765 M9
+380.1 93.1765 M9
+380.1 75.5294 M9
+368.4 75.5294 M9
+gsave
+D9
+grestore
+30.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+374.25 93.1765 S9
+[] 1.000000 SL
+374.25 172.588 M9
+438.6 172.588 M9
+D9
+380.1 75.5294 S9
+[] 1.000000 SL
+380.1 93.1765 M9
+391.8 93.1765 M9
+391.8 75.5294 M9
+380.1 75.5294 M9
+gsave
+D9
+grestore
+E9
+385.95 93.1765 S9
+[] 1.000000 SL
+385.95 159.353 M9
+438.6 159.353 M9
+D9
+391.8 75.5294 S9
+[] 1.000000 SL
+391.8 93.1765 M9
+403.5 93.1765 M9
+403.5 75.5294 M9
+391.8 75.5294 M9
+gsave
+D9
+grestore
+30.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+397.65 93.1765 S9
+[] 1.000000 SL
+397.65 146.118 M9
+438.6 146.118 M9
+D9
+403.5 75.5294 S9
+[] 1.000000 SL
+403.5 93.1765 M9
+415.2 93.1765 M9
+415.2 75.5294 M9
+403.5 75.5294 M9
+gsave
+D9
+grestore
+30.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+409.35 93.1765 S9
+[] 1.000000 SL
+409.35 132.882 M9
+438.6 132.882 M9
+D9
+415.2 75.5294 S9
+[] 1.000000 SL
+415.2 93.1765 M9
+426.9 93.1765 M9
+426.9 75.5294 M9
+415.2 75.5294 M9
+gsave
+D9
+grestore
+30.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+421.05 93.1765 S9
+[] 1.000000 SL
+421.05 119.647 M9
+438.6 119.647 M9
+D9
+426.9 75.5294 S9
+[] 1.000000 SL
+426.9 93.1765 M9
+438.6 93.1765 M9
+438.6 75.5294 M9
+426.9 75.5294 M9
+gsave
+D9
+grestore
+E9
+432.75 93.1765 S9
+[] 1.000000 SL
+432.75 106.412 M9
+438.6 106.412 M9
+D9
+391.8 66.7059 S9
+391.8 102 M9
+D9
+150 216.706 S9
+[] 1.000000 SL
+150 234.353 M9
+230.652 234.353 M9
+230.652 216.706 M9
+150 216.706 M9
+gsave
+D9
+grestore
+45.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+230.652 216.706 S9
+[] 1.000000 SL
+230.652 234.353 M9
+245.199 234.353 M9
+245.199 216.706 M9
+230.652 216.706 M9
+gsave
+D9
+grestore
+45.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+245.199 216.706 S9
+[] 1.000000 SL
+245.199 234.353 M9
+247.032 234.353 M9
+247.032 216.706 M9
+245.199 216.706 M9
+gsave
+D9
+grestore
+45.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+247.032 216.706 S9
+[] 1.000000 SL
+247.032 234.353 M9
+250.308 234.353 M9
+250.308 216.706 M9
+247.032 216.706 M9
+gsave
+D9
+grestore
+E9
+250.308 216.706 S9
+[] 1.000000 SL
+250.308 234.353 M9
+303.699 234.353 M9
+303.699 216.706 M9
+250.308 216.706 M9
+gsave
+D9
+grestore
+45.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+303.699 216.706 S9
+[] 1.000000 SL
+303.699 234.353 M9
+311.889 234.353 M9
+311.889 216.706 M9
+303.699 216.706 M9
+gsave
+D9
+grestore
+45.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+311.889 216.706 S9
+[] 1.000000 SL
+311.889 234.353 M9
+315.672 234.353 M9
+315.672 216.706 M9
+311.889 216.706 M9
+gsave
+D9
+grestore
+45.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+315.672 216.706 S9
+[] 1.000000 SL
+315.672 234.353 M9
+316.842 234.353 M9
+316.842 216.706 M9
+315.672 216.706 M9
+gsave
+D9
+grestore
+E9
+150 199.059 S9
+[] 1.000000 SL
+150 216.706 M9
+196.995 216.706 M9
+196.995 199.059 M9
+150 199.059 M9
+gsave
+D9
+grestore
+60.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+196.995 199.059 S9
+[] 1.000000 SL
+196.995 216.706 M9
+200.31 216.706 M9
+200.31 199.059 M9
+196.995 199.059 M9
+gsave
+D9
+grestore
+60.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+200.31 199.059 S9
+[] 1.000000 SL
+200.31 216.706 M9
+201.441 216.706 M9
+201.441 199.059 M9
+200.31 199.059 M9
+gsave
+D9
+grestore
+60.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+201.441 199.059 S9
+[] 1.000000 SL
+201.441 216.706 M9
+204.678 216.706 M9
+204.678 199.059 M9
+201.441 199.059 M9
+gsave
+D9
+grestore
+E9
+204.678 199.059 S9
+[] 1.000000 SL
+204.678 216.706 M9
+219.732 216.706 M9
+219.732 199.059 M9
+204.678 199.059 M9
+gsave
+D9
+grestore
+60.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+219.732 199.059 S9
+[] 1.000000 SL
+219.732 216.706 M9
+224.646 216.706 M9
+224.646 199.059 M9
+219.732 199.059 M9
+gsave
+D9
+grestore
+60.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+224.646 199.059 S9
+[] 1.000000 SL
+224.646 216.706 M9
+226.83 216.706 M9
+226.83 199.059 M9
+224.646 199.059 M9
+gsave
+D9
+grestore
+60.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+226.83 199.059 S9
+[] 1.000000 SL
+226.83 216.706 M9
+227.961 216.706 M9
+227.961 199.059 M9
+226.83 199.059 M9
+gsave
+D9
+grestore
+E9
+150 181.412 S9
+[] 1.000000 SL
+150 199.059 M9
+168.681 199.059 M9
+168.681 181.412 M9
+150 181.412 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+168.681 181.412 S9
+[] 1.000000 SL
+168.681 199.059 M9
+174.492 199.059 M9
+174.492 181.412 M9
+168.681 181.412 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+174.492 181.412 S9
+[] 1.000000 SL
+174.492 199.059 M9
+175.389 199.059 M9
+175.389 181.412 M9
+174.492 181.412 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+175.389 181.412 S9
+[] 1.000000 SL
+175.389 199.059 M9
+178.509 199.059 M9
+178.509 181.412 M9
+175.389 181.412 M9
+gsave
+D9
+grestore
+E9
+178.509 181.412 S9
+[] 1.000000 SL
+178.509 199.059 M9
+184.437 199.059 M9
+184.437 181.412 M9
+178.509 181.412 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+184.437 181.412 S9
+[] 1.000000 SL
+184.437 199.059 M9
+189 199.059 M9
+189 181.412 M9
+184.437 181.412 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+189 181.412 S9
+[] 1.000000 SL
+189 199.059 M9
+190.95 199.059 M9
+190.95 181.412 M9
+189 181.412 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+190.95 181.412 S9
+[] 1.000000 SL
+190.95 199.059 M9
+192.12 199.059 M9
+192.12 181.412 M9
+190.95 181.412 M9
+gsave
+D9
+grestore
+E9
+150 163.765 S9
+[] 1.000000 SL
+150 181.412 M9
+194.421 181.412 M9
+194.421 163.765 M9
+150 163.765 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+194.421 163.765 S9
+[] 1.000000 SL
+194.421 181.412 M9
+196.644 181.412 M9
+196.644 163.765 M9
+194.421 163.765 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+196.644 163.765 S9
+[] 1.000000 SL
+196.644 181.412 M9
+197.931 181.412 M9
+197.931 163.765 M9
+196.644 163.765 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+197.931 163.765 S9
+[] 1.000000 SL
+197.931 181.412 M9
+201.207 181.412 M9
+201.207 163.765 M9
+197.931 163.765 M9
+gsave
+D9
+grestore
+E9
+201.207 163.765 S9
+[] 1.000000 SL
+201.207 181.412 M9
+235.059 181.412 M9
+235.059 163.765 M9
+201.207 163.765 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+235.059 163.765 S9
+[] 1.000000 SL
+235.059 181.412 M9
+240.324 181.412 M9
+240.324 163.765 M9
+235.059 163.765 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+240.324 163.765 S9
+[] 1.000000 SL
+240.324 181.412 M9
+243.249 181.412 M9
+243.249 163.765 M9
+240.324 163.765 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+243.249 163.765 S9
+[] 1.000000 SL
+243.249 181.412 M9
+244.419 181.412 M9
+244.419 163.765 M9
+243.249 163.765 M9
+gsave
+D9
+grestore
+E9
+204.678 190.235 S9
+[] 1.000000 SL
+204.678 225.529 M9
+D9
+178.509 172.588 S9
+178.509 207.882 M9
+D9
+201.207 154.941 S9
+201.207 190.235 M9
+D9
+250.308 207.882 S9
+250.308 243.176 M9
+D9
+150 128.471 S9
+[] 1.000000 SL
+150 146.118 M9
+170.163 146.118 M9
+170.163 128.471 M9
+150 128.471 M9
+gsave
+D9
+grestore
+35.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+170.163 128.471 S9
+[] 1.000000 SL
+170.163 146.118 M9
+173.985 146.118 M9
+173.985 128.471 M9
+170.163 128.471 M9
+gsave
+D9
+grestore
+35.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+173.985 128.471 S9
+[] 1.000000 SL
+173.985 146.118 M9
+177.534 146.118 M9
+177.534 128.471 M9
+173.985 128.471 M9
+gsave
+D9
+grestore
+35.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+177.534 128.471 S9
+[] 1.000000 SL
+177.534 146.118 M9
+194.733 146.118 M9
+194.733 128.471 M9
+177.534 128.471 M9
+gsave
+D9
+grestore
+E9
+194.733 128.471 S9
+[] 1.000000 SL
+194.733 146.118 M9
+224.373 146.118 M9
+224.373 128.471 M9
+194.733 128.471 M9
+gsave
+D9
+grestore
+35.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+224.373 128.471 S9
+[] 1.000000 SL
+224.373 146.118 M9
+249.684 146.118 M9
+249.684 128.471 M9
+224.373 128.471 M9
+gsave
+D9
+grestore
+35.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+249.684 128.471 S9
+[] 1.000000 SL
+249.684 146.118 M9
+250.776 146.118 M9
+250.776 128.471 M9
+249.684 128.471 M9
+gsave
+D9
+grestore
+35.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+250.776 128.471 S9
+[] 1.000000 SL
+250.776 146.118 M9
+251.127 146.118 M9
+251.127 128.471 M9
+250.776 128.471 M9
+gsave
+D9
+grestore
+E9
+150 110.824 S9
+[] 1.000000 SL
+150 128.471 M9
+160.452 128.471 M9
+160.452 110.824 M9
+150 110.824 M9
+gsave
+D9
+grestore
+50.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+160.452 110.824 S9
+[] 1.000000 SL
+160.452 128.471 M9
+162.753 128.471 M9
+162.753 110.824 M9
+160.452 110.824 M9
+gsave
+D9
+grestore
+50.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+162.753 110.824 S9
+[] 1.000000 SL
+162.753 128.471 M9
+166.146 128.471 M9
+166.146 110.824 M9
+162.753 110.824 M9
+gsave
+D9
+grestore
+50.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+166.146 110.824 S9
+[] 1.000000 SL
+166.146 128.471 M9
+183.423 128.471 M9
+183.423 110.824 M9
+166.146 110.824 M9
+gsave
+D9
+grestore
+E9
+183.423 110.824 S9
+[] 1.000000 SL
+183.423 128.471 M9
+210.177 128.471 M9
+210.177 110.824 M9
+183.423 110.824 M9
+gsave
+D9
+grestore
+50.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+210.177 110.824 S9
+[] 1.000000 SL
+210.177 128.471 M9
+232.602 128.471 M9
+232.602 110.824 M9
+210.177 110.824 M9
+gsave
+D9
+grestore
+50.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+232.602 110.824 S9
+[] 1.000000 SL
+232.602 128.471 M9
+234.24 128.471 M9
+234.24 110.824 M9
+232.602 110.824 M9
+gsave
+D9
+grestore
+50.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+234.24 110.824 S9
+[] 1.000000 SL
+234.24 128.471 M9
+234.591 128.471 M9
+234.591 110.824 M9
+234.24 110.824 M9
+gsave
+D9
+grestore
+E9
+150 93.1765 S9
+[] 1.000000 SL
+150 110.824 M9
+153.12 110.824 M9
+153.12 93.1765 M9
+150 93.1765 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+153.12 93.1765 S9
+[] 1.000000 SL
+153.12 110.824 M9
+154.251 110.824 M9
+154.251 93.1765 M9
+153.12 93.1765 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+154.251 93.1765 S9
+[] 1.000000 SL
+154.251 110.824 M9
+157.488 110.824 M9
+157.488 93.1765 M9
+154.251 93.1765 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+157.488 93.1765 S9
+[] 1.000000 SL
+157.488 110.824 M9
+174.726 110.824 M9
+174.726 93.1765 M9
+157.488 93.1765 M9
+gsave
+D9
+grestore
+E9
+174.726 93.1765 S9
+[] 1.000000 SL
+174.726 110.824 M9
+186.309 110.824 M9
+186.309 93.1765 M9
+174.726 93.1765 M9
+gsave
+D9
+grestore
+5.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+186.309 93.1765 S9
+[] 1.000000 SL
+186.309 110.824 M9
+202.611 110.824 M9
+202.611 93.1765 M9
+186.309 93.1765 M9
+gsave
+D9
+grestore
+5.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+202.611 93.1765 S9
+[] 1.000000 SL
+202.611 110.824 M9
+203.196 110.824 M9
+203.196 93.1765 M9
+202.611 93.1765 M9
+gsave
+D9
+grestore
+5.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+203.196 93.1765 S9
+[] 1.000000 SL
+203.196 110.824 M9
+203.547 110.824 M9
+203.547 93.1765 M9
+203.196 93.1765 M9
+gsave
+D9
+grestore
+E9
+150 75.5294 S9
+[] 1.000000 SL
+150 93.1765 M9
+160.803 93.1765 M9
+160.803 75.5294 M9
+150 75.5294 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {pop} SS9 0.900000 G9 E9 0.000000 G9
+160.803 75.5294 S9
+[] 1.000000 SL
+160.803 93.1765 M9
+163.455 93.1765 M9
+163.455 75.5294 M9
+160.803 75.5294 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {pop} SS9 0.500000 G9 E9 0.000000 G9
+163.455 75.5294 S9
+[] 1.000000 SL
+163.455 93.1765 M9
+166.848 93.1765 M9
+166.848 75.5294 M9
+163.455 75.5294 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {pop} SS9 1.000000 G9 E9 0.000000 G9
+166.848 75.5294 S9
+[] 1.000000 SL
+166.848 93.1765 M9
+184.086 93.1765 M9
+184.086 75.5294 M9
+166.848 75.5294 M9
+gsave
+D9
+grestore
+E9
+184.086 75.5294 S9
+[] 1.000000 SL
+184.086 93.1765 M9
+198.633 93.1765 M9
+198.633 75.5294 M9
+184.086 75.5294 M9
+gsave
+D9
+grestore
+20.000000 45.000000 {cross} SS9 0.900000 G9 E9 0.000000 G9
+198.633 75.5294 S9
+[] 1.000000 SL
+198.633 93.1765 M9
+216.846 93.1765 M9
+216.846 75.5294 M9
+198.633 75.5294 M9
+gsave
+D9
+grestore
+20.000000 90.000000 {cross} SS9 0.500000 G9 E9 0.000000 G9
+216.846 75.5294 S9
+[] 1.000000 SL
+216.846 93.1765 M9
+217.509 93.1765 M9
+217.509 75.5294 M9
+216.846 75.5294 M9
+gsave
+D9
+grestore
+20.000000 135.000000 {cross} SS9 1.000000 G9 E9 0.000000 G9
+217.509 75.5294 S9
+[] 1.000000 SL
+217.509 93.1765 M9
+217.86 93.1765 M9
+217.86 75.5294 M9
+217.509 75.5294 M9
+gsave
+D9
+grestore
+E9
+194.733 119.647 S9
+[] 1.000000 SL
+194.733 154.941 M9
+D9
+183.423 102 S9
+183.423 137.294 M9
+D9
+174.726 84.3529 S9
+174.726 119.647 M9
+D9
+184.086 66.7059 S9
+184.086 102 M9
+D9
+initclip 
+10 /Times-Roman SetTxt
+() 0 306 28 TXC
+(system i-cache misses) 0 438.6 195.529 TXL
+(system d-cache misses) 0 438.6 182.294 TXL
+(system wbuffer waits) 0 438.6 169.059 TXL
+(system uncached reads) 0 438.6 155.824 TXL
+(user i-cache misses) 0 438.6 142.588 TXL
+(user d-cache misses) 0 438.6 129.353 TXL
+(user wbuffer waits) 0 438.6 116.118 TXL
+(user uncached reads) 0 438.6 102.882 TXL
+(MCPI) 0 452.25 79.0588 TXL
+(splot-base) 0 146.1 222 TXR
+(0.43) 0 324.642 220.235 TXL
+(splot-nocomp) 0 146.1 204.353 TXR
+(0.20) 0 235.761 202.588 TXL
+(splot-a+nocomp) 0 146.1 186.706 TXR
+(0.11) 0 199.92 184.941 TXL
+(splot-assoc) 0 146.1 169.059 TXR
+(0.24) 0 252.219 167.294 TXL
+(gs-base) 0 146.1 133.765 TXR
+(0.26) 0 258.927 132 TXL
+(gs-nocomp) 0 146.1 116.118 TXR
+(0.22) 0 242.391 114.353 TXL
+(gs-a+nocomp) 0 146.1 98.4706 TXR
+(0.14) 0 211.347 96.7059 TXL
+(gs-assoc) 0 146.1 80.8235 TXR
+(0.17) 0 225.66 79.0588 TXL
+() 0 438.6 185.029 TXL
+() 0 438.6 171.794 TXL
+() 0 438.6 158.559 TXL
+() 0 438.6 145.324 TXL
+() 0 438.6 132.088 TXL
+() 0 438.6 118.853 TXL
+() 0 438.6 105.618 TXL
+() 0 438.6 92.3824 TXL
+() 0 452.25 68.5588 TXL
+() 0 146.1 211.5 TXR
+() 0 324.642 209.735 TXL
+() 0 146.1 193.853 TXR
+() 0 235.761 192.088 TXL
+() 0 146.1 176.206 TXR
+() 0 199.92 174.441 TXL
+() 0 146.1 158.559 TXR
+() 0 252.219 156.794 TXL
+() 0 146.1 123.265 TXR
+() 0 258.927 121.5 TXL
+() 0 146.1 105.618 TXR
+() 0 242.391 103.853 TXL
+() 0 146.1 87.9706 TXR
+() 0 211.347 86.2059 TXL
+() 0 146.1 70.3235 TXR
+() 0 225.66 68.5588 TXL
+72.000000 72.000000 540.000000 72.000000 540.000000 252.000000 72.000000 252.000000 newpath moveto lineto lineto lineto closepath clip
+72.000000 72.000000 540.000000 72.000000 540.000000 252.000000 72.000000 252.000000 newpath moveto lineto lineto lineto closepath clip
+6 SetSym
+initclip 
+showpage
+%%Trailer
+end
+
+%%EndDocument
+ PE 10 /Times-Bold AF
+17323 29996 MT
+(Figure 4-3:)SH
+/Times-Roman SF
+22572 XM
+(Inter-Context Competition, Associativity, and)SH
+/Times-Italic SF
+41183 XM
+(MCPI)SH
+/Times-Roman SF
+(.)SH
+9 SS 
+10337 31537 MT
+(This figure shows the effect competition and self-interference misses)
+141 W( on memory system performance.  Each)140 W
+9720 32551 MT
+(horizontal bar represents total)68 W
+/Times-Italic SF
+20942 XM
+(MCPI)SH
+/Times-Roman SF
+23435 XM
+(for a given experimental run, as in Figure 4-1.  We show four bars for each)68 W
+9720 33565 MT
+(workload: the base system \050)199 W
+/Times-Italic SF
+(bench)SH
+/Times-Roman SF
+(-base\051, without competition \050)199 W
+/Times-Italic SF
+(bench)SH
+/Times-Roman SF
+(-nocomp\051, with associativity and without)198 W
+9720 34579 MT
+(competition \050)21 W
+/Times-Italic SF
+(bench)SH
+/Times-Roman SF
+(-a+nocomp\051, and with associativity \050)21 W
+/Times-Italic SF
+(bench)SH
+/Times-Roman SF
+(-assoc\051. This)
+267 W( figure shows)
+21 W( that both competition and)22 W
+9720 35593 MT
+(self-interference misses have)
+167 W( significant impact on memory system behavior for realistic X11 workloads, par-)166 W
+9720 36607 MT
+(ticularly in the instruction cache.)SH
+11 /Times-Bold AF
+7920 40224 MT
+(4.3. TLB Behavior)SH
+10 /Times-Roman AF
+8920 41421 MT
+(In this section we consider the TLB behavior of the realistic X11 workloads.  Table 4-1 shows TLB)
+25 W( miss data)26 W
+7920 42618 MT
+(for)SH
+/Times-Italic SF
+9405 XM
+(splot)SH
+/Times-Roman SF
+(,)SH
+/Times-Italic SF
+11919 XM
+(gs)SH
+/Times-Roman SF
+(, and)69 W
+/Times-Italic SF
+15139 XM
+(gcc)SH
+/Times-Roman SF
+(. Compared)
+386 W( to other integer workloads, X11 applications have poor TLB behavior.  Both)68 W
+/Times-Italic SF
+7920 43815 MT
+(splot)SH
+/Times-Roman SF
+10365 XM
+(and)SH
+/Times-Italic SF
+12309 XM
+(gs)SH
+/Times-Roman SF
+13698 XM
+(show significantly higher miss rates than)250 W
+/Times-Italic SF
+31808 XM
+(gcc)SH
+/Times-Roman SF
+(, which is relatively)
+250 W( demanding among integer)251 W
+7920 45012 MT
+(workloads [7].  Three phenomena contribute to increased TLB miss rates:)SH
+/Symbol SF
+9710 46465 MT
+(\267)SH
+/Times-Roman SF
+10420 XM
+(The X11 server needs over 200)
+95 W( page mappings to address the entire frame buffer.  Any operation)94 W
+10420 47570 MT
+(that paints a significant part of the screen will tend to flush the TLB.)SH
+/Symbol SF
+9710 49328 MT
+(\267)SH
+/Times-Roman SF
+10420 XM
+(The X11 server,)99 W
+/Times-Italic SF
+17437 XM
+(gs)SH
+/Times-Roman SF
+18675 XM
+(and)SH
+/Times-Italic SF
+20468 XM
+(splot)SH
+/Times-Roman SF
+22762 XM
+(all have relatively large program text.)
+99 W( This)
+450 W( increases the likelihood)100 W
+10420 50433 MT
+(that localities will be spread across multiple text pages,)
+32 W( which in turn increases the demand on TLB)31 W
+10420 51538 MT
+(resources.)SH
+/Symbol SF
+9710 53296 MT
+(\267)SH
+/Times-Roman SF
+10420 XM
+(X11 applications involve)
+29 W( two interacting user contexts, as opposed to one context for)30 W
+/Times-Italic SF
+45137 XM
+(gcc)SH
+/Times-Roman SF
+(. Multiple)310 W
+10420 54401 MT
+(contexts mean more fragmentation and increased competition for limited TLB resources.)SH
+1 SS 
+5760 7920 61266 PB 
+%%BeginDocument: xtlb.ps
+%!PS-Adobe-1.0
+%%Creator: OLIVIA.MACH.CS.CMU.EDU:bchen (Brad Chen)
+%%Title: stdin
+%%CreationDate: Sat Oct 23 19:49:01 1993
+%%DocumentFonts: Times-Roman Times-Italic Times-Bold Symbol Times-Roman DIThacks
+%%%Pages: (atend)
+%%EndComments
+% Start of pscat.pro -- prolog for troff translator
+% Copyright (c) 1985,1987 Adobe Systems Incorporated. All Rights Reserved. 
+% GOVERNMENT END USERS: See Notice file in TranScript library directory
+% -- probably /usr/lib/ps/Notice
+% RCS: $Header: pscat.pro,v 2.2 91/02/21 18:00:13 ern Exp $
+%
+% HISTORY
+% $Log: pscat.pro,v $
+% Revision 2.2  91/02/21  18:00:13  ern
+%       orig
+%       [91/02/20  15:27:53  ern]
+% 
+%
+save /pscatsave exch def
+/$pscat 50 dict def
+$pscat begin
+/fm [1 0 0 1 0 0] def
+/xo 0 def /yo 0 def
+/M /moveto load def
+/R /show load def
+/S {exch currentpoint exch pop moveto show}def
+/T {exch currentpoint pop exch moveto show}def
+/U {3 1 roll moveto show}def
+/siz 0 def
+/font 0 def
+/Z {/siz exch def SF}def
+/F {/font exch def SF}def
+/SF{font 0 ne
+    {catfonts font 1 sub get fm 0 siz put fm 3 siz neg put 
+     fm makefont setfont}if}def
+/BP{save/catsv exch def 0 792 translate 72 432 div dup neg scale 
+  xo yo translate 0 0 moveto}def
+/EP{catsv restore showpage}def
+
+% definitions for PPROC callback functions
+% each PPROC is called with the following number on the stack:
+% pointsize charcode railmag pswidth pschar x y wid
+/$pprocs 50 dict def
+/fractm [.65 0 0 .6 0 0] def
+% fractions
+/PS1{gsave $pprocs begin
+    /wid exch def pop pop pop pop pop /ch exch def /size exch def
+    /pair $pprocs ch get def /cf currentfont def
+    cf fractm makefont setfont
+    0 .3 size mul 6 mul 2 copy neg rmoveto pair 0 get show rmoveto
+    currentfont cf setfont (\244) show setfont
+    pair 1 get show grestore wid .06 div 0 rmoveto end}def
+$pprocs begin
+8#34 [(1)(4)] def
+8#36 [(1)(2)] def
+8#46 [(3)(4)] def
+end
+% DIThacks fonts for some special chars
+50 dict dup begin
+/FontType 3 def
+/FontName /DIThacks def
+/FontMatrix [.001 0.0 0.0 .001 0.0 0.0] def
+/FontBBox [-220 -280 900 900] def% a lie but ...
+/Encoding 256 array def
+0 1 255{Encoding exch /.notdef put}for
+Encoding
+ dup 8#040/space put %space
+ dup 8#110/rc put %right ceil
+ dup 8#111/lt put %left  top curl
+ dup 8#112/bv put %bold vert
+ dup 8#113/lk put %left  mid curl
+ dup 8#114/lb put %left  bot curl
+ dup 8#115/rt put %right top curl
+ dup 8#116/rk put %right mid curl
+ dup 8#117/rb put %right bot curl
+ dup 8#120/rf put %right floor
+ dup 8#121/lf put %left  floor
+ dup 8#122/lc put %left  ceil
+ dup 8#140/sq put %square
+ dup 8#141/bx put %box
+ dup 8#142/ci put %circle
+ dup 8#143/br put %box rule
+ dup 8#144/rn put %root extender
+ dup 8#145/vr put %vertical rule
+ dup 8#146/ob put %outline bullet
+ dup 8#147/bu put %bullet
+ dup 8#150/ru put %rule
+ dup 8#151/ul put %underline
+ pop
+/DITfd 100 dict def
+/BuildChar{0 begin
+ /cc exch def /fd exch def
+ /charname fd /Encoding get cc get def
+ /charwid fd /Metrics get charname get def
+ /charproc fd /CharProcs get charname get def
+ charwid 0 fd /FontBBox get aload pop setcachedevice
+ 40 setlinewidth
+ newpath 0 0 moveto gsave charproc grestore
+ end}def
+/BuildChar load 0 DITfd put
+%/UniqueID 5 def
+/CharProcs 50 dict def
+CharProcs begin
+/space{}def
+/.notdef{}def
+/ru{500 0 rls}def
+/rn{0 750 moveto 500 0 rls}def
+/vr{20 800 moveto 0 -770 rls}def
+/bv{20 800 moveto 0 -1000 rls}def
+/br{20 770 moveto 0 -1040 rls}def
+/ul{0 -250 moveto 500 0 rls}def
+/ob{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath stroke}def
+/bu{200 250 rmoveto currentpoint newpath 200 0 360 arc closepath fill}def
+/sq{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath stroke}def
+/bx{80 0 rmoveto currentpoint dround newpath moveto
+    640 0 rlineto 0 640 rlineto -640 0 rlineto closepath fill}def
+/ci{355 333 rmoveto currentpoint newpath 333 0 360 arc
+    50 setlinewidth stroke}def
+
+/lt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 add exch s4 a4p stroke}def
+/lb{20 800 moveto 0 -550 rlineto currx -200 2cx s4 add exch s4 a4p stroke}def
+/rt{20 -200 moveto 0 550 rlineto currx 800 2cx s4 sub exch s4 a4p stroke}def
+/rb{20 800 moveto 0 -500 rlineto currx -200 2cx s4 sub exch s4 a4p stroke}def
+/lk{20 800 moveto 20 300 -280 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/rk{20 800 moveto 20 300 320 300 s4 arcto pop pop 1000 sub
+    currentpoint stroke moveto
+    20 300 4 2 roll s4 a4p 20 -200 lineto stroke}def
+/lf{20 800 moveto 0 -1000 rlineto s4 0 rls}def
+/rf{20 800 moveto 0 -1000 rlineto s4 neg 0 rls}def
+/lc{20 -200 moveto 0 1000 rlineto s4 0 rls}def
+/rc{20 -200 moveto 0 1000 rlineto s4 neg 0 rls}def
+end
+
+/Metrics 50 dict def Metrics begin
+/.notdef 0 def
+/space 500 def
+/ru 500 def
+/br 0 def
+/lt 250 def
+/lb 250 def
+/rt 250 def
+/rb 250 def
+/lk 250 def
+/rk 250 def
+/rc 250 def
+/lc 250 def
+/rf 250 def
+/lf 250 def
+/bv 250 def
+/ob 350 def
+/bu 350 def
+/ci 750 def
+/bx 750 def
+/sq 750 def
+/rn 500 def
+/ul 500 def
+/vr 0 def
+end
+
+DITfd begin
+/s2 500 def /s4 250 def /s3 333 def
+/a4p{arcto pop pop pop pop}def
+/2cx{2 copy exch}def
+/rls{rlineto stroke}def
+/currx{currentpoint pop}def
+/dround{transform round exch round exch itransform} def
+end
+end
+/DIThacks exch definefont pop
+/xo -475 def /yo 4536 def
+/catfonts [
+        /Times-Roman findfont
+        /Times-Italic findfont
+        /Times-Bold findfont
+        /Symbol findfont
+        /Times-Roman findfont
+        /DIThacks findfont
+        ] def
+%%EndProlog
+%%%Page: ? 1
+BP
+6 F
+60 Z
+1446 -69(iiiiiiiiiiiiiiiiiiiiiiiiii)U
+1446 3(i)U
+1 F
+6(wo)T
+1552(r)S
+1575(k)S
+1608(lo)S
+1658(ad)S
+1809(u)S
+1844(se)S
+1899(r)S
+2012(sys)S
+2092(t)S
+2112(e)S
+2142(m)S
+6 F
+1475 3(iiiiiiiiiiiiiiiiiiiiiiiii)U
+1 F
+1592 78(sp)U
+1649(lo)S
+1699(t)S
+1809(1)S
+1841(.)S
+1858(5)S
+1890(8)S
+2047(0)S
+2079(.)S
+2096(2)S
+2128(8)S
+1664 144(gs)U
+1809(1)S
+1841(.)S
+1858(4)S
+1890(9)S
+2047(0)S
+2079(.)S
+2096(1)S
+2128(4)S
+2128 210(7)U
+6 F
+1446 207(i)U
+1 F
+1635 210(gcc)U
+1809(1)S
+1841(.)S
+1858(1)S
+1890(1)S
+2047(0)S
+2079(.)S
+2096(0)S
+6 F
+1475 207(iiiiiiiiiiiiiiiiiiiiiiiii)U
+1446(c)S
+171(c)T
+111(c)T
+51(c)T
+-9(c)T
+1764 207(c)U
+171(c)T
+111(c)T
+51(c)T
+-9(c)T
+2225 207(c)U
+171(c)T
+111(c)T
+51(c)T
+-9(c)T
+EP
+%%Trailer
+pscatsave end restore
+%%%Pages: 1
+
+%%EndDocument
+ PE 10 /Times-Bold AF
+21239 62876 MT
+(Table 4-1:)SH
+/Times-Roman SF
+26100 XM
+(TLB Misses per 1000 instructions.)SH
+9 SS 
+10337 64417 MT
+(System TLB misses include misses to both user and system segments.)SH
+10 SS 
+8920 66208 MT
+(During the run of)50 W
+/Times-Italic SF
+16341 XM
+(splot)SH
+/Times-Roman SF
+(, 280000 user TLB misses occurred.  There)
+50 W( were about 680000 during)49 W
+/Times-Italic SF
+47209 XM
+(gs)SH
+/Times-Roman SF
+(. Estimating)348 W
+7920 67405 MT
+(20 cycles to service a TLB miss)
+20 W( [21],)
+SH( the penalty for TLB faults is less than 0.04 CPI for both workloads.  Thus,)20 W
+7920 68602 MT
+(the impact on overall performance is not significant for the memory system we simulated.)SH
+30350 75600 MT
+(9)SH
+ES
+%%Page: 10 10
+BS
+0 SI
+10 /Times-Roman AF
+8920 8606 MT
+(The impact of the TLB on overall performance is dependent on the)
+79 W( performance balance of memory system)78 W
+7920 9803 MT
+(components. Processors)
+335 W( such as the DEC Alpha 21064)
+43 W( [2])
+SH( rely on fewer TLB entries with larger and oversized)43 W
+7920 11000 MT
+(pages to achieve good TLB behavior.  If software systems such as X11 don't make)
+160 W( good use of these new)159 W
+7920 12197 MT
+(features, miss rates will go up, increasing the impact of the TLB on overall performance.  Also,)
+21 W( the penalty for a)22 W
+7920 13394 MT
+(single TLB miss could increase.)
+50 W( An)
+348 W( earlier study used 100 cycles as an estimate of the TLB miss penalty for a)49 W
+7920 14591 MT
+(futuristic machine)
+66 W( [8].)
+SH( As)
+382 W( the balance)
+66 W( of TLB to cache resources changes, TLB performance could become an)67 W
+7920 15788 MT
+(important issue.  X11 workloads require)
+11 W( more TLB resources than popular benchmarks such as)10 W
+/Times-Italic SF
+46419 XM
+(gcc)SH
+/Times-Roman SF
+(. If)
+270 W( computer)10 W
+7920 16985 MT
+(systems are designed to optimize the performance of the popular benchmarks, systems such as X11 can)
+174 W( be)175 W
+7920 18182 MT
+(expected to suffer.)SH
+8920 19878 MT
+(Our measurements show degraded)
+176 W( TLB behavior for X11 workloads as compared to other integer codes.)175 W
+7920 21075 MT
+(Researchers at the University of Michigan)
+185 W( [21])
+SH( measured similar TLB behavior for the Mach 3.0)
+185 W( operating)186 W
+7920 22272 MT
+(system [1, 13],)
+SH( another system where a user-level server contributes significantly)
+112 W( to overall activity.  The two)111 W
+7920 23469 MT
+(independent studies suggest a broader conclusion, that)
+15 W( page behavior for user-level client/server systems induces)16 W
+7920 24666 MT
+(substantially elevated TLB miss rates.)SH
+8920 26362 MT
+(As a final note, competition)
+22 W( also affects TLB behavior.  In our measurements, competition accounted for 60%)21 W
+7920 27559 MT
+(of user TLB misses in)108 W
+/Times-Italic SF
+17543 XM
+(splot)SH
+/Times-Roman SF
+19846 XM
+(and 30% of user TLB misses in)108 W
+/Times-Italic SF
+33463 XM
+(gs)SH
+/Times-Roman SF
+(. Note)
+468 W( that additional associativity can't help)109 W
+7920 28756 MT
+(here, as the DECstation 5000/200 TLB is already fully associative.)SH
+12 /Times-Bold AF
+7920 32440 MT
+(5. Conclusions)SH
+10 /Times-Roman AF
+8920 33637 MT
+(Memory system behavior for X11 workloads differs significantly from the batch-mode programs)
+151 W( typically)150 W
+7920 34834 MT
+(used in memory system studies.  With)
+34 W( large program text, a large mapped frame buffer, and multiple competing)35 W
+7920 36031 MT
+(contexts, they can present a far greater load on instruction caches and TLBs than typical throughput benchmarks.)SH
+8920 37727 MT
+(Cache associativity and)
+31 W( TLB size are sensitive issues for hardware designers.  For many machines, increasing)30 W
+7920 38924 MT
+(these parameters would have direct impact on machine cycle time,)
+159 W( the principle metric driving performance)160 W
+7920 40121 MT
+(improvements in microprocessors.  As machine)
+441 W( cycle time dominates performance for many current)440 W
+7920 41318 MT
+(benchmarks, there is a potential conflict between high throughput for benchmarks, and)
+141 W( low latency for large)142 W
+7920 42515 MT
+(client/server systems.  Optimal throughput and optimal latency may not be possible in the same machine.)SH
+8920 44211 MT
+(Our measurements are specific to X11 clients and server, but similar behavior can be expected in)
+202 W( other)201 W
+7920 45408 MT
+(client/server systems.  Instruction cache and TLB)
+237 W( behavior is aggravated by large user text, frequent and)238 W
+7920 46605 MT
+(mandatory context switches, and multiple active contexts.)
+102 W( Any)
+453 W( system with these characteristic will probably)101 W
+7920 47802 MT
+(have similar behavior.  In systems with multiple heavy-weight servers, contention for memory system)
+38 W( resources)39 W
+7920 48999 MT
+(will be even more intense.)SH
+12 /Times-Bold AF
+7920 52683 MT
+(6. Acknowledgements)SH
+10 /Times-Roman AF
+8920 53880 MT
+(Thanks to Norm Jouppi who first)
+130 W( suggested looking at X11.  Brian Bershad and Doug Tygar made useful)129 W
+7920 55077 MT
+(comments on the text.  Joel McCormick answered questions about X11.  David Wall provided the initial)
+23 W( version)24 W
+7920 56274 MT
+(of)SH
+/Times-Italic SF
+9200 XM
+(epoxie)SH
+/Times-Roman SF
+(. The)
+644 W( design of the tracing system is based on prior work by Anita Borg, and her contributions)196 W
+7920 57471 MT
+(continued throughout this project.  Thanks also to Digital Equipment Corporation for their generous support.)SH
+12 /Times-Bold AF
+7920 61155 MT
+(References)SH
+10 SS 
+7920 62946 MT
+(1.)SH
+/Times-Roman SF
+9170 XM
+(Michael J. Accetta, Robert V. Baron, William Bolosky, David B. Golub, Richard F. Rashid, Avadis)SH
+7920 64051 MT
+(Tevanian, Jr., and Michael W. Young.  Mach: A New Kernel Foundation for Unix Development.  Proceedings of)SH
+7920 65156 MT
+(the Summer 1986 USENIX Conference, July, 1986, pp. 93-113.)SH
+/Times-Bold SF
+7920 66947 MT
+(2.)SH
+/Times-Roman SF
+9170 XM
+(Digital Equipment Corporation.  Digital's 21064 Microprocessor.  Data sheet.)SH
+/Times-Bold SF
+7920 68738 MT
+(3.)SH
+/Times-Roman SF
+9170 XM
+(Brian N. Bershad, Richard P. Draves, and Alessandro Forin.  Using Microbenchmarks to Evaluate System)SH
+7920 69843 MT
+(Performance. The)
+250 W( Proceedings of the Third Workshop on Workstation Operating Systems, April, 1992, pp.)SH
+7920 70948 MT
+(148-153.)SH
+30100 75600 MT
+(10)SH
+ES
+%%Page: 11 11
+BS
+0 SI
+10 /Times-Bold AF
+7920 8606 MT
+(4.)SH
+/Times-Roman SF
+9170 XM
+(Anita Borg, R.E. Kessler, Georgia Lazana, and David Wall.  Long Address Traces from RISC Machines:)SH
+7920 9711 MT
+(Generation and Analysis.  WRL Research Report 89/14, Digital Equipment Corporation Western Research)SH
+7920 10816 MT
+(Laboratory, 1989.)SH
+/Times-Bold SF
+7920 12607 MT
+(5.)SH
+/Times-Roman SF
+9170 XM
+(J.R. Boyton, S.L. Chakrabarti, S.P. Hiebert, J.J. Lang, J.R. Owen, K.A. Marchington, P.R. Robinson, M.H.)SH
+7920 13712 MT
+(Stroyan, J.A. Waitz.  "Sharing access to display resources in the Starbase/X11 Merge".)SH
+/Times-Italic SF
+43202 XM
+(Hewlett Packard)SH
+7920 14817 MT
+(Journal 40)SH
+/Times-Roman SF
+(, 6 \050December 1989\051, 20-32.)SH
+/Times-Bold SF
+7920 16608 MT
+(6.)SH
+/Times-Roman SF
+9170 XM
+(Kenneth H. Bronstein, David J. Sweetser, and William R. Yoder.  "System design for compatibility of a)SH
+7920 17713 MT
+(high-performance graphics library and the X Window System.".)SH
+/Times-Italic SF
+34073 XM
+(Hewlett Packard Journal 40)SH
+/Times-Roman SF
+(, 6 \050December)SH
+7920 18818 MT
+(1989\051, 6-10. .)SH
+/Times-Bold SF
+7920 20609 MT
+(7.)SH
+/Times-Roman SF
+9170 XM
+(J. Bradley Chen and Brian N. Bershad.  The Impact of Operating System Structure on Memory System)SH
+7920 21714 MT
+(Performance. Proceedings)
+250 W( of the 14th ACM Symposium on Operating System Principles, December, 1993.)SH
+/Times-Bold SF
+7920 23505 MT
+(8.)SH
+/Times-Roman SF
+9170 XM
+(J. Bradley Chen, Anita Borg, and Norman P. Jouppi.  A Simulation Based Study of TLB Performance.  The)SH
+7920 24610 MT
+(Proceedings of the 19th Annual International Symposium on Computer Architecture, May, 1992, pp. 114-123.)SH
+/Times-Bold SF
+7920 26401 MT
+(9.)SH
+/Times-Roman SF
+9170 XM
+(H. Davis, S.R. Goldschmidt, and J. Hennessy.  Tango: A Multiprocessor Simulation and Tracing System.)SH
+7920 27506 MT
+(Proceedings of the International Conference on Parallel Processing, August, 1991, pp. 99-107.)SH
+/Times-Bold SF
+7920 29297 MT
+(10.)SH
+/Times-Roman SF
+9670 XM
+(Jeffrey D. Gee, Mark D. Hill, Dionisios N. Pnevmatikatos, and Alan Jay Smith.  Cache Performance of the)SH
+7920 30402 MT
+(SPEC Benchmark Suite.  University of Wisconsin-Madison, 1991.)SH
+/Times-Bold SF
+7920 32193 MT
+(11.)SH
+/Times-Roman SF
+9670 XM
+(Aaron Goldberg and John Hennessy.  MTOOL: A Method for Detecting Memory Bottlenecks.  WRL)SH
+7920 33298 MT
+(Technical Note TN-17, Digital Equipment Corporation Western Research Laboratory, 1990.)SH
+/Times-Bold SF
+7920 35089 MT
+(12.)SH
+/Times-Roman SF
+9670 XM
+(Aaron J. Goldberg and John L. Hennessy.  "MTOOL: An Integrated System for Performance Debugging)SH
+7920 36194 MT
+(Shared Memory Multiprocessor Applications".)SH
+/Times-Italic SF
+27215 XM
+(IEEE Transactions on Parallel Processing 4)SH
+/Times-Roman SF
+(, 1 \050January 1993\051,)SH
+7920 37299 MT
+(28-40.)SH
+/Times-Bold SF
+7920 39090 MT
+(13.)SH
+/Times-Roman SF
+9670 XM
+(David Golub, Randall Dean, Alessandro Forin and Richard Rashid.  UNIX as an Application Program.)SH
+7920 40195 MT
+(Proceedings of the Summer 1990 USENIX Conference, June, 1990, pp. 87-95.)SH
+/Times-Bold SF
+7920 41986 MT
+(14.)SH
+/Times-Roman SF
+9670 XM
+(John L. Hennessy and David A. Patterson.)SH
+/Times-Italic SF
+27140 XM
+(Computer Architecture: A Quantitative Approach.)SH
+/Times-Roman SF
+47777 XM
+(Morgan)SH
+7920 43091 MT
+(Kaufmann, Palo Alto, CA, 1990.)SH
+/Times-Bold SF
+7920 44882 MT
+(15.)SH
+/Times-Roman SF
+9670 XM
+(Margaret Martonosi, Anoop Gupta, and Thomas Anderson.  MemSpy, Analyzing Memory System Bot-)SH
+7920 45987 MT
+(tlenecks in Programs.  Proceedings of the 1992 ACM SIGMETRICS Conference on Measurement and Modeling)SH
+7920 47092 MT
+(of Computer Systems, June, 1992, pp. 1-12.)SH
+/Times-Bold SF
+7920 48883 MT
+(16.)SH
+/Times-Roman SF
+9670 XM
+(Joel McCormack.  Writing Fast X Servers for Dumb Color Frame Buffers.  WRL Research Report 91/1,)SH
+7920 49988 MT
+(Digital Equipment Corporation Western Research Laboratory, 1991.)SH
+/Times-Bold SF
+7920 51779 MT
+(17.)SH
+/Times-Roman SF
+9670 XM
+(Joel McCormack and Bob McNamara.  A Smart Frame Buffer.  WRL Research Report 93/1, Digital)SH
+7920 52884 MT
+(Equipment Corporation Western Research Laboratory, 1993.)SH
+/Times-Bold SF
+7920 54675 MT
+(18.)SH
+/Times-Roman SF
+9670 XM
+(Scott McFarling.  Program Optimization for Instruction Caches.  The Proceedings of the Third International)SH
+7920 55780 MT
+(Conference on Architectural Support for Programming Languages and Operating Systems, April, 1989, pp.)SH
+7920 56885 MT
+(183-191.)SH
+/Times-Bold SF
+7920 58676 MT
+(19.)SH
+/Times-Roman SF
+9670 XM
+(Jeffrey C. Mogul and Anita Borg.  The Effect of Context Switches on Cache Performance.  The Proceedings)SH
+7920 59781 MT
+(of the Fourth International Conference on Architectural Support for Programming Languages and Operating)SH
+7920 60886 MT
+(Systems, April, 1991, pp. 75-84.)SH
+/Times-Bold SF
+7920 62677 MT
+(20.)SH
+/Times-Roman SF
+9670 XM
+(Jeffrey C. Mogul.  SPECmarks are leading us astray.  The Third Workshop on Workstation Operating)SH
+7920 63782 MT
+(Systems, April, 1992, pp. 160-161.)SH
+/Times-Bold SF
+7920 65573 MT
+(21.)SH
+/Times-Roman SF
+9670 XM
+(David Nagle, Richard Uhlig, Tim Stanley, Stuart Sechrest, Trevor Mudge and Richard Brown.  Design)SH
+7920 66678 MT
+(Tradeoffs for Software-Managed TLBs.  Proceedings of the 20th Annual International Symposium on Computer)SH
+7920 67783 MT
+(Architecture, May, 1993, pp. 27-38.)SH
+30100 75600 MT
+(11)SH
+ES
+%%Page: 12 12
+BS
+0 SI
+10 /Times-Bold AF
+7920 8606 MT
+(22.)SH
+/Times-Roman SF
+9670 XM
+(J.L. Peterson.  XSCOPE: a debugging and PERFORMANCE tool for X11.  Proceedings of the IFIP 11th)SH
+7920 9711 MT
+(World Computer Congress, September, 1989, pp. 49-54.)SH
+/Times-Bold SF
+7920 11502 MT
+(23.)SH
+/Times-Italic SF
+9670 XM
+(SPEC Benchmark Suite Release 1.0.)SH
+/Times-Roman SF
+24973 XM
+(System Performance Evaluation Cooperative, 1989.)SH
+/Times-Bold SF
+7920 13293 MT
+(24.)SH
+/Times-Roman SF
+9670 XM
+(David W. Wall.  Systems for Late Code Modification.  In)SH
+/Times-Italic SF
+32945 XM
+(Code Generation --- Concepts, Tools, Techniques)SH
+/Times-Roman SF
+(,)SH
+7920 14398 MT
+(Springer-Verlag, 1992, pp. 275-293.)SH
+/Times-Bold SF
+7920 18649 MT
+(J. Bradley Chen)182 W
+/Times-Roman SF
+15633 XM
+(is presently completing a PhD in Computer Science)
+182 W( at Carnegie Mellon University.  His)183 W
+7920 19846 MT
+(interests include operating systems, memory systems, and)
+38 W( issues relating to the design and performance of large)37 W
+7920 21043 MT
+(software systems.  He received BS and MS degrees in 1987 from Stanford University.)SH
+30100 75600 MT
+(12)SH
+ES
+%%Page: i 13
+BS
+0 SI
+12 /Times-Bold AF
+26033 8724 MT
+(Table of Contents)SH
+11 SS 
+9570 9892 MT
+(1. Introduction)SH
+52730 XM
+(1)SH
+10 SS 
+11420 10972 MT
+(1.1. Related Work)SH
+52780 XM
+(2)SH
+11 SS 
+9570 12140 MT
+(2. Tracing and Simulation)SH
+52730 XM
+(3)SH
+9570 13308 MT
+(3. Workloads)SH
+52730 XM
+(4)SH
+9570 14476 MT
+(4. Experiments and Analysis)SH
+52730 XM
+(5)SH
+10 SS 
+11420 15556 MT
+(4.1. Memory Cycles Per Instruction)SH
+52780 XM
+(5)SH
+11420 16636 MT
+(4.2. Cache Effects)SH
+52780 XM
+(7)SH
+13420 17716 MT
+(4.2.1. Inter-Context Competition)SH
+52780 XM
+(7)SH
+13420 18796 MT
+(4.2.2. Self-Interference misses)SH
+52780 XM
+(8)SH
+13420 19876 MT
+(4.2.3. Summary)SH
+52780 XM
+(8)SH
+11420 20956 MT
+(4.3. TLB Behavior)SH
+52780 XM
+(9)SH
+11 SS 
+9570 22124 MT
+(5. Conclusions)SH
+52180 XM
+(10)SH
+9570 23292 MT
+(6. Acknowledgements)SH
+52180 XM
+(10)SH
+9570 24460 MT
+(References)SH
+52180 XM
+(10)SH
+10 /Times-Roman AF
+30461 75600 MT
+(i)SH
+ES
+%%Page: ii 14
+BS
+0 SI
+12 /Times-Bold AF
+26866 8724 MT
+(List of Figures)SH
+11 SS 
+9570 9892 MT
+(Figure 4-1:)
+SH( Baseline)550 W
+/Times-BoldItalic SF
+19805 XM
+(MCPI)SH
+/Times-Bold SF
+(.)SH
+52730 XM
+(6)SH
+9570 11060 MT
+(Figure 4-2:)SH
+/Times-BoldItalic SF
+15618 XM
+(MCPI)SH
+/Times-Bold SF
+18705 XM
+(with and without inter-context competition.)SH
+52730 XM
+(8)SH
+9570 12228 MT
+(Figure 4-3:)
+SH( Inter-Context)
+550 W( Competition, Associativity, and)SH
+/Times-BoldItalic SF
+37370 XM
+(MCPI)SH
+/Times-Bold SF
+(.)SH
+52730 XM
+(9)SH
+10 /Times-Roman AF
+30322 75600 MT
+(ii)SH
+ES
+%%Page: iii 15
+BS
+0 SI
+12 /Times-Bold AF
+27099 8724 MT
+(List of Tables)SH
+11 SS 
+9570 9892 MT
+(Table 2-1:)
+SH( Memory)
+550 W( system simulation parameters.)SH
+52730 XM
+(3)SH
+9570 11060 MT
+(Table 3-1:)
+SH( Experimental)
+550 W( workloads.  Times are in seconds.)SH
+52730 XM
+(4)SH
+9570 12228 MT
+(Table 3-2:)
+SH( Instruction)
+550 W( and Data Reference Counts)SH
+52730 XM
+(5)SH
+9570 13396 MT
+(Table 4-1:)
+SH( TLB)
+550 W( Misses per 1000 instructions.)SH
+52730 XM
+(9)SH
+10 /Times-Roman AF
+30183 75600 MT
+(iii)SH
+ES
+%%Trailer
+%%Pages: 15
+%%DocumentFonts: Times-Roman Times-Italic Times-Bold Symbol Courier Times-BoldItalic

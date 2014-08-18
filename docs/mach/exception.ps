@@ -1,0 +1,2546 @@
+%!PS-Adobe-2.0
+%%Title: exception.mss
+%%DocumentFonts: (atend)
+%%Creator: Mary Thompson and Scribe 7(1700)
+%%CreationDate: 10 March 1994 12:09
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale
+    /showpage {} def
+    /letter {} def
+    /lettersmall {} def
+    /note {} def
+    } bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: ? 1
+BS
+0 SI
+13 /Helvetica-Bold AF
+18935 8148 MT
+(The Mach Exception Handling Facility)SH
+10 /Helvetica AF
+21124 10681 MT
+(David L. Black, David B. Golub, Karl Hauth)SH
+8 SS 
+29571 11478 MT
+(1)SH
+10 SS 
+22179 11829 MT
+(Avadis Tevanian)SH
+30294 XM
+(, and Richard Sanzi)SH
+23736 14115 MT
+(Computer Science Department)SH
+24626 15258 MT
+(Carnegie Mellon University)SH
+25875 16401 MT
+(Pittsburgh, PA 15213)SH
+12 /Helvetica-Bold AF
+7200 20156 MT
+(1. Introduction)SH
+10 /Helvetica AF
+8312 21299 MT
+(Exceptions are caused by the occurrence of unusual conditions during program)
+90 W( execution; raising an)89 W
+7200 22442 MT
+(exception invokes the operating system to)
+47 W( manage recovery from the unusual condition.  Although many)48 W
+7200 23585 MT
+(exceptions can be handled and dismissed transparently)
+171 W( to the user \050e.g. page faults\051, some must be)170 W
+7200 24728 MT
+(exported in some form \050invoke handler, core dump,)
+17 W( etc.\051.  This paper concerns the design and implemen-)18 W
+7200 25871 MT
+(tation of exception handling facilities that)
+99 W( perform this exporting for general purpose operating systems.)98 W
+7200 27014 MT
+(We discuss both the overall design principles for these facilities and the)
+100 W( specific design and implemen-)101 W
+7200 28157 MT
+(tation of an exception handling facility for the Mach)
+108 W( [1])
+SH( operating system.)
+108 W( We)
+493 W( also discuss the support)107 W
+7200 29300 MT
+(provided to applications that use exceptions \050e.g. debuggers\051 by this facility and)
+238 W( other Mach kernel)239 W
+7200 30443 MT
+(facilities.)SH
+8312 32727 MT
+(Mach supports debuggers via a)
+121 W( combination of independent kernel facilities instead of concentrating)120 W
+7200 33870 MT
+(debugger support in a single kernel component \050e.g. ptrace\051.  This)
+376 W( approach avoids duplicating)377 W
+7200 35013 MT
+(functionality within the kernel by designing debugger support facilities)
+64 W( to allow use by other applications.)63 W
+7200 36156 MT
+(This results in increased)
+115 W( flexibility and functionality which benefits all applications using these facilities,)116 W
+7200 37299 MT
+(including debuggers.  In addition the kernel is simplified by the)
+119 W( corresponding reduction in special pur-)118 W
+7200 38442 MT
+(pose debugger support code.)SH
+8312 40726 MT
+(The independence and network transparency)
+121 W( properties of Mach's communication facility \050Mach ipc\051)122 W
+7200 41869 MT
+(also provide)
+138 W( additional debugging functionality.  Mach ipc is used to implement not only the exception)137 W
+7200 43012 MT
+(handling facility, but also the interfaces to all Mach kernel facilities.  The independence and network)189 W
+7200 44155 MT
+(transparency properties separate applications from the servers \050including the kernel\051 that)
+243 W( implement)242 W
+7200 45298 MT
+(facilities. This)
+286 W( separation supports parallel and)
+4 W( distributed debugging by removing restrictions on relation-)5 W
+7200 46441 MT
+(ships between)
+146 W( debuggers and other applications, and by allowing components of both debuggers and)145 W
+7200 47584 MT
+(applications to be distributed over a network without change.)SH
+8312 49868 MT
+(The remainder of this paper has the following structure.  We begin with an introduction to the Mach)121 W
+7200 51011 MT
+(system and a review of exceptions and their uses including previous work in this area.  We then)
+28 W( describe)27 W
+7200 52154 MT
+(a general model for exception handling and use it to design)
+127 W( the Mach exception handling facility.  Ad-)128 W
+7200 53297 MT
+(ditional sections discuss the implementation of applications that use)
+9 W( exceptions with particular attention to)8 W
+7200 54440 MT
+(debuggers. We)
+278 W( conclude by describing a debugger that has been implemented using this facility.)SH
+12 /Helvetica-Bold AF
+7200 58195 MT
+(2. The Mach System)SH
+10 /Helvetica AF
+8312 59338 MT
+(Mach is)
+162 W( a multiprocessor operating system under development at Carnegie-Mellon University.  It is)163 W
+7200 60481 MT
+(based on a simple communication-oriented kernel that)
+108 W( exports a small number of abstractions to users)107 W
+7200 61624 MT
+(via an integrated interface; many traditional operating system functions are implemented)
+352 W( by user)353 W
+7200 62767 MT
+(programs or servers outside the kernel.  The kernel)
+98 W( itself exports exactly five abstractions to users, the)97 W
+/Helvetica-Oblique SF
+7200 63910 MT
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+9779 XM
+(thread)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+13359 XM
+(port)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+15827 XM
+(message)SH
+/Helvetica SF
+(, and)189 W
+/Helvetica-Oblique SF
+22764 XM
+(memory object)189 W
+/Helvetica SF
+(. Of)
+658 W( these the)190 W
+/Helvetica-Oblique SF
+37020 XM
+(memory object)190 W
+/Helvetica SF
+44235 XM
+(is not relevant to the)190 W
+7200 65053 MT
+(subject matter of this paper.)SH
+8312 67337 MT
+(Mach splits the traditional notion of a process into)
+21 W( the)20 W
+/Helvetica-Oblique SF
+32365 XM
+(task)SH
+/Helvetica SF
+34497 XM
+(and)SH
+/Helvetica-Oblique SF
+36463 XM
+(thread)SH
+/Helvetica SF
+39596 XM
+(abstractions. A)318 W
+/Helvetica-Oblique SF
+46826 XM
+(task)SH
+/Helvetica SF
+48958 XM
+(is the basic)20 W
+10800 50 7200 70292 UL
+6 SS 
+8090 71687 MT
+(1)SH
+8 SS 
+8424 72000 MT
+(Author's present address is NeXT, Inc., Palo Alto, CA.)SH
+ES
+%%Page: ? 2
+BS
+0 SI
+10 /Helvetica AF
+7200 7929 MT
+(unit of resource allocation.  It includes a paged virtual address space and protected access to system)132 W
+7200 9072 MT
+(resources such as communication capabilities and virtual memory.  The)77 W
+/Helvetica-Oblique SF
+39925 XM
+(thread)SH
+/Helvetica SF
+43115 XM
+(is the)
+77 W( basic unit of com-)76 W
+7200 10215 MT
+(putation. It)
+500 W( is a lightweight process executing withing a task, and consists solely of)
+111 W( a processing state)112 W
+7200 11358 MT
+(\050i.e. program counter and registers\051.  All threads within a task share the address)
+56 W( space and communica-)55 W
+7200 12501 MT
+(tion rights of that task.  A traditional process would consist of a task with a single)
+136 W( thread in the Mach)137 W
+7200 13644 MT
+(system.)SH
+8312 15928 MT
+(Mach's communication facility is implemented by the)212 W
+/Helvetica-Oblique SF
+33303 XM
+(port)SH
+/Helvetica SF
+35515 XM
+(and)SH
+/Helvetica-Oblique SF
+37672 XM
+(message)SH
+/Helvetica SF
+42218 XM
+(abstractions. A)700 W
+/Helvetica-Oblique SF
+50021 XM
+(port)SH
+/Helvetica SF
+52233 XM
+(is a)211 W
+7200 17071 MT
+(communication channel)92 W
+/Symbol SF
+18317 XM
+(-)SH
+/Helvetica SF
+19387 XM
+(logically a queue for messages protected by the kernel.  Ports are the refer-)93 W
+7200 18214 MT
+(ence objects in)
+38 W( Mach and are used in a similar fashion to object references in an object oriented system.)37 W
+7200 19357 MT
+(Send and Receive primitive operations implement communication by sending and receiving messages to)42 W
+7200 20500 MT
+(and from ports.  A)56 W
+/Helvetica-Oblique SF
+15706 XM
+(message)SH
+/Helvetica SF
+20097 XM
+(is a typed collection of data objects)
+56 W( used in communication; messages may)55 W
+7200 21643 MT
+(be of any size and can contain)
+55 W( pointers and typed capabilities for ports.  This communication facility is a)56 W
+7200 22786 MT
+(basic building block on which more complicated objects may be constructed; it is)
+145 W( the underlying com-)144 W
+7200 23929 MT
+(munication mechanism for the Mach exception handling facility.)SH
+12 /Helvetica-Bold AF
+7200 27684 MT
+(3. Exceptions and their Uses)SH
+10 /Helvetica AF
+8312 28827 MT
+(Exceptions are synchronous interruptions to the normal flow of program control caused by the program)20 W
+7200 29970 MT
+(itself. This)
+690 W( excludes software)
+206 W( interrupts and other actions caused by asynchronous external events.)205 W
+7200 31113 MT
+(Exceptions include illegal)
+30 W( accesses \050bus errors, segmentation and protection violations\051, arithmetic errors)31 W
+7200 32256 MT
+(\050overflow, underflow,)
+140 W( divide by zero\051, and hardware instructions intended to support emulation, debug-)139 W
+7200 33399 MT
+(ging, error detection, etc.  Hardware exceptions cause traps into the operating)
+250 W( system; the system)251 W
+7200 34542 MT
+(handles certain exceptions transparently \050e.g.)
+47 W( recoverable page faults\051, but the remaining exceptions are)46 W
+7200 35685 MT
+(exported to the user by the operating system's exception handling facility.)SH
+8312 37969 MT
+(There are four major classes of applications that use exceptions:)SH
+/Symbol SF
+9242 39441 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Debugging. Debuggers)
+712 W( rely on exceptions generated by hardware trace and breakpoint)217 W
+9980 40584 MT
+(facilities. Other)
+842 W( exceptions that indicate errors must be reported to the debugger; the)282 W
+9980 41727 MT
+(presence of the debugger indicates the user's interest in any anomalous program behavior.)SH
+/Symbol SF
+9242 43542 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Core dumps.  In)
+37 W( the absence of a debugger, a fatal exception can cause the execution state)38 W
+8 SS 
+38264 44339 MT
+(2)SH
+10 SS 
+9980 44690 MT
+(of a program to be saved \050in a file\051 for later examination.  Unix)68 W
+39055 XM
+(systems refer to these files)68 W
+9980 45833 MT
+(as `core dumps' for historical reasons. [3])SH
+/Symbol SF
+9242 47648 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Error handling.)
+50 W( Certain)
+379 W( applications handle their own exceptions \050particularly arithmetic\051 un-)51 W
+9980 48791 MT
+(der some circumstances.)
+138 W( For)
+552 W( example, a handler could substitute zero for the result of a)137 W
+9980 49934 MT
+(floating underflow and continue execution.  Error handlers are often required)
+134 W( by high-level)135 W
+8 SS 
+18930 50731 MT
+(3)SH
+10 SS 
+9980 51082 MT
+(languages \050e.g. Ada)SH
+19653 XM
+([2]\051.)SH
+/Symbol SF
+9242 52897 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Emulation. Virtually)
+400 W( all modern machines generate exceptions upon encountering operation)61 W
+9980 54040 MT
+(codes that cannot be executed by the hardware.  Emulators can)
+192 W( be built to execute the)193 W
+9980 55183 MT
+(desired operation in software.  Such emulators)
+187 W( serve to extend the instruction set of the)186 W
+9980 56326 MT
+(underlying machine by performing)
+59 W( instructions that are not present in the hardware \050e.g. the)60 W
+8 SS 
+14814 57123 MT
+(4)SH
+10 SS 
+9980 57474 MT
+(Microvax II)SH
+15537 XM
+(relies on software "macrocode" to implement infrequently used instructions [5]\051)SH
+8312 59758 MT
+(Many computers regard system calls as another form of exception)
+60 W( at the hardware level; system calls)59 W
+8 SS 
+45796 60555 MT
+(5)SH
+10 SS 
+7200 60906 MT
+(cause the hardware to suspend execution and trap into the operating system \050e.g.)
+10 W( VAX)11 W
+46519 XM
+([4]\051. The)
+300 W( operat-)11 W
+7200 62049 MT
+(ing system distinguishes system calls from other)
+202 W( hardware exceptions; system calls are requests for)201 W
+10800 50 7200 64568 UL
+6 SS 
+8090 65963 MT
+(2)SH
+8 SS 
+8424 66276 MT
+(Unix is a trademark of AT&T Bell Laboratories)SH
+6 SS 
+8090 67871 MT
+(3)SH
+8 SS 
+8424 68184 MT
+(Ada is a registered trademark of the U.S. Government, Ada Joint Program Office)SH
+6 SS 
+8090 69779 MT
+(4)SH
+8 SS 
+8424 70092 MT
+(Microvax and Microvax II are trademarks of Digital Equipment Corporation)SH
+6 SS 
+8090 71687 MT
+(5)SH
+8 SS 
+8424 72000 MT
+(VAX is a trademark of Digital Equipment Corporation)SH
+ES
+%%Page: ? 3
+BS
+0 SI
+10 /Helvetica AF
+7200 7929 MT
+(services from the operating system,)
+299 W( and are better viewed as extracodes or meta-instructions im-)300 W
+7200 9072 MT
+(plemented by the operating system)
+167 W( [8].)
+SH( This)
+612 W( places system calls beyond the)
+167 W( scope of any exception)166 W
+7200 10215 MT
+(handling facility.)SH
+12 /Helvetica-Bold AF
+7200 13970 MT
+(4. Existing Approaches)SH
+10 /Helvetica AF
+8312 15113 MT
+(Operating systems designers have)
+14 W( approached the area of exceptions in a variety of ways. The Accent)15 W
+7200 16256 MT
+(operating system)
+195 W( [7],)
+SH( a predecessor of Mach, used a)
+195 W( message-based facility for debugger invocation)194 W
+7200 17399 MT
+(upon exception occurrence.  This debugger was often the kernel debugger which had limited utility for)126 W
+7200 18542 MT
+(debugging user programs.)
+75 W( In)
+427 W( contrast, the Medusa operating system for Cm*)
+74 W( [6])
+SH( provided almost half a)74 W
+7200 19685 MT
+(dozen different options for handling exceptions.  Medusa introduced the idea of)
+534 W( stopping a)535 W
+7200 20828 MT
+(thread/task/process when an exception)
+73 W( occurred and invoking a separate "buddy" entity to deal with the)72 W
+7200 21971 MT
+(exception. Most)
+404 W( other research systems have)
+63 W( designed exception handling facilities on an ad-hoc basis)64 W
+7200 23114 MT
+(to provide the minimum functionality necessary for the)
+108 W( debugger\050s\051 and/or error handler\050s\051 on that sys-)107 W
+7200 24257 MT
+(tem. Often)
+450 W( this involved a)
+86 W( simple mechanism to reflect exceptions back to a user program \050in a limited)87 W
+7200 25400 MT
+(fashion\051 or cause a core dump.  The major)
+18 W( drawbacks of these approaches are limited functionality \050often)17 W
+7200 26543 MT
+(caused by design solely for use by debuggers\051, and lack of extensibility to a multi-threaded environment.)SH
+8312 28827 MT
+(Unix generalizes exception handling to the signal facility which handles all)
+218 W( interruptions to normal)219 W
+7200 29970 MT
+(program flow.  Differing requirements of the various)
+163 W( interruptions \050exceptions, timer expiration, control)162 W
+7200 31113 MT
+(character on terminal, etc.\051 entail semantics that vary from signal to signal;)
+170 W( the default action can be)171 W
+7200 32256 MT
+(nothing, stop, continue from stop, or terminate \050with or without a core dump\051.  Users can)
+95 W( change these)94 W
+7200 33399 MT
+(defaults or specify a handler to be invoked by a signal.  The interface to these handlers includes)
+32 W( a partial)33 W
+7200 34542 MT
+(machine context; registers outside this)
+108 W( context are not accessible.  Debugging support is centralized in)107 W
+7200 35685 MT
+(the ptrace\050\051 system call; it performs all data transfer and process control needed by debuggers,)
+189 W( and)190 W
+7200 36828 MT
+(interacts with the signal facility to make signals)
+86 W( visible to debuggers \050including signals that would other-)85 W
+7200 37971 MT
+(wise invoke error handlers)
+32 W( or emulators\051.  The occurrence of a signal in a debugged process causes that)33 W
+7200 39114 MT
+(process to stop in a peculiar manner and notify the)
+233 W( debugger that something has happened.  This)232 W
+7200 40257 MT
+(notification is implemented by special treatment of debugged processes in the)
+37 W( wait\050\051 system call; this call)38 W
+7200 41400 MT
+(usually detects terminated \050zombie\051 processes, but also)
+297 W( detects stopped processes that are being)296 W
+7200 42543 MT
+(debugged. One)
+332 W( consequence of these features)
+27 W( and their implementation is that debuggers are restricted)28 W
+7200 43686 MT
+(to debugging processes that are the immediate children of the debugger.)SH
+8312 45970 MT
+(There are)
+100 W( a number of major problems with the Unix signal facility.  Two of the most important ones)99 W
+7200 47113 MT
+(are:)SH
+/Symbol SF
+9242 48585 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Executing the signal handler in the same context as)
+162 W( the exception makes many registers)163 W
+9980 49728 MT
+(inaccessible. These)
+578 W( registers are often the very registers that an)
+150 W( arithmetic error handler)149 W
+9980 50871 MT
+(needs to modify.  \050e.g. by substituting 0 for a floating underflow\051.)SH
+/Symbol SF
+9242 52686 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The entire concept of signals is predicated on single-threaded)
+18 W( applications.  Adapting signals)19 W
+9980 53829 MT
+(to multi-threaded applications is difficult and complicates the)
+60 W( interface to them.  At least half)59 W
+9980 54972 MT
+(a dozen major changes to the Unix)
+174 W( signal implementation in the Mach kernel have been)175 W
+9980 56115 MT
+(required for this reason.)SH
+8312 58399 MT
+(The typical)
+112 W( use of signal handlers is to detect and respond to external events; for this they are ade-)111 W
+7200 59542 MT
+(quate, but as)
+211 W( an exception handling facility they leave much to be desired. The original Unix signal)212 W
+7200 60685 MT
+(mechanism wasn't even adequate)
+82 W( for detecting and responding to external events; signals were viewed)81 W
+7200 61828 MT
+(as almost always fatal [3].)SH
+12 /Helvetica-Bold AF
+7200 65583 MT
+(5. A Model for Exception Handling)SH
+10 /Helvetica AF
+8312 66726 MT
+(The Mach exception handling)
+13 W( facility is based on a general model that describes the use of exceptions.)14 W
+7200 67869 MT
+(This model is derived from)
+112 W( the requirements of applications that use exceptions.  The generality of the)111 W
+7200 69012 MT
+(resulting model is sufficient to describe)
+207 W( virtually all uses of exceptions, including those made by the)208 W
+7200 70155 MT
+(applications discussed in Section 3.)SH
+ES
+%%Page: ? 4
+BS
+0 SI
+10 /Helvetica AF
+8312 7929 MT
+(Applications that use exceptions can be divided into two major classes:)SH
+9424 9330 MT
+(1.)SH
+10536 XM
+(Error Handlers: These components perform)
+122 W( recovery actions in response to an exception)121 W
+10536 10473 MT
+(and resume execution of the thread involved.  This class includes both error)
+103 W( or exception)104 W
+10536 11616 MT
+(handlers and emulators.  Error Handlers typically execute in)
+133 W( the same address space as)132 W
+10536 12759 MT
+(that thread for efficiency reasons \050access to state\051.)SH
+9424 14574 MT
+(2.)SH
+10536 XM
+(Debuggers: These components examine the)
+186 W( state of an entire application to investigate)187 W
+10536 15717 MT
+(why an exception occurred)
+142 W( and/or why the program is misbehaving.  This class includes)141 W
+10536 16860 MT
+(interactive debuggers)
+140 W( and servers that produce core dumps; the latter can be viewed as)141 W
+10536 18003 MT
+(front ends to debuggers that examine core dumps.  Debuggers usually execute in)
+64 W( address)63 W
+10536 19146 MT
+(spaces distinct from the application for protection reasons.)SH
+7200 20547 MT
+(This paper uses)
+86 W( the terms `error handler' and `debugger' to refer to the entire classes delineated above)87 W
+7200 21690 MT
+(\050e.g. a core dumper is a `debugger'\051.  In addition the term)
+31 W( `handler' is used to refer to any application that)30 W
+7200 22833 MT
+(uses exceptions.)SH
+8312 25117 MT
+(Our model is derived by examining the requirements common to)
+85 W( error handlers and debuggers.  The)86 W
+7200 26260 MT
+(occurrence of)
+39 W( an exception requires suspension of the thread involved and notification of a handler.  The)38 W
+7200 27403 MT
+(handler receives)
+243 W( the notification and performs some computation \050e.g. error handler fixes the error,)244 W
+7200 28546 MT
+(debugger decides what to do next\051, after which the thread is either resumed or terminated.  On)
+31 W( this basis)30 W
+7200 29689 MT
+(we propose the following model to cover all uses of exceptions:  the occurrence of an)
+6 W( exception invokes a)7 W
+7200 30832 MT
+(four step process involving the thread that caused the exception \050Victim\051 and the entity)
+73 W( that handles the)72 W
+7200 31975 MT
+(exception \050Handler, may be the operating system\051:)SH
+9424 33376 MT
+(1.)SH
+10536 XM
+(Victim:)SH
+/Helvetica-Bold SF
+13814 XM
+(raise)SH
+/Helvetica SF
+16427 XM
+(-- cause notification of an exception's occurrence.)SH
+9424 35191 MT
+(2.)SH
+10536 XM
+(Victim:)SH
+/Helvetica-Bold SF
+13814 XM
+(wait)SH
+/Helvetica SF
+16037 XM
+(-- synchronize with completion of exception handling.)SH
+9424 37006 MT
+(3.)SH
+10536 XM
+(Handler:)SH
+/Helvetica-Bold SF
+14671 XM
+(catch)SH
+/Helvetica SF
+17639 XM
+(-- receive)
+78 W( notification.  This notification usually identifies the exception and)79 W
+10536 38149 MT
+(the victim.  Some of this identification may be implicit in where and how the)
+94 W( notification is)93 W
+10536 39292 MT
+(received.)SH
+9424 41107 MT
+(4.)SH
+10536 XM
+(Handler: take action.  There are two possible actions:)SH
+/Symbol SF
+12578 42579 MT
+(\267)SH
+/Helvetica-Bold SF
+13316 XM
+(clear)SH
+/Helvetica SF
+15929 XM
+(-- clear exception causing victim to return from)SH
+/Helvetica-Bold SF
+36713 XM
+(wait)SH
+/Helvetica SF
+(.)SH
+/Symbol SF
+12578 43722 MT
+(\267)SH
+/Helvetica-Bold SF
+13316 XM
+(terminate)SH
+/Helvetica SF
+18095 XM
+(-- cause termination of victim thread.)SH
+7200 45123 MT
+(The boldface primitives in this model constitute the high-level model interface to exceptions and can be)89 W
+7200 46266 MT
+(viewed as operating on "exception objects".)
+20 W( The)
+317 W( handler will usually perform other functions between the)19 W
+/Helvetica-Bold SF
+7200 47409 MT
+(catch)SH
+/Helvetica SF
+10100 XM
+(and)SH
+/Helvetica-Bold SF
+12056 XM
+(clear)SH
+/Helvetica SF
+14679 XM
+(or)SH
+/Helvetica-Bold SF
+15856 XM
+(terminate)SH
+/Helvetica SF
+20645 XM
+(steps; these functions are particular to)
+10 W( the handler application itself and are)11 W
+7200 48552 MT
+(not part of the exception model.)SH
+8312 50836 MT
+(Any exception handling facility must implement these primitives in some form;)
+219 W( as an example we)218 W
+7200 51979 MT
+(consider signal handling in Unix.  An exception that invokes a signal handler uses the)
+SH( following implemen-)1 W
+7200 53122 MT
+(tation of the model:)SH
+9424 54523 MT
+(1.)SH
+/Helvetica-Bold SF
+10536 XM
+(raise)SH
+/Helvetica SF
+13153 XM
+(- Internal kernel code that translates)
+4 W( the hardware exception to a signal and sends the)3 W
+10536 55666 MT
+(signal to the process.  The kill\050\051 system call can be used to mimic this)
+139 W( for user-detected)140 W
+10536 56809 MT
+(exceptions.)SH
+9424 58624 MT
+(2.)SH
+/Helvetica-Bold SF
+10536 XM
+(wait)SH
+/Helvetica SF
+12879 XM
+(- Implicit because the handler and victim execute in the same process; execution of)119 W
+10536 59767 MT
+(the victim cannot resume until the handler completes.)SH
+9424 61582 MT
+(3.)SH
+/Helvetica-Bold SF
+10536 XM
+(catch)SH
+/Helvetica SF
+13445 XM
+(- Internal kernel code that invokes the handler and sets)
+19 W( up its stack.  Both the excep-)20 W
+10536 62725 MT
+(tion and the entity that caused it are implicit in the choice)
+108 W( of the handler and the process)107 W
+10536 63868 MT
+(context that it executes in.)SH
+9424 65683 MT
+(4.)SH
+/Helvetica-Bold SF
+10536 XM
+(clear)SH
+/Helvetica SF
+13345 XM
+(- sigcleanup\050\051 or sigreturn\050\051 system call invoked when handler exits.  These calls)197 W
+10536 66826 MT
+(unwind the stack and clear the kernel state associated with a signal handler.)SH
+9424 68641 MT
+(5.)SH
+/Helvetica-Bold SF
+10536 XM
+(terminate)SH
+/Helvetica SF
+15315 XM
+(- exit\050\051 system call.)SH
+7200 70042 MT
+(The model)
+1 W( also applies to Unix support for debuggers; this is of less interest because the support consists)SH
+7200 71185 MT
+(primarily of special-purpose code)
+155 W( in the Unix kernel.  Much of this code duplicates functionality found)156 W
+ES
+%%Page: ? 5
+BS
+0 SI
+10 /Helvetica AF
+7200 7929 MT
+(elsewhere in the kernel.)SH
+8312 10213 MT
+(This exception handling)
+53 W( model also serves as a guide for future exception handling facilities.  Many of)52 W
+7200 11356 MT
+(the problems exhibited by other exception handling facilities are due to their implementation of a)
+SH( restricted)1 W
+7200 12499 MT
+(version of our model \050e.g. Unix signal handler must execute in victim's context\051.)
+43 W( These)
+363 W( problems can be)42 W
+7200 13642 MT
+(avoided by a design that implements the model in full generality; such a design can)
+43 W( be more flexible and)44 W
+7200 14785 MT
+(provide greater functionality without impacting the size of the kernel.  The next)
+108 W( section provides an ex-)107 W
+7200 15928 MT
+(ample of such a design, the Mach exception handling facility.)SH
+12 /Helvetica-Bold AF
+7200 19683 MT
+(6. Design of the Mach Exception Handling Facility)SH
+10 /Helvetica AF
+8312 20826 MT
+(The Mach exception handling facility was designed from scratch as a general)
+123 W( implementation of our)124 W
+7200 21969 MT
+(exception handling model.  The major design goals for this new facility were:)SH
+/Symbol SF
+9242 23441 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(A single facility with consistent semantics for all exceptions.)SH
+/Symbol SF
+9242 25256 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Clean and simple interface.)SH
+/Symbol SF
+9242 27071 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Full support for debuggers and error handlers.)SH
+/Symbol SF
+9242 28886 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(No duplication of functionality within kernel.)SH
+/Symbol SF
+9242 30701 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Support user-defined exceptions.)SH
+7200 32102 MT
+(A consequence of these goals is that)
+59 W( we reject the notion of a handler executing in the same context as)58 W
+7200 33245 MT
+(the exception it is handling.  We know of no clean and straightforward way to make)
+111 W( a thread's context)112 W
+7200 34388 MT
+(available to the thread itself; this)
+39 W( results in a single thread having multiple contexts \050a currently executing)38 W
+7200 35531 MT
+(context and one or more saved exception contexts\051. In turn this causes)
+59 W( serious naming and functionality)60 W
+7200 36674 MT
+(problems for operations)
+172 W( that access or manipulate thread contexts.  Because Mach supports multiple)171 W
+7200 37817 MT
+(threads within)
+39 W( the same task, it is sufficient to stop the thread that caused the exception and execute the)40 W
+7200 38960 MT
+(handler as another thread in the same task.)SH
+8312 41244 MT
+(The Mach exception handling facility implements the)
+65 W( exception handling model via Mach kernel primi-)64 W
+7200 42387 MT
+(tives to avoid duplication of kernel functionality.)
+9 W( Because)
+298 W( the handler never executes in the context of the)10 W
+7200 43530 MT
+(victim thread, the)91 W
+/Helvetica-Bold SF
+15365 XM
+(raise)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Bold SF
+18347 XM
+(wait)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Bold SF
+20939 XM
+(notify)SH
+/Helvetica SF
+(, and)91 W
+/Helvetica-Bold SF
+26345 XM
+(clear)SH
+/Helvetica SF
+29049 XM
+(primitives constitute a)
+91 W( remote procedure call \050rpc\051.  We)90 W
+7200 44673 MT
+(therefore implement them using a message-based rpc provided by Mach's communication facility.  The)103 W
+7200 45816 MT
+(remaining)SH
+/Helvetica-Bold SF
+11960 XM
+(terminate)SH
+/Helvetica SF
+16831 XM
+(primitive is exactly Mach's)92 W
+/Helvetica-Bold SF
+29034 XM
+(thread_terminate)SH
+/Helvetica SF
+37517 XM
+(or)SH
+/Helvetica-Bold SF
+38776 XM
+(task_terminate)SH
+/Helvetica SF
+46204 XM
+(primitive; no)
+92 W( spe-)91 W
+7200 46959 MT
+(cial action is required to terminate the thread or task instead of completing the rpc.)SH
+8312 49243 MT
+(The exception rpc consists of two messages; an initial message to invoke)
+3 W( the rpc, and a reply message)4 W
+7200 50386 MT
+(to complete the rpc.  The initial message contains the following items:)SH
+/Symbol SF
+9242 51858 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Send and reply ports for the rpc.)SH
+/Symbol SF
+9242 53001 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The identities of thread that caused the exception and the corresponding task.)SH
+/Symbol SF
+9242 54144 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(A machine independent exception class.  \050cf. appendix A\051)SH
+/Symbol SF
+9242 55287 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Two machine-dependent fields that further identify the exception.)SH
+7200 56688 MT
+(If the rpc is completed, the reply message contains the two rpc ports and a)
+50 W( return code from the handler)49 W
+7200 57831 MT
+(that handled the exception \050success in almost all cases\051.  MiG \050Mach)
+11 W( interface Generator\051 generated stub)12 W
+7200 58974 MT
+(routines perform the generation and)
+23 W( decoding of the messages; this allows users to avoid dealing directly)22 W
+7200 60117 MT
+(with the contents of the messages.)SH
+8312 62401 MT
+(An exception rpc corresponds to our exception model as follows:)SH
+/Symbol SF
+9242 63873 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(raise)SH
+/Helvetica SF
+12593 XM
+(- send initial message.)SH
+/Symbol SF
+9242 65016 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(wait)SH
+/Helvetica SF
+12203 XM
+(- wait for and receive reply message.)SH
+/Symbol SF
+9242 66159 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(catch)SH
+/Helvetica SF
+12870 XM
+(- receive initial message.)SH
+/Symbol SF
+9242 67302 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(clear)SH
+/Helvetica SF
+12593 XM
+(- send reply message.)SH
+ES
+%%Page: ? 6
+BS
+0 SI
+11 /Helvetica-Bold AF
+7200 8002 MT
+(6.1. Exception Ports)SH
+10 /Helvetica AF
+8312 9145 MT
+(The two messages that constitute the rpc are sent to and)
+142 W( received from ports corresponding to the)143 W
+7200 10288 MT
+(handler \050initial message\051 and victim \050reply message\051.)
+101 W( The)
+478 W( handler's port is registered as the exception)100 W
+7200 11431 MT
+(port for either the victim's task or thread; the kernel consults this registration when an)
+73 W( exception occurs.)74 W
+7200 12574 MT
+(The reply port is specified in the initial)
+98 W( message; for hardware exceptions the kernel allocates the reply)97 W
+7200 13717 MT
+(port and caches it for reuse on a per-thread basis.  Mach kernel primitives are)
+35 W( available to register a port)36 W
+7200 14860 MT
+(as an exception port for a task or thread,)
+161 W( and to return the port currently registered; these and other)160 W
+7200 16003 MT
+(useful kernel primitives for implementing debuggers and error handlers are described in Appendix B.)SH
+8312 18287 MT
+(Registering exception ports for both tasks and threads)
+59 W( effects a separation of concerns between error)60 W
+7200 19430 MT
+(handlers and debuggers.  Error handlers are)
+199 W( supported by the thread exception ports because error)198 W
+7200 20573 MT
+(handlers usually affect only the victim thread; different threads)
+196 W( within a task can have different error)197 W
+7200 21716 MT
+(handlers. The)
+652 W( registered exception)
+187 W( port for a thread defaults to the null port at thread creation; this)186 W
+7200 22859 MT
+(defaults the initial error)
+118 W( handler to "no handler".  Debuggers are supported by the task exception ports)119 W
+7200 24002 MT
+(because debuggers operate on the application level; this includes at least all the)
+94 W( threads in the victim's)93 W
+7200 25145 MT
+(task, so at most one debugger is ever associated)
+55 W( with a single task.  The registered exception port for a)56 W
+7200 26288 MT
+(task is inherited from the parent task at task creation;)
+56 W( this supports debuggers that handle trees of tasks)55 W
+7200 27431 MT
+(\050e.g. a multi-tasking parallel program\051 and inheritance of core-dump servers.)SH
+8312 29715 MT
+(The presence of both task and thread exception ports creates a potential)
+144 W( conflict because both are)145 W
+7200 30858 MT
+(applicable to any exception.  This is)
+97 W( resolved by examining the differences between error handlers and)96 W
+7200 32001 MT
+(debuggers. Error)
+340 W( handlers use exceptions to implement portions of an application;)
+31 W( an error handler is an)32 W
+7200 33144 MT
+(integral part of the application that generates its exceptions.  Exceptions handled by an)
+14 W( error handler may)13 W
+7200 34287 MT
+(be unusual, but they do)
+6 W( not indicate anomalous or erroneous behavior.  In contrast debuggers use excep-)7 W
+7200 35430 MT
+(tions to investigate anomalous or erroneous application behavior; as a result debuggers have little interest)SH
+7200 36573 MT
+(in exceptions successfully handled by error handlers.  This implies)
+123 W( that exceptions should invoke error)124 W
+7200 37716 MT
+(handlers in)
+142 W( preference to debuggers; this preference is implemented by having thread exception ports)141 W
+7200 38859 MT
+(take precedence over task exception ports in determining where to direct the rpc invoked by an exception.)SH
+7200 40002 MT
+(If neither an error handler nor a debugger can successfully handle an exception, the task is terminated.)SH
+11 /Helvetica-Bold AF
+7200 43684 MT
+(6.2. User Extensibility)SH
+10 /Helvetica AF
+8312 44827 MT
+(Mach's exception handling facility permits users to define)
+72 W( and handle their own exceptions in addition)71 W
+7200 45970 MT
+(to those defined by)
+101 W( the system.  The software class of exceptions \050cf. appendix A\051 contains a range of)102 W
+7200 47113 MT
+(codes reserved for user-defined exceptions; this allows the handling)
+44 W( of these exceptions to be integrated)43 W
+7200 48256 MT
+(into the handling of all other \050i.e. system-defined\051 exceptions.  The same)
+101 W( ports are used in both cases,)102 W
+7200 49399 MT
+(and the interface to handlers is identical.  An advantage of this approach is that)
+59 W( user-defined exceptions)58 W
+7200 50542 MT
+(can immediately be recognized as such, even by debuggers that cannot decode the)
+51 W( machine-dependent)52 W
+7200 51685 MT
+(fields which identify the exact exception.  Generation of user-defined exceptions is facilitated by a)
+115 W( MiG)114 W
+7200 52828 MT
+(\050Mach interface Generator\051 stub)
+321 W( routine that implements the exception rpc \050in turn this routine is)322 W
+7200 53971 MT
+(generated automatically from an interface description of the exception rpc\051.  User code that)
+115 W( detects an)114 W
+7200 55114 MT
+(exception simply obtains the appropriate exception port from the kernel and calls this stub routine; the)126 W
+7200 56257 MT
+(stub routine handles the rpc and returns a return code from the)
+22 W( handler.  Alternatively, users may use the)21 W
+7200 57400 MT
+(MiG exception interface with)
+170 W( their own exceptions and exception ports; this approach may be advan-)171 W
+7200 58543 MT
+(tageous for applications that handle only user-defined exceptions.)SH
+12 /Helvetica-Bold AF
+7200 62298 MT
+(7. Implementing Error Handlers)SH
+10 /Helvetica AF
+8312 63441 MT
+(Error handlers are supported by thread exception ports and invoked)
+183 W( by remote procedure calls on)182 W
+7200 64584 MT
+(those ports.  An error handler is associated with a thread by registering a port on which the)
+38 W( error handler)39 W
+7200 65727 MT
+(receives exception rpcs as the thread's exception port.  This registration causes)
+60 W( all exceptions occurring)59 W
+7200 66870 MT
+(in the thread to invoke rpcs to the error handler's port.  Since most error handlers cannot handle)
+176 W( all)177 W
+7200 68013 MT
+(possible exceptions that could occur, they must check each exception and forward it)
+15 W( to the corresponding)14 W
+7200 69156 MT
+(task exception port if it cannot be handled.  This forwarding can be performed by obtaining)
+39 W( the exception)40 W
+7200 70299 MT
+(port for the task specified in the initial message and sending the initial message there.  Alternatively)
+72 W( the)71 W
+7200 71442 MT
+(error handler can return a failure code in the reply)
+15 W( message; this causes the sender of the initial message)16 W
+ES
+%%Page: ? 7
+BS
+0 SI
+10 /Helvetica AF
+7200 7929 MT
+(to reinitiate the rpc using the task exception port.)SH
+8312 10213 MT
+(Implementation of error handlers requires additional functionality beyond)
+209 W( completing the rpc.  This)208 W
+7200 11356 MT
+(functionality is supported by separate Mach kernel primitives that can also be used by)
+37 W( other applications.)38 W
+7200 12499 MT
+(The most common actions and corresponding primitives are:)SH
+/Symbol SF
+9242 13971 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Read/Write register state -)SH
+/Helvetica-Bold SF
+21928 XM
+(thread_get_state)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Bold SF
+30486 XM
+(thread_set_state)SH
+/Helvetica SF
+(.)SH
+/Symbol SF
+9242 15786 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Read/Write memory state - access memory directly within task, otherwise)412 W
+/Helvetica-Bold SF
+46829 XM
+(vm_read)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Bold SF
+9980 16929 MT
+(vm_write)SH
+/Helvetica SF
+(.)SH
+/Symbol SF
+9242 18744 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Terminate thread -)SH
+/Helvetica-Bold SF
+18483 XM
+(thread_terminate)SH
+/Helvetica SF
+(.)SH
+/Symbol SF
+9242 20559 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Resume thread - send reply message to complete rpc \050)SH
+/Helvetica-Bold SF
+(msg_send)SH
+/Helvetica SF
+(\051.)SH
+8312 22843 MT
+(Some applications may require that error handlers execute in the context of \050i.e. on the stack of\051)
+98 W( the)99 W
+7200 23986 MT
+(thread that caused the exception \050e.g. emulation of Unix signal handlers\051.)
+204 W( Although)
+684 W( this appears to)203 W
+7200 25129 MT
+(conflict with our restriction)
+8 W( of never executing an error handler in the context of the victim thread, it can be)9 W
+7200 26272 MT
+(implemented by using a system-invoked error handler)
+23 W( to set up the application's handler.  Specifically the)22 W
+7200 27415 MT
+(error handler invoked by the exception rpc modifies the victim thread so that the application's handler)
+73 W( is)74 W
+7200 28558 MT
+(executed when the)
+38 W( thread is resumed.  Unwinding the stack when the application's error handler finishes)37 W
+7200 29701 MT
+(is the responsibility of the application implementor.)SH
+12 /Helvetica-Bold AF
+7200 33456 MT
+(8. Implementing Debuggers)SH
+10 /Helvetica AF
+8312 34599 MT
+(Debuggers are supported by the task exception ports; exceptions invoke debuggers via remote proce-)47 W
+7200 35742 MT
+(dure calls on those ports.  A debugger is associated with a task by registering a port)
+202 W( on which the)201 W
+7200 36885 MT
+(debugger receives exception rpcs as the task's exception port.  An exception rpc only)
+118 W( stops the victim)119 W
+7200 38028 MT
+(thread pending rpc completion; other threads in the task continue running.  This has two consequences:)SH
+/Symbol SF
+9242 39500 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(If the debugger wishes to stop)
+208 W( the entire task, a)207 W
+/Helvetica-Bold SF
+33345 XM
+(task_suspend)SH
+/Helvetica SF
+40499 XM
+(must be performed.  A)207 W
+9980 40643 MT
+(straightforward way to)
+51 W( accomplish this is to do it inside the exception rpc and then complete)52 W
+9980 41786 MT
+(the rpc; the victim thread cannot resume execution upon rpc completion because)
+16 W( its task has)15 W
+9980 42929 MT
+(been suspended.)SH
+/Symbol SF
+9242 44744 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Multiple exceptions from a)
+153 W( multi-threaded task may be outstanding for the debugger on a)154 W
+9980 45887 MT
+(single debugger)
+103 W( invocation.  If the debugger does not handle these pending exceptions for)102 W
+9980 47030 MT
+(the task, some may appear to occur at impossible times \050e.g. breakpoint)
+115 W( occurs after user)116 W
+9980 48173 MT
+(removes it\051.)SH
+8312 50457 MT
+(The Mach exception handling facility is one small component of the kernel that can be used)
+36 W( by debug-)35 W
+7200 51600 MT
+(gers. The)
+334 W( various actions required to support debuggers are implemented via general purpose primitives)28 W
+7200 52743 MT
+(that also)
+112 W( support other applications.  Some of the more important debugger actions and corresponding)111 W
+7200 53886 MT
+(kernel primitives are:)SH
+/Symbol SF
+9242 55358 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Detect event)
+110 W( -)111 W
+/Helvetica-Bold SF
+16815 XM
+(msg_receive)SH
+/Helvetica SF
+23263 XM
+(- System components that generate or detect external events)111 W
+9980 56501 MT
+(\050e.g. interrupt character on a terminal\051 signal the events by sending messages.)SH
+/Symbol SF
+9242 58316 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Read and write application memory \050includes setting breakpoints\051 -)SH
+/Helvetica-Bold SF
+39824 XM
+(vm_read)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Bold SF
+44493 XM
+(vm_write)SH
+/Helvetica SF
+(.)SH
+/Symbol SF
+9242 60131 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Read and write application registers \050includes setting single-step mode if available\051 -)364 W
+/Helvetica-Bold SF
+9980 61274 MT
+(thread_get_state)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Bold SF
+18538 XM
+(thread_set_state)SH
+/Helvetica SF
+(.)SH
+/Symbol SF
+9242 63089 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Continue application - Task and thread control primitives.)SH
+/Symbol SF
+9242 64904 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(End debugging session -)SH
+/Helvetica-Bold SF
+21264 XM
+(task_terminate)SH
+/Helvetica SF
+(.)SH
+7200 66305 MT
+(More detail on these and other useful kernel primitives can be found in appendix B.)SH
+8312 68589 MT
+(Exceptions that invoke error handlers via thread exception ports are not visible to debuggers.  A)226 W
+7200 69732 MT
+(debugger that wishes to detect error)
+98 W( handler invocation can insert one or more breakpoints in the error)97 W
+7200 70875 MT
+(handler itself; exceptions caused by these breakpoints will be reported to the debugger.)SH
+ES
+%%Page: ? 8
+BS
+0 SI
+12 /Helvetica-Bold AF
+7200 8075 MT
+(9. Communication Properties and Extended Functionality)SH
+10 /Helvetica AF
+8312 9218 MT
+(The Mach communication facility has two important properties that)
+111 W( facilitate extended functionality of)112 W
+7200 10361 MT
+(systems based on it:)SH
+/Symbol SF
+9242 11833 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Independence - A port is an independent)
+56 W( entity from the tasks which use it to communicate.)55 W
+9980 12976 MT
+(Port rights can be exchanged in messages, and are tracked)
+18 W( by the kernel to maintain protec-)19 W
+9980 14119 MT
+(tion.)SH
+/Symbol SF
+9242 15934 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Network Transparency - User-mode network message servers transparently extend)
+297 W( the)296 W
+9980 17077 MT
+(Mach communication facility over the network.  The server on the remote machine)
+107 W( creates)108 W
+9980 18220 MT
+(proxy ports to represent the ports exported to it over the network.  A message)
+36 W( destined for a)35 W
+9980 19363 MT
+(remote port is sent to the local proxy port;)
+133 W( the local network message server receives the)134 W
+9980 20506 MT
+(message and forwards it over the net)
+88 W( to the remote remote network message server which)87 W
+9980 21649 MT
+(sends it on to the actual destination port.  This forwarding is invisible to)
+156 W( the senders and)157 W
+9980 22792 MT
+(receivers of messages.)SH
+8312 25076 MT
+(Extended functionality can be obtained from the Mach exception)
+56 W( handling facility and kernel primitives)55 W
+7200 26219 MT
+(because the Mach communication facility is used as an implementation base.  In addition to the use)
+98 W( of)99 W
+7200 27362 MT
+(messages in the)
+140 W( exception handling facility, the kernel interface itself is message based; most system)139 W
+7200 28505 MT
+(calls are actually invoked by a message rpc to the kernel.)SH
+11 /Helvetica-Bold AF
+7200 32187 MT
+(9.1. Debugger Attachment)SH
+10 /Helvetica AF
+8312 33330 MT
+(The independence property described above allows Mach to)
+4 W( support debugger attachment and detach-)5 W
+7200 34473 MT
+(ment without change to the kernel.  Traditional Unix systems require that the)
+94 W( debugged process be the)93 W
+7200 35616 MT
+(child of the debugger; this makes it impossible to debug a process that was not started by)
+43 W( the debugger.)44 W
+7200 36759 MT
+(Subsequent implementors have expended considerable effort to implement an attach primitive that allows)14 W
+7200 37902 MT
+(a debugger to attach to a previously started process and debug it; this)
+12 W( allows analysis of failures that may)13 W
+7200 39045 MT
+(not be repeatable.  Similarly these systems allow a debugger to detach from)
+69 W( a running process and exit)68 W
+7200 40188 MT
+(without affecting the process.  No change is required in our design)
+215 W( to support this functionality; the)216 W
+7200 41331 MT
+(debugger need only obtain the port representing the task to be debugged,)
+105 W( and may then use all of the)104 W
+7200 42474 MT
+(primitives previously discussed to debug that task.  A debugger)
+78 W( can detach from a task by resetting the)79 W
+7200 43617 MT
+(task's exception port to its former)
+143 W( value; there is no other connection between the debugger and task)142 W
+7200 44760 MT
+(being debugged.)SH
+12 /Helvetica-Bold AF
+7200 48515 MT
+(10. Parallel and Distributed Debugging)SH
+10 /Helvetica AF
+8312 49658 MT
+(Our design also supports parallel and distributed)
+51 W( debugging without change.  There are several cases)52 W
+7200 50801 MT
+(to be considered based on the structure)
+96 W( of the debugger and the application being debugged.  In all of)95 W
+7200 51944 MT
+(these cases the debugger itself)
+174 W( may be a parallel and/or distributed application consisting of multiple)175 W
+7200 53087 MT
+(tasks and/or threads.)SH
+8312 55371 MT
+(For parallel applications composed of multiple threads within)
+207 W( a single task, a debugger need only)206 W
+7200 56514 MT
+(register its exception rpc port as that task's exception port.)
+211 W( Multiple)
+702 W( concurrent exceptions result in)212 W
+7200 57657 MT
+(multiple rpc invocations being queued to that port; each invocation identifies the thread involved.  Mach's)37 W
+7200 58800 MT
+(communication facility allows the debugger to accept all of these rpcs before responding to any of)
+59 W( them,)60 W
+7200 59943 MT
+(and to respond to them in)
+6 W( any order.  \050Of course the debugger must keep track of the rpcs and make sure)5 W
+7200 61086 MT
+(they are all responded to when)
+303 W( continuing the application.\051 A straightforward implementation is to)304 W
+7200 62229 MT
+(suspend the task in response to the first)
+43 W( rpc, and then complete all pending exception rpcs recording the)42 W
+7200 63372 MT
+(threads and exceptions involved.  The exceptions can then be reported to the user en masse.)SH
+8312 65656 MT
+(For parallel applications composed of multiple tasks within a single machine,)
+11 W( only minor changes to the)12 W
+7200 66799 MT
+(above debugger logic are required.  The)
+102 W( debugger must now register its exception rpc port as the task)101 W
+7200 67942 MT
+(exception port)
+65 W( for each task, and may choose to identify components of the parallel application by tasks)66 W
+7200 69085 MT
+(instead of threads.  Suspending)
+134 W( or resuming the entire application now requires an operation on each)133 W
+7200 70228 MT
+(task. If)
+349 W( the application dynamically creates tasks, an additional interface to report these new tasks to the)36 W
+7200 71371 MT
+(debugger may be required so that the new tasks can be suspended and resumed by the debugger.)SH
+ES
+%%Page: ? 9
+BS
+0 SI
+10 /Helvetica AF
+8312 7929 MT
+(Network transparency allows the components of a)
+244 W( debugger and the debugged application to be)243 W
+7200 9072 MT
+(spread throughout a network; all)
+47 W( required operations extend transparently across the network.  This sup-)48 W
+7200 10215 MT
+(ports a number of possible debugging scenarios:)SH
+/Symbol SF
+9242 11687 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Application and debugger on separate hosts.)SH
+/Symbol SF
+9242 13502 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Debugging of a distributed application.  The debugger does not require)
+23 W( modifications beyond)22 W
+9980 14645 MT
+(those needed to deal with applications composed of multiple tasks.)SH
+/Symbol SF
+9242 16460 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The debugger itself can be distributed over the network.)SH
+7200 17861 MT
+(The last scenario is useful for)
+92 W( implementing fast exception response in a debugger for applications that)93 W
+7200 19004 MT
+(runs in parallel on several distributed hosts; if the exception rpc)
+92 W( stays within the host, suspending of all)91 W
+7200 20147 MT
+(application components on that host can be done faster.)SH
+12 /Helvetica-Bold AF
+7200 23902 MT
+(11. Gdb Enhancements)SH
+10 /Helvetica AF
+8312 25045 MT
+(As part of this work we have used the Mach exception handling facility and)
+98 W( other Mach kernel primi-)99 W
+7200 26188 MT
+(tives to enhance Gdb \050the Gnu Debugger\051)
+16 W( [9])
+SH( for debugging multi-threaded tasks.)
+16 W( This)
+309 W( enhanced version)15 W
+7200 27331 MT
+(of gdb operates at the task level \050i.e. any exception causes it to suspend the entire task\051. A notion of)
+47 W( the)48 W
+7200 28474 MT
+("current thread" has been added to the user interface; this thread is used)
+133 W( by any thread-specific com-)132 W
+7200 29617 MT
+(mand that does not specify a thread.  New commands are provided to list the)
+26 W( threads in the task, change)27 W
+7200 30760 MT
+(the "current thread", and examine or control individual threads.)
+181 W( Thread-specific)
+639 W( breakpoints are sup-)180 W
+7200 31903 MT
+(ported by logic that transparently continues the application from the breakpoint until the desired thread)119 W
+7200 33046 MT
+(hits it.  Implementation of attachment to)
+81 W( running tasks as described in section 9.1 is in progress, as are)80 W
+7200 34189 MT
+(changes to deal with multiple concurrent breakpoints.)SH
+8312 36473 MT
+(The existence of multiple threads within)
+29 W( a debugged task complicates gdb's execution control logic.  In)30 W
+7200 37616 MT
+(addition to the)98 W
+/Helvetica-Bold SF
+14054 XM
+(task_suspend)SH
+/Helvetica SF
+21098 XM
+(required upon exception detection, resuming from a breakpoint becomes)97 W
+7200 38759 MT
+(somewhat intricate.  Vanilla gdb removes the breakpoint, single)
+70 W( steps the process, puts back the break-)71 W
+7200 39902 MT
+(point and continues.  The enhanced version)
+49 W( must ensure that only the thread at the breakpoint executes)48 W
+7200 41045 MT
+(while performing the single step; this)
+62 W( requires switching from task suspension to suspension of all of the)63 W
+7200 42188 MT
+(threads except one and then back again before resuming the application.)SH
+8312 44472 MT
+(The Mach exception handling facility is an important implementation base for)
+167 W( the enhancements to)166 W
+7200 45615 MT
+(gdb. Identification)
+480 W( of the victim thread in the initial message avoids)
+101 W( confusion over which thread in the)102 W
+7200 46758 MT
+(process is being manipulated by ptrace\050\051; without)
+23 W( this identification it is necessary to compare the context)22 W
+7200 47901 MT
+(accessed by ptrace\050\051 to all other thread contexts in the task to determine this.  This)
+134 W( identification also)135 W
+7200 49044 MT
+(make it possible to)
+74 W( handle multiple concurrent exceptions; all of the Unix primitives are restricted to one)73 W
+7200 50187 MT
+(current signal per task, and hence preclude handling of multiple concurrent exceptions.  Finally the)
+126 W( in-)127 W
+7200 51330 MT
+(dependence of the debugger from the debugged application makes it possible to)
+141 W( implement debugger)140 W
+7200 52473 MT
+(attachment without kernel modifications;)
+111 W( Unix requires extensive kernel modifications to achieve similar)112 W
+7200 53616 MT
+(functionality [10])SH
+12 /Helvetica-Bold AF
+7200 57371 MT
+(12. Conclusion)SH
+10 /Helvetica AF
+8312 58514 MT
+(This paper)
+142 W( has discussed the design and implementation of exception handling facilities for general)141 W
+7200 59657 MT
+(purpose operating systems.  In the past these facilities have often been designed as afterthoughts)
+159 W( to)160 W
+7200 60800 MT
+(support a few specific applications.  In contrast to this approach we)
+15 W( have set forth a general model for the)14 W
+7200 61943 MT
+(use of exceptions and designed an exception handling facility that implements the model in full)
+11 W( generality.)12 W
+7200 63086 MT
+(The resulting facility is both simpler and more powerful than its predecessors; among)
+234 W( its major ad-)233 W
+7200 64229 MT
+(vantages is a clean separation between debuggers and error handlers.)SH
+8312 66513 MT
+(We have also shown that significant benefits can be derived from the properties)
+48 W( of the communication)49 W
+7200 67656 MT
+(facility used for exception handling.  The independence)
+207 W( of the Mach communication facility from the)206 W
+7200 68799 MT
+(applications using it to communicate provides direct support for debugger)
+81 W( attachment without the kernel)82 W
+7200 69942 MT
+(modifications required by previous implementations.  The combination of this independence property with)28 W
+7200 71085 MT
+(network transparency enables Mach to support parallel)
+72 W( and distributed debugging without change to the)73 W
+ES
+%%Page: ? 10
+BS
+0 SI
+10 /Helvetica AF
+7200 7929 MT
+(operating system kernel.)SH
+12 /Helvetica-Bold AF
+7200 11684 MT
+(Appendix A. Exception Classification)SH
+10 /Helvetica AF
+8312 12827 MT
+(The Mach)
+183 W( exception handling facility employs a new hardware-independent classification of excep-)182 W
+7200 13970 MT
+(tions. This)
+618 W( is in contrast to previous systems \050e.g. Unix\051, whose exception classifications are closely)171 W
+7200 15113 MT
+(wedded to the hardware on which they were originally developed.  Our new classification)
+193 W( divides all)192 W
+7200 16256 MT
+(exceptions into six classes based on the causes and uses of)
+233 W( the exceptions; further hardware and)234 W
+7200 17399 MT
+(software specific distinctions can be made within these classes as needed.  The six classes are:)SH
+9424 18800 MT
+(1.)SH
+10536 XM
+(Bad Access - A user access to memory failed for some reason and)
+104 W( the operating system)103 W
+10536 19943 MT
+(was unable to recover.  \050e.g. invalid memory, protection violation\051)SH
+9424 21758 MT
+(2.)SH
+10536 XM
+(Bad Instruction - A user executed an illegitimate instruction.)
+171 W( \050e.g.)
+621 W( undefined instruction,)172 W
+10536 22901 MT
+(reserved operand, privileged instruction\051)SH
+9424 24716 MT
+(3.)SH
+10536 XM
+(Arithmetic - A user arithmetic instruction)
+189 W( failed for an arithmetic reason.  \050e.g. overflow,)188 W
+10536 25859 MT
+(underflow, divide by zero\051.)SH
+9424 27674 MT
+(4.)SH
+10536 XM
+(Emulation - A user executed an instruction requiring software emulation.)SH
+9424 29489 MT
+(5.)SH
+10536 XM
+(Software - A broad class including all exceptions intended to support)
+83 W( software.  These fall)84 W
+10536 30632 MT
+(into three subclasses)SH
+12760 32033 MT
+(a.)SH
+13872 XM
+(Hardware - Hardware instructions to support error detection.  \050e.g.)
+42 W( trap on overflow,)41 W
+13872 33176 MT
+(trap on subscript out of range\051)SH
+12760 34991 MT
+(b.)SH
+13872 XM
+(Operating System - Exceptions detected by)
+194 W( operating system during system call)195 W
+13872 36134 MT
+(execution. \050e.g.)
+296 W( no receiver on)
+9 W( pipe\051 These are for operating system emulation \050e.g.)8 W
+13872 37277 MT
+(Unix\051. Mach)
+278 W( does not use exceptions for system call errors.)SH
+12816 39092 MT
+(c.)SH
+13872 XM
+(User - Exceptions defined and caused by user software for its own purposes.)SH
+9424 40907 MT
+(6.)SH
+10536 XM
+(Debugger - Hardware)
+188 W( Exceptions to support debuggers. \050e.g. breakpoint instruction and)189 W
+10536 42050 MT
+(trace trap\051.)SH
+7200 43451 MT
+(In cases of potential confusion \050e.g. is a bad opcode a bad instruction or an instruction)
+72 W( requiring emula-)71 W
+7200 44594 MT
+(tion?\051 the)
+34 W( correct classification is always clear from the intended uses of the instruction as determined by)35 W
+7200 45737 MT
+(the hardware and system designers.)SH
+8312 48021 MT
+(Two machine dependent fields are used to identify the precise exception within)
+56 W( a class for flexibility in)55 W
+7200 49164 MT
+(encoding exception numbers.  Two fields are needed for emulation instructions containing a single)
+135 W( ar-)136 W
+7200 50307 MT
+(gument \050one for the)
+40 W( instruction, one for the argument\051, but we have also found them useful for construct-)39 W
+7200 51450 MT
+(ing machine-dependent exception classifications \050e.g. use one field to hold the)
+7 W( trap number or vector, and)8 W
+7200 52593 MT
+(the other to distinguish this trap from the others that use this number or vector\051.  Cases in which)
+3 W( two fields)2 W
+7200 53736 MT
+(do not suffice require a separate interface to extract the additional machine-dependent status.)SH
+12 /Helvetica-Bold AF
+7200 57491 MT
+(Appendix B. Kernel Interface)SH
+10 /Helvetica AF
+8312 58634 MT
+(This appendix lists the Mach system calls that relate directly to the exception handling facility and other)14 W
+7200 59777 MT
+(calls of particular interest to users of the facility.  This)
+37 W( is a partial listing of system calls with brief descrip-)36 W
+7200 60920 MT
+(tions; a complete listing with full documentation can be found in the Mach Kernel Interface Manual.)SH
+8312 63204 MT
+(The following four operations are used to read and modify exception ports:)SH
+/Symbol SF
+9242 64676 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(task_get_exception_port)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+24484 XM
+(exception_port)SH
+/Helvetica SF
+(\051 - obtain task's exception port.)SH
+/Symbol SF
+9242 66491 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(task_set_exception_port)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+24429 XM
+(exception_port)SH
+/Helvetica SF
+(\051 - set task's exception port.)SH
+/Symbol SF
+9242 68306 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(thread_get_exception_port)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(thread)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+26540 XM
+(exception_port)SH
+/Helvetica SF
+(\051 - obtain thread's exception port.)SH
+/Symbol SF
+9242 70121 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(thread_set_exception_port)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(thread)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+26485 XM
+(exception_port)SH
+/Helvetica SF
+(\051 - set thread's exception port.)SH
+7200 71522 MT
+(The above operations are)
+86 W( implemented as macros that expand to the exception port version of the cor-)87 W
+ES
+%%Page: ? 11
+BS
+0 SI
+10 /Helvetica AF
+7200 7929 MT
+(responding set_special_port or get_special_port calls.)SH
+8312 10213 MT
+(The following additional kernel)
+9 W( operations may be of interest to programmers writing error handlers and)8 W
+7200 11356 MT
+(debuggers:)SH
+/Symbol SF
+9242 12828 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Communication Operations)SH
+7 /Symbol AF
+12160 14079 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 14229 MT
+(msg_send)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(msg_header)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+24153 XM
+(option)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+27433 XM
+(timeout)SH
+/Helvetica SF
+(\051 - send a message to a port.)SH
+7 /Symbol AF
+12160 15894 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 16044 MT
+(msg_receive)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(msg_header)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+25266 XM
+(option)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+28546 XM
+(timeout)SH
+/Helvetica SF
+(\051 - receive a message from a port.)SH
+7 /Symbol AF
+12160 17709 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 17859 MT
+(msg_rpc)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(msg_header)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+23402 XM
+(option)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+26710 XM
+(reply_size)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+31795 XM
+(send_timeout)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+38382 XM
+(reply_timeout)SH
+/Helvetica SF
+(\051 - send a mes-)28 W
+12760 19002 MT
+(sage to a port and receive the reply.)SH
+7 /Symbol AF
+12160 20667 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 20817 MT
+(port_allocate)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+21707 XM
+(port)SH
+/Helvetica SF
+(\051 - allocate new port in task.)SH
+7 /Symbol AF
+12160 22482 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 22632 MT
+(port_deallocate)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+22874 XM
+(port)SH
+/Helvetica SF
+(\051 - deallocate port from task.)SH
+/Symbol SF
+9242 24447 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Task Operations)SH
+7 /Symbol AF
+12160 25698 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 25848 MT
+(task_create)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(parent_task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+24614 XM
+(inherit_memory)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+32297 XM
+(child_task)SH
+/Helvetica SF
+(\051 - Create)
+237 W( new child task from)236 W
+12760 26991 MT
+(parent task.)SH
+7 /Symbol AF
+12160 28656 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 28806 MT
+(task_terminate)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(\051 - Terminate execution of the task.)SH
+7 /Symbol AF
+12160 30471 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 30621 MT
+(task_suspend)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(\051 - Suspend execution of the entire task.)SH
+7 /Symbol AF
+12160 32286 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 32436 MT
+(task_resume)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(\051 - Resume execution of the entire task.)SH
+7 /Symbol AF
+12160 34101 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 34251 MT
+(task_threads)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+21652 XM
+(thread_list)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+26821 XM
+(thread_count)SH
+/Helvetica SF
+(\051 - Obtain a list of all threads in the task.)SH
+/Symbol SF
+9242 36066 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Thread Operations)SH
+7 /Symbol AF
+12160 37317 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 37467 MT
+(thread_create)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+22220 XM
+(thread)SH
+/Helvetica SF
+(\051 - Create a new thread in)
+179 W( the specified task.  The new)180 W
+12760 38610 MT
+(thread is created in a suspended state.)SH
+7 /Symbol AF
+12160 40275 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 40425 MT
+(thread_terminate)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(thread)SH
+/Helvetica SF
+(\051 - Terminate execution of the thread.)SH
+7 /Symbol AF
+12160 42090 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 42240 MT
+(thread_suspend)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(thread)SH
+/Helvetica SF
+(\051 - Suspend execution of the thread.)SH
+7 /Symbol AF
+12160 43905 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 44055 MT
+(thread_resume)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(thread)SH
+/Helvetica SF
+(\051 - Resume execution of the thread.)SH
+7 /Symbol AF
+12160 45720 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 45870 MT
+(thread_get_state)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(thread)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+24727 XM
+(flavor)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+27969 XM
+(state)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+30934 XM
+(count)SH
+/Helvetica SF
+(\051 - Read registers in thread's)
+241 W( context.)240 W
+12760 47013 MT
+(Flavor distinguishes)
+88 W( between multiple register sets \050e.g. general and floating-point\051 in)89 W
+12760 48156 MT
+(hardware.)SH
+7 /Symbol AF
+12160 49821 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 49971 MT
+(thread_set_state)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(thread)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+24431 XM
+(flavor)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+27432 XM
+(state)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+30156 XM
+(count)SH
+/Helvetica SF
+(\051 - Write registers in thread's context.)SH
+/Symbol SF
+9242 51786 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Virtual Memory Operations)SH
+7 /Symbol AF
+12160 53037 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 53187 MT
+(vm_read)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+19596 XM
+(address)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+23709 XM
+(size)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+26043 XM
+(data)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+28545 XM
+(count)SH
+/Helvetica SF
+(\051 - Read another task's \050virtual\051 memory.)SH
+7 /Symbol AF
+12160 54852 MT
+(\267)SH
+10 /Helvetica-Bold AF
+12760 55002 MT
+(vm_write)SH
+/Helvetica SF
+(\050)SH
+/Helvetica-Oblique SF
+(task)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+19818 XM
+(address)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+23931 XM
+(data)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+26433 XM
+(count)SH
+/Helvetica SF
+(\051 - Write another task's \050virtual\051 memory.)SH
+12 /Helvetica-Bold AF
+7200 58757 MT
+(References)SH
+10 /Helvetica AF
+7200 60629 MT
+([1])SH
+10536 XM
+(Accetta, M.J., Baron, R.V., Bolosky, W., Golub, D.B., Rashid, R.F., Tevanian, A., and Young,)SH
+10536 61772 MT
+(M.W.)SH
+10536 62915 MT
+(Mach: A New Kernel Foundation for UNIX Development.)SH
+10536 64058 MT
+(In)SH
+/Helvetica-Oblique SF
+11648 XM
+(Proceedings of Summer Usenix)SH
+/Helvetica SF
+(. July,)
+278 W( 1986.)SH
+7200 65930 MT
+([2])SH
+/Helvetica-Oblique SF
+10536 XM
+(American National Standard Reference Manual for the Ada Programming Language)SH
+/Helvetica SF
+10536 67073 MT
+(ANSI, New York, NY, 1983.)SH
+10536 68216 MT
+(ANSI/MIL-STD 1815A-1983.)SH
+ES
+%%Page: ? 12
+BS
+0 SI
+10 /Helvetica AF
+7200 7929 MT
+([3])SH
+10536 XM
+(Bach, M. J.)SH
+/Helvetica-Oblique SF
+10536 9072 MT
+(The Design of the Unix Operating System.)SH
+/Helvetica SF
+10536 10215 MT
+(Prentice-Hall, Inc., Englewood Cliffs, NJ, 1986.)SH
+7200 12087 MT
+([4])SH
+/Helvetica-Oblique SF
+10536 XM
+(VAX Architecture Handbook)SH
+/Helvetica SF
+10536 13230 MT
+(DEC, Marlboro, MA, 1981.)SH
+7200 15102 MT
+([5])SH
+10536 XM
+(Dobberpuhl, D.W., Supnik, R.M., and Witek, R.T.)SH
+10536 16245 MT
+(The MicroVAX 78032 Chip, A 32-Bit Microprocessor.)SH
+/Helvetica-Oblique SF
+10536 17388 MT
+(Digital Technical Journal)SH
+/Helvetica SF
+21706 XM
+(\0502\051:12-23, March, 1986.)SH
+7200 19260 MT
+([6])SH
+10536 XM
+(Ousterhout, J.K.)SH
+/Helvetica-Oblique SF
+10536 20403 MT
+(Partitioning and cooperation in a Distributed Multiprocessor Operating System: Medusa)SH
+/Helvetica SF
+(.)SH
+10536 21546 MT
+(PhD thesis, Carnegie Mellon University, 1980.)SH
+7200 23418 MT
+([7])SH
+10536 XM
+(Rashid, R.F., and Robertson, G.)SH
+10536 24561 MT
+(Accent: A Communication Oriented Network Operating System Kernel.)SH
+10536 25704 MT
+(In)SH
+/Helvetica-Oblique SF
+11648 XM
+(Proceedings of the Eighth Symposium on Operating System Principles)SH
+/Helvetica SF
+(, pages 64-75.  Decem-)SH
+12204 26847 MT
+(ber, 1981.)SH
+7200 28719 MT
+([8])SH
+10536 XM
+(Siewiorek, D.P., Bell, C. G., and Newell, A.)SH
+/Helvetica-Oblique SF
+10536 29862 MT
+(Computer Structures: Principles and Examples.)SH
+/Helvetica SF
+10536 31005 MT
+(McGraw-Hill Book Company, New York, NY, 1982.)SH
+7200 32877 MT
+([9])SH
+10536 XM
+(Richard M. Stallman.)SH
+/Helvetica-Oblique SF
+10536 34020 MT
+(GDB Manual: The GNU source-Level Debugger)SH
+/Helvetica SF
+10536 35163 MT
+(First edition, Free Software Foundation, 1987.)SH
+7200 37035 MT
+([10])SH
+10536 38178 MT
+(Sun Operating System Version 3.2.)SH
+10536 39321 MT
+(Operating System Kernel Source Code.)SH
+ES
+%%Page: i 13
+BS
+0 SI
+10 /Helvetica-Bold AF
+30461 4329 MT
+(i)SH
+12 SS 
+25533 8075 MT
+(Table of Contents)SH
+11 SS 
+9036 9319 MT
+(1. Introduction)SH
+9036 10563 MT
+(2. The Mach System)SH
+9036 11807 MT
+(3. Exceptions and their Uses)SH
+9036 13051 MT
+(4. Existing Approaches)SH
+9036 14295 MT
+(5. A Model for Exception Handling)SH
+9036 15539 MT
+(6. Design of the Mach Exception Handling Facility)SH
+10 SS 
+11092 16688 MT
+(6.1. Exception Ports)SH
+11092 17837 MT
+(6.2. User Extensibility)SH
+11 SS 
+9036 19081 MT
+(7. Implementing Error Handlers)SH
+9036 20325 MT
+(8. Implementing Debuggers)SH
+9036 21569 MT
+(9. Communication Properties and Extended Functionality)SH
+10 SS 
+11092 22718 MT
+(9.1. Debugger Attachment)SH
+11 SS 
+9036 23962 MT
+(10. Parallel and Distributed Debugging)SH
+9036 25206 MT
+(11. Gdb Enhancements)SH
+9036 26450 MT
+(12. Conclusion)SH
+9036 27694 MT
+(Appendix A. Exception Classification)SH
+9036 28938 MT
+(Appendix B. Kernel Interface)SH
+9036 30182 MT
+(References)SH
+ES
+%%Trailer
+%%Pages: 13
+%%DocumentFonts: Helvetica Helvetica-Bold Helvetica-Oblique Symbol

@@ -1,0 +1,7865 @@
+%!              for use by dvi2ps Version 2.00
+
+
+
+
+/TeXDict 200 dict def   
+TeXDict begin           
+
+                        
+/Resolution 300 def
+/Inch  {Resolution mul} def  
+
+/Mtrx 6 array def
+
+
+
+/@draft				
+  { /DraftOption 1 def
+  } def
+
+/every-page {
+	DraftOption 1 eq {print-draft} if
+} def
+
+
+/print-draft {
+	gsave
+		-45 rotate
+		-100 0 moveto
+		/Helvetica-Bold findfont
+			[ 120.0 0 0 -120.0 0 0 ] makefont setfont
+		(DRAFT) show
+	grestore
+	gsave
+		300 -100 moveto
+		/Helvetica-Bold findfont
+			[ 60.0 0 0 -60.0 0 0 ] makefont setfont
+		Date-and-Time show
+		(   ::   )	      show
+		Dvi-File-Name show
+	grestore
+} def
+
+
+userdict /letter known not {/letter {} def} if
+
+
+/@letter
+  { letter initmatrix
+    72 Resolution div dup neg scale          
+    310 -3005 translate      
+    Mtrx currentmatrix pop   
+  } def
+        
+/@note
+  { note initmatrix
+    72 Resolution div dup neg scale          
+    310 -3005 translate                      
+    Mtrx currentmatrix pop
+  } def
+
+ /LandscapeOption 0 def			     
+					     
+
+
+/@landscape
+  { /LandscapeOption 1 def
+   letter initmatrix
+    72 Resolution div dup neg scale          
+    Mtrx currentmatrix 0 0.0 put             
+    Mtrx 1 -1.0 put                          
+    Mtrx 2 1.0 put                           
+    Mtrx 3 0.0 put                           
+    Mtrx  setmatrix                          
+    300 310  translate                       
+    Mtrx currentmatrix pop
+  } def
+
+/@legal
+  { legal initmatrix
+    72 Resolution div dup neg scale          
+    295 -3880 translate                      
+    Mtrx currentmatrix pop
+  } def
+
+/@manualfeed
+   { statusdict /manualfeed true put
+   } def
+        
+/@copies
+   { /#copies exch def
+   } def
+
+
+/@newfont       
+  { /newname exch def
+    pop
+    newname 7 dict def          
+    newname load begin
+        /FontType 3 def
+        /FontMatrix [1 0 0 -1 0 0] def
+        /FontBBox [0 0 1 1] def
+        /BitMaps 128 array def
+        /BuildChar {CharBuilder} def
+        /Encoding 128 array def
+        0 1 127 {Encoding exch /.undef put} for
+        end
+    newname newname load definefont pop
+  } def
+
+
+
+/ch-image {ch-data 0 get} def   
+/ch-width {ch-data 1 get} def   
+/ch-height {ch-data 2 get} def  
+/ch-xoff  {ch-data 3 get} def   
+/ch-yoff  {ch-data 4 get} def   
+/ch-tfmw  {ch-data 5 get} def   
+
+/CharBuilder    
+  { /ch-code exch def           
+    /font-dict exch def         
+    /ch-data font-dict /BitMaps get ch-code get def     
+    ch-data null eq not
+      { ch-tfmw   0   ch-xoff neg   ch-yoff neg   ch-width ch-xoff sub   ch-height ch-yoff sub
+            setcachedevice
+        ch-width ch-height true [1 0  0 1  ch-xoff ch-yoff]
+            {ch-image} imagemask
+      }
+    if
+  } def
+
+
+/@sf            
+  { setfont() pop
+  } def
+
+                
+                
+
+/@dc            
+  { /ch-code exch def
+    dup 0 get
+    length 2 lt
+      { pop [ <00> 1 1 0 0 8.00 ] } 
+    if
+    /ch-data exch def
+    currentfont /BitMaps get ch-code ch-data put
+    currentfont /Encoding get ch-code 
+       dup (   ) cvs cvn   
+       put
+  } def
+
+/@bop0           
+  { 
+  } def
+
+/@bop1           
+  { pop
+    erasepage initgraphics 
+    Mtrx setmatrix
+    /SaveImage save def() pop
+  } def
+
+/@eop           
+  { every-page			
+    showpage 
+    SaveImage restore() pop
+  } def
+
+/@start         
+  { @letter                             
+  } def
+
+/@end           
+  { end
+  } def
+
+/p              
+  { moveto
+  } def
+
+/r              
+  { 0 rmoveto
+  } def
+
+/s              
+  { show
+  } def
+
+/c              
+  { c-string exch 0 exch put
+    c-string show
+  } def
+
+/c-string ( ) def
+
+/ru             
+  { /dy exch neg def    
+    /dx exch def
+    /x currentpoint /y exch def def   
+    newpath x y moveto
+    dx 0 rlineto
+    0 dy rlineto
+    dx neg 0 rlineto
+    closepath fill
+    x y moveto
+  } def
+
+
+
+
+
+/@SpecialDefaults
+  { /hs 8.5 Inch def
+    /vs 11 Inch def
+    /ho 0 def
+    /vo 0 def
+    /hsc 1 def
+    /vsc 1 def
+    /CLIP false def
+  } def
+
+/@hsize {/hs exch def /CLIP true def} def
+/@vsize {/vs exch def /CLIP true def} def
+/@hoffset {/ho exch def} def
+/@voffset {/vo exch def} def
+/@hscale {/hsc exch def} def
+/@vscale {/vsc exch def} def
+
+/@setclipper
+  { hsc vsc scale
+    CLIP
+      { newpath 0 0 moveto hs 0 rlineto 0 vs rlineto hs neg 0 rlineto closepath clip }
+    if
+  } def
+
+
+/@beginspecial          
+  { gsave /SpecialSave save def
+          
+          
+    currentpoint transform initgraphics itransform translate
+    LandscapeOption 1 eq {90 rotate} if
+    @SpecialDefaults    
+    @MacSetUp           
+  } def
+
+/@setspecial    
+  {
+    MacDrwgs
+      {md begin /pxt ho def /pyt vo neg def end}
+      {ho vo translate @setclipper}
+    ifelse
+  } def
+
+/@endspecial            
+  { SpecialSave restore
+    grestore
+  } def
+
+/MacDrwgs false def     
+
+        
+                        
+                        
+                        
+                        
+/@MacSetUp
+  { userdict /md known  
+      { userdict /md get type /dicttype eq      
+         { /MacDrwgs true def
+           md begin                             
+              /psu                              
+                /psu load
+                        
+                { /letter {} def        
+                  /note {} def          
+                  /legal {} def
+                  statusdict /waittimeout 300 put
+                  /page {pop} def       
+                  /pyt vo neg def       
+                  /pxt ho def
+                }
+                concatprocs 
+              def
+              /od                               
+                /od load
+                { @setclipper }
+                concatprocs
+              def
+           end }
+        if }
+    if    
+  } def
+
+/concatprocs
+  { /p2 exch cvlit def 
+    /p1 exch cvlit def
+    /p p1 length p2 length add array def
+    p 0 p1 putinterval 
+    p p1 length p2 putinterval
+    p cvx
+  } def
+
+end                     
+TeXDict begin @start
+%%Creator: dvi-ps
+%%EndProlog
+/bp-per-inch	72 def
+
+/bp2pxl 1.0 Resolution div bp-per-inch mul def
+
+/Rotate-Angle 0.0 def
+
+/Default-Matrix { [bp2pxl 0.0 0.0 bp2pxl
+		   72.0 -72.0 ] } def
+
+/Default-Matrix { [0.0 bp2pxl bp2pxl neg 0.0
+		   720.0 0.0 ] } def
+
+/Default-Matrix { [ bp2pxl 0.0 0.0 bp2pxl neg
+		   1 bp-per-inch mul			% t_x
+		   11 1 sub bp-per-inch mul		% t_y
+		] } def
+
+/Dvi-File-Name (debugger.dvi) def
+/DraftOption 0 def
+/#copies 1 def
+/Date-and-Time (Mon Nov 13 14:32:32 1989) def
+% =========================================================================
+% ========================= ps fonts go here ==============================
+% =========================================================================
+% From 'old-font-name' generate a makefont-operator modified font
+% which is called new-font-name.
+% 	new-font-name [ matrix ] old-font-name @newfont-ps -
+/@newfont-ps	{
+
+% Save the arguments
+	/old-font-name	exch def
+	/font-mat	exch def
+	/new-font-name	exch def
+
+% In the following we have three fonts:
+% 	(a) the old font, which forms the basis
+% 	(b) the new font 2, which is the result of the 'makefont' operator
+% 	(c) the new font, which is a copied directory of (b)
+
+	/old-font-dict old-font-name findfont def
+	/font-dict-2   old-font-dict font-mat makefont def
+
+% Create a new dictionary. Make a copy of the old font
+	/font-dict-new font-dict-2 length dict def
+	 font-dict-new begin
+	font-dict-2		% copy everything out of font-dict-2
+	{				% except FontBBox and FID
+	    exch dup dup /FID ne exch
+			 /FontBBox ne and
+	        { exch font-dict-new 3 1 roll put }
+	        { pop pop }
+	    ifelse
+	}   forall
+	end
+
+	/newFontBBox old-font-dict /FontBBox get % bug fix, see exercise
+		aload length array astore def
+
+	font-dict-new /FontBBox newFontBBox put
+	font-dict-new /FontName new-font-name put
+%	newfont /Metrics newwidths put
+   
+	new-font-name font-dict-new definefont pop
+
+%	vmstatus exch sub == pop      % print a few statistics (mem remaining)
+} def
+% Load a PS PS font
+% fontdict @sfps -        -- make that the current font
+/@sfps	{
+	findfont setfont
+
+} def
+%!
+% Print the font dictionaries in the current context
+/@PrintFontDicts {
+
+} def
+%!
+% $Revision: 1.4 $
+% Program 18 of the Postscript Cookbook, Page 211
+% Modified for the needs of including it into the postscript
+% stuff of TeX.
+
+/reencodedict 12 dict def	% get us a temporary directory
+
+% Reencode procedure
+% font-name newfont-name encoding-change-vector ReEncodeSmall
+
+/@ReEncodeSmall {
+    reencodedict begin
+    /newcodesandnames	exch def
+    /newfontname	exch def
+    /basefontname	exch def
+
+
+
+    /basefontdict basefontname findfont def	% get font dictionary you
+    						% start out with
+    /newfont basefontdict maxlength dict def	% Create a new dictionary,
+    						% same length
+    basefontdict
+    {	exch dup /FID ne
+%       (Looping\n) print flush
+	{
+%	    dup				% duplicate Key for printing
+%	    (Key being copied: ) print
+%	    (               ) cvs print
+%	    (\n) print flush
+	    dup /Encoding eq
+	    {
+		exch dup length array copy	% make a COPY of the
+						% encoding vector elements
+		newfont 3 1 roll put
+	    }{
+		exch newfont 3 1 roll put	% the rest is easy to copy
+	    } ifelse
+	}{
+	    pop pop				% do not copy FID
+	} ifelse
+    } forall
+
+    newfont /FontName newfontname put		% put in the new name
+
+% Now we start to modify the encoding vector
+    newcodesandnames aload pop
+    newcodesandnames length 2 idiv 
+    { newfont /Encoding get 3 1 roll put}
+	repeat
+    newfontname newfont definefont		% Declare the new font
+    pop						% ignore result
+    end
+    @PrintFontDicts
+} def
+
+% START PS FONT, TeX internal font number: 53
+
+% psname: @Times-Bold.53
+% SetUpPsFont: Start
+/@CodeVectorTextDelta [
+	8#0 /Aacute
+	8#1 /Acircumflex
+	8#2 /Adieresis
+	8#3 /Agrave
+	8#4 /Aring
+	8#5 /Atilde
+	8#6 /Ccedilla
+	8#7 /Eacute
+	8#10 /Ecircumflex
+	8#11 /Edieresis
+	8#12 /Egrave
+	8#13 /Iacute
+	8#14 /Icircumflex
+	8#15 /Idieresis
+	8#16 /Igrave
+	8#17 /Ntilde
+	8#20 /Oacute
+	8#21 /Ocircumflex
+	8#22 /Odieresis
+	8#23 /Ograve
+	8#24 /Otilde
+	8#25 /Scaron
+	8#26 /Uacute
+	8#27 /Ucircumflex
+	8#30 /Udieresis
+	8#31 /Ugrave
+	8#32 /Ydieresis
+	8#33 /Zcaron
+	8#34 /aacute
+	8#35 /acircumflex
+	8#36 /adieresis
+	8#37 /agrave
+	8#200 /aring
+	8#201 /atilde
+	8#202 /ccedilla
+	8#203 /eacute
+	8#204 /ecircumflex
+	8#205 /edieresis
+	8#206 /egrave
+	8#207 /iacute
+	8#210 /icircumflex
+	8#211 /idieresis
+	8#212 /igrave
+	8#213 /ntilde
+	8#214 /oacute
+	8#215 /ocircumflex
+	8#216 /odieresis
+	8#217 /ograve
+	8#220 /otilde
+	8#221 /scaron
+	8#222 /uacute
+	8#223 /ucircumflex
+	8#224 /udieresis
+	8#225 /ugrave
+	8#226 /ydieresis
+	8#227 /zcaron
+] def
+/Times-Bold /@Times-Bold.53.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     2.1600
+/@Times-Bold.53.2 [ 59.776 0.000 0.000 -59.776 0.000 0.000 ]
+	/@Times-Bold.53.1 @newfont-ps 
+% SetUpPsFont: End
+/@P53 { /@Times-Bold.53.2 } def
+
+% END PS FONT, TeX internal font number: 53
+
+
+% START PS FONT, TeX internal font number: 49
+
+% psname: @Times-Roman.49
+% SetUpPsFont: Start
+/Times-Roman /@Times-Roman.49.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     2.1600
+/@Times-Roman.49.2 [ 59.776 0.000 0.000 -59.776 0.000 0.000 ]
+	/@Times-Roman.49.1 @newfont-ps 
+% SetUpPsFont: End
+/@P49 { /@Times-Roman.49.2 } def
+
+% END PS FONT, TeX internal font number: 49
+
+
+% START PS FONT, TeX internal font number: 41
+
+% psname: @Times-Roman.41
+% SetUpPsFont: Start
+/Times-Roman /@Times-Roman.41.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.8000
+/@Times-Roman.41.2 [ 49.813 0.000 0.000 -49.813 0.000 0.000 ]
+	/@Times-Roman.41.1 @newfont-ps 
+% SetUpPsFont: End
+/@P41 { /@Times-Roman.41.2 } def
+
+% END PS FONT, TeX internal font number: 41
+
+
+% START PS FONT, TeX internal font number: 39
+
+% psname: @Courier.39
+% SetUpPsFont: Start
+/Courier /@Courier.39.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.6430
+/@Courier.39.2 [ 45.468 0.000 0.000 -45.468 0.000 0.000 ]
+	/@Courier.39.1 @newfont-ps 
+% SetUpPsFont: End
+/@P39 { /@Courier.39.2 } def
+
+% END PS FONT, TeX internal font number: 39
+
+
+% START PS FONT, TeX internal font number: 38
+
+% psname: @Times-Bold.38
+% SetUpPsFont: Start
+/Times-Bold /@Times-Bold.38.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.6430
+/@Times-Bold.38.2 [ 45.468 0.000 0.000 -45.468 0.000 0.000 ]
+	/@Times-Bold.38.1 @newfont-ps 
+% SetUpPsFont: End
+/@P38 { /@Times-Bold.38.2 } def
+
+% END PS FONT, TeX internal font number: 38
+
+
+% START PS FONT, TeX internal font number: 37
+
+% psname: @Times-Italic.37
+% SetUpPsFont: Start
+/Times-Italic /@Times-Italic.37.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.6430
+/@Times-Italic.37.2 [ 45.468 0.000 0.000 -45.468 0.000 0.000 ]
+	/@Times-Italic.37.1 @newfont-ps 
+% SetUpPsFont: End
+/@P37 { /@Times-Italic.37.2 } def
+
+% END PS FONT, TeX internal font number: 37
+
+% cmsy10.1643 is @F36
+
+% START PS FONT, TeX internal font number: 33
+
+% psname: @Times-Roman.33
+% SetUpPsFont: Start
+/Times-Roman /@Times-Roman.33.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.6430
+/@Times-Roman.33.2 [ 45.468 0.000 0.000 -45.468 0.000 0.000 ]
+	/@Times-Roman.33.1 @newfont-ps 
+% SetUpPsFont: End
+/@P33 { /@Times-Roman.33.2 } def
+
+% END PS FONT, TeX internal font number: 33
+
+
+% START PS FONT, TeX internal font number: 30
+
+% psname: @Times-Bold.30
+% SetUpPsFont: Start
+/Times-Bold /@Times-Bold.30.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.5000
+/@Times-Bold.30.2 [ 41.511 0.000 0.000 -41.511 0.000 0.000 ]
+	/@Times-Bold.30.1 @newfont-ps 
+% SetUpPsFont: End
+/@P30 { /@Times-Bold.30.2 } def
+
+% END PS FONT, TeX internal font number: 30
+
+
+% START PS FONT, TeX internal font number: 25
+
+% psname: @Times-Roman.25
+% SetUpPsFont: Start
+/Times-Roman /@Times-Roman.25.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.5000
+/@Times-Roman.25.2 [ 41.511 0.000 0.000 -41.511 0.000 0.000 ]
+	/@Times-Roman.25.1 @newfont-ps 
+% SetUpPsFont: End
+/@P25 { /@Times-Roman.25.2 } def
+
+% END PS FONT, TeX internal font number: 25
+
+
+% START PS FONT, TeX internal font number: 22
+
+% psname: @Times-Italic.22
+% SetUpPsFont: Start
+/Times-Italic /@Times-Italic.22.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.3500
+/@Times-Italic.22.2 [ 37.360 0.000 0.000 -37.360 0.000 0.000 ]
+	/@Times-Italic.22.1 @newfont-ps 
+% SetUpPsFont: End
+/@P22 { /@Times-Italic.22.2 } def
+
+% END PS FONT, TeX internal font number: 22
+
+
+% START PS FONT, TeX internal font number: 18
+
+% psname: @Times-Roman.18
+% SetUpPsFont: Start
+/Times-Roman /@Times-Roman.18.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.3500
+/@Times-Roman.18.2 [ 37.360 0.000 0.000 -37.360 0.000 0.000 ]
+	/@Times-Roman.18.1 @newfont-ps 
+% SetUpPsFont: End
+/@P18 { /@Times-Roman.18.2 } def
+
+% END PS FONT, TeX internal font number: 18
+
+
+% START PS FONT, TeX internal font number: 13
+
+% psname: @Times-Roman.13
+% SetUpPsFont: Start
+/Times-Roman /@Times-Roman.13.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     1.2000
+/@Times-Roman.13.2 [ 33.209 0.000 0.000 -33.209 0.000 0.000 ]
+	/@Times-Roman.13.1 @newfont-ps 
+% SetUpPsFont: End
+/@P13 { /@Times-Roman.13.2 } def
+
+% END PS FONT, TeX internal font number: 13
+
+
+% START PS FONT, TeX internal font number: 4
+
+% psname: @Times-Roman.4
+% SetUpPsFont: Start
+/Times-Roman /@Times-Roman.4.1 @CodeVectorTextDelta @ReEncodeSmall
+% NO outline font business
+% Font magnification:     0.9000
+/@Times-Roman.4.2 [ 24.907 0.000 0.000 -24.907 0.000 0.000 ]
+	/@Times-Roman.4.1 @newfont-ps 
+% SetUpPsFont: End
+/@P4 { /@Times-Roman.4.2 } def
+
+% END PS FONT, TeX internal font number: 4
+
+13 @bop0
+13 @bop1
+@P33 @sfps 
+98 42 p (Feb.) s
+16 r (1988.) s
+23 117 p ([4]) s
+22 r (Black,) s
+12 r (D.) s
+12 r (L.,) s
+12 r (D.) s
+11 r (B.) s
+11 r (Golub,) s
+12 r (K.) s
+12 r (Hauth,) s
+12 r (A.) s
+11 r 84 c
+-2 r (evanian,) s
+11 r (Jr) s
+-2 r 46 c
+10 r (and) s
+12 r (R.) s
+11 r (Sanzi.) s
+11 r 170 c
+0 r (The) s
+11 r (MACH) s
+12 r (Exception) s
+11 r (Handling) s
+98 173 p (Facility",) s
+@P37 @sfps 
+18 r (Pr) s
+-1 r (oc.) s
+16 r (A.C.M.) s
+16 r (SIGPLAN) s
+17 r (and) s
+17 r (SIGOPS) s
+16 r 87 c
+-3 r (orkshop) s
+16 r (on) s
+17 r (Parallel) s
+16 r (and) s
+17 r (Distributed) s
+17 r (Debugging,) s
+98 230 p (SIGPLAN) s
+16 r (Notices) s
+@P33 @sfps 
+15 r (24,1) s
+15 r (\(May) s
+15 r (1988\),) s
+15 r (45-56.) s
+23 305 p ([5]) s
+22 r (Letwin,) s
+16 r (Gordon.) s
+@P37 @sfps 
+15 r (Inside) s
+15 r (OS/2) s
+@P33 @sfps 
+15 r (Redmond,W) s
+-3 r (a.:) s
+20 r (Microsoft) s
+15 r (Press,) s
+15 r (1988.) s
+15 r (289) s
+15 r (pages.) s
+23 380 p ([6]) s
+22 r (Microsoft) s
+11 r (Corporation.) s
+@P37 @sfps 
+10 r (Micr) s
+-1 r (osoft) s
+9 r (OS/2) s
+10 r (Pr) s
+0 r (ogrammers) s
+9 r (Refer) s
+-1 r (ence,) s
+10 r 86 c
+-4 r (olume) s
+9 r 51 c
+@P33 @sfps 
+0 r 46 c
+11 r (Redmond,) s
+11 r 87 c
+-3 r (a.:) s
+17 r (Microsoft) s
+98 436 p (Press,) s
+16 r (1988.) s
+15 r (430) s
+15 r (pages.) s
+23 511 p ([7]) s
+22 r (Petzold,) s
+25 r (Charles.) s
+22 r 170 c
+0 r 84 c
+-2 r (echniques) s
+22 r (for) s
+22 r (Debugging) s
+23 r (Multithread) s
+22 r (OS/2) s
+23 r (Programs) s
+23 r (with) s
+22 r (CodeV) s
+-2 r (iew) s
+22 r (2.2",) s
+@P37 @sfps 
+98 568 p (Micr) s
+0 r (osoft) s
+14 r (Systems) s
+15 r (Journal) s
+@P33 @sfps 
+0 r 44 c
+15 r (September) s
+15 r (1988,) s
+16 r (pp.) s
+15 r (21-29.) s
+23 643 p ([8]) s
+22 r (Stallman,) s
+19 r (R.M.,) s
+@P37 @sfps 
+18 r (GDB) s
+17 r (Manual;) s
+19 r (The) s
+18 r (GNU) s
+17 r (Sour) s
+0 r (ce-Level) s
+16 r (Debugger) s
+-4 r 44 c
+17 r (1st) s
+18 r (ed.,) s
+18 r (GDB) s
+18 r 86 c
+-4 r (ersion) s
+16 r (2.0) s
+@P33 @sfps 
+0 r 44 c
+19 r (Free) s
+98 699 p (Software) s
+16 r (Foundation,) s
+15 r (Jan.) s
+15 r (1987.) s
+23 775 p ([9]) s
+22 r 84 c
+-2 r (evanian,) s
+12 r (Jr) s
+-2 r (.,) s
+12 r (R.) s
+12 r 70 c
+-2 r 46 c
+11 r (Rashid,) s
+12 r (D.) s
+12 r (B.) s
+12 r (Golub,) s
+13 r (D.) s
+12 r (L.) s
+12 r (Black,) s
+13 r (E.) s
+12 r (Cooper) s
+12 r (and) s
+12 r (M.) s
+12 r 87 c
+-3 r 46 c
+11 r 89 c
+-4 r (oung.) s
+12 r 170 c
+0 r (MACH) s
+12 r (Threads) s
+98 831 p (and) s
+17 r (the) s
+17 r (UNIX) s
+17 r (Kernel;) s
+18 r (The) s
+17 r (Battle) s
+17 r (for) s
+17 r (Control",) s
+@P37 @sfps 
+17 r (Pr) s
+0 r (oc.) s
+16 r (USENIX) s
+17 r (1987) s
+17 r (Summer) s
+17 r 84 c
+-4 r (echnical) s
+16 r (Conf.) s
+17 r (and) s
+98 887 p (Exhibition) s
+@P33 @sfps 
+0 r 44 c
+16 r (8-12) s
+15 r (June) s
+15 r (1987,) s
+15 r (185-197.) s
+951 2843 p (13) s
+@eop
+12 @bop0
+12 @bop1
+@P33 @sfps 
+0 42 p (multithreaded) s
+15 r (applications) s
+14 r (on) s
+15 r (multiprocessors.) s
+20 r 91 c
+0 r 50 c
+0 r 93 c
+14 r (Parasight) s
+15 r (inserts) s
+14 r (debugging) s
+15 r 170 c
+0 r (parasites) s
+0 r 186 c
+14 r (into) s
+15 r (the) s
+15 r (appli-) s
+0 98 p (cation) s
+17 r (to) s
+17 r (directly) s
+17 r (monitor) s
+17 r (its) s
+17 r (execution) s
+16 r (state;) s
+18 r (these) s
+17 r 170 c
+0 r (parasites) s
+0 r 186 c
+17 r (execute) s
+17 r (as) s
+17 r (independent) s
+17 r (threads) s
+17 r (on) s
+17 r (spare) s
+0 154 p (processors) s
+14 r (\(not) s
+14 r (in) s
+15 r (use) s
+14 r (by) s
+14 r (the) s
+14 r (application\)) s
+14 r (to) s
+15 r (continually) s
+14 r (check) s
+14 r (assertions.) s
+20 r (Parasight) s
+14 r (relies) s
+14 r (heavily) s
+14 r (on) s
+15 r (this) s
+0 211 p (technique) s
+19 r (of) s
+19 r (modifying) s
+19 r (the) s
+19 r (application) s
+19 r (to) s
+19 r (perform) s
+19 r (debugging) s
+19 r (\(e.g.) s
+32 r (breakpoints) s
+19 r (are) s
+19 r (implemented) s
+19 r (by) s
+19 r 97 c
+0 267 p (branch) s
+17 r (to) s
+17 r (debugging) s
+17 r (code) s
+17 r (inserted) s
+17 r (into) s
+17 r (the) s
+16 r (application) s
+17 r (by) s
+17 r (Parasight\).) s
+26 r (In) s
+17 r (contrast,) s
+17 r (we) s
+17 r (have) s
+17 r (retained) s
+17 r (the) s
+0 324 p (traditional) s
+14 r (Unix) s
+15 r (debugger) s
+14 r (model) s
+15 r (which) s
+14 r (avoids) s
+15 r (modifying) s
+14 r (the) s
+14 r (application) s
+15 r (except) s
+14 r (for) s
+15 r (breakpoint) s
+14 r (insertion.) s
+@P38 @sfps 
+0 492 p (9.) s
+45 r (Futur) s
+0 r 101 c
+15 r (Enhancements) s
+@P33 @sfps 
+0 637 p (One) s
+16 r (major) s
+17 r (area) s
+16 r (of) s
+16 r (work) s
+17 r (we) s
+16 r (chose) s
+17 r (not) s
+16 r (to) s
+16 r (attack) s
+17 r (was) s
+16 r 97 c
+16 r (major) s
+17 r (redesign) s
+16 r (of) s
+@P37 @sfps 
+16 r (gdb) s
+@P33 @sfps 
+17 r (to) s
+16 r (incorporate) s
+17 r (support) s
+16 r (for) s
+0 694 p (multiple) s
+13 r (threads) s
+14 r (throughout) s
+13 r (its) s
+13 r (code.) s
+20 r (Such) s
+13 r 97 c
+14 r (redesign) s
+13 r (would) s
+13 r (include) s
+14 r (saving) s
+13 r (state) s
+14 r (information) s
+13 r (about) s
+13 r (every) s
+0 750 p (thread) s
+18 r (so) s
+18 r (that) s
+19 r (multiple) s
+18 r (breakpoints) s
+18 r (can) s
+18 r (be) s
+18 r (handled) s
+18 r (by) s
+19 r 97 c
+18 r (single) s
+18 r (continue.) s
+29 r (This) s
+18 r (would) s
+18 r (make) s
+19 r (it) s
+18 r (possible) s
+0 807 p (to) s
+20 r (support) s
+20 r (conditional) s
+20 r (breakpoints) s
+20 r (and) s
+20 r (breakpoints) s
+20 r (that) s
+20 r (execute) s
+20 r (commands) s
+20 r (and) s
+20 r (continue) s
+20 r (without) s
+20 r (user) s
+0 863 p (intervention) s
+15 r (which) s
+15 r (cannot) s
+15 r (be) s
+16 r (supported) s
+15 r (in) s
+15 r (our) s
+15 r (current) s
+15 r (design.) s
+62 961 p (In) s
+20 r (addition,) s
+20 r (the) s
+20 r (exception) s
+20 r (handling) s
+19 r (processing) s
+20 r (should) s
+19 r (be) s
+20 r (written) s
+19 r (to) s
+20 r (take) s
+20 r (advantage) s
+19 r (of) s
+20 r (the) s
+19 r (detailed) s
+0 1017 p (information) s
+16 r (received) s
+15 r (through) s
+16 r (the) s
+15 r (MACH) s
+16 r (Exception) s
+15 r (Handling) s
+16 r (Facility) s
+-2 r 46 c
+20 r (For) s
+16 r (example,) s
+15 r (when) s
+16 r (the) s
+16 r (debugger) s
+0 1074 p (receives) s
+16 r 97 c
+15 r (breakpoint) s
+16 r (trap) s
+15 r (exception) s
+16 r (from) s
+15 r (MACH,) s
+16 r (it) s
+16 r (knows) s
+15 r (whether) s
+16 r (the) s
+15 r (exception) s
+16 r (was) s
+15 r (caused) s
+16 r (by) s
+16 r 97 c
+15 r (real) s
+0 1130 p (breakpoint) s
+16 r (or) s
+17 r (by) s
+16 r 97 c
+16 r (trace) s
+16 r (trap.) s
+24 r (Using) s
+16 r (the) s
+@P37 @sfps 
+16 r (ptrace) s
+@P33 @sfps 
+0 r 47 c
+@P37 @sfps 
+0 r (wait) s
+@P33 @sfps 
+17 r (combination) s
+16 r (for) s
+16 r 174 c
+0 r (nding) s
+17 r (out) s
+16 r (an) s
+16 r (application) s
+16 r (thread') s
+-1 r 115 c
+0 1187 p (stop) s
+18 r (status,) s
+19 r (all) s
+18 r (the) s
+18 r (debugger) s
+18 r (knows) s
+18 r (is) s
+18 r (that) s
+18 r (the) s
+18 r (thread) s
+18 r (stopped) s
+18 r (on) s
+18 r 97 c
+18 r (SIGTRAP) s
+18 r (which) s
+18 r (could) s
+18 r (be) s
+18 r (either) s
+18 r 97 c
+0 1243 p (breakpoint) s
+15 r (or) s
+15 r 97 c
+15 r (trace) s
+15 r (trap.) s
+21 r (Our) s
+@P37 @sfps 
+15 r (gdb) s
+@P33 @sfps 
+15 r (is) s
+15 r (currently) s
+15 r (implemented) s
+15 r (to) s
+15 r (convert) s
+15 r (the) s
+15 r (detailed) s
+15 r (information) s
+15 r (back) s
+15 r (to) s
+0 1300 p 97 c
+15 r (SIGTRAP) s
+14 r (so) s
+15 r (that) s
+15 r (the) s
+14 r (original) s
+@P37 @sfps 
+15 r (gdb) s
+@P33 @sfps 
+15 r (code) s
+14 r (can) s
+15 r (interpret) s
+15 r (what) s
+14 r (to) s
+15 r (do.) s
+20 r (Much) s
+15 r (of) s
+15 r (the) s
+14 r (complexity) s
+15 r (of) s
+15 r (that) s
+14 r (code) s
+0 1356 p (could) s
+15 r (be) s
+15 r (simpli) s
+0 r 174 c
+0 r (ed) s
+15 r (by) s
+16 r (knowing) s
+15 r (up) s
+15 r (front) s
+15 r (what) s
+15 r (kind) s
+15 r (of) s
+16 r (trap) s
+15 r (occurred.) s
+@P38 @sfps 
+0 1525 p (10.) s
+45 r (Acknowledgements) s
+@P33 @sfps 
+0 1670 p (The) s
+15 r (Mach) s
+16 r (kernel) s
+15 r (features) s
+15 r (for) s
+16 r (debugging) s
+15 r (support) s
+16 r (\(Mach) s
+15 r (ptrace) s
+15 r (and) s
+16 r (the) s
+15 r (exception) s
+15 r (handling) s
+16 r (facility\)) s
+15 r (were) s
+0 1726 p (implemented) s
+21 r (by) s
+21 r (David) s
+21 r (Black) s
+21 r (at) s
+21 r (Carnegie) s
+21 r (Mellon) s
+21 r (University) s
+-2 r 46 c
+36 r (Some) s
+21 r (initial) s
+21 r (work) s
+21 r (on) s
+21 r (adapting) s
+21 r (gdb) s
+21 r (to) s
+0 1783 p (multiple) s
+22 r (threads) s
+21 r (was) s
+22 r (done) s
+22 r (by) s
+22 r (Karl) s
+21 r (Hauth) s
+22 r (at) s
+22 r (Carnegie) s
+21 r (Mellon) s
+22 r (University) s
+-2 r 46 c
+39 r (The) s
+22 r (bulk) s
+21 r (of) s
+22 r (the) s
+22 r (work) s
+21 r (in) s
+0 1839 p (restructuring) s
+21 r (gdb') s
+-2 r 115 c
+20 r (internals) s
+21 r (to) s
+21 r (properly) s
+20 r (deal) s
+21 r (with) s
+21 r (multiple) s
+21 r (threads) s
+20 r (was) s
+21 r (done) s
+21 r (by) s
+21 r (Deborah) s
+20 r (Caswell) s
+21 r (at) s
+0 1895 p (Hewlett) s
+18 r (Packard) s
+18 r (Laboratories.) s
+28 r (The) s
+17 r (attachment) s
+18 r (feature) s
+18 r (was) s
+18 r (implemented) s
+18 r (by) s
+17 r (Richard) s
+18 r (Sanzi) s
+18 r (at) s
+18 r (Carnegie) s
+0 1952 p (Mellon) s
+17 r (University) s
+-2 r 46 c
+24 r (The) s
+16 r (authors) s
+17 r (would) s
+17 r (like) s
+17 r (to) s
+16 r (thank) s
+17 r (Hewlett) s
+17 r (Packard) s
+16 r (for) s
+17 r (supporting) s
+17 r (this) s
+17 r (work.) s
+25 r (Further) s
+0 2008 p (detail) s
+14 r (on) s
+13 r (the) s
+14 r (Mach) s
+14 r (system) s
+14 r (and) s
+13 r (the) s
+14 r (various) s
+14 r (kernel) s
+13 r (calls) s
+14 r (used) s
+14 r (by) s
+14 r (our) s
+13 r (debugger) s
+14 r (can) s
+14 r (be) s
+13 r (found) s
+14 r (in) s
+14 r 91 c
+0 r 49 c
+0 r 93 c
+14 r (and) s
+13 r 91 c
+0 r 51 c
+0 r (].) s
+@P38 @sfps 
+0 2177 p (Refer) s
+0 r (ences) s
+@P33 @sfps 
+23 2298 p ([1]) s
+22 r (Accetta,) s
+22 r (M.,) s
+21 r (R.) s
+20 r 86 c
+-5 r 46 c
+19 r (Baron,) s
+21 r 87 c
+-3 r 46 c
+19 r (Bolosky) s
+-2 r 44 c
+20 r (D.) s
+20 r (B.) s
+20 r (Golub,) s
+22 r (R.) s
+20 r 70 c
+-3 r 46 c
+19 r (Rashid,) s
+21 r (A.) s
+20 r 84 c
+-2 r (evanian,) s
+20 r (Jr) s
+-1 r 46 c
+19 r (and) s
+20 r (M.) s
+20 r 87 c
+-3 r 46 c
+98 2355 p 89 c
+-3 r (oung.) s
+12 r 170 c
+0 r (MACH;) s
+14 r 65 c
+14 r (New) s
+13 r (Kernel) s
+14 r (Foundation) s
+13 r (for) s
+14 r (UNIX) s
+14 r (Development",) s
+@P37 @sfps 
+14 r (Pr) s
+-1 r (oc.) s
+12 r (USENIX) s
+14 r (1986) s
+14 r (Summer) s
+98 2411 p 84 c
+-3 r (echnical) s
+14 r (Conf.) s
+16 r (and) s
+15 r (Exhibition) s
+@P33 @sfps 
+0 r 44 c
+15 r (9-13) s
+15 r (June) s
+15 r (1986,) s
+15 r (93-1) s
+0 r (12.) s
+23 2486 p ([2]) s
+22 r (Aral,) s
+17 r (Ziya,) s
+17 r (Ilya) s
+17 r (Gertner) s
+-1 r 44 c
+16 r (and) s
+17 r (Greg) s
+16 r (Schaf) s
+0 r (fer) s
+-2 r 46 c
+15 r 170 c
+0 r (Ef) s
+0 r 174 c
+0 r (cient) s
+16 r (Debugging) s
+17 r (Primitives) s
+16 r (for) s
+17 r (Multiprocessors",) s
+@P37 @sfps 
+98 2542 p (ASPLOS-III) s
+12 r (Pr) s
+-1 r (oceedings) s
+11 r (\(Thir) s
+-1 r 100 c
+11 r (International) s
+11 r (Confer) s
+0 r (ence) s
+10 r (on) s
+12 r (Ar) s
+-1 r (chitectural) s
+11 r (Support) s
+12 r (for) s
+11 r (Pr) s
+-1 r (ogramming) s
+98 2599 p (Languages) s
+16 r (and) s
+15 r (Operating) s
+15 r (Systems\)) s
+@P33 @sfps 
+0 r 46 c
+15 r (Boston,) s
+15 r (MA,) s
+15 r (April) s
+16 r (3-6,) s
+15 r (1989.) s
+15 r (pp.) s
+15 r (87-95.) s
+23 2673 p ([3]) s
+22 r (Baron,) s
+14 r (R.) s
+14 r 86 c
+-5 r (.,) s
+13 r (D.) s
+14 r (L.) s
+14 r (Black,) s
+14 r 87 c
+-3 r 46 c
+12 r (Bolosky) s
+-2 r 44 c
+13 r (J.) s
+14 r (Chew) s
+-2 r 44 c
+13 r (D.) s
+14 r (B.) s
+13 r (Golub,) s
+14 r (R.) s
+14 r 70 c
+-2 r 46 c
+12 r (Rashid,) s
+14 r (A.) s
+14 r 84 c
+-2 r (evanian,) s
+13 r (Jr) s
+-2 r 46 c
+13 r (and) s
+14 r (M.) s
+98 2730 p 87 c
+-3 r 46 c
+12 r 89 c
+-3 r (oung.) s
+@P37 @sfps 
+12 r (MACH) s
+13 r (Kernel) s
+14 r (Interface) s
+13 r (Manual) s
+@P33 @sfps 
+0 r 44 c
+13 r (Dept.) s
+14 r (of) s
+13 r (Computer) s
+13 r (Science,) s
+14 r (Carnegie-Mellon) s
+13 r (Univ) s
+-2 r (.,) s
+12 r (15) s
+951 2843 p (12) s
+@eop
+11 @bop0
+11 @bop1
+@P33 @sfps 
+0 42 p (the) s
+15 r (thread) s
+14 r (that) s
+15 r (will) s
+15 r (generate) s
+14 r (the) s
+15 r (core) s
+15 r (dump\),) s
+14 r (the) s
+15 r (user) s
+15 r (must) s
+14 r (suspend) s
+15 r (all) s
+15 r (other) s
+14 r (threads) s
+15 r (in) s
+15 r (order) s
+15 r (to) s
+14 r (preserve) s
+0 98 p (the) s
+14 r (application') s
+-2 r 115 c
+13 r (memory) s
+14 r (state.) s
+20 r (Due) s
+14 r (to) s
+14 r (single-threaded) s
+14 r (limitations) s
+14 r (in) s
+14 r (the) s
+13 r (core) s
+14 r 174 c
+0 r (le) s
+14 r (format,) s
+14 r (core) s
+14 r (dumps) s
+14 r (for) s
+0 154 p (multithreaded) s
+13 r (programs) s
+13 r (currently) s
+13 r (contain) s
+13 r (state) s
+13 r (only) s
+13 r (for) s
+13 r (the) s
+13 r (thread) s
+13 r (that) s
+13 r (initiated) s
+13 r (the) s
+13 r (core) s
+13 r (dump.) s
+19 r (Switching) s
+0 211 p (to) s
+14 r 97 c
+14 r (new) s
+14 r (core) s
+14 r 174 c
+0 r (le) s
+13 r (format) s
+14 r (that) s
+14 r (allowed) s
+14 r (multiple) s
+14 r (thread) s
+14 r (contexts) s
+14 r (to) s
+14 r (be) s
+14 r (dumped) s
+13 r (would) s
+14 r (avoid) s
+14 r (this) s
+14 r (limitation.) s
+@P38 @sfps 
+0 380 p (7.) s
+45 r (Debugger) s
+16 r (Attachment) s
+@P33 @sfps 
+0 525 p 65 c
+17 r (debugger) s
+17 r (that) s
+17 r (attaches) s
+17 r (to) s
+17 r 97 c
+17 r (running) s
+17 r (process) s
+17 r (has) s
+17 r (been) s
+17 r (implemented) s
+17 r (using) s
+17 r (the) s
+17 r (techniques) s
+17 r (described) s
+17 r (in) s
+0 581 p (Section) s
+15 r 52 c
+15 r (for) s
+15 r (replacing) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+15 r (with) s
+15 r (other) s
+15 r (kernel) s
+15 r (operations.) s
+20 r (Before) s
+15 r (using) s
+15 r (these) s
+15 r (techniques,) s
+15 r (the) s
+15 r (debugger) s
+0 638 p (must) s
+15 r 174 c
+0 r (rst) s
+15 r (obtain) s
+15 r (task) s
+15 r (and) s
+15 r (thread) s
+15 r (ports) s
+15 r (for) s
+14 r (the) s
+15 r (application.) s
+21 r (All) s
+14 r (Mach) s
+15 r (tasks) s
+15 r (and) s
+15 r (threads) s
+15 r (are) s
+15 r (represented) s
+15 r (to) s
+0 694 p (the) s
+11 r (outside) s
+12 r (world) s
+11 r (by) s
+11 r 97 c
+12 r (port;) s
+12 r 97 c
+11 r (user) s
+12 r (process) s
+11 r (must) s
+11 r (have) s
+12 r (the) s
+11 r (corresponding) s
+11 r (port) s
+12 r (in) s
+11 r (order) s
+11 r (to) s
+11 r (perform) s
+12 r (operations) s
+0 751 p (on) s
+13 r 97 c
+12 r (task) s
+13 r (or) s
+12 r (thread.) s
+19 r (Our) s
+13 r (debugger) s
+13 r (currently) s
+12 r (uses) s
+13 r (the) s
+12 r (Mach) s
+@P38 @sfps 
+13 r (task) s
+2 r 14 2 ru 
+14 r (by) s
+3 r 14 2 ru 
+13 r (unix) s
+3 r 14 2 ru 
+14 r (pid) s
+@P33 @sfps 
+12 r (kernel) s
+13 r (call) s
+12 r (to) s
+13 r (obtain) s
+13 r (the) s
+12 r (task) s
+0 807 p (port) s
+15 r (for) s
+15 r 97 c
+14 r (given) s
+15 r (Unix) s
+15 r (process) s
+15 r (id) s
+14 r (\(pid\);) s
+15 r (this) s
+15 r (call) s
+15 r (checks) s
+14 r (the) s
+15 r (Unix) s
+15 r (uid') s
+-2 r 115 c
+14 r (of) s
+15 r (the) s
+15 r (application) s
+14 r (and) s
+15 r (debugger) s
+15 r (to) s
+0 864 p (prevent) s
+13 r 97 c
+13 r (protection) s
+14 r (violation.) s
+19 r (The) s
+13 r (thread) s
+14 r (ports) s
+13 r (for) s
+13 r (threads) s
+13 r (in) s
+13 r (the) s
+14 r (task) s
+13 r (can) s
+13 r (be) s
+13 r (obtained) s
+13 r (by) s
+14 r (using) s
+13 r (the) s
+13 r (Mach) s
+@P38 @sfps 
+0 920 p (task) s
+3 r 14 2 ru 
+13 r (thr) s
+0 r (eads) s
+@P33 @sfps 
+14 r (kernel) s
+14 r (call.) s
+20 r (Because) s
+14 r (the) s
+@P37 @sfps 
+14 r (wait) s
+@P33 @sfps 
+14 r (call) s
+14 r (cannot) s
+14 r (be) s
+14 r (used) s
+14 r (to) s
+14 r (detect) s
+14 r (termination) s
+14 r (of) s
+14 r (the) s
+14 r (application) s
+14 r (in) s
+0 977 p (this) s
+16 r (case) s
+15 r (\(the) s
+16 r (debugger) s
+16 r (is) s
+15 r (not) s
+16 r (the) s
+16 r (parent) s
+15 r (of) s
+16 r (the) s
+16 r (debugged) s
+15 r (application\),) s
+16 r 97 c
+16 r (notify) s
+16 r (mechanism) s
+15 r (based) s
+16 r (on) s
+16 r (the) s
+0 1033 p (death) s
+15 r (of) s
+15 r (the) s
+15 r (task) s
+16 r (port) s
+15 r (\(caused) s
+15 r (by) s
+15 r (application) s
+15 r (termination\)) s
+15 r (is) s
+16 r (used) s
+15 r (to) s
+15 r (detect) s
+15 r (application) s
+15 r (termination.) s
+62 1131 p (Attaching) s
+20 r (to) s
+20 r (and) s
+21 r (detaching) s
+20 r (from) s
+20 r (an) s
+20 r (application) s
+20 r (is) s
+20 r (transparent) s
+20 r (because) s
+20 r (the) s
+20 r (debugger) s
+20 r (does) s
+21 r (not) s
+20 r (rely) s
+0 1187 p (on) s
+@P37 @sfps 
+19 r (ptrace) s
+@P33 @sfps 
+18 r (or) s
+19 r (the) s
+18 r (STRC) s
+19 r 170 c
+0 r (traced) s
+0 r 186 c
+18 r (bit) s
+19 r (to) s
+18 r (alter) s
+19 r (application) s
+18 r (behavior) s
+-1 r 46 c
+29 r (The) s
+18 r (debugger) s
+19 r (attaches) s
+18 r (by) s
+19 r (obtaining) s
+0 1244 p (the) s
+19 r (application') s
+-1 r 115 c
+18 r (task) s
+20 r (port) s
+19 r (and) s
+19 r (suspending) s
+20 r (the) s
+19 r (application) s
+20 r (to) s
+19 r (examine) s
+19 r (it.) s
+33 r (It) s
+20 r (detaches) s
+19 r (by) s
+19 r (resuming) s
+20 r (the) s
+0 1300 p (application) s
+16 r (and) s
+16 r (deallocating) s
+16 r (the) s
+16 r (task) s
+16 r (port) s
+16 r (from) s
+16 r (the) s
+16 r (debugger) s
+-1 r 46 c
+22 r (The) s
+16 r (deallocation) s
+16 r (happens) s
+16 r (implicitly) s
+16 r (if) s
+16 r (the) s
+0 1357 p (debugger) s
+15 r (exits.) s
+62 1455 p (Signal) s
+22 r (behavior) s
+23 r (is) s
+22 r (slightly) s
+22 r (dif) s
+0 r (ferent) s
+21 r (from) s
+22 r (the) s
+22 r (normal) s
+23 r (case) s
+22 r (because) s
+22 r (the) s
+22 r (application) s
+22 r (process) s
+22 r (is) s
+22 r (not) s
+0 1511 p 170 c
+(traced) s
+186 c
+46 c
+32 r (External) s
+19 r (event) s
+19 r (signals) s
+19 r (no) s
+19 r (longer) s
+19 r (cause) s
+19 r (the) s
+20 r (application) s
+19 r (to) s
+19 r (stop) s
+19 r (for) s
+19 r (the) s
+19 r (debugger) s
+-1 r 44 c
+19 r (but) s
+19 r (instead) s
+0 1568 p (invoke) s
+14 r (their) s
+14 r (handlers) s
+14 r (or) s
+14 r (carry) s
+14 r (out) s
+14 r (the) s
+14 r (corresponding) s
+14 r (default) s
+14 r (actions.) s
+20 r (Interruption) s
+14 r (of) s
+14 r 97 c
+14 r (runaway) s
+14 r (process) s
+14 r (is) s
+0 1624 p (implemented) s
+14 r (by) s
+13 r (deploying) s
+14 r 97 c
+13 r (signal) s
+14 r (handler) s
+14 r (for) s
+13 r (SIGINT) s
+14 r (in) s
+14 r (the) s
+13 r (debugger;) s
+14 r 97 c
+14 r (control-C) s
+13 r (invokes) s
+14 r (this) s
+14 r (handler) s
+0 1681 p (to) s
+16 r (wake) s
+17 r (up) s
+16 r (the) s
+17 r (debugger) s
+16 r (which) s
+17 r (then) s
+16 r (suspends) s
+16 r (the) s
+17 r (application) s
+16 r (for) s
+17 r (further) s
+16 r (debugging.) s
+24 r (Signal) s
+17 r (delivery) s
+16 r (to) s
+0 1737 p (the) s
+15 r (application) s
+16 r (is) s
+15 r (implemented) s
+15 r (by) s
+15 r (using) s
+16 r (the) s
+15 r (normal) s
+15 r (Unix) s
+16 r (kill\(\)) s
+15 r (mechanism) s
+15 r (to) s
+16 r (send) s
+15 r (signals;) s
+15 r (this) s
+16 r (may) s
+15 r (not) s
+0 1793 p (override) s
+15 r (pending) s
+15 r (signals) s
+15 r (\(unlike) s
+16 r (the) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+15 r (continue) s
+15 r (with) s
+15 r (signal) s
+15 r (mechanism\).) s
+@P38 @sfps 
+0 1963 p (8.) s
+45 r (Related) s
+16 r 87 c
+-2 r (ork) s
+@P33 @sfps 
+0 2107 p 91 c
+55 c
+93 c
+14 r (describes) s
+15 r (CodeV) s
+-2 r (iew) s
+13 r (2.2) s
+15 r (which) s
+14 r (provides) s
+14 r (debugging) s
+15 r (support) s
+14 r (for) s
+15 r (multithreaded) s
+14 r (programs) s
+14 r (in) s
+15 r (OS/2.) s
+20 r (The) s
+0 2164 p (OS/2) s
+10 r (kernel) s
+11 r (provides) s
+10 r (an) s
+11 r (enhanced) s
+@P37 @sfps 
+10 r (ptrace) s
+@P33 @sfps 
+11 r (interface) s
+10 r (for) s
+11 r (interaction) s
+10 r (between) s
+11 r (the) s
+10 r (debugger) s
+11 r (and) s
+10 r (the) s
+11 r (application) s
+0 2220 p (making) s
+16 r (possible) s
+16 r 97 c
+16 r (clean) s
+17 r (debugger) s
+16 r (design) s
+16 r (and) s
+16 r (user) s
+16 r (interface.) s
+23 r (The) s
+16 r (major) s
+17 r (enhancements) s
+16 r (to) s
+@P37 @sfps 
+16 r (ptrace) s
+@P33 @sfps 
+16 r (are) s
+16 r (the) s
+0 2277 p (ability) s
+16 r (to) s
+16 r (manipulate) s
+17 r (any) s
+16 r (thread) s
+16 r (in) s
+16 r (the) s
+16 r (application) s
+17 r (\(an) s
+16 r (additional) s
+16 r (ar) s
+0 r (gument) s
+16 r (speci) s
+0 r 174 c
+0 r (es) s
+16 r (the) s
+16 r (desired) s
+16 r (thread\),) s
+0 2333 p (and) s
+15 r (the) s
+15 r (decoupling) s
+14 r (of) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+15 r (from) s
+15 r (the) s
+14 r (semantics) s
+15 r (of) s
+15 r (signals) s
+15 r 91 c
+0 r 53 c
+0 r 44 c
+0 r 54 c
+0 r (].) s
+20 r (These) s
+15 r (improvements) s
+14 r (involve) s
+15 r (changing) s
+0 2390 p (the) s
+@P37 @sfps 
+12 r (ptrace) s
+@P33 @sfps 
+11 r (call) s
+12 r (itself) s
+11 r (and) s
+12 r (are) s
+11 r (made) s
+12 r (possible) s
+11 r (in) s
+12 r (part) s
+11 r (by) s
+12 r (the) s
+11 r (absence) s
+12 r (of) s
+11 r 97 c
+12 r (need) s
+11 r (to) s
+12 r (maintain) s
+12 r (Unix) s
+11 r (compatibility) s
+-2 r 46 c
+0 2446 p (Concurrent) s
+19 r (breakpoints) s
+19 r (are) s
+19 r (not) s
+19 r (mentioned) s
+19 r (in) s
+19 r (any) s
+19 r (of) s
+19 r (these) s
+19 r (sources.) s
+31 r (This) s
+19 r (might) s
+19 r (be) s
+19 r (because) s
+19 r (OS/2) s
+19 r (only) s
+0 2503 p (runs) s
+16 r (on) s
+15 r (uniprocessors) s
+16 r (where) s
+16 r (it) s
+16 r (is) s
+15 r (possible) s
+16 r (to) s
+16 r (avoid) s
+16 r (concurrent) s
+15 r (breakpoints) s
+16 r (via) s
+16 r (scheduling) s
+16 r (enhancements) s
+0 2559 p (\(e.g.) s
+20 r (run) s
+14 r (debugger) s
+15 r (immediately) s
+14 r (in) s
+15 r (response) s
+14 r (to) s
+15 r (the) s
+14 r 174 c
+0 r (rst) s
+15 r (breakpoint\).) s
+20 r 87 c
+-3 r 101 c
+14 r (did) s
+14 r (not) s
+14 r (have) s
+15 r (this) s
+14 r (choice) s
+15 r (because) s
+0 2616 p (concurrent) s
+15 r (breakpoints) s
+15 r (cannot) s
+15 r (be) s
+16 r (avoided) s
+15 r (on) s
+15 r (multiprocessors) s
+15 r (that) s
+15 r (support) s
+15 r (parallel) s
+16 r (execution) s
+15 r (of) s
+15 r (threads.) s
+62 2714 p (The) s
+21 r (Parasight) s
+20 r (project) s
+20 r (at) s
+21 r (Encore) s
+20 r (Computer) s
+20 r (has) s
+21 r (been) s
+20 r (following) s
+20 r 97 c
+21 r (dif) s
+0 r (ferent) s
+19 r (approach) s
+21 r (for) s
+20 r (debugging) s
+952 2843 p 49 c
+-1 r 49 c
+@eop
+10 @bop0
+10 @bop1
+@P33 @sfps 
+0 42 p (thread) s
+16 r (is) s
+17 r (free) s
+16 r (to) s
+16 r (continue) s
+16 r (running) s
+17 r (upon) s
+16 r (receipt) s
+16 r (of) s
+16 r (the) s
+17 r (debugger) s
+1 r 39 c
+-1 r 115 c
+15 r (reply) s
+-2 r 44 c
+16 r (but) s
+16 r (since) s
+16 r (the) s
+16 r (task) s
+17 r (is) s
+16 r (suspended,) s
+0 98 p (the) s
+14 r (thread) s
+14 r (won') s
+0 r 116 c
+13 r (execute) s
+15 r (until) s
+14 r (the) s
+14 r (debugger) s
+14 r (resumes) s
+14 r (the) s
+14 r (task.) s
+20 r (When) s
+14 r (control) s
+14 r 174 c
+0 r (nally) s
+14 r (passes) s
+14 r (up) s
+14 r (to) s
+14 r (the) s
+14 r (user) s
+0 r 44 c
+0 154 p (the) s
+@P37 @sfps 
+16 r (curr) s
+-1 r (ent) s
+15 r (thr) s
+-1 r (ead) s
+@P33 @sfps 
+15 r (in) s
+16 r (the) s
+16 r (user) s
+16 r (interface) s
+15 r (will) s
+16 r (be) s
+16 r (set) s
+16 r (to) s
+16 r (the) s
+16 r (the) s
+15 r (thread) s
+16 r (found) s
+16 r (stopped) s
+16 r (with) s
+16 r 97 c
+16 r (Unix) s
+15 r (signal) s
+16 r (if) s
+0 211 p (there) s
+15 r (is) s
+15 r (one) s
+15 r (\(because) s
+15 r (this) s
+15 r (signal) s
+16 r (must) s
+15 r (be) s
+15 r (processed) s
+15 r (in) s
+15 r (order) s
+15 r (to) s
+15 r (reset) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+0 r (\),) s
+15 r (otherwise) s
+15 r (it) s
+16 r (will) s
+15 r (be) s
+15 r (the) s
+15 r (last) s
+0 267 p (thread) s
+15 r (for) s
+15 r (which) s
+15 r (an) s
+16 r (exception) s
+15 r (message) s
+15 r (was) s
+15 r (received.) s
+@P38 @sfps 
+0 431 p (6.5.) s
+45 r (Continuation) s
+16 r (Logic) s
+@P33 @sfps 
+0 560 p 65 c
+17 r (fundamental) s
+16 r (design) s
+17 r (decision) s
+17 r (in) s
+17 r (our) s
+@P37 @sfps 
+16 r (gdb) s
+@P33 @sfps 
+17 r (makes) s
+17 r (it) s
+17 r (impossible) s
+16 r (to) s
+17 r (handle) s
+17 r (more) s
+17 r (than) s
+16 r (one) s
+17 r (breakpoint) s
+17 r (per) s
+0 616 p (continuation) s
+14 r (without) s
+14 r (extensive) s
+14 r (modi) s
+0 r 174 c
+0 r (cations.) s
+20 r (This) s
+14 r (restriction) s
+14 r (is) s
+14 r (due) s
+14 r (in) s
+14 r (part) s
+14 r (to) s
+14 r (the) s
+@P37 @sfps 
+14 r (curr) s
+-1 r (ent) s
+13 r (thr) s
+-1 r (ead) s
+@P33 @sfps 
+13 r (concept) s
+0 673 p (that) s
+13 r (permits) s
+12 r (us) s
+13 r (to) s
+13 r (utilize) s
+12 r (existing) s
+13 r (code;) s
+13 r (that) s
+13 r (code) s
+13 r (can) s
+12 r (only) s
+13 r (recover) s
+13 r (from) s
+12 r 97 c
+13 r (breakpoint) s
+13 r (in) s
+12 r (the) s
+13 r (current) s
+13 r (thread.) s
+0 729 p (Our) s
+12 r (enhanced) s
+@P37 @sfps 
+11 r (gdb) s
+@P33 @sfps 
+12 r (provides) s
+12 r (the) s
+11 r (user) s
+12 r (with) s
+12 r (workarounds) s
+11 r (for) s
+12 r (this) s
+12 r (problem;) s
+12 r (multiple) s
+12 r (breakpointed) s
+12 r (threads) s
+11 r (can) s
+0 786 p (be) s
+14 r (single-stepped) s
+15 r (\(clears) s
+14 r (the) s
+14 r (breakpoint\)) s
+14 r (or) s
+15 r (suspended) s
+14 r (\(defers) s
+14 r (action) s
+14 r (on) s
+15 r (the) s
+14 r (breakpoint) s
+14 r (until) s
+15 r (later\)) s
+14 r (before) s
+0 842 p (continuing) s
+15 r (the) s
+15 r (application.) s
+21 r (Of) s
+15 r (course) s
+15 r 97 c
+15 r (thread) s
+15 r (must) s
+15 r (be) s
+15 r (the) s
+@P37 @sfps 
+16 r (curr) s
+-1 r (ent) s
+14 r (thr) s
+-1 r (ead) s
+@P33 @sfps 
+15 r (before) s
+15 r (it) s
+15 r (is) s
+15 r (single) s
+15 r (stepped.) s
+@P38 @sfps 
+0 1006 p (6.6.) s
+45 r (Deadlock) s
+@P33 @sfps 
+0 1135 p (The) s
+11 r (ability) s
+11 r (to) s
+10 r (suspend) s
+11 r (individual) s
+11 r (threads) s
+11 r (in) s
+10 r (an) s
+11 r (application) s
+11 r (creates) s
+11 r (potential) s
+10 r (deadlock) s
+11 r (scenarios.) s
+19 r (Continuing) s
+0 1191 p (an) s
+21 r (application) s
+20 r (that) s
+21 r (has) s
+21 r (no) s
+21 r (runnable) s
+20 r (threads) s
+21 r (causes) s
+21 r (deadlock) s
+21 r (because) s
+20 r (the) s
+21 r (debugger) s
+21 r (is) s
+20 r (waiting) s
+21 r (for) s
+21 r (the) s
+0 1248 p (application) s
+18 r (to) s
+18 r (do) s
+18 r (something) s
+18 r (and) s
+18 r (the) s
+18 r (application) s
+18 r (is) s
+18 r (waiting) s
+18 r (for) s
+18 r (the) s
+18 r (debugger) s
+18 r (to) s
+18 r (resume) s
+18 r (one) s
+18 r (or) s
+18 r (more) s
+18 r (of) s
+0 1304 p (its) s
+17 r (threads.) s
+27 r (Due) s
+18 r (to) s
+17 r 97 c
+18 r (feature) s
+17 r (of) s
+18 r (Unix) s
+17 r (signals,) s
+18 r (the) s
+18 r (only) s
+17 r (way) s
+17 r (to) s
+18 r (recover) s
+17 r (from) s
+18 r (such) s
+17 r 97 c
+18 r (deadlock) s
+17 r (is) s
+17 r (for) s
+18 r (the) s
+0 1361 p (user) s
+17 r (to) s
+18 r (send) s
+17 r (SIGKILL) s
+17 r (to) s
+18 r (the) s
+17 r (application) s
+@P13 @sfps 
+768 1344 p 53 c
+@P33 @sfps 
+804 1361 p (\(other) s
+17 r (signals) s
+18 r (will) s
+17 r (not) s
+17 r (work) s
+18 r (because) s
+17 r (they) s
+17 r (do) s
+18 r (not) s
+17 r (resume) s
+17 r (the) s
+0 1417 p (application\).) s
+27 r 84 c
+-2 r 111 c
+17 r (avoid) s
+17 r (this) s
+18 r (type) s
+17 r (of) s
+18 r (embarassing) s
+17 r (inconvenience,) s
+19 r (our) s
+17 r (debugger) s
+18 r (checks) s
+17 r (to) s
+18 r (make) s
+17 r (sure) s
+18 r (that) s
+0 1474 p (at) s
+16 r (least) s
+16 r (one) s
+16 r (thread) s
+16 r (is) s
+16 r (runnable) s
+16 r (before) s
+16 r (resuming) s
+16 r (the) s
+15 r (application;) s
+17 r (if) s
+16 r (no) s
+16 r (thread) s
+16 r (is) s
+16 r (runnable,) s
+16 r (it) s
+16 r (complains) s
+16 r (to) s
+0 1530 p (the) s
+18 r (user) s
+19 r (and) s
+18 r (will) s
+18 r (not) s
+19 r (continue) s
+18 r (the) s
+18 r (application) s
+19 r (until) s
+18 r (at) s
+18 r (least) s
+18 r (one) s
+19 r (thread) s
+18 r (is) s
+18 r (resumed.) s
+30 r (Thread) s
+18 r (suspension) s
+0 1587 p (can) s
+17 r (cause) s
+16 r (additional) s
+17 r (deadlocks) s
+16 r (in) s
+17 r (the) s
+17 r (application) s
+16 r (if) s
+17 r (all) s
+16 r (of) s
+17 r (the) s
+16 r (running) s
+17 r (threads) s
+17 r (need) s
+16 r (to) s
+17 r (synchronize) s
+16 r (with) s
+0 1643 p (threads) s
+14 r (suspended) s
+13 r (by) s
+14 r (the) s
+14 r (debugger;) s
+14 r (these) s
+14 r (deadlocks) s
+13 r (can) s
+14 r (be) s
+14 r (interrupted) s
+13 r (by) s
+14 r (typing) s
+14 r (control-C) s
+14 r (because) s
+13 r (there) s
+0 1699 p (are) s
+15 r (threads) s
+15 r (in) s
+15 r (the) s
+16 r (application) s
+15 r (that) s
+15 r (are) s
+15 r (not) s
+15 r (suspended,) s
+15 r (and) s
+16 r (therefore) s
+15 r (able) s
+15 r (to) s
+15 r (handle) s
+15 r (signals.) s
+@P38 @sfps 
+0 1864 p (6.7.) s
+45 r (Delivering) s
+16 r (Signals) s
+@P33 @sfps 
+0 1992 p (Signal) s
+14 r (delivery) s
+14 r (forms) s
+13 r (an) s
+14 r (important) s
+14 r (part) s
+14 r (of) s
+14 r (the) s
+13 r (debugging) s
+14 r (of) s
+14 r (complex) s
+14 r (Unix) s
+14 r (applications) s
+14 r (because) s
+13 r (it) s
+14 r (allows) s
+0 2049 p (signal) s
+14 r (handlers) s
+15 r (to) s
+14 r (be) s
+15 r (tested) s
+14 r (and) s
+15 r (monitored) s
+14 r (under) s
+15 r (controlled) s
+14 r (conditions.) s
+20 r (Most) s
+14 r (Unix) s
+15 r (debuggers) s
+14 r (implement) s
+0 2105 p (the) s
+14 r (delivery) s
+13 r (of) s
+14 r (arbitrary) s
+14 r (signals) s
+13 r (by) s
+14 r (using) s
+14 r (the) s
+@P37 @sfps 
+14 r (ptrace) s
+@P33 @sfps 
+13 r 170 c
+0 r (continue) s
+14 r (with) s
+14 r (signal) s
+0 r 186 c
+13 r (action.) s
+20 r (This) s
+14 r (is) s
+13 r (not) s
+14 r (as) s
+14 r (straight-) s
+0 2161 p (forward) s
+15 r (for) s
+15 r (our) s
+15 r (debugger) s
+15 r (because) s
+15 r (the) s
+16 r (desired) s
+15 r (thread) s
+15 r (may) s
+15 r (not) s
+15 r (be) s
+15 r (stopped) s
+15 r (in) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+0 r 44 c
+15 r (and) s
+15 r (signals) s
+16 r (sent) s
+15 r (to) s
+15 r 97 c
+0 2218 p (multithreaded) s
+13 r (task) s
+14 r (are) s
+13 r (handled) s
+13 r (by) s
+13 r (the) s
+14 r 174 c
+0 r (rst) s
+13 r (thread) s
+13 r (that) s
+14 r (notices) s
+13 r (them.) s
+20 r 87 c
+-3 r 101 c
+12 r (solve) s
+13 r (this) s
+14 r (problem) s
+13 r (by) s
+13 r (forcing) s
+14 r (the) s
+0 2274 p (desired) s
+16 r (thread) s
+16 r (into) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+16 r (by) s
+16 r (sending) s
+16 r (it) s
+15 r 97 c
+16 r (signal.) s
+22 r 84 c
+-2 r 111 c
+15 r (ensure) s
+16 r (that) s
+15 r (the) s
+16 r (thread) s
+16 r (we) s
+16 r (are) s
+15 r (interested) s
+16 r (in) s
+16 r (receives) s
+0 2331 p (the) s
+12 r (signal,) s
+13 r (we) s
+13 r (send) s
+12 r 97 c
+13 r (message) s
+12 r (to) s
+13 r (the) s
+@P37 @sfps 
+12 r (ux) s
+3 r 14 2 ru 
+14 r (handler) s
+@P33 @sfps 
+12 r (specifying) s
+13 r (that) s
+12 r (thread) s
+13 r (and) s
+12 r (suspend) s
+12 r (all) s
+13 r (other) s
+12 r (threads) s
+13 r (in) s
+12 r (the) s
+0 2387 p (task.) s
+25 r (Upon) s
+17 r (continuing) s
+17 r (the) s
+16 r (application,) s
+18 r (that) s
+16 r (thread) s
+17 r (will) s
+17 r (execute,) s
+17 r (receive) s
+17 r (the) s
+17 r (signal) s
+16 r (from) s
+17 r (the) s
+@P37 @sfps 
+17 r (ux) s
+3 r 14 2 ru 
+13 r (handler) s
+@P33 @sfps 
+0 r 44 c
+0 2444 p (and) s
+15 r (stop) s
+15 r (in) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+0 r 46 c
+21 r (At) s
+15 r (this) s
+15 r (point) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+15 r (can) s
+15 r (be) s
+16 r (used) s
+15 r (to) s
+15 r (deliver) s
+15 r (the) s
+15 r (desired) s
+15 r (signal) s
+15 r (to) s
+16 r (the) s
+15 r (thread.) s
+62 2542 p (This) s
+18 r (mechanism) s
+17 r (can) s
+17 r (also) s
+18 r (be) s
+17 r (used) s
+17 r (to) s
+18 r (force) s
+17 r 97 c
+17 r (selected) s
+18 r (thread) s
+17 r (to) s
+17 r (initiate) s
+18 r 97 c
+17 r (core) s
+17 r (dump) s
+18 r (by) s
+17 r (sending) s
+17 r (it) s
+18 r 97 c
+0 2598 p (fatal) s
+16 r (signal) s
+15 r (that) s
+16 r (causes) s
+16 r 97 c
+15 r (core) s
+16 r (dump.) s
+21 r (Since) s
+16 r (resuming) s
+16 r (the) s
+15 r (application) s
+16 r (resumes) s
+16 r (all) s
+15 r (of) s
+16 r (the) s
+15 r (threads) s
+16 r (\(not) s
+16 r (just) s
+0 2647 p 779 2 ru 
+@P4 @sfps 
+53 2704 p 53 c
+@P18 @sfps 
+67 2720 p (e.g.) s
+13 r (kill) s
+12 r (-9) s
+@P22 @sfps 
+13 r (pid) s
+@P33 @sfps 
+951 2843 p (10) s
+@eop
+9 @bop0
+9 @bop1
+@P38 @sfps 
+0 42 p (6.4.) s
+45 r (Pr) s
+0 r (ocessing) s
+15 r (Application) s
+15 r (Events) s
+@P33 @sfps 
+0 170 p (Our) s
+17 r (debugger) s
+18 r (utilizes) s
+17 r (two) s
+18 r (sources) s
+17 r (to) s
+17 r (obtain) s
+18 r (information) s
+17 r (about) s
+18 r (events) s
+17 r (that) s
+17 r (occur) s
+18 r (in) s
+17 r (the) s
+18 r (application,) s
+17 r (the) s
+0 226 p (status) s
+13 r (returned) s
+13 r (by) s
+12 r (the) s
+@P37 @sfps 
+13 r (wait) s
+@P33 @sfps 
+13 r (system) s
+13 r (call) s
+12 r (and) s
+13 r (the) s
+13 r (contents) s
+13 r (of) s
+12 r (the) s
+13 r (exception) s
+13 r (messages.) s
+19 r (The) s
+13 r (status) s
+13 r (returned) s
+13 r (by) s
+0 283 p (the) s
+@P37 @sfps 
+14 r (wait) s
+@P33 @sfps 
+13 r (system) s
+14 r (call) s
+13 r (indicates) s
+14 r (not) s
+14 r (only) s
+13 r (whether) s
+14 r 97 c
+13 r (thread) s
+14 r (has) s
+14 r (stopped) s
+13 r (in) s
+@P37 @sfps 
+14 r (ptrace) s
+@P33 @sfps 
+0 r 44 c
+14 r (and) s
+13 r (why) s
+-2 r 44 c
+13 r (but) s
+14 r (also) s
+14 r (whether) s
+0 339 p (the) s
+19 r (application) s
+18 r (has) s
+19 r (terminated.) s
+31 r (Exception) s
+18 r (messages) s
+19 r (identify) s
+19 r (the) s
+18 r (thread) s
+19 r (that) s
+18 r (caused) s
+19 r (the) s
+19 r (exception,) s
+19 r (and) s
+0 396 p (precisely) s
+17 r (identify) s
+17 r (the) s
+16 r (exception) s
+17 r (as) s
+17 r (well.) s
+25 r (This) s
+17 r (enables) s
+16 r (our) s
+17 r (debugger) s
+2 r 39 c
+-2 r 115 c
+16 r (low) s
+17 r (level) s
+17 r (event) s
+17 r (detection) s
+16 r (code) s
+17 r (to) s
+0 452 p (treat) s
+15 r (breakpoints) s
+15 r (and) s
+15 r (trace) s
+16 r (traps) s
+15 r (dif) s
+0 r (ferently) s
+14 r (because) s
+15 r (they) s
+15 r (are) s
+16 r (used) s
+15 r (for) s
+15 r (dif) s
+0 r (ferent) s
+14 r (purposes.) s
+62 550 p 84 c
+0 r (race) s
+11 r (traps) s
+12 r (need) s
+12 r (not) s
+12 r (be) s
+12 r (reported) s
+12 r (directly) s
+12 r (to) s
+12 r (the) s
+12 r (user) s
+12 r (by) s
+12 r (the) s
+12 r (low-level) s
+12 r (event) s
+12 r (detection) s
+12 r (code) s
+12 r (because) s
+13 r (they) s
+0 607 p (are) s
+15 r (used) s
+15 r (for) s
+14 r (exactly) s
+15 r (two) s
+15 r (purposes:) s
+20 r (user) s
+0 r (-requested) s
+14 r (single) s
+15 r (stepping,) s
+14 r (and) s
+15 r (debugger) s
+0 r (-initiated) s
+14 r (single) s
+15 r (stepping) s
+0 663 p (as) s
+17 r (part) s
+16 r (of) s
+17 r (continuing) s
+17 r (from) s
+17 r 97 c
+16 r (breakpoint.) s
+25 r (In) s
+17 r (both) s
+17 r (cases) s
+17 r (higher) s
+0 r (-level) s
+15 r (debugger) s
+17 r (code) s
+17 r (can) s
+17 r 174 c
+0 r (gure) s
+16 r (out) s
+17 r (if) s
+17 r (the) s
+0 720 p (user) s
+20 r (should) s
+20 r (be) s
+19 r (noti) s
+0 r 174 c
+0 r (ed) s
+20 r (and) s
+20 r (how) s
+-2 r 44 c
+20 r (so) s
+20 r (the) s
+20 r (events) s
+19 r (are) s
+20 r (passed) s
+20 r (directly) s
+20 r (to) s
+20 r (that) s
+19 r (code) s
+20 r (without) s
+20 r (reporting) s
+20 r (the) s
+0 776 p (trap) s
+16 r (directly) s
+17 r (to) s
+16 r (the) s
+16 r (user) s
+-1 r 46 c
+23 r (The) s
+16 r (higher) s
+16 r (level) s
+17 r (debugger) s
+16 r (logic) s
+17 r (will) s
+16 r (return) s
+16 r (control) s
+17 r (to) s
+16 r (the) s
+16 r (user) s
+17 r (or) s
+16 r (continue) s
+16 r (the) s
+0 833 p (application) s
+14 r (as) s
+14 r (appropriate.) s
+19 r (In) s
+14 r (the) s
+14 r (second) s
+14 r (case,) s
+14 r (the) s
+14 r (user) s
+14 r (is) s
+14 r (not) s
+13 r (noti) s
+0 r 174 c
+0 r (ed) s
+14 r (about) s
+14 r (the) s
+14 r (internal) s
+14 r (debugger) s
+14 r (actions) s
+0 889 p (required) s
+21 r (to) s
+21 r (continue) s
+21 r (from) s
+21 r 97 c
+21 r (breakpoint.) s
+37 r (Similar) s
+21 r (reasoning) s
+21 r (applies) s
+21 r (to) s
+21 r (breakpoints) s
+21 r (used) s
+21 r (to) s
+21 r (implement) s
+0 945 p (stepping) s
+15 r (over) s
+15 r (functions,) s
+15 r (subroutines,) s
+16 r (or) s
+15 r (procedures) s
+15 r (as) s
+15 r (part) s
+15 r (of) s
+15 r 97 c
+16 r (language-level) s
+15 r (\(e.g.) s
+15 r (C\)) s
+15 r (single) s
+15 r (step.) s
+62 1043 p (In) s
+15 r (contrast,) s
+15 r (breakpoint) s
+14 r (traps) s
+15 r (caused) s
+15 r (by) s
+14 r (user) s
+0 r (-requested) s
+14 r (breakpoints) s
+15 r (are) s
+14 r (reported) s
+15 r (directly) s
+15 r (to) s
+14 r (the) s
+15 r (user) s
+15 r (by) s
+0 1100 p (the) s
+14 r (the) s
+14 r (low-level) s
+13 r (event) s
+14 r (detection) s
+14 r (code.) s
+20 r (This) s
+13 r (is) s
+14 r (so) s
+14 r (the) s
+14 r (user) s
+14 r (is) s
+13 r (aware) s
+14 r (of) s
+14 r (which) s
+14 r (threads) s
+13 r (have) s
+14 r (hit) s
+14 r (breakpoints) s
+0 1156 p (since) s
+17 r (the) s
+17 r (last) s
+17 r (time) s
+17 r (the) s
+17 r (application) s
+17 r (was) s
+17 r (continued.) s
+26 r (The) s
+17 r (only) s
+17 r (breakpoints) s
+17 r (not) s
+18 r (reported) s
+17 r (to) s
+17 r (users) s
+17 r (are) s
+17 r (those) s
+0 1213 p (used) s
+15 r (as) s
+15 r (part) s
+15 r (of) s
+16 r 97 c
+15 r (language-level) s
+15 r (single-step) s
+15 r (as) s
+15 r (indicated) s
+15 r (above.) s
+62 1311 p (Our) s
+14 r (debugger) s
+14 r (must) s
+13 r (use) s
+14 r 97 c
+14 r (polling) s
+13 r (low-level) s
+14 r (event) s
+14 r (detection) s
+14 r (algorithm) s
+13 r (due) s
+14 r (to) s
+14 r (the) s
+13 r (incompatibility) s
+14 r (of) s
+14 r (the) s
+0 1367 p (sources) s
+14 r (of) s
+14 r (event) s
+13 r (information.) s
+20 r (The) s
+14 r (polling) s
+14 r (interval) s
+13 r (is) s
+14 r (implemented) s
+14 r (by) s
+14 r 97 c
+13 r (timeout) s
+14 r (if) s
+14 r (no) s
+14 r (message) s
+13 r (is) s
+14 r (received) s
+0 1424 p (within) s
+13 r (the) s
+13 r (timeout) s
+13 r (interval,) s
+14 r (along) s
+13 r (with) s
+13 r (the) s
+13 r (use) s
+13 r (of) s
+13 r 97 c
+13 r (nonblocking) s
+13 r (variant) s
+13 r (of) s
+@P37 @sfps 
+13 r (wait) s
+@P33 @sfps 
+0 r 46 c
+19 r (Upon) s
+14 r (detecting) s
+13 r (an) s
+13 r (event,) s
+0 1480 p (the) s
+14 r (algorithm) s
+14 r (loops) s
+14 r (to) s
+14 r (obtain) s
+15 r (information) s
+14 r (about) s
+14 r (all) s
+14 r (pending) s
+14 r (events;) s
+15 r (this) s
+14 r (guarantees) s
+14 r (that) s
+14 r (the) s
+14 r (state) s
+14 r (reported) s
+0 1537 p (to) s
+16 r (the) s
+16 r (user) s
+15 r (contains) s
+16 r (no) s
+16 r (stale) s
+16 r (events) s
+15 r (\(e.g.) s
+16 r (the) s
+16 r (problem) s
+16 r (of) s
+15 r (hitting) s
+16 r 97 c
+16 r (deleted) s
+16 r (breakpoint) s
+15 r (is) s
+16 r (eliminated\).) s
+22 r (Our) s
+0 1593 p (actual) s
+15 r (event) s
+15 r (detection) s
+15 r (algorithm) s
+16 r (is:) s
+@P39 @sfps 
+0 1691 p (1:) s
+27 r (Attempt) s
+28 r (to) s
+27 r (receive) s
+27 r (an) s
+27 r (exception) s
+28 r (message) s
+27 r (with) s
+27 r 97 c
+27 r (timeout.) s
+0 1747 p (If) s
+27 r (there) s
+28 r (are) s
+27 r (any) s
+27 r (exceptions) s
+27 r (waiting) s
+28 r (to) s
+27 r (be) s
+27 r (processed) s
+82 1804 p (If) s
+27 r (this) s
+27 r (is) s
+28 r (the) s
+27 r (first) s
+27 r (exception) s
+27 r (since) s
+28 r (we) s
+27 r (continued) s
+27 r (last) s
+28 r (time,) s
+218 1860 p (suspend) s
+27 r (the) s
+28 r (task) s
+82 1917 p (If) s
+27 r (the) s
+27 r (exception) s
+28 r (is) s
+27 r 97 c
+27 r (trace) s
+27 r (trap,) s
+28 r (process) s
+27 r (it) s
+27 r (and) s
+28 r (come) s
+27 r (back) s
+27 r (for) s
+27 r (more) s
+82 1973 p (If) s
+27 r (the) s
+27 r (exception) s
+28 r (is) s
+27 r 97 c
+27 r (breakpoint) s
+27 r (trap,) s
+28 r (announce) s
+27 r (it) s
+27 r (to) s
+28 r (the) s
+27 r (user) s
+82 2030 p (Continue) s
+27 r (in) s
+27 r (this) s
+28 r (loop) s
+27 r (until) s
+27 r (no) s
+27 r (more) s
+28 r (exceptions) s
+27 r (\(i.e.,) s
+27 r (goto) s
+28 r (1\)) s
+0 2143 p (2:) s
+27 r (See) s
+28 r (if) s
+27 r (any) s
+27 r (thread) s
+27 r (stopped) s
+28 r (with) s
+27 r 97 c
+27 r (Unix) s
+27 r (signal.) s
+55 r (If) s
+27 r (so,) s
+28 r (process) s
+27 r (it) s
+82 2199 p (If) s
+27 r (no) s
+27 r (Unix) s
+28 r (signals) s
+27 r (and) s
+27 r (we) s
+27 r (found) s
+28 r (an) s
+27 r (exception) s
+27 r (above,) s
+28 r (process) s
+27 r (the) s
+27 r (last) s
+191 2255 p (exception) s
+27 r (found) s
+82 2312 p (If) s
+27 r (no) s
+27 r (exceptions) s
+28 r (were) s
+27 r (found,) s
+27 r (start) s
+27 r (the) s
+28 r (entire) s
+27 r (algorithm) s
+27 r (over) s
+28 r (again) s
+191 2368 p (\(i.e.,) s
+27 r (goto) s
+27 r (1\)) s
+@P33 @sfps 
+0 2466 p (In) s
+16 r (this) s
+16 r (description,) s
+17 r (the) s
+16 r (term) s
+16 r (`process') s
+16 r (should) s
+16 r (be) s
+16 r (read) s
+16 r (as) s
+16 r (`invoke) s
+17 r (the) s
+16 r (higher) s
+16 r (level) s
+16 r (debugger) s
+16 r (code) s
+16 r (and) s
+16 r (set) s
+0 2523 p (the) s
+15 r (current) s
+15 r (thread) s
+15 r (to) s
+16 r (this) s
+15 r (thread.') s
+62 2621 p (When) s
+18 r (the) s
+18 r 174 c
+0 r (rst) s
+17 r (exception) s
+18 r (is) s
+18 r (received,) s
+18 r (the) s
+18 r (debugger) s
+18 r (suspends) s
+17 r (the) s
+18 r (entire) s
+18 r (task.) s
+28 r (It) s
+17 r (continues) s
+18 r (to) s
+18 r (receive) s
+0 2677 p (exceptions) s
+14 r (which) s
+13 r (have) s
+14 r (queued) s
+14 r (up) s
+13 r (on) s
+14 r (the) s
+14 r (exception) s
+13 r (port) s
+14 r (and) s
+14 r (deals) s
+13 r (with) s
+14 r (them) s
+14 r (appropriately) s
+-2 r 44 c
+13 r (but) s
+13 r (no) s
+14 r (further) s
+0 2734 p (suspension) s
+13 r (is) s
+12 r (necessary) s
+-2 r 46 c
+19 r (It) s
+12 r (immediately) s
+13 r (sends) s
+12 r 97 c
+13 r (reply) s
+13 r (message) s
+12 r (to) s
+13 r (each) s
+13 r (thread) s
+12 r (which) s
+13 r (hit) s
+12 r (an) s
+13 r (exception.) s
+19 r (The) s
+962 2843 p 57 c
+@eop
+8 @bop0
+8 @bop1
+@P33 @sfps 
+567 2076 p (Figure) s
+15 r (1:) s
+20 r (Application) s
+15 r (threads) s
+16 r (state) s
+15 r (diagram) s
+962 2843 p 56 c
+@eop
+7 @bop0
+7 @bop1
+@P38 @sfps 
+0 42 p (6.2.) s
+45 r (Debugging) s
+16 r (and) s
+15 r (Concurr) s
+0 r (ent) s
+14 r (Events) s
+@P33 @sfps 
+0 170 p (The) s
+15 r (major) s
+15 r (new) s
+15 r (complication) s
+15 r (posed) s
+15 r (by) s
+15 r (debugging) s
+15 r (multithreaded) s
+15 r (programs) s
+15 r (is) s
+15 r (that) s
+15 r (instead) s
+15 r (of) s
+15 r (one) s
+15 r (event) s
+15 r (\(a) s
+0 226 p (breakpoint\),) s
+15 r (many) s
+14 r (events) s
+15 r (can) s
+14 r (happen) s
+15 r (concurrently) s
+14 r (when) s
+15 r (the) s
+14 r (application) s
+15 r (is) s
+15 r (continued.) s
+20 r (Due) s
+14 r (to) s
+15 r (parallelism) s
+0 283 p (and) s
+16 r (concurrency) s
+15 r (within) s
+16 r (the) s
+15 r (operating) s
+16 r (system) s
+15 r (itself,) s
+16 r (these) s
+16 r (events) s
+15 r (may) s
+16 r (not) s
+15 r (be) s
+16 r (reported) s
+15 r (to) s
+16 r (the) s
+15 r (debugger) s
+16 r (in) s
+0 339 p (chronological) s
+15 r (order) s
+15 r (\(e.g.) s
+15 r (two) s
+14 r (threads) s
+15 r (hit) s
+15 r (breakpoints) s
+15 r (on) s
+15 r 97 c
+15 r (parallel) s
+15 r (processor) s
+-1 r 44 c
+14 r (but) s
+15 r 97 c
+15 r (clock) s
+14 r (interrupt) s
+15 r (causes) s
+0 396 p (the) s
+15 r 174 c
+0 r (rst) s
+15 r (thread) s
+15 r (to) s
+14 r (be) s
+15 r (delayed) s
+15 r (in) s
+15 r (preparing) s
+15 r (its) s
+15 r (exception) s
+15 r (message) s
+15 r (so) s
+14 r (that) s
+15 r (the) s
+15 r (second) s
+15 r (exception) s
+15 r (message) s
+15 r (is) s
+0 452 p (sent) s
+14 r 174 c
+0 r (rst\).) s
+19 r (In) s
+14 r (particular) s
+-1 r 44 c
+13 r (the) s
+14 r (Mach) s
+14 r (exception) s
+13 r (facility) s
+14 r (makes) s
+14 r (no) s
+13 r (guarantees) s
+14 r (that) s
+14 r (messages) s
+13 r (will) s
+14 r (be) s
+14 r (delivered) s
+0 509 p (in) s
+16 r (the) s
+16 r (order) s
+16 r (that) s
+16 r (the) s
+16 r (exceptions) s
+16 r (occurred.) s
+22 r (In) s
+16 r (most) s
+16 r (cases) s
+16 r (the) s
+16 r (order) s
+16 r (of) s
+16 r (the) s
+16 r (events) s
+16 r (is) s
+16 r (not) s
+16 r (of) s
+16 r (major) s
+16 r (interest;) s
+0 565 p (for) s
+20 r (the) s
+20 r (case) s
+21 r (of) s
+20 r (breakpoints,) s
+21 r (the) s
+21 r (user) s
+20 r (is) s
+20 r (probably) s
+20 r (more) s
+20 r (interested) s
+21 r (in) s
+20 r (the) s
+20 r (fact) s
+20 r (that) s
+20 r (two) s
+21 r (threads) s
+20 r (just) s
+20 r (hit) s
+0 622 p (breakpoints) s
+15 r (\(and) s
+15 r (which) s
+15 r (breakpoints) s
+16 r (they) s
+15 r (hit\),) s
+15 r (than) s
+15 r (in) s
+15 r (which) s
+15 r (breakpoint) s
+16 r (occurred) s
+15 r 174 c
+0 r (rst.) s
+@P38 @sfps 
+0 786 p (6.3.) s
+45 r (Managing) s
+16 r (Thr) s
+0 r (ead) s
+14 r (Execution) s
+@P33 @sfps 
+0 914 p (Our) s
+18 r (debugger) s
+19 r (uses) s
+18 r 97 c
+19 r (six) s
+18 r (state) s
+18 r (model) s
+19 r (to) s
+18 r (manage) s
+18 r (the) s
+19 r (execution) s
+18 r (states) s
+19 r (of) s
+18 r (threads) s
+18 r (in) s
+19 r (the) s
+18 r (application) s
+19 r (it) s
+18 r (is) s
+0 971 p (debugging.) s
+20 r (This) s
+14 r (model) s
+13 r (underlies) s
+14 r (the) s
+14 r (debugger) s
+14 r (logic) s
+13 r (for) s
+14 r (dealing) s
+14 r (with) s
+14 r (concurrent) s
+13 r (events.) s
+20 r (The) s
+14 r (six) s
+14 r (possible) s
+0 1027 p (execution) s
+20 r (states) s
+21 r (for) s
+20 r 97 c
+21 r (thread) s
+20 r (being) s
+20 r (managed) s
+21 r (by) s
+20 r (our) s
+21 r (debugger) s
+20 r (and) s
+20 r (the) s
+21 r (associated) s
+20 r (state) s
+20 r (transitions) s
+21 r (are) s
+0 1084 p (shown) s
+18 r (in) s
+18 r (Figure) s
+19 r (1.) s
+29 r (The) s
+18 r (reader) s
+18 r (should) s
+18 r (note) s
+19 r (that) s
+18 r (the) s
+18 r (Mach) s
+18 r (suspend) s
+18 r (and) s
+18 r (resume) s
+19 r (mechanisms) s
+18 r (are) s
+18 r (based) s
+0 1140 p (on) s
+16 r (reference) s
+16 r (counts) s
+16 r (\(e.g.) s
+15 r 97 c
+16 r (thread) s
+16 r (that) s
+16 r (is) s
+16 r (suspended) s
+16 r (twice) s
+16 r (must) s
+16 r (be) s
+15 r (resumed) s
+16 r (twice\)) s
+16 r (and) s
+16 r (that) s
+16 r (the) s
+16 r (task) s
+16 r (and) s
+0 1197 p (thread) s
+16 r (suspension) s
+15 r (mechanisms) s
+16 r (are) s
+15 r (independent) s
+16 r (\(e.g.) s
+15 r (the) s
+16 r (ef) s
+0 r (fects) s
+14 r (of) s
+16 r 97 c
+@P37 @sfps 
+15 r (task) s
+3 r 14 2 ru 
+14 r (suspend) s
+@P33 @sfps 
+15 r (cannot) s
+16 r (be) s
+15 r (reversed) s
+16 r (by) s
+0 1253 p 97 c
+@P37 @sfps 
+16 r (thr) s
+-1 r (ead) s
+2 r 14 2 ru 
+14 r 114 c
+-1 r (esume) s
+@P33 @sfps 
+0 r (\).) s
+22 r 65 c
+16 r (thread) s
+16 r (may) s
+16 r (run) s
+16 r (only) s
+16 r (if) s
+15 r (both) s
+16 r (it) s
+16 r (and) s
+16 r (its) s
+16 r (task) s
+16 r (are) s
+16 r (not) s
+16 r (suspended.) s
+23 r (For) s
+16 r (clarity) s
+-2 r 44 c
+15 r (only) s
+16 r (the) s
+0 1309 p (initial) s
+16 r (suspend) s
+16 r (\(either) s
+16 r (task) s
+16 r (or) s
+16 r (thread\)) s
+16 r (that) s
+16 r (makes) s
+16 r 97 c
+16 r (thread) s
+16 r (not) s
+16 r (runnable,) s
+16 r (and) s
+16 r (the) s
+16 r 174 c
+0 r (nal) s
+16 r (resume) s
+16 r (that) s
+16 r (makes) s
+0 1366 p (the) s
+15 r (thread) s
+15 r (runnable,) s
+15 r (are) s
+16 r (shown) s
+15 r (in) s
+15 r (Figure) s
+15 r (1.) s
+20 r (No) s
+15 r (other) s
+16 r (suspends) s
+15 r (and) s
+15 r (resumes) s
+15 r (cause) s
+15 r (state) s
+15 r (transitions.) s
+62 1474 p 87 c
+-1 r (ith) s
+14 r (this) s
+15 r (state) s
+15 r (diagram,) s
+15 r (we) s
+15 r (can) s
+15 r (now) s
+14 r (explain) s
+15 r (how) s
+15 r (the) s
+15 r (debugger) s
+15 r (manages) s
+15 r (thread) s
+14 r (execution.) s
+21 r (All) s
+14 r (of) s
+15 r (the) s
+0 1530 p (threads) s
+16 r (for) s
+15 r 97 c
+16 r (running) s
+15 r (application) s
+16 r (are) s
+15 r (in) s
+16 r (the) s
+@P38 @sfps 
+16 r (run) s
+@P33 @sfps 
+15 r (state;) s
+16 r (events) s
+16 r (that) s
+15 r (invoke) s
+16 r (the) s
+15 r (debugger) s
+16 r (cause) s
+15 r (one) s
+16 r (of) s
+16 r (two) s
+0 1587 p (possible) s
+15 r (transitions) s
+15 r (out) s
+15 r (of) s
+16 r (this) s
+15 r (state:) s
+57 1685 p (1.) s
+23 r (The) s
+14 r (event) s
+15 r (is) s
+14 r (an) s
+15 r (exception,) s
+14 r (causing) s
+15 r (the) s
+14 r (thread) s
+15 r (to) s
+15 r (send) s
+14 r 97 c
+15 r (message) s
+14 r (to) s
+15 r (the) s
+14 r (debugger) s
+-1 r 46 c
+19 r (The) s
+14 r (thread) s
+15 r (waits) s
+114 1741 p (in) s
+15 r (the) s
+@P38 @sfps 
+15 r (exc) s
+@P33 @sfps 
+15 r (state) s
+15 r (for) s
+15 r 97 c
+16 r (reply) s
+-2 r 46 c
+57 1816 p (2.) s
+23 r (The) s
+16 r (event) s
+16 r (is) s
+16 r (the) s
+17 r (delivery) s
+16 r (of) s
+16 r 97 c
+17 r (Unix) s
+16 r (signal.) s
+24 r (The) s
+16 r (thread) s
+16 r (is) s
+16 r (stopped) s
+17 r (by) s
+16 r (the) s
+16 r (Unix) s
+17 r (signal) s
+16 r (code) s
+16 r (and) s
+17 r (in) s
+114 1873 p (the) s
+@P38 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+15 r (state) s
+15 r (where) s
+15 r (it) s
+15 r (can) s
+16 r (be) s
+15 r (manipulated) s
+15 r (using) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+0 r 46 c
+0 1971 p (In) s
+18 r (response) s
+18 r (to) s
+18 r (the) s
+18 r 174 c
+0 r (rst) s
+18 r (exception) s
+18 r (detected) s
+18 r (\(from) s
+19 r 97 c
+18 r (set) s
+18 r (of) s
+18 r (concurrent) s
+18 r (exceptions\),) s
+19 r (the) s
+18 r (entire) s
+18 r (application) s
+0 2027 p (is) s
+19 r (suspended,) s
+21 r (causing) s
+19 r (threads) s
+19 r (in) s
+19 r (the) s
+@P38 @sfps 
+20 r (run) s
+@P33 @sfps 
+19 r (and) s
+@P38 @sfps 
+19 r (exc) s
+@P33 @sfps 
+19 r (states) s
+20 r (to) s
+19 r (move) s
+19 r (down) s
+20 r (to) s
+19 r (the) s
+19 r (corresponding) s
+@P38 @sfps 
+19 r (suspend) s
+@P33 @sfps 
+0 2083 p (states.) s
+33 r (The) s
+19 r (debugger) s
+19 r (proceeds) s
+20 r (to) s
+19 r (obtain) s
+19 r (information) s
+19 r (about) s
+20 r (the) s
+19 r (remaining) s
+19 r (exception) s
+20 r (events) s
+19 r (and) s
+19 r (clears) s
+0 2140 p (the) s
+18 r (exceptions) s
+18 r (by) s
+19 r (sending) s
+18 r (reply) s
+18 r (messages) s
+18 r (\(moving) s
+18 r (the) s
+18 r (corresponding) s
+19 r (threads) s
+18 r (from) s
+18 r (the) s
+@P38 @sfps 
+18 r (exc) s
+18 r 43 c
+18 r (suspend) s
+@P33 @sfps 
+0 2196 p (state) s
+20 r (to) s
+21 r (the) s
+@P38 @sfps 
+20 r (suspend) s
+@P33 @sfps 
+21 r (state\).) s
+36 r (The) s
+21 r (debugger) s
+20 r (is) s
+21 r (now) s
+20 r (prepared) s
+21 r (to) s
+20 r (interact) s
+21 r (with) s
+20 r (the) s
+20 r (user) s
+0 r 44 c
+20 r (with) s
+21 r (all) s
+20 r (of) s
+21 r (the) s
+0 2253 p (application) s
+15 r (threads) s
+15 r (in) s
+15 r (either) s
+15 r (the) s
+@P38 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+14 r (or) s
+@P38 @sfps 
+15 r (suspend) s
+@P33 @sfps 
+15 r (states.) s
+20 r (The) s
+15 r (Unix) s
+15 r (signal) s
+15 r (logic) s
+15 r (guarantees) s
+15 r (that) s
+15 r (at) s
+15 r (most) s
+0 2309 p (one) s
+15 r (application) s
+15 r (thread) s
+15 r (can) s
+16 r (be) s
+15 r (in) s
+15 r (the) s
+@P38 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+15 r (state.) s
+62 2407 p (When) s
+22 r (the) s
+21 r (user) s
+22 r (requests) s
+21 r (that) s
+21 r (the) s
+22 r (application) s
+21 r (be) s
+22 r (continued,) s
+23 r (the) s
+21 r (debugger) s
+22 r (continues) s
+21 r (the) s
+21 r (application) s
+0 2464 p (by) s
+16 r (using) s
+15 r (either) s
+@P37 @sfps 
+16 r (task) s
+3 r 14 2 ru 
+13 r 114 c
+0 r (esume) s
+@P33 @sfps 
+14 r (\(if) s
+16 r (the) s
+16 r (debugger) s
+15 r (suspended) s
+16 r (the) s
+15 r (task\)) s
+16 r (or) s
+16 r (the) s
+15 r (continue) s
+16 r (action) s
+16 r (of) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+16 r (\(if) s
+16 r (the) s
+0 2520 p (kernel) s
+12 r (ptrace) s
+12 r (code) s
+12 r (suspended) s
+12 r (the) s
+12 r (task\).) s
+19 r (Threads) s
+12 r (individually) s
+11 r (suspended) s
+12 r (by) s
+12 r (the) s
+12 r (user) s
+12 r (remain) s
+12 r (in) s
+12 r (the) s
+@P38 @sfps 
+12 r (suspend) s
+@P33 @sfps 
+0 2577 p (state;) s
+19 r (all) s
+18 r (others) s
+18 r (enter) s
+18 r (the) s
+@P38 @sfps 
+18 r (run) s
+@P33 @sfps 
+18 r (state) s
+18 r (and) s
+18 r (resume) s
+18 r (execution.) s
+29 r (For) s
+18 r (single) s
+18 r (stepping,) s
+19 r (the) s
+18 r (debugger) s
+18 r (suspends) s
+0 2633 p (all) s
+16 r (but) s
+17 r (the) s
+16 r (thread) s
+17 r (to) s
+16 r (be) s
+16 r (single) s
+17 r (stepped,) s
+17 r (arranges) s
+16 r (to) s
+16 r (single) s
+17 r (step) s
+16 r (that) s
+17 r (thread) s
+16 r (by) s
+16 r (setting) s
+17 r (the) s
+16 r (trace) s
+17 r (bit) s
+16 r (\(using) s
+@P37 @sfps 
+0 2690 p (thr) s
+-1 r (ead) s
+2 r 14 2 ru 
+14 r (set) s
+2 r 14 2 ru 
+14 r (state) s
+@P33 @sfps 
+0 r (\),) s
+15 r (and) s
+15 r (resumes) s
+15 r (the) s
+16 r (task;) s
+15 r (only) s
+15 r (the) s
+15 r (thread) s
+15 r (to) s
+15 r (be) s
+16 r (single) s
+15 r (stepped) s
+15 r (enters) s
+15 r (the) s
+@P38 @sfps 
+15 r (run) s
+@P33 @sfps 
+15 r (state.) s
+962 2843 p 55 c
+@eop
+6 @bop0
+6 @bop1
+@P33 @sfps 
+0 42 p (can) s
+18 r (dequeue) s
+18 r (and) s
+18 r (examine) s
+17 r (all) s
+18 r (of) s
+18 r (these) s
+18 r (messages) s
+18 r (without) s
+18 r (continuing) s
+18 r (the) s
+18 r (application) s
+17 r (and) s
+18 r (thus) s
+18 r (determine) s
+0 98 p (the) s
+15 r (complete) s
+15 r (state) s
+15 r (of) s
+16 r (the) s
+15 r (application,) s
+15 r (including) s
+15 r (which) s
+15 r (threads) s
+15 r (are) s
+16 r (at) s
+15 r (breakpoints.) s
+@P38 @sfps 
+0 262 p (5.2.) s
+45 r (Unix) s
+16 r (Compatibility) s
+@P33 @sfps 
+0 391 p (Unix) s
+20 r (compatibility) s
+20 r (is) s
+20 r (provided) s
+20 r (by) s
+21 r (an) s
+20 r (internal) s
+20 r (kernel) s
+20 r (exception) s
+20 r (handler) s
+20 r (\(the) s
+20 r (ux) s
+3 r 14 2 ru 
+14 r (handler\)) s
+20 r (that) s
+20 r (converts) s
+0 447 p (exception) s
+15 r (messages) s
+14 r (to) s
+15 r (signals) s
+14 r (and) s
+15 r (sends) s
+15 r (them) s
+14 r (to) s
+15 r (the) s
+15 r (appropriate) s
+14 r (threads.) s
+20 r (This) s
+15 r (handler) s
+14 r (sets) s
+15 r (up) s
+15 r (its) s
+14 r (port) s
+15 r (as) s
+0 504 p (the) s
+11 r (task) s
+12 r (exception) s
+11 r (port) s
+12 r (of) s
+11 r (/etc/init;) s
+13 r (the) s
+11 r (inheritance) s
+12 r (of) s
+11 r (the) s
+12 r (task) s
+11 r (exception) s
+12 r (port) s
+11 r (across) s
+12 r (task) s
+11 r (creation) s
+12 r (\(including) s
+0 560 p (forks\)) s
+18 r (ensures) s
+19 r (that) s
+18 r (exceptions) s
+18 r (are) s
+19 r (converted) s
+18 r (to) s
+18 r (signals) s
+19 r (by) s
+18 r (default) s
+18 r (unless) s
+19 r (there) s
+18 r (is) s
+18 r (an) s
+18 r (application) s
+19 r (that) s
+18 r (is) s
+0 616 p (interested) s
+19 r (in) s
+19 r (handling) s
+19 r (the) s
+19 r (exceptions,) s
+@P37 @sfps 
+20 r (e.g.) s
+@P33 @sfps 
+19 r 97 c
+19 r (debugger) s
+-1 r 46 c
+31 r 65 c
+19 r (debugger) s
+19 r (can) s
+19 r (use) s
+19 r (the) s
+19 r (ux) s
+3 r 14 2 ru 
+13 r (handler) s
+19 r (to) s
+19 r (convert) s
+0 673 p (exceptions) s
+15 r (to) s
+16 r (signals) s
+15 r (for) s
+15 r (debugging) s
+16 r (purposes;) s
+15 r (forwarding) s
+15 r (an) s
+16 r (initial) s
+15 r (exception) s
+15 r (message) s
+16 r (or) s
+15 r (sending) s
+15 r 97 c
+16 r (new) s
+0 729 p (one) s
+18 r (to) s
+18 r (the) s
+18 r (ux) s
+3 r 14 2 ru 
+14 r (handler) s
+18 r (causes) s
+18 r (this) s
+18 r (to) s
+18 r (occur) s
+-2 r 46 c
+28 r (The) s
+18 r (ux) s
+3 r 14 2 ru 
+14 r (handler) s
+1 r 39 c
+-1 r 115 c
+17 r (port) s
+18 r (can) s
+18 r (be) s
+18 r (obtained) s
+18 r (as) s
+18 r (the) s
+18 r (original) s
+18 r (task) s
+0 786 p (exception) s
+15 r (port) s
+15 r (of) s
+15 r (the) s
+16 r (application) s
+15 r (before) s
+15 r (the) s
+15 r (debugger) s
+15 r (changed) s
+15 r (it.) s
+62 884 p (The) s
+16 r (signal) s
+15 r (compatibility) s
+16 r (code) s
+16 r (in) s
+15 r (the) s
+16 r (Mach) s
+15 r (kernel) s
+16 r (has) s
+15 r (been) s
+16 r (extended) s
+15 r (to) s
+16 r (ensure) s
+16 r (that) s
+15 r (signals) s
+16 r (generated) s
+0 940 p (by) s
+16 r (exceptions) s
+17 r (are) s
+16 r (handled) s
+16 r (by) s
+16 r (the) s
+17 r (thread) s
+16 r (that) s
+16 r (caused) s
+17 r (the) s
+16 r (exception.) s
+24 r (This) s
+16 r (behavior) s
+16 r (is) s
+16 r (applied) s
+17 r (to) s
+16 r (the) s
+16 r (nine) s
+0 997 p (Unix) s
+12 r (signals) s
+12 r (caused) s
+13 r (by) s
+12 r (exceptions;) s
+13 r (SIGILL,) s
+12 r (SIGTRAP) s
+-4 r 44 c
+11 r (SIGIOT) s
+-2 r 44 c
+11 r (SIGEMT) s
+-2 r 44 c
+11 r (SIGFPE,) s
+12 r (SIGBUS,) s
+12 r (SIGSEGV) s
+-5 r 44 c
+0 1053 p (SIGSYS,) s
+14 r (and) s
+15 r (SIGPIPE.) s
+14 r (As) s
+15 r 97 c
+14 r (result,) s
+15 r (the) s
+14 r (ux) s
+3 r 14 2 ru 
+14 r (handler) s
+14 r (can) s
+15 r (be) s
+14 r (assured) s
+15 r (that) s
+14 r (the) s
+14 r (thread) s
+15 r (to) s
+14 r (which) s
+15 r (it) s
+14 r (delivers) s
+15 r (an) s
+0 1110 p (exception) s
+15 r (signal) s
+15 r (\(i.e.) s
+15 r (the) s
+16 r (thread) s
+15 r (that) s
+15 r (caused) s
+15 r (the) s
+15 r (original) s
+15 r (exception\)) s
+16 r (will) s
+15 r (handle) s
+15 r (the) s
+15 r (signal.) s
+@P38 @sfps 
+0 1279 p (6.) s
+45 r 65 c
+16 r (Multithr) s
+0 r (eaded) s
+14 r (Debugger) s
+@P33 @sfps 
+0 1424 p 87 c
+-3 r 101 c
+15 r (have) s
+16 r (developed) s
+16 r 97 c
+16 r (debugger) s
+16 r (for) s
+15 r (multithreaded) s
+16 r (applications) s
+16 r (that) s
+16 r (utilizes) s
+16 r (the) s
+16 r (Mach) s
+15 r (kernel') s
+-1 r 115 c
+15 r (debugging) s
+0 1480 p (support.) s
+34 r (This) s
+19 r (debugger) s
+20 r (is) s
+20 r (an) s
+20 r (enhanced) s
+19 r (version) s
+20 r (of) s
+@P37 @sfps 
+20 r (gdb) s
+@P33 @sfps 
+19 r (from) s
+20 r (the) s
+20 r (Free) s
+19 r (Software) s
+20 r (Foundation) s
+20 r 91 c
+0 r 56 c
+0 r (].) s
+33 r (This) s
+0 1537 p (section) s
+15 r (describes) s
+15 r (the) s
+15 r (enhancements) s
+16 r (and) s
+15 r (the) s
+15 r (additional) s
+15 r (functionality) s
+15 r (they) s
+15 r (provide.) s
+@P38 @sfps 
+0 1701 p (6.1.) s
+45 r (User) s
+16 r (Interface) s
+15 r (Extensions) s
+@P33 @sfps 
+0 1829 p 87 c
+-3 r 101 c
+17 r (extended) s
+18 r (gdb') s
+-1 r 115 c
+17 r (user) s
+18 r (interface) s
+18 r (to) s
+18 r (allow) s
+18 r (the) s
+17 r (independent) s
+18 r (examination) s
+18 r (and) s
+18 r (modi) s
+0 r 174 c
+0 r (cation) s
+18 r (of) s
+18 r (threads) s
+18 r (in) s
+0 1886 p (the) s
+19 r (application.) s
+33 r (New) s
+19 r (commands) s
+20 r (were) s
+19 r (added) s
+19 r (to) s
+20 r (identify) s
+19 r (threads) s
+19 r (and) s
+20 r (to) s
+19 r (select) s
+19 r 97 c
+20 r (thread) s
+19 r (to) s
+19 r (manipulate.) s
+0 1942 p (Our) s
+18 r (debugger) s
+18 r (adopts) s
+19 r (the) s
+18 r (concept) s
+18 r (of) s
+18 r 97 c
+@P37 @sfps 
+19 r (curr) s
+-1 r (ent) s
+17 r (thr) s
+0 r (ead) s
+@P33 @sfps 
+17 r (to) s
+18 r (simplify) s
+18 r (the) s
+19 r (interface) s
+18 r (and) s
+18 r (maintain) s
+18 r (maximum) s
+0 1999 p (compatibility) s
+16 r (with) s
+16 r (the) s
+17 r (single) s
+16 r (threaded) s
+16 r (version) s
+16 r (of) s
+@P37 @sfps 
+16 r (gdb) s
+@P33 @sfps 
+0 r 46 c
+24 r (Although) s
+16 r (our) s
+16 r (enhanced) s
+@P37 @sfps 
+16 r (gdb) s
+@P33 @sfps 
+16 r (can) s
+16 r (only) s
+17 r (manipulate) s
+0 2055 p (one) s
+12 r (thread) s
+13 r (at) s
+12 r 97 c
+13 r (time,) s
+13 r (it) s
+12 r (allows) s
+13 r (the) s
+12 r (user) s
+12 r (to) s
+13 r (select) s
+12 r (any) s
+13 r (thread) s
+12 r (as) s
+13 r (the) s
+@P37 @sfps 
+12 r (curr) s
+-1 r (ent) s
+12 r (thr) s
+-1 r (ead) s
+@P33 @sfps 
+12 r (to) s
+12 r (be) s
+12 r (manipulated.) s
+20 r (Hence) s
+0 2111 p (the) s
+14 r (same) s
+@P37 @sfps 
+15 r (gdb) s
+@P33 @sfps 
+14 r (commands) s
+15 r (that) s
+14 r (modi) s
+0 r 174 c
+0 r (ed) s
+14 r (the) s
+15 r (state) s
+14 r (of) s
+15 r 97 c
+14 r (Unix) s
+15 r (process) s
+14 r (perform) s
+14 r (the) s
+15 r (same) s
+14 r (modi) s
+0 r 174 c
+0 r (cations) s
+15 r (to) s
+14 r (the) s
+0 2168 p (selected) s
+17 r (thread.) s
+25 r 87 c
+-3 r 101 c
+16 r (also) s
+17 r (changed) s
+17 r (the) s
+17 r (single) s
+17 r (step) s
+17 r (command) s
+16 r (to) s
+17 r (single) s
+17 r (step) s
+17 r (only) s
+17 r (the) s
+17 r (current) s
+16 r (thread) s
+17 r (while) s
+0 2224 p (preventing) s
+15 r (all) s
+15 r (other) s
+15 r (application) s
+16 r (threads) s
+15 r (from) s
+15 r (running.) s
+62 2322 p (In) s
+18 r (order) s
+19 r (to) s
+18 r (isolate) s
+18 r (aberrant) s
+18 r (behavior) s
+18 r (such) s
+19 r (as) s
+18 r (race) s
+18 r (conditions,) s
+19 r (it) s
+18 r (is) s
+18 r (vital) s
+18 r (to) s
+19 r (be) s
+18 r (able) s
+18 r (to) s
+18 r (continue) s
+18 r (only) s
+0 2379 p (selected) s
+17 r (portions) s
+16 r (of) s
+17 r 97 c
+17 r (multithreaded) s
+17 r (application.) s
+24 r 84 c
+-2 r 111 c
+16 r (support) s
+17 r (this) s
+16 r (we) s
+17 r (also) s
+17 r (added) s
+16 r (debugger) s
+17 r (commands) s
+17 r (to) s
+0 2435 p (individually) s
+17 r (suspend) s
+16 r (and) s
+17 r (resume) s
+16 r (threads.) s
+24 r 65 c
+@P37 @sfps 
+17 r (suspended) s
+@P33 @sfps 
+16 r (thread) s
+17 r (does) s
+16 r (not) s
+17 r (execute) s
+16 r (when) s
+17 r (the) s
+16 r (application) s
+17 r (is) s
+0 2492 p (continued,) s
+15 r (and) s
+14 r (remains) s
+14 r (in) s
+15 r (this) s
+@P37 @sfps 
+14 r (suspended) s
+@P33 @sfps 
+14 r (state) s
+15 r (until) s
+14 r (it) s
+15 r (is) s
+@P37 @sfps 
+14 r 114 c
+-1 r (esumed) s
+@P33 @sfps 
+0 r 46 c
+19 r (These) s
+15 r (commands) s
+14 r (also) s
+14 r (support) s
+15 r (options) s
+0 2548 p (to) s
+12 r (suspend) s
+13 r (or) s
+12 r (resume) s
+12 r (all) s
+13 r (threads) s
+12 r (to) s
+13 r (allow) s
+12 r (faster) s
+12 r (selection) s
+13 r (of) s
+12 r (the) s
+12 r (desired) s
+13 r (portion) s
+12 r (of) s
+12 r (the) s
+13 r (application) s
+12 r (\(e.g.) s
+12 r (one) s
+0 2605 p (can) s
+18 r (select) s
+18 r (two) s
+19 r (threads) s
+18 r (out) s
+18 r (of) s
+18 r 97 c
+19 r (collection) s
+18 r (by) s
+18 r (suspending) s
+18 r (all) s
+19 r (of) s
+18 r (the) s
+18 r (threads) s
+18 r (and) s
+19 r (then) s
+18 r (resuming) s
+18 r (the) s
+18 r (two) s
+0 2661 p (desired) s
+18 r (threads\).) s
+27 r (The) s
+18 r (debugger) s
+18 r (can) s
+17 r (resume) s
+18 r 97 c
+18 r (thread,) s
+18 r (but) s
+18 r (the) s
+17 r (thread) s
+18 r (remains) s
+18 r (suspended) s
+17 r (until) s
+18 r (the) s
+18 r (entire) s
+0 2717 p (application) s
+15 r (containing) s
+15 r (the) s
+15 r (thread) s
+16 r (is) s
+15 r (continued.) s
+962 2843 p 54 c
+@eop
+5 @bop0
+5 @bop1
+@P38 @sfps 
+0 42 p (4.4.) s
+45 r (Mach) s
+16 r (ptrace) s
+@P33 @sfps 
+0 170 p 87 c
+-3 r 101 c
+15 r (have) s
+16 r (applied) s
+16 r (the) s
+16 r (above) s
+16 r (changes) s
+16 r (to) s
+15 r (the) s
+16 r (Unix) s
+16 r (implementation) s
+16 r (of) s
+@P37 @sfps 
+16 r (ptrace) s
+@P33 @sfps 
+16 r (to) s
+16 r (yield) s
+15 r (the) s
+16 r (Mach) s
+16 r (implemen-) s
+0 226 p (tation.) s
+27 r (The) s
+17 r (resulting) s
+17 r (implementation) s
+17 r (does) s
+18 r (not) s
+17 r (resume) s
+17 r (the) s
+18 r (debugged) s
+17 r (application) s
+17 r (in) s
+17 r (order) s
+18 r (to) s
+17 r (examine) s
+17 r (or) s
+0 283 p (modify) s
+12 r (its) s
+12 r (state.) s
+20 r (Although) s
+12 r (the) s
+12 r (above) s
+12 r (changes) s
+12 r (have) s
+12 r (been) s
+13 r (described) s
+12 r (in) s
+12 r (terms) s
+12 r (of) s
+12 r (the) s
+13 r (calls) s
+12 r (that) s
+12 r (could) s
+12 r (be) s
+12 r (made) s
+0 339 p (by) s
+17 r 97 c
+17 r (debugger) s
+17 r (outside) s
+17 r (the) s
+17 r (kernel,) s
+18 r (we) s
+17 r (have) s
+17 r (taken) s
+17 r (advantage) s
+17 r (of) s
+17 r (the) s
+17 r (ef) s
+0 r 174 c
+0 r (ciencies) s
+17 r (af) s
+0 r (forded) s
+16 r (by) s
+17 r (an) s
+17 r (in-kernel) s
+0 396 p (implementation.) s
+31 r (\(e.g.) s
+31 r (modify) s
+18 r (only) s
+19 r (the) s
+19 r (register) s
+18 r (requested,) s
+20 r (rather) s
+19 r (than) s
+18 r (performing) s
+19 r 97 c
+@P37 @sfps 
+19 r (thr) s
+-1 r (ead) s
+2 r 14 2 ru 
+13 r (set) s
+3 r 14 2 ru 
+14 r (state) s
+@P33 @sfps 
+18 r (to) s
+0 452 p (modify) s
+18 r (all) s
+17 r (of) s
+18 r (them.\).) s
+28 r (The) s
+18 r (resulting) s
+@P37 @sfps 
+17 r (ptrace) s
+@P33 @sfps 
+18 r (makes) s
+18 r (it) s
+17 r (possible) s
+18 r (to) s
+18 r (use) s
+17 r (existing) s
+18 r (single) s
+18 r (threaded) s
+17 r (debuggers) s
+0 509 p (for) s
+16 r (multithreaded) s
+15 r (applications) s
+16 r (because) s
+15 r (it) s
+16 r (does) s
+15 r (not) s
+16 r (resume) s
+15 r (the) s
+16 r (application) s
+15 r (in) s
+16 r (order) s
+15 r (to) s
+16 r (examine) s
+15 r (or) s
+16 r (modify) s
+0 565 p (its) s
+17 r (state.) s
+25 r (This) s
+16 r (does) s
+17 r (not) s
+17 r (constitute) s
+16 r (complete) s
+17 r (support) s
+17 r (for) s
+17 r (multithreaded) s
+16 r (debugging) s
+17 r (due) s
+17 r (to) s
+16 r (lack) s
+17 r (of) s
+17 r (support) s
+0 622 p (for) s
+19 r (concurrent) s
+18 r (exceptions) s
+@P13 @sfps 
+479 605 p 52 c
+@P33 @sfps 
+498 622 p 44 c
+19 r (but) s
+18 r (it) s
+19 r (is) s
+19 r 97 c
+18 r (distinct) s
+19 r (improvement) s
+18 r (over) s
+19 r (the) s
+18 r (original) s
+19 r (implementation) s
+18 r (which) s
+19 r (is) s
+0 678 p (essentially) s
+15 r (useless) s
+15 r (for) s
+15 r (this) s
+16 r (purpose.) s
+@P38 @sfps 
+0 846 p (5.) s
+45 r (Handling) s
+16 r (Concurr) s
+0 r (ent) s
+14 r (Exceptions) s
+@P33 @sfps 
+0 991 p (The) s
+15 r (interaction) s
+15 r (of) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+16 r (with) s
+15 r (signals) s
+15 r (poses) s
+15 r 97 c
+15 r (major) s
+15 r (obstacle) s
+16 r (to) s
+15 r (multithreaded) s
+15 r (debugging) s
+15 r (because) s
+15 r (signal) s
+0 1047 p (semantics) s
+17 r (require) s
+16 r (that) s
+17 r (exceptions) s
+16 r (be) s
+17 r (handled) s
+16 r (serially) s
+-2 r 46 c
+24 r (This) s
+16 r (is) s
+17 r 97 c
+16 r (reasonable) s
+17 r (restriction) s
+16 r (for) s
+17 r (external) s
+16 r (event) s
+0 1103 p (signals) s
+21 r (and) s
+20 r 97 c
+21 r (single-threaded) s
+20 r (application,) s
+22 r (but) s
+21 r (it) s
+20 r (is) s
+21 r (unreasonable) s
+21 r (for) s
+20 r (exception) s
+21 r (signals) s
+20 r (generated) s
+21 r (by) s
+20 r 97 c
+0 1160 p (multithreaded) s
+12 r (application) s
+11 r (because) s
+12 r (it) s
+12 r (hides) s
+12 r (some) s
+11 r (of) s
+12 r (the) s
+12 r (application') s
+-2 r 115 c
+11 r (state.) s
+19 r (In) s
+12 r (particular) s
+-1 r 44 c
+11 r (it) s
+12 r (is) s
+12 r (impossible) s
+11 r (for) s
+0 1216 p 97 c
+12 r (debugger) s
+12 r (to) s
+12 r (determine) s
+13 r (the) s
+12 r (complete) s
+12 r (state) s
+12 r (of) s
+12 r 97 c
+12 r (multithreaded) s
+12 r (application) s
+12 r (that) s
+13 r (has) s
+12 r (hit) s
+12 r (multiple) s
+12 r (breakpoints) s
+0 1273 p (in) s
+19 r (dif) s
+0 r (ferent) s
+17 r (threads) s
+19 r (because) s
+19 r (only) s
+18 r (one) s
+19 r (breakpoint) s
+18 r (can) s
+19 r (be) s
+19 r (reported) s
+18 r (to) s
+19 r (the) s
+18 r (debugger) s
+-1 r 46 c
+29 r (If) s
+19 r (the) s
+19 r (user) s
+18 r (were) s
+19 r (to) s
+0 1329 p (remove) s
+15 r (some) s
+14 r (of) s
+15 r (the) s
+15 r (other) s
+15 r (breakpoints) s
+14 r (before) s
+15 r (continuing) s
+15 r (the) s
+14 r (application,) s
+15 r (some) s
+15 r (of) s
+15 r (the) s
+14 r (pending) s
+15 r (breakpoint) s
+0 1386 p (signals) s
+20 r (would) s
+20 r (appear) s
+20 r (to) s
+20 r (come) s
+20 r (from) s
+20 r (non-existent) s
+20 r (breakpoints.) s
+35 r (This) s
+19 r (and) s
+20 r (similar) s
+20 r (problems) s
+20 r (are) s
+20 r 97 c
+20 r (direct) s
+0 1442 p (result) s
+16 r (of) s
+15 r (the) s
+16 r (serialization) s
+15 r (imposed) s
+16 r (by) s
+15 r (signals) s
+16 r (and) s
+15 r (can) s
+16 r (only) s
+15 r (be) s
+16 r (alleviated) s
+15 r (by) s
+16 r (using) s
+15 r 97 c
+16 r (dif) s
+0 r (ferent) s
+15 r (mechanism) s
+0 1499 p (to) s
+15 r (report) s
+15 r (exceptions) s
+15 r (to) s
+16 r (the) s
+15 r (debugger) s
+-2 r 46 c
+@P38 @sfps 
+0 1661 p (5.1.) s
+45 r (The) s
+16 r (Mach) s
+15 r (Exception) s
+15 r (Handling) s
+15 r (Facility) s
+@P33 @sfps 
+0 1790 p (Mach) s
+13 r (provides) s
+14 r 97 c
+13 r (message-based) s
+14 r (exception) s
+13 r (handling) s
+13 r (facility) s
+14 r (to) s
+13 r (overcome) s
+14 r (the) s
+13 r (limitations) s
+14 r (imposed) s
+13 r (by) s
+13 r (Unix) s
+0 1846 p (signals.) s
+20 r (Converting) s
+14 r (exceptions) s
+13 r (to) s
+14 r (messages) s
+14 r (allows) s
+14 r 97 c
+14 r (debugger) s
+14 r (to) s
+14 r (receive) s
+13 r (and) s
+14 r (record) s
+14 r (all) s
+14 r (of) s
+14 r (the) s
+14 r (exceptions) s
+0 1903 p (that) s
+12 r (have) s
+13 r (happened) s
+12 r (to) s
+12 r (the) s
+12 r (application) s
+13 r (since) s
+12 r (it) s
+12 r (was) s
+12 r (last) s
+13 r (continued,) s
+12 r (and) s
+13 r (thus) s
+12 r (obtain) s
+12 r 97 c
+12 r (complete) s
+13 r (picture) s
+12 r (of) s
+12 r (the) s
+0 1959 p (application') s
+-2 r 115 c
+12 r (state.) s
+20 r (The) s
+13 r (exception) s
+12 r (handling) s
+13 r (facility) s
+13 r (is) s
+13 r (based) s
+13 r (on) s
+12 r 97 c
+13 r (remote) s
+13 r (procedure) s
+13 r (call) s
+13 r (\(rpc\)) s
+12 r (implemented) s
+0 2015 p (by) s
+16 r (two) s
+17 r (Mach) s
+16 r (ipc) s
+16 r (messages.) s
+24 r (The) s
+16 r (occurrence) s
+16 r (of) s
+17 r (an) s
+16 r (exception) s
+16 r (causes) s
+17 r 97 c
+16 r (message) s
+16 r (to) s
+17 r (be) s
+16 r (sent) s
+16 r (that) s
+16 r (identi) s
+0 r 174 c
+0 r (es) s
+0 2072 p (the) s
+15 r (exception,) s
+15 r (the) s
+16 r (thread) s
+15 r (that) s
+15 r (caused) s
+15 r (it,) s
+16 r (and) s
+15 r (the) s
+15 r (task) s
+15 r (containing) s
+16 r (that) s
+15 r (thread.) s
+20 r (The) s
+15 r (thread) s
+16 r (waits) s
+15 r (for) s
+15 r 97 c
+15 r (reply) s
+0 2128 p (to) s
+17 r (this) s
+17 r (message;) s
+17 r (the) s
+17 r (reply) s
+17 r (indicates) s
+16 r (whether) s
+17 r (the) s
+17 r (exception) s
+17 r (was) s
+17 r (successfully) s
+16 r (handled.) s
+25 r (Further) s
+17 r (details) s
+17 r (on) s
+0 2185 p (the) s
+15 r (use) s
+15 r (and) s
+15 r (implementation) s
+16 r (of) s
+15 r (the) s
+15 r (exception) s
+15 r (handling) s
+15 r (facility) s
+15 r (can) s
+16 r (be) s
+15 r (found) s
+15 r (in) s
+15 r 91 c
+0 r 52 c
+0 r (].) s
+62 2283 p 65 c
+21 r (debugger) s
+20 r (uses) s
+20 r (the) s
+21 r (exception) s
+20 r (handling) s
+21 r (facility) s
+20 r (to) s
+20 r (detect) s
+21 r (exceptions) s
+20 r (in) s
+20 r (the) s
+21 r (debugged) s
+20 r (application,) s
+0 2339 p (including) s
+13 r (breakpoint) s
+14 r (and) s
+13 r (trace) s
+14 r (traps.) s
+19 r (The) s
+14 r (debugger) s
+13 r (enables) s
+14 r (this) s
+13 r (by) s
+14 r (setting) s
+13 r (the) s
+@P38 @sfps 
+13 r (task) s
+14 r (exception) s
+13 r (port) s
+@P33 @sfps 
+14 r (of) s
+13 r (the) s
+0 2396 p (debugged) s
+11 r (task) s
+12 r (to) s
+11 r 97 c
+11 r (port) s
+12 r (on) s
+11 r (which) s
+11 r (the) s
+11 r (debugger) s
+12 r (expects) s
+11 r (to) s
+11 r (receive) s
+12 r (exception) s
+11 r (messages.) s
+19 r (Then) s
+11 r (any) s
+11 r (exception) s
+0 2452 p (in) s
+18 r (the) s
+17 r (application) s
+18 r (that) s
+17 r (is) s
+18 r (not) s
+17 r (handled) s
+18 r (by) s
+17 r (an) s
+18 r (application-speci) s
+0 r 174 c
+0 r 99 c
+17 r (error) s
+18 r (handler) s
+17 r (initiates) s
+18 r (an) s
+17 r (exception) s
+18 r (rpc) s
+0 2509 p (to) s
+21 r (the) s
+20 r (debugger) s
+-1 r 46 c
+35 r (This) s
+21 r (mechanism) s
+21 r (replaces) s
+20 r (signals) s
+21 r (and) s
+21 r (the) s
+20 r (serialization) s
+21 r (restriction) s
+20 r (imposed) s
+21 r (by) s
+21 r (them;) s
+0 2565 p (multiple) s
+14 r (concurrent) s
+14 r (exceptions) s
+14 r (result) s
+14 r (in) s
+14 r (multiple) s
+14 r (messages) s
+14 r (being) s
+14 r (queued) s
+14 r (for) s
+14 r (the) s
+14 r (debugger) s
+-1 r 46 c
+19 r (The) s
+14 r (debugger) s
+0 2607 p 779 2 ru 
+@P4 @sfps 
+53 2664 p 52 c
+@P18 @sfps 
+67 2680 p (This) s
+11 r (also) s
+11 r (causes) s
+11 r (problems) s
+12 r (with) s
+11 r (single) s
+11 r (stepping) s
+11 r (in) s
+11 r (the) s
+11 r (presence) s
+11 r (of) s
+11 r (outstanding) s
+11 r (breakpoint) s
+11 r (events) s
+11 r (because) s
+11 r (the) s
+11 r (signal) s
+12 r (received) s
+0 2726 p (after) s
+12 r (initiating) s
+13 r (the) s
+12 r (single) s
+13 r (step) s
+12 r (action) s
+13 r (may) s
+12 r (be) s
+13 r (from) s
+12 r 97 c
+13 r (pending) s
+12 r (breakpoint) s
+12 r (instead) s
+13 r (of) s
+12 r (completion) s
+13 r (of) s
+12 r (the) s
+13 r (single) s
+12 r (step.) s
+@P33 @sfps 
+962 2843 p 53 c
+@eop
+4 @bop0
+4 @bop1
+@P33 @sfps 
+0 42 p (application) s
+13 r (be) s
+13 r (resumed,) s
+13 r (with) s
+13 r (the) s
+12 r (result) s
+13 r (that) s
+13 r (the) s
+13 r (threads) s
+12 r (not) s
+13 r (stopped) s
+13 r (in) s
+13 r (the) s
+12 r (signal) s
+13 r (code) s
+13 r (continue) s
+13 r (to) s
+12 r (execute,) s
+0 98 p (possibly) s
+18 r (altering) s
+19 r (state) s
+18 r (needed) s
+18 r (for) s
+18 r (the) s
+19 r (debugging) s
+18 r (process.) s
+30 r (The) s
+18 r (new) s
+18 r (implementation) s
+18 r (takes) s
+19 r (advantage) s
+18 r (of) s
+0 154 p (existing) s
+18 r (Mach) s
+17 r (features) s
+18 r (to) s
+18 r (replace) s
+17 r (the) s
+@P37 @sfps 
+18 r (pr) s
+-1 r (ocxmt) s
+@P33 @sfps 
+17 r (code) s
+17 r (\(executed) s
+18 r (by) s
+18 r (the) s
+17 r (application) s
+18 r (to) s
+18 r (perform) s
+17 r (actions) s
+18 r (on) s
+0 211 p (itself\)) s
+19 r (with) s
+20 r (code) s
+19 r (that) s
+19 r (allows) s
+19 r (the) s
+20 r (debugger) s
+19 r (process) s
+19 r (to) s
+20 r (directly) s
+19 r (perform) s
+19 r (the) s
+20 r (actions) s
+19 r (itself.) s
+33 r (This) s
+19 r (has) s
+19 r (the) s
+0 267 p (bene) s
+174 c
+(cial) s
+16 r (side) s
+15 r (ef) s
+0 r (fect) s
+15 r (of) s
+16 r (eliminating) s
+15 r (two) s
+16 r (context) s
+16 r (switches) s
+15 r (and) s
+16 r (the) s
+15 r (associated) s
+16 r (synchronization) s
+16 r (from) s
+15 r (every) s
+0 324 p (call) s
+18 r (to) s
+@P37 @sfps 
+18 r (ptrace) s
+@P33 @sfps 
+0 r 46 c
+28 r (The) s
+17 r (following) s
+18 r (sections) s
+18 r (describe) s
+18 r (these) s
+17 r (changes) s
+18 r (and) s
+18 r (also) s
+18 r (indicate) s
+17 r (how) s
+18 r (the) s
+18 r (ptrace) s
+18 r (actions) s
+0 380 p (could) s
+15 r (be) s
+15 r (replaced) s
+15 r (by) s
+16 r (other) s
+15 r (Mach) s
+15 r (kernel) s
+15 r (facilities) s
+15 r (available) s
+15 r (to) s
+16 r 97 c
+15 r (debugger) s
+-2 r 46 c
+@P38 @sfps 
+0 544 p (4.1.) s
+45 r (Access) s
+16 r (to) s
+15 r (Memory) s
+15 r (and) s
+15 r (Registers) s
+@P33 @sfps 
+0 673 p (The) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+16 r (actions) s
+15 r (that) s
+16 r (read) s
+15 r (or) s
+16 r (write) s
+15 r (the) s
+16 r (application) s
+15 r (memory) s
+16 r (can) s
+15 r (be) s
+16 r (replaced) s
+15 r (by) s
+16 r (the) s
+15 r (Mach) s
+@P37 @sfps 
+16 r (vm) s
+3 r 14 2 ru 
+13 r 114 c
+0 r (ead) s
+@P33 @sfps 
+14 r (and) s
+@P37 @sfps 
+0 729 p (vm) s
+3 r 14 2 ru 
+13 r (write) s
+@P33 @sfps 
+16 r (kernel) s
+16 r (operations) s
+15 r (that) s
+16 r (directly) s
+16 r (access) s
+15 r (memory) s
+16 r (of) s
+16 r (another) s
+15 r (task.) s
+22 r (These) s
+16 r (operations) s
+16 r (are) s
+15 r (somewhat) s
+0 786 p (inef) s
+0 r 174 c
+0 r (cient) s
+15 r (in) s
+15 r (accessing) s
+16 r (the) s
+15 r (small) s
+16 r (amount) s
+15 r (of) s
+16 r (data) s
+15 r (that) s
+16 r (ptrace) s
+15 r (normally) s
+16 r (transfers.) s
+21 r (This) s
+15 r (inef) s
+0 r 174 c
+0 r (ciency) s
+15 r (can) s
+15 r (be) s
+0 842 p (alleviated) s
+14 r (by) s
+15 r (directly) s
+14 r (using) s
+@P37 @sfps 
+15 r (vm) s
+2 r 14 2 ru 
+14 r 114 c
+-1 r (ead) s
+@P33 @sfps 
+14 r (and) s
+@P37 @sfps 
+14 r (vm) s
+3 r 14 2 ru 
+13 r (write) s
+@P33 @sfps 
+15 r (in) s
+14 r (the) s
+14 r (debugger) s
+15 r (to) s
+14 r (examine) s
+15 r (or) s
+14 r (write) s
+14 r (lar) s
+0 r (ger) s
+14 r (amounts) s
+14 r (of) s
+0 899 p (data,) s
+15 r (or) s
+15 r (by) s
+15 r (system-speci) s
+0 r 174 c
+0 r 99 c
+15 r (extensions) s
+15 r (to) s
+15 r (ptrace) s
+15 r (for) s
+15 r (transferring) s
+15 r (lar) s
+0 r (ger) s
+14 r (amounts) s
+15 r (of) s
+15 r (data;) s
+15 r (in) s
+15 r (both) s
+15 r (cases) s
+15 r (the) s
+0 955 p (number) s
+15 r (of) s
+15 r (kernel) s
+15 r (operations) s
+16 r (required) s
+15 r (to) s
+15 r (access) s
+15 r (lar) s
+0 r (ge) s
+14 r (amounts) s
+16 r (of) s
+15 r (data) s
+15 r (is) s
+15 r (reduced.) s
+62 1053 p (Similarly) s
+-2 r 44 c
+15 r (the) s
+@P37 @sfps 
+16 r (ptrace) s
+@P33 @sfps 
+16 r (actions) s
+16 r (that) s
+15 r (read) s
+16 r (or) s
+16 r (write) s
+16 r (the) s
+16 r (application) s
+15 r (registers) s
+16 r (can) s
+16 r (be) s
+16 r (replaced) s
+16 r (by) s
+15 r (the) s
+16 r (Mach) s
+@P37 @sfps 
+0 1110 p (thr) s
+-1 r (ead) s
+2 r 14 2 ru 
+14 r (get) s
+2 r 14 2 ru 
+14 r (state) s
+@P33 @sfps 
+19 r (and) s
+@P37 @sfps 
+19 r (thr) s
+-1 r (ead) s
+2 r 14 2 ru 
+13 r (set) s
+3 r 14 2 ru 
+14 r (state) s
+@P33 @sfps 
+18 r (kernel) s
+19 r (operations) s
+19 r (which) s
+19 r (also) s
+18 r (read) s
+19 r (and) s
+19 r (write) s
+19 r (registers.) s
+31 r (Since) s
+18 r (user) s
+0 1166 p (registers) s
+17 r (are) s
+18 r (saved) s
+17 r (on) s
+18 r (the) s
+17 r (kernel) s
+17 r (stack) s
+18 r (during) s
+17 r (kernel) s
+18 r (operations,) s
+18 r (this) s
+17 r (improvement) s
+17 r (is) s
+18 r (made) s
+17 r (possible) s
+18 r (by) s
+0 1222 p (the) s
+19 r (fact) s
+19 r (that) s
+18 r (Mach) s
+19 r (places) s
+19 r (the) s
+19 r (kernel) s
+19 r (stacks) s
+18 r (of) s
+19 r (threads) s
+19 r (in) s
+19 r (kernel) s
+19 r (memory) s
+18 r (proper) s
+0 r 44 c
+18 r (so) s
+19 r (that) s
+19 r (all) s
+19 r (stacks) s
+18 r (are) s
+0 1279 p (accessible) s
+14 r (to) s
+14 r (the) s
+14 r (kernel) s
+14 r (at) s
+14 r (all) s
+13 r (times) s
+14 r (\(in) s
+14 r (contrast) s
+14 r (Unix) s
+14 r (usually) s
+14 r (forbids) s
+14 r (access) s
+14 r (to) s
+14 r (kernel) s
+14 r (stacks) s
+13 r (of) s
+14 r (other) s
+14 r (than) s
+0 1335 p (the) s
+15 r (current) s
+15 r (process\).) s
+@P38 @sfps 
+0 1500 p (4.2.) s
+45 r (Other) s
+16 r (Kernel) s
+15 r (Information) s
+@P33 @sfps 
+0 1628 p (The) s
+@P37 @sfps 
+16 r (ptrace) s
+@P33 @sfps 
+17 r (action) s
+16 r (that) s
+16 r (reads) s
+17 r (kernel) s
+16 r (information) s
+16 r (from) s
+17 r (the) s
+@P37 @sfps 
+16 r (user) s
+@P33 @sfps 
+16 r (area) s
+17 r (in) s
+16 r (Unix) s
+16 r (indicates) s
+17 r (which) s
+16 r (information) s
+0 1684 p (it) s
+20 r (wants) s
+19 r (by) s
+20 r (an) s
+20 r (of) s
+0 r (fset) s
+19 r (into) s
+19 r (the) s
+20 r (user) s
+20 r (structure.) s
+33 r (Since) s
+20 r (the) s
+20 r (user) s
+19 r (structure) s
+20 r (has) s
+20 r (been) s
+20 r (divided) s
+19 r (into) s
+20 r (task) s
+20 r (and) s
+0 1741 p (thread) s
+18 r (speci) s
+0 r 174 c
+0 r 99 c
+18 r (components) s
+19 r (in) s
+18 r (Mach,) s
+19 r (it) s
+18 r (was) s
+18 r (necessary) s
+19 r (to) s
+18 r (incorporate) s
+18 r (kernel) s
+18 r (code) s
+19 r (to) s
+18 r (reassemble) s
+18 r 97 c
+18 r (fake) s
+0 1797 p (user) s
+16 r (structure) s
+16 r (from) s
+16 r (these) s
+16 r (components) s
+16 r (so) s
+16 r (that) s
+16 r (the) s
+17 r (of) s
+0 r (fset) s
+15 r (can) s
+16 r (be) s
+16 r (interpreted) s
+16 r (to) s
+16 r 174 c
+0 r (nd) s
+16 r (the) s
+16 r (desired) s
+16 r (data.) s
+23 r (This) s
+0 1854 p (information) s
+15 r (is) s
+15 r (also) s
+15 r (available) s
+16 r (via) s
+15 r (the) s
+15 r (various) s
+15 r (options) s
+15 r (to) s
+15 r (the) s
+16 r (Mach) s
+@P37 @sfps 
+15 r (table) s
+@P33 @sfps 
+15 r (syscall.) s
+@P38 @sfps 
+0 2018 p (4.3.) s
+45 r (Execution) s
+16 r (Contr) s
+0 r (ol) s
+@P33 @sfps 
+0 2147 p (The) s
+@P37 @sfps 
+20 r (ptrace) s
+@P33 @sfps 
+20 r (continue) s
+20 r (action) s
+20 r (can) s
+19 r (be) s
+20 r (replaced) s
+20 r (by) s
+20 r (the) s
+20 r (Mach) s
+@P37 @sfps 
+20 r (task) s
+3 r 14 2 ru 
+13 r 114 c
+-1 r (esume) s
+@P33 @sfps 
+19 r (kernel) s
+20 r (call.) s
+35 r (Finer) s
+19 r (control) s
+20 r (over) s
+0 2203 p (execution) s
+11 r (can) s
+12 r (be) s
+11 r (obtained) s
+11 r (by) s
+11 r (using) s
+@P37 @sfps 
+12 r (thr) s
+-1 r (ead) s
+2 r 14 2 ru 
+13 r (suspend) s
+@P33 @sfps 
+12 r (and) s
+@P37 @sfps 
+11 r (thr) s
+-1 r (ead) s
+2 r 14 2 ru 
+14 r 114 c
+-1 r (esume) s
+@P33 @sfps 
+10 r (to) s
+12 r (control) s
+11 r (which) s
+11 r (application) s
+11 r (threads) s
+0 2259 p (are) s
+22 r (to) s
+22 r (execute.) s
+42 r (Single) s
+22 r (stepping) s
+22 r (can) s
+22 r (be) s
+22 r (implemented) s
+23 r (by) s
+22 r (accessing) s
+22 r (the) s
+22 r (process) s
+22 r (control) s
+23 r (register\(s\)) s
+22 r (of) s
+0 2316 p (the) s
+20 r (desired) s
+21 r (thread\(s\)) s
+20 r (to) s
+21 r (set) s
+20 r (the) s
+20 r (trace) s
+21 r (bit) s
+20 r (\(as) s
+20 r (described) s
+21 r (in) s
+20 r (the) s
+21 r (previous) s
+20 r (section\)) s
+20 r (before) s
+21 r (performing) s
+20 r (the) s
+@P37 @sfps 
+0 2372 p (task) s
+3 r 14 2 ru 
+13 r 114 c
+0 r (esume) s
+@P33 @sfps 
+0 r 46 c
+62 2470 p (There) s
+14 r (is,) s
+14 r (however) s
+-1 r 44 c
+13 r (no) s
+14 r (direct) s
+14 r (Mach) s
+14 r (replacement) s
+14 r (for) s
+13 r (the) s
+14 r (termination) s
+14 r (action) s
+14 r (of) s
+@P37 @sfps 
+14 r (ptrace) s
+@P33 @sfps 
+14 r (due) s
+13 r (to) s
+14 r (the) s
+14 r (need) s
+14 r (to) s
+0 2527 p (clean) s
+15 r (up) s
+15 r (and) s
+14 r (deallocate) s
+15 r (Unix) s
+15 r (state) s
+15 r (and) s
+14 r (data) s
+15 r (structures.) s
+20 r (It) s
+15 r (is) s
+15 r (still) s
+15 r (necessary) s
+14 r (for) s
+15 r (the) s
+15 r (application) s
+15 r (to) s
+15 r (perform) s
+0 2583 p (this) s
+14 r (itself) s
+13 r (by) s
+14 r (calling) s
+@P37 @sfps 
+13 r (exit) s
+@P33 @sfps 
+14 r (either) s
+13 r (within) s
+14 r (or) s
+13 r (from) s
+14 r (outside) s
+13 r (the) s
+14 r (kernel.) s
+20 r (The) s
+13 r (debugger) s
+14 r (can) s
+13 r (cause) s
+14 r (the) s
+13 r (application) s
+0 2640 p (to) s
+15 r (do) s
+15 r (this) s
+15 r (reliably) s
+16 r (by) s
+15 r (sending) s
+15 r (SIGKILL) s
+15 r (to) s
+15 r (it.) s
+962 2843 p 52 c
+@eop
+3 @bop0
+[ 1643 ] /@F36 @newfont 
+@F36 @sf 
+[<07E0001FF8003FFC007FFE007FFE00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF007FFE007FFE003FFC001FF8
+  0007E000>
+	 24 18 -3 -2 22.727] 15 @dc
+3 @bop1
+@P33 @sfps 
+0 42 p (as) s
+20 r 97 c
+19 r (breakpoint) s
+20 r (trap.) s
+33 r (Similarly) s
+-2 r 44 c
+20 r (single) s
+20 r (stepping) s
+19 r (is) s
+20 r (often) s
+20 r (implemented) s
+19 r (by) s
+20 r 97 c
+19 r (`trace) s
+20 r (bit') s
+20 r (which) s
+19 r (causes) s
+20 r 97 c
+0 98 p (trace) s
+15 r (trap) s
+15 r (at) s
+14 r (the) s
+15 r (end) s
+15 r (of) s
+15 r (the) s
+15 r (next) s
+15 r (instruction.) s
+20 r (In) s
+15 r (both) s
+14 r (cases) s
+15 r (the) s
+15 r (kernel) s
+15 r (identi) s
+0 r 174 c
+0 r (es) s
+15 r (the) s
+14 r (trap) s
+15 r (and) s
+15 r (generates) s
+15 r (the) s
+0 154 p (SIGTRAP) s
+15 r (signal;) s
+15 r (this) s
+15 r (noti) s
+0 r 174 c
+0 r (es) s
+16 r (the) s
+15 r (debugger) s
+15 r (via) s
+15 r (the) s
+15 r (kernel) s
+15 r (mechanisms) s
+16 r (discussed) s
+15 r (above.) s
+62 252 p (There) s
+11 r (is) s
+11 r (one) s
+12 r (subtlety) s
+11 r (involved) s
+11 r (in) s
+11 r (actually) s
+11 r (using) s
+11 r (breakpoints.) s
+19 r (Since) s
+11 r (it) s
+11 r (is) s
+11 r (not) s
+11 r (possible) s
+11 r (to) s
+12 r (insert) s
+11 r (the) s
+11 r (special) s
+0 309 p (breakpoint) s
+18 r (instruction) s
+18 r (between) s
+18 r (adjacent) s
+18 r (instructions,) s
+19 r (it) s
+18 r (is) s
+19 r (necessary) s
+18 r (to) s
+18 r (replace) s
+18 r (part) s
+18 r (of) s
+18 r (the) s
+18 r (application') s
+-1 r 115 c
+0 365 p (machine) s
+10 r (code) s
+@P13 @sfps 
+250 349 p 51 c
+@P33 @sfps 
+269 365 p 46 c
+18 r (As) s
+11 r 97 c
+10 r (result,) s
+11 r (it) s
+10 r (is) s
+11 r (necessary) s
+10 r (to) s
+10 r (execute) s
+10 r (the) s
+11 r (replaced) s
+10 r (code) s
+10 r (when) s
+10 r (continuing) s
+11 r (from) s
+10 r 97 c
+10 r (breakpoint;) s
+0 422 p (this) s
+16 r (is) s
+17 r (usually) s
+16 r (done) s
+17 r (by) s
+16 r (replacing) s
+17 r (the) s
+16 r (original) s
+17 r (code,) s
+17 r (single) s
+16 r (stepping,) s
+17 r (and) s
+16 r (replacing) s
+17 r (the) s
+16 r (breakpoint) s
+17 r (before) s
+0 478 p (continuing) s
+15 r (the) s
+15 r (application.) s
+@P38 @sfps 
+0 646 p (3.) s
+45 r (Multiple) s
+16 r (Thr) s
+0 r (eads) s
+14 r (and) s
+15 r (Debugging) s
+@P33 @sfps 
+0 791 p (Mach) s
+17 r (splits) s
+18 r (the) s
+17 r (familiar) s
+18 r (Unix) s
+@P38 @sfps 
+17 r (pr) s
+0 r (ocess) s
+@P33 @sfps 
+17 r (abstraction) s
+17 r (into) s
+18 r (the) s
+@P38 @sfps 
+17 r (task) s
+@P33 @sfps 
+17 r (and) s
+@P38 @sfps 
+18 r (thr) s
+0 r (ead) s
+@P33 @sfps 
+16 r (abstractions) s
+18 r 91 c
+0 r 57 c
+0 r (].) s
+27 r 65 c
+@P38 @sfps 
+17 r (task) s
+@P33 @sfps 
+18 r (is) s
+0 848 p (an) s
+15 r (address) s
+15 r (space) s
+15 r (along) s
+14 r (with) s
+15 r (associated) s
+15 r (communication) s
+15 r (rights;) s
+15 r (it) s
+15 r (is) s
+15 r 97 c
+15 r (passive) s
+14 r (entity) s
+15 r (that) s
+15 r (is) s
+15 r (not) s
+15 r (capable) s
+15 r (of) s
+0 904 p (execution) s
+14 r (by) s
+14 r (itself.) s
+19 r 65 c
+@P38 @sfps 
+14 r (thr) s
+0 r (ead) s
+@P33 @sfps 
+13 r (is) s
+14 r 97 c
+14 r (locus) s
+14 r (of) s
+14 r (control) s
+14 r (within) s
+14 r 97 c
+13 r (task;) s
+15 r (it) s
+14 r (consists) s
+13 r (of) s
+14 r 97 c
+14 r (register) s
+14 r (context,) s
+14 r 97 c
+14 r (kernel) s
+0 961 p (stack,) s
+16 r (and) s
+17 r (usually) s
+16 r (its) s
+16 r (own) s
+16 r (user) s
+17 r (stack) s
+16 r (\(assigned) s
+16 r (under) s
+16 r (user) s
+16 r (control\).) s
+24 r 65 c
+16 r (Unix) s
+16 r (process) s
+16 r (is) s
+17 r (represented) s
+16 r (by) s
+16 r 97 c
+0 1017 p (task) s
+12 r (with) s
+13 r 97 c
+12 r (single) s
+12 r (thread) s
+13 r (under) s
+12 r (Mach.) s
+19 r (Additional) s
+12 r (threads) s
+13 r (can) s
+12 r (be) s
+12 r (created) s
+13 r (within) s
+12 r 97 c
+12 r (task) s
+13 r (for) s
+12 r (concurrency) s
+12 r (and) s
+0 1073 p (parallelism;) s
+19 r (the) s
+18 r (threads) s
+18 r (share) s
+18 r (all) s
+18 r (of) s
+17 r (the) s
+18 r (task') s
+-1 r 115 c
+17 r (resources) s
+18 r (\(memory) s
+17 r (and) s
+18 r (communication) s
+18 r (rights\).) s
+28 r (Threads) s
+0 1130 p (execute) s
+19 r (and) s
+19 r (are) s
+18 r (scheduled) s
+19 r (independently) s
+19 r (by) s
+19 r (the) s
+19 r (operating) s
+18 r (system) s
+19 r (kernel,) s
+20 r (so) s
+19 r (that) s
+19 r 97 c
+18 r (blocking) s
+19 r (operation) s
+0 1186 p (executed) s
+15 r (by) s
+16 r (one) s
+15 r (thread) s
+15 r (does) s
+15 r (not) s
+16 r (af) s
+0 r (fect) s
+14 r (others.) s
+21 r 65 c
+15 r (debugger) s
+15 r (normally) s
+16 r (executes) s
+15 r (in) s
+15 r 97 c
+15 r (task) s
+16 r (distinct) s
+15 r (from) s
+15 r (the) s
+0 1243 p (application) s
+15 r (that) s
+15 r (is) s
+15 r (being) s
+16 r (debugged) s
+15 r (for) s
+15 r (protection) s
+15 r (reasons.) s
+62 1341 p (Using) s
+13 r (existing) s
+13 r (process-oriented) s
+13 r (debuggers) s
+13 r (to) s
+13 r (debug) s
+13 r (applications) s
+13 r (with) s
+13 r (multiple) s
+13 r (threads) s
+12 r (exposes) s
+13 r 97 c
+13 r (num-) s
+0 1397 p (ber) s
+19 r (of) s
+18 r (problem) s
+19 r (areas) s
+19 r (in) s
+18 r (both) s
+19 r (the) s
+19 r (debuggers) s
+18 r (and) s
+19 r (the) s
+19 r (underlying) s
+18 r (operating) s
+19 r (system) s
+18 r (support.) s
+31 r (Among) s
+19 r (the) s
+0 1454 p (more) s
+15 r (signi) s
+0 r 174 c
+0 r (cant) s
+15 r (of) s
+15 r (these) s
+16 r (problems) s
+15 r (are:) s
+@F36 @sf 
+68 1552 p 15 c
+@P33 @sfps 
+23 r (The) s
+17 r (debugger) s
+17 r (lacks) s
+17 r (internal) s
+17 r (data) s
+17 r (structures) s
+16 r (and) s
+17 r (process) s
+17 r (control) s
+17 r (logic) s
+17 r (for) s
+17 r (tracking) s
+17 r (and) s
+17 r (controlling) s
+114 1608 p (the) s
+15 r (states) s
+15 r (of) s
+15 r (the) s
+15 r (application) s
+15 r (threads.) s
+@F36 @sf 
+68 1682 p 15 c
+@P33 @sfps 
+23 r (The) s
+19 r (existing) s
+@P37 @sfps 
+19 r (ptrace) s
+@P33 @sfps 
+19 r (interface) s
+18 r (and) s
+19 r (process) s
+19 r (control) s
+19 r (logic) s
+19 r (are) s
+19 r (inadequate) s
+19 r (because) s
+18 r (they) s
+19 r (assume) s
+19 r (that) s
+114 1739 p (there) s
+15 r (is) s
+15 r (exactly) s
+15 r (one) s
+15 r (application) s
+15 r (thread.) s
+@F36 @sf 
+68 1813 p 15 c
+@P33 @sfps 
+23 r (Concurrent) s
+20 r (exceptions) s
+19 r (\(e.g.) s
+20 r (three) s
+19 r (threads) s
+20 r (hit) s
+20 r 97 c
+19 r (breakpoint) s
+20 r (before) s
+20 r (the) s
+19 r (debugger) s
+20 r (gets) s
+20 r (control\)) s
+19 r (are) s
+114 1869 p (beyond) s
+12 r (the) s
+12 r (ability) s
+12 r (of) s
+12 r (both) s
+12 r (the) s
+13 r (debugger) s
+12 r (and) s
+12 r (the) s
+12 r (operating) s
+12 r (system.) s
+20 r (The) s
+12 r (exceptions) s
+12 r (will) s
+12 r (be) s
+12 r (serialized,) s
+114 1926 p (causing) s
+11 r (potentially) s
+12 r (bizarre) s
+11 r (behavior) s
+12 r (\(e.g.) s
+11 r 97 c
+12 r (thread) s
+11 r (appears) s
+12 r (to) s
+12 r (hit) s
+11 r 97 c
+12 r (breakpoint) s
+11 r (that) s
+12 r (was) s
+11 r (just) s
+12 r (removed\).) s
+0 2024 p 87 c
+-3 r 101 c
+12 r (attacked) s
+12 r (these) s
+12 r (problem) s
+12 r (areas) s
+12 r (individually) s
+13 r (by) s
+12 r (improving) s
+@P37 @sfps 
+12 r (ptrace) s
+@P33 @sfps 
+12 r (to) s
+13 r (deal) s
+12 r (with) s
+12 r (multiple) s
+12 r (threads,) s
+13 r (replacing) s
+0 2080 p (the) s
+12 r (signal) s
+12 r (and) s
+11 r (ptrace) s
+12 r (logic) s
+12 r (that) s
+12 r (serializes) s
+12 r (concurrent) s
+11 r (exceptions,) s
+13 r (and) s
+12 r (enhancing) s
+11 r (the) s
+12 r (debugger) s
+12 r (to) s
+12 r (understand) s
+0 2137 p (multiple) s
+18 r (threads) s
+18 r (and) s
+17 r (concurrent) s
+18 r (exceptions.) s
+28 r (The) s
+18 r (following) s
+18 r (sections) s
+17 r (discuss) s
+18 r (our) s
+18 r (implementation) s
+18 r (of) s
+18 r (this) s
+0 2193 p (strategy) s
+-2 r 46 c
+@P38 @sfps 
+0 2361 p (4.) s
+45 r (Impr) s
+0 r (oving) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+0 2506 p (Our) s
+16 r (major) s
+16 r (goal) s
+16 r (in) s
+16 r (improving) s
+17 r (the) s
+16 r (implementation) s
+16 r (of) s
+@P37 @sfps 
+16 r (ptrace) s
+@P33 @sfps 
+16 r (was) s
+16 r (to) s
+16 r (eliminate) s
+@P37 @sfps 
+16 r (pr) s
+0 r (ocxmt) s
+@P33 @sfps 
+15 r (and) s
+16 r (the) s
+16 r (associated) s
+0 2563 p (logic) s
+12 r (that) s
+13 r (resumes) s
+12 r (the) s
+13 r (debugged) s
+12 r (application.) s
+19 r (The) s
+13 r (interaction) s
+12 r (of) s
+@P37 @sfps 
+13 r (ptrace) s
+@P33 @sfps 
+12 r (with) s
+13 r (signals) s
+12 r (requires) s
+12 r (that) s
+13 r (the) s
+12 r (entire) s
+0 2607 p 779 2 ru 
+@P4 @sfps 
+53 2664 p 51 c
+@P18 @sfps 
+67 2680 p (This) s
+16 r (is) s
+16 r (not) s
+15 r (strictly) s
+16 r (true) s
+15 r (for) s
+16 r (pipelined) s
+16 r (machines) s
+15 r (with) s
+16 r (address) s
+16 r (queues) s
+15 r (that) s
+16 r (allow) s
+16 r (out) s
+15 r (of) s
+16 r (order) s
+16 r (instruction) s
+15 r (sequencing) s
+16 r (\(e.g.) s
+0 2726 p (Hewlett) s
+11 r (Packard') s
+-1 r 115 c
+10 r (Precision) s
+11 r (Architecture\).) s
+17 r (The) s
+11 r (breakpoint) s
+11 r (and) s
+11 r (trace) s
+11 r (trap) s
+11 r (mechanisms) s
+11 r (for) s
+11 r (such) s
+12 r (machines) s
+11 r (can) s
+11 r (be) s
+11 r (rather) s
+11 r (complex.) s
+@P33 @sfps 
+962 2843 p 51 c
+@eop
+2 @bop0
+2 @bop1
+@P37 @sfps 
+62 42 p (ptrace) s
+@P33 @sfps 
+17 r (also) s
+17 r (includes) s
+18 r 97 c
+17 r (hook) s
+17 r (that) s
+17 r (allows) s
+17 r (the) s
+17 r (debugged) s
+17 r (application) s
+17 r (to) s
+17 r (identify) s
+18 r (itself) s
+17 r (to) s
+17 r (the) s
+17 r (kernel) s
+17 r (and) s
+0 98 p (request) s
+18 r (special) s
+18 r (treatment) s
+17 r (as) s
+18 r 97 c
+18 r (result.) s
+28 r 84 c
+-2 r (ypically) s
+17 r 97 c
+18 r (debugger) s
+17 r (forks) s
+18 r 97 c
+18 r (child) s
+18 r (process) s
+18 r (which) s
+17 r (calls) s
+18 r (this) s
+18 r (hook) s
+0 154 p (\(`Please) s
+16 r (trace) s
+15 r (me'\)) s
+16 r (before) s
+@P37 @sfps 
+16 r (exec) s
+@P33 @sfps 
+0 r ('ing) s
+15 r (the) s
+16 r (application) s
+15 r (to) s
+16 r (be) s
+16 r (debugged;) s
+16 r (this) s
+15 r (hook) s
+16 r (sets) s
+15 r (the) s
+16 r (trace) s
+16 r 175 c
+0 r (ag) s
+15 r (\(STRC\)) s
+0 211 p (for) s
+15 r (the) s
+15 r (debugged) s
+15 r (process.) s
+21 r 65 c
+15 r (process) s
+15 r (with) s
+15 r (this) s
+15 r 175 c
+0 r (ag) s
+15 r (set) s
+16 r (is) s
+15 r (referred) s
+15 r (to) s
+15 r (as) s
+15 r 97 c
+15 r 170 c
+0 r (traced) s
+0 r 186 c
+15 r (process.) s
+@P38 @sfps 
+0 375 p (2.2.) s
+45 r (Signals) s
+@P33 @sfps 
+0 504 p (Signals) s
+21 r (form) s
+21 r (an) s
+21 r (important) s
+21 r (part) s
+21 r (of) s
+21 r (the) s
+21 r (interface) s
+21 r (between) s
+21 r (the) s
+21 r (debugger) s
+21 r (and) s
+21 r (the) s
+21 r (debugged) s
+21 r (application.) s
+0 560 p (Signals) s
+17 r (are) s
+18 r (caused) s
+17 r (both) s
+17 r (by) s
+18 r (external) s
+17 r (events) s
+17 r (involving) s
+18 r (the) s
+17 r (application) s
+17 r (and) s
+18 r (by) s
+17 r (exceptions) s
+17 r (\(both) s
+18 r (hardware) s
+0 616 p (and) s
+20 r (software\)) s
+20 r (occurring) s
+20 r (in) s
+19 r (the) s
+20 r (application) s
+20 r (itself.) s
+35 r (When) s
+19 r 97 c
+20 r (signal) s
+20 r (is) s
+20 r (delivered) s
+20 r (to) s
+20 r 97 c
+20 r (traced) s
+20 r (process,) s
+21 r (the) s
+0 673 p (process) s
+13 r (stops) s
+14 r (inside) s
+13 r (the) s
+13 r (signal) s
+14 r (code) s
+13 r (so) s
+13 r (that) s
+14 r (it) s
+13 r (can) s
+13 r (carry) s
+14 r (out) s
+13 r (actions) s
+13 r (requested) s
+14 r (by) s
+13 r (the) s
+13 r (debugger) s
+14 r (through) s
+13 r (the) s
+@P37 @sfps 
+0 729 p (ptrace) s
+@P33 @sfps 
+13 r (interface.) s
+20 r (The) s
+13 r (process) s
+14 r (remains) s
+13 r (in) s
+13 r (this) s
+14 r (state) s
+13 r (until) s
+13 r 97 c
+14 r (continue,) s
+13 r (single) s
+14 r (step,) s
+13 r (or) s
+14 r (kill) s
+13 r (action) s
+13 r (is) s
+14 r (requested;) s
+0 786 p (the) s
+19 r 174 c
+0 r (rst) s
+18 r (two) s
+19 r (allow) s
+19 r (it) s
+18 r (to) s
+19 r (continue) s
+18 r (execution,) s
+20 r (and) s
+19 r (the) s
+18 r (latter) s
+19 r (terminates) s
+18 r (it) s
+19 r (immediately) s
+-2 r 46 c
+30 r (The) s
+18 r (signal) s
+19 r (itself) s
+0 842 p (is) s
+19 r (cancelled) s
+18 r (unless) s
+19 r (the) s
+18 r (debugger) s
+19 r (speci) s
+0 r 174 c
+0 r (cally) s
+18 r (directs) s
+19 r (that) s
+19 r (it) s
+18 r (be) s
+19 r (taken;) s
+20 r (the) s
+19 r (debugger) s
+18 r (may) s
+19 r (also) s
+18 r (substitute) s
+0 899 p (another) s
+15 r (signal) s
+15 r (if) s
+15 r (desired.) s
+62 997 p (The) s
+12 r (two) s
+11 r (most) s
+11 r (common) s
+12 r (uses) s
+11 r (of) s
+11 r (signals) s
+12 r (during) s
+11 r (debugging) s
+11 r (are) s
+12 r (breakpoint/trace) s
+11 r (detection) s
+11 r (and) s
+12 r (interruption) s
+0 1053 p (of) s
+17 r 97 c
+17 r (looping) s
+17 r (application.) s
+27 r (Both) s
+17 r (breakpoints) s
+17 r (and) s
+17 r (trace) s
+17 r (traps) s
+17 r (generate) s
+17 r (the) s
+18 r (signal) s
+17 r (SIGTRAP;) s
+17 r (the) s
+17 r (debugger) s
+0 1110 p (will) s
+20 r (usually) s
+20 r (allow) s
+20 r (this) s
+20 r (signal) s
+20 r (to) s
+20 r (be) s
+20 r (cancelled) s
+20 r (after) s
+20 r (gaining) s
+20 r (control) s
+20 r (via) s
+@P37 @sfps 
+20 r (ptrace) s
+@P33 @sfps 
+0 r 46 c
+35 r (Similarly) s
+-2 r 44 c
+20 r (interruption) s
+0 1166 p (characters) s
+19 r (at) s
+20 r (the) s
+19 r (keyboard) s
+19 r (also) s
+19 r (generate) s
+20 r (signals) s
+19 r (\(e.g.) s
+52 r (control-C) s
+19 r (generates) s
+19 r (SIGINT\).) s
+19 r 65 c
+20 r (user) s
+19 r (can) s
+19 r (take) s
+0 1222 p (advantage) s
+16 r (of) s
+16 r (this) s
+16 r (to) s
+16 r (regain) s
+16 r (debugger) s
+16 r (control) s
+16 r (of) s
+16 r 97 c
+16 r (runaway) s
+16 r (application;) s
+16 r (typing) s
+16 r (control-C) s
+16 r (on) s
+16 r (the) s
+16 r (terminal) s
+0 1279 p (causes) s
+15 r (the) s
+15 r (application) s
+15 r (to) s
+15 r (stop) s
+15 r (in) s
+15 r (the) s
+15 r (signal) s
+14 r (code) s
+15 r (and) s
+15 r (the) s
+15 r (debugger) s
+15 r (to) s
+15 r (regain) s
+15 r (control.) s
+20 r (The) s
+15 r (only) s
+15 r (remaining) s
+0 1335 p (detail) s
+15 r (to) s
+15 r (be) s
+15 r (explained) s
+16 r (is) s
+15 r (how) s
+15 r (the) s
+15 r (debugger) s
+15 r (detects) s
+15 r (that) s
+16 r (the) s
+15 r (application) s
+15 r (has) s
+15 r (stopped.) s
+@P38 @sfps 
+0 1500 p (2.3.) s
+@P37 @sfps 
+45 r (wait) s
+0 1628 p (wait) s
+@P33 @sfps 
+18 r (is) s
+18 r (the) s
+18 r (most) s
+17 r (common) s
+18 r (mechanism) s
+18 r (used) s
+18 r (by) s
+18 r (debuggers) s
+18 r (to) s
+17 r (determine) s
+18 r (that) s
+18 r 97 c
+18 r (debugged) s
+18 r (application) s
+18 r (has) s
+0 1684 p (stopped) s
+@P13 @sfps 
+141 1668 p 50 c
+@P33 @sfps 
+160 1684 p 46 c
+26 r (The) s
+@P37 @sfps 
+17 r (wait) s
+@P33 @sfps 
+17 r (system) s
+18 r (call) s
+17 r (is) s
+17 r (normally) s
+17 r (used) s
+17 r (to) s
+17 r (wait) s
+17 r (for) s
+17 r (an) s
+18 r (exited) s
+17 r (process) s
+17 r (and) s
+17 r (return) s
+17 r (its) s
+17 r (exit) s
+17 r (code,) s
+0 1741 p (but) s
+@P37 @sfps 
+14 r (wait) s
+@P33 @sfps 
+15 r (also) s
+14 r (returns) s
+14 r (if) s
+15 r (it) s
+14 r 174 c
+0 r (nds) s
+14 r 97 c
+14 r (traced) s
+15 r (process) s
+14 r (that) s
+14 r (has) s
+15 r (stopped) s
+14 r (in) s
+14 r (the) s
+15 r (signal) s
+14 r (code.) s
+20 r (Thus) s
+14 r 97 c
+15 r (debugger) s
+14 r (can) s
+0 1797 p (use) s
+15 r (wait) s
+15 r (to) s
+15 r (simultaneously) s
+16 r (detect) s
+15 r (the) s
+15 r (two) s
+15 r (occurrences) s
+15 r (that) s
+15 r (it) s
+16 r (is) s
+15 r (most) s
+15 r (interested) s
+15 r (in:) s
+57 1895 p (1.) s
+23 r (The) s
+15 r (application) s
+15 r (has) s
+15 r (taken) s
+15 r 97 c
+15 r (signal) s
+15 r (\(e.g.) s
+16 r (hit) s
+15 r 97 c
+15 r (breakpoint\)) s
+15 r (and) s
+15 r (stopped.) s
+57 1970 p (2.) s
+23 r (The) s
+15 r (application) s
+15 r (has) s
+15 r (exited.) s
+0 2068 p (The) s
+18 r (status) s
+18 r (returned) s
+18 r (by) s
+@P37 @sfps 
+18 r (wait) s
+@P33 @sfps 
+18 r (indicates) s
+18 r (whether) s
+18 r (the) s
+18 r (application) s
+18 r (has) s
+18 r (stopped) s
+18 r (or) s
+18 r (exited,) s
+19 r (and) s
+18 r (in) s
+18 r (the) s
+18 r (former) s
+0 2125 p (case) s
+15 r (also) s
+15 r (returns) s
+15 r (the) s
+15 r (signal) s
+15 r (that) s
+15 r (caused) s
+16 r (it) s
+15 r (to) s
+15 r (stop.) s
+20 r (Once) s
+@P37 @sfps 
+15 r (wait) s
+@P33 @sfps 
+15 r (has) s
+15 r (indicated) s
+15 r (that) s
+15 r (the) s
+15 r (debugged) s
+15 r (application) s
+0 2181 p (has) s
+15 r (stopped,) s
+15 r (the) s
+15 r (debugger) s
+16 r (can) s
+15 r (safely) s
+15 r (use) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+15 r (to) s
+15 r (manipulate) s
+16 r (the) s
+15 r (application.) s
+@P38 @sfps 
+0 2346 p (2.4.) s
+45 r (Br) s
+0 r (eakpoints) s
+15 r (and) s
+15 r (Single) s
+15 r (Stepping) s
+@P33 @sfps 
+0 2474 p (The) s
+16 r (actual) s
+16 r (mechanisms) s
+16 r (used) s
+16 r (to) s
+16 r (implement) s
+16 r (breakpoints) s
+16 r (and) s
+16 r (single) s
+16 r (stepping) s
+16 r (are) s
+16 r (hardware) s
+16 r (dependent,) s
+17 r (but) s
+0 2530 p (the) s
+14 r (software) s
+15 r (interface) s
+14 r (to) s
+15 r (them) s
+14 r (\(via) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+0 r 41 c
+14 r (is) s
+14 r (very) s
+15 r (similar) s
+14 r (across) s
+15 r (most) s
+14 r (machines.) s
+20 r 65 c
+14 r (breakpoint) s
+15 r (is) s
+14 r (usually) s
+0 2587 p (implemented) s
+16 r (by) s
+15 r 97 c
+16 r (special) s
+15 r (machine) s
+16 r (instruction) s
+15 r (which) s
+16 r (causes) s
+15 r 97 c
+16 r (trap) s
+15 r (that) s
+16 r (the) s
+15 r (kernel) s
+16 r (immediately) s
+15 r (identi) s
+0 r 174 c
+0 r (es) s
+0 2636 p 779 2 ru 
+@P4 @sfps 
+53 2693 p 50 c
+@P18 @sfps 
+67 2709 p (Used) s
+13 r (by) s
+12 r (virtually) s
+13 r (all) s
+12 r (BSD) s
+13 r (debuggers;) s
+12 r (some) s
+12 r (System) s
+13 r 53 c
+12 r (debuggers) s
+13 r (may) s
+12 r (use) s
+13 r (the) s
+12 r (SIGCLD) s
+13 r (signal) s
+12 r (for) s
+12 r (this) s
+13 r (purpose.) s
+@P33 @sfps 
+962 2843 p 50 c
+@eop
+1 @bop0
+1 @bop1
+@P38 @sfps 
+0 42 p (1.) s
+45 r (Intr) s
+0 r (oduction) s
+@P33 @sfps 
+0 186 p (Applications) s
+16 r (that) s
+16 r (employ) s
+16 r (multiple) s
+16 r (threads) s
+16 r (of) s
+16 r (control) s
+16 r (add) s
+16 r (new) s
+17 r (challenges) s
+16 r (to) s
+16 r (the) s
+16 r (debugging) s
+16 r (problem) s
+16 r (that) s
+0 243 p (exceed) s
+20 r (the) s
+21 r (capabilities) s
+20 r (of) s
+21 r (most) s
+20 r (existing) s
+21 r (debuggers) s
+20 r (for) s
+21 r (single) s
+20 r (threaded) s
+20 r (applications.) s
+37 r (Not) s
+20 r (only) s
+20 r (do) s
+21 r (the) s
+0 299 p (debuggers) s
+13 r (lack) s
+13 r (the) s
+13 r (logic) s
+13 r (and) s
+13 r (data) s
+14 r (structures) s
+13 r (needed) s
+13 r (to) s
+13 r (deal) s
+13 r (with) s
+13 r (multiple) s
+13 r (threads) s
+13 r (in) s
+13 r (the) s
+13 r (tar) s
+0 r (get) s
+13 r (application,) s
+0 356 p (but) s
+13 r (often) s
+13 r (the) s
+14 r (operating) s
+13 r (system) s
+13 r (primitives) s
+13 r (they) s
+14 r (depend) s
+13 r (on) s
+13 r (\(e.g.) s
+@P37 @sfps 
+13 r (ptrace) s
+@P33 @sfps 
+0 r 41 c
+14 r (are) s
+13 r (inadequate) s
+13 r (to) s
+13 r (the) s
+13 r (task.) s
+20 r (While) s
+13 r 97 c
+0 412 p (good) s
+11 r (operating) s
+12 r (system) s
+11 r (designer) s
+12 r (includes) s
+11 r (new) s
+12 r (primitives) s
+11 r (to) s
+12 r (support) s
+11 r (multithreaded) s
+12 r (debugging,) s
+12 r (it) s
+12 r (is) s
+11 r (up) s
+11 r (to) s
+12 r (the) s
+0 469 p (debugger) s
+16 r (implementors) s
+15 r (to) s
+16 r (put) s
+16 r (these) s
+15 r (primitives) s
+16 r (to) s
+16 r (good) s
+16 r (use.) s
+21 r (This) s
+16 r (paper) s
+16 r (describes) s
+15 r (one) s
+16 r (such) s
+16 r (ef) s
+0 r (fort) s
+15 r (in) s
+15 r (this) s
+0 525 p (area;) s
+13 r (the) s
+12 r (modi) s
+0 r 174 c
+0 r (cation) s
+12 r (of) s
+12 r (an) s
+12 r (existing) s
+12 r (debugger) s
+12 r (for) s
+12 r (single) s
+12 r (threaded) s
+12 r (Unix) s
+@P13 @sfps 
+1297 509 p 49 c
+@P33 @sfps 
+1328 525 p (applications) s
+12 r (to) s
+12 r (support) s
+12 r (debugging) s
+0 581 p (of) s
+12 r (multithreaded) s
+13 r (applications) s
+12 r (under) s
+12 r (the) s
+13 r (Mach) s
+12 r (operating) s
+13 r (system.) s
+19 r (Although) s
+12 r (the) s
+13 r (operating) s
+12 r (system) s
+12 r (primitives) s
+0 638 p (are) s
+12 r (speci) s
+0 r 174 c
+0 r 99 c
+13 r (to) s
+12 r (Mach,) s
+13 r (the) s
+12 r (underlying) s
+13 r (design) s
+12 r (principles) s
+12 r (are) s
+13 r (applicable) s
+12 r (to) s
+12 r (any) s
+13 r (debugger) s
+12 r (for) s
+13 r (applications) s
+12 r (with) s
+0 694 p (multiple) s
+15 r (threads) s
+15 r (of) s
+15 r (control) s
+16 r (in) s
+15 r 97 c
+15 r (Unix-compatible) s
+15 r (environment.) s
+62 792 p (This) s
+19 r (paper) s
+19 r (begins) s
+19 r (with) s
+19 r (an) s
+19 r (introduction) s
+19 r (to) s
+19 r (Unix) s
+19 r (debuggers) s
+19 r (for) s
+19 r (single) s
+19 r (threaded) s
+19 r (applications) s
+19 r (and) s
+19 r (the) s
+0 849 p (problems) s
+20 r (involved) s
+19 r (in) s
+20 r (adding) s
+20 r (support) s
+19 r (for) s
+20 r (multithreaded) s
+20 r (applications.) s
+33 r 87 c
+-2 r 101 c
+18 r (then) s
+20 r (address) s
+20 r (these) s
+19 r (problems) s
+0 905 p (and) s
+15 r (describe) s
+16 r (our) s
+15 r (solutions) s
+16 r (for) s
+15 r (the) s
+16 r (Mach) s
+15 r (debugger) s
+16 r (that) s
+15 r (we) s
+15 r (have) s
+16 r (implemented.) s
+21 r 87 c
+-3 r 101 c
+15 r (conclude) s
+15 r (with) s
+16 r 97 c
+15 r (short) s
+0 962 p (discussion) s
+15 r (of) s
+15 r (possible) s
+15 r (extensions) s
+16 r (to) s
+15 r (our) s
+15 r (work) s
+15 r (and) s
+15 r (its) s
+15 r (relation) s
+16 r (to) s
+15 r (other) s
+15 r (work) s
+15 r (in) s
+15 r (the) s
+15 r 174 c
+0 r (eld.) s
+@P38 @sfps 
+0 1131 p (2.) s
+45 r (Unix) s
+16 r (Debuggers) s
+15 r (and) s
+15 r (Debugging-Related) s
+15 r (System) s
+15 r (Calls) s
+@P33 @sfps 
+0 1276 p (On) s
+20 r 97 c
+21 r (Unix) s
+20 r (system,) s
+22 r (the) s
+20 r (debugger) s
+21 r (and) s
+20 r (an) s
+20 r (application) s
+21 r (being) s
+20 r (debugged) s
+21 r (are) s
+20 r (separate) s
+20 r (user) s
+21 r (processes) s
+20 r (that) s
+0 1332 p (communicate) s
+19 r (via) s
+18 r (kernel-provided) s
+19 r (services,) s
+19 r (primarily) s
+19 r (the) s
+19 r (various) s
+18 r (options) s
+19 r (of) s
+19 r (the) s
+@P37 @sfps 
+18 r (ptrace) s
+@P33 @sfps 
+19 r (system) s
+19 r (call.) s
+30 r (In) s
+0 1389 p (addition) s
+21 r 97 c
+21 r (debugged) s
+21 r (process) s
+21 r (under) s
+0 r (goes) s
+20 r (special) s
+22 r (interactions) s
+21 r (with) s
+21 r (the) s
+21 r (Unix) s
+21 r (signal) s
+21 r (and) s
+21 r (process) s
+21 r (control) s
+0 1445 p (mechanisms) s
+15 r (to) s
+15 r (facilitate) s
+14 r (debugging.) s
+21 r (Hence) s
+14 r (the) s
+15 r (implementation) s
+15 r (of) s
+15 r (debugging) s
+15 r (functionality) s
+14 r (is) s
+15 r (split) s
+15 r (across) s
+0 1502 p (the) s
+15 r (user) s
+0 r (-kernel) s
+14 r (boundary) s
+16 r (and) s
+15 r (includes) s
+15 r (logic) s
+15 r (in) s
+15 r (both) s
+15 r (the) s
+15 r (debugger) s
+16 r (and) s
+15 r (the) s
+15 r (operating) s
+15 r (system.) s
+@P38 @sfps 
+0 1666 p (2.1.) s
+@P37 @sfps 
+45 r (ptrace) s
+@P33 @sfps 
+0 1794 p (The) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+16 r (system) s
+15 r (call) s
+16 r (implements) s
+15 r (most) s
+16 r (of) s
+15 r (the) s
+16 r (functionality) s
+15 r (required) s
+16 r (by) s
+15 r 97 c
+16 r (debugger) s
+15 r (to) s
+16 r (interact) s
+15 r (with) s
+16 r (the) s
+0 1851 p (application) s
+15 r (being) s
+15 r (debugged.) s
+21 r (The) s
+15 r (various) s
+15 r (options) s
+15 r (to) s
+@P37 @sfps 
+15 r (ptrace) s
+@P33 @sfps 
+15 r (implement:) s
+@F36 @sf 
+68 1949 p 15 c
+@P33 @sfps 
+23 r (Access) s
+15 r (to) s
+15 r (the) s
+15 r (application') s
+-1 r 115 c
+14 r (registers) s
+15 r (and) s
+15 r (memory) s
+-2 r 46 c
+@F36 @sf 
+68 2024 p 15 c
+@P33 @sfps 
+23 r (Read) s
+15 r (access) s
+16 r (to) s
+15 r (certain) s
+15 r (kernel) s
+16 r (information) s
+15 r (about) s
+15 r (the) s
+15 r (application) s
+16 r (\(e.g.) s
+21 r (the) s
+15 r (command) s
+15 r (it) s
+15 r (was) s
+16 r (invoked) s
+114 2080 p (with\).) s
+@F36 @sf 
+68 2155 p 15 c
+@P33 @sfps 
+23 r (Continue) s
+13 r (or) s
+12 r (single) s
+13 r (step) s
+12 r (the) s
+13 r (application) s
+12 r (\(with) s
+13 r (the) s
+13 r (option) s
+12 r (of) s
+13 r (delivering) s
+12 r 97 c
+13 r (signal\).) s
+19 r (Also) s
+13 r (kill) s
+13 r (\(terminate\)) s
+114 2212 p (the) s
+15 r (application.) s
+0 2310 p (Since) s
+16 r (Unix) s
+16 r (applications) s
+16 r (do) s
+16 r (not) s
+17 r (have) s
+16 r (access) s
+16 r (to) s
+16 r (the) s
+16 r (state) s
+16 r (or) s
+16 r (address) s
+16 r (space) s
+17 r (of) s
+16 r (another) s
+16 r (process,) s
+16 r (even) s
+16 r (when) s
+0 2366 p (running) s
+16 r (in) s
+16 r (kernel) s
+16 r (mode,) s
+@P37 @sfps 
+16 r (ptrace) s
+@P33 @sfps 
+16 r (is) s
+16 r (implemented) s
+16 r (by) s
+16 r (having) s
+16 r (the) s
+16 r (debugged) s
+16 r (application) s
+16 r (perform) s
+16 r (the) s
+16 r (desired) s
+0 2423 p (action) s
+13 r (on) s
+14 r (itself) s
+13 r (\(e.g.) s
+13 r (if) s
+14 r 97 c
+13 r (register) s
+13 r (is) s
+14 r (to) s
+13 r (be) s
+14 r (read,) s
+13 r (the) s
+14 r (debugged) s
+13 r (application) s
+13 r (reads) s
+14 r (the) s
+13 r (register) s
+13 r (and) s
+14 r (returns) s
+13 r (that) s
+0 2479 p (value) s
+14 r (to) s
+13 r (the) s
+14 r (debugger) s
+13 r (process) s
+14 r (via) s
+14 r (an) s
+13 r (internal) s
+14 r (kernel) s
+14 r (communication) s
+13 r (mechanism\);) s
+14 r (the) s
+14 r (kernel) s
+14 r (code) s
+13 r (that) s
+14 r (the) s
+0 2536 p (application) s
+17 r (executes) s
+17 r (to) s
+17 r (do) s
+16 r (this) s
+17 r (is) s
+17 r (in) s
+17 r (the) s
+17 r (function) s
+@P37 @sfps 
+17 r (pr) s
+-1 r (ocxmt) s
+@P33 @sfps 
+0 r 46 c
+24 r (The) s
+17 r (debugger) s
+17 r (process) s
+17 r (sleeps) s
+17 r (waiting) s
+17 r (for) s
+17 r (the) s
+0 2592 p (application) s
+15 r (to) s
+15 r (wake) s
+15 r (it) s
+16 r (when) s
+15 r (the) s
+15 r (action) s
+15 r (has) s
+15 r (been) s
+15 r (completed.) s
+0 2641 p 779 2 ru 
+@P4 @sfps 
+53 2698 p 49 c
+@P18 @sfps 
+67 2714 p (Unix) s
+13 r (is) s
+12 r 97 c
+13 r (registered) s
+12 r (trademark) s
+13 r (of) s
+12 r 65 c
+-3 r (T&T) s
+11 r (Bell) s
+13 r (Laboratories) s
+@P33 @sfps 
+962 2843 p 49 c
+@eop
+0 @bop0
+0 @bop1
+@P53 @sfps 
+552 458 p (Implementing) s
+20 r 97 c
+20 r (Mach) s
+19 r (Debugger) s
+569 514 p (for) s
+20 r (Multithr) s
+0 r (eaded) s
+19 r (Applications) s
+@P49 @sfps 
+548 672 p (Deborah) s
+20 r (Caswell) s
+20 r (and) s
+20 r (David) s
+20 r (Black) s
+@P38 @sfps 
+819 759 p (November) s
+16 r (1989) s
+811 815 p (CMU-CS-89-154) s
+@P41 @sfps 
+340 1201 p (Deborah) s
+17 r (Caswell) s
+632 r (David) s
+17 r (Black) s
+@P33 @sfps 
+240 1257 p (Hewlett) s
+15 r (Packard) s
+15 r (Laboratories) s
+400 r (Carnegie) s
+15 r (Mellon) s
+15 r (University) s
+382 1314 p (Palo) s
+15 r (Alto,) s
+15 r (CA) s
+667 r (Pittsbur) s
+0 r (gh,) s
+14 r 80 c
+-3 r 65 c
+62 1558 p 84 c
+-2 r 111 c
+9 r (appear) s
+11 r (in) s
+10 r (the) s
+11 r (Conference) s
+10 r (Proceedings) s
+10 r (of) s
+@P37 @sfps 
+11 r 87 c
+-2 r (inter) s
+10 r (1990) s
+10 r (USENIX) s
+11 r 84 c
+-4 r (echnical) s
+10 r (Confer) s
+-1 r (ence) s
+9 r (and) s
+11 r (Exhibition) s
+@P33 @sfps 
+0 r 44 c
+0 1614 p 87 c
+-3 r (ashington,) s
+15 r (DC,) s
+15 r (January) s
+-2 r 44 c
+14 r (1990.) s
+@P30 @sfps 
+896 1706 p (Abstract) s
+@P25 @sfps 
+176 1801 p (Multiple) s
+15 r (threads) s
+14 r (of) s
+15 r (control) s
+15 r (add) s
+14 r (new) s
+15 r (challenges) s
+15 r (to) s
+14 r (the) s
+15 r (task) s
+15 r (of) s
+14 r (application) s
+15 r (debugging,) s
+15 r (and) s
+15 r (require) s
+114 1851 p (the) s
+17 r (development) s
+18 r (of) s
+17 r (new) s
+18 r (debuggers) s
+17 r (to) s
+18 r (meet) s
+17 r (these) s
+17 r (challenges.) s
+30 r (This) s
+17 r (paper) s
+18 r (describes) s
+17 r (the) s
+18 r (design) s
+17 r (and) s
+114 1901 p (implementation) s
+14 r (of) s
+15 r (modi) s
+0 r 174 c
+0 r (cations) s
+15 r (to) s
+15 r (an) s
+15 r (existing) s
+15 r (debugger) s
+14 r (\(gdb\)) s
+15 r (for) s
+15 r (debugging) s
+15 r (multithreaded) s
+15 r (applica-) s
+114 1951 p (tions) s
+15 r (under) s
+15 r (the) s
+15 r (Mach) s
+15 r (operating) s
+15 r (system.) s
+22 r (It) s
+15 r (also) s
+15 r (describes) s
+15 r (the) s
+15 r (operating) s
+15 r (system) s
+15 r (facilities) s
+15 r (that) s
+15 r (support) s
+114 2000 p (it.) s
+18 r (Although) s
+13 r (certain) s
+14 r (implementation) s
+13 r (details) s
+14 r (are) s
+13 r (speci) s
+0 r 174 c
+0 r 99 c
+13 r (to) s
+14 r (Mach,) s
+13 r (the) s
+14 r (underlying) s
+13 r (design) s
+14 r (principles) s
+13 r (are) s
+114 2050 p (applicable) s
+13 r (to) s
+14 r (other) s
+14 r (systems) s
+14 r (that) s
+14 r (support) s
+14 r (threads) s
+13 r (in) s
+14 r 97 c
+14 r (Unix) s
+14 r (compatible) s
+14 r (environment.) s
+@P33 @sfps 
+62 2308 p (This) s
+11 r (research) s
+11 r (was) s
+11 r (performed) s
+11 r (in) s
+11 r (part) s
+11 r (at) s
+11 r (Hewlett) s
+11 r (Packard) s
+10 r (Laboratories) s
+11 r (and) s
+11 r (supported) s
+11 r (by) s
+11 r (Hewlett) s
+11 r (Packard) s
+0 2365 p (Company) s
+-2 r 46 c
+62 2463 p (This) s
+15 r (research) s
+16 r (was) s
+15 r (sponsored) s
+15 r (by) s
+15 r (the) s
+15 r (Defense) s
+15 r (Advanced) s
+15 r (Research) s
+16 r (Projects) s
+15 r (Agency) s
+15 r (\(DOD\),) s
+15 r (monitored) s
+0 2519 p (by) s
+15 r (the) s
+15 r (Space) s
+15 r (and) s
+16 r (Naval) s
+15 r 87 c
+-3 r (arfare) s
+14 r (Systems) s
+15 r (Command) s
+16 r (under) s
+15 r (Contract) s
+15 r (N00039-87-C-0251.) s
+62 2617 p (The) s
+19 r (views) s
+19 r (and) s
+19 r (conclusions) s
+19 r (contained) s
+19 r (in) s
+19 r (this) s
+19 r (document) s
+19 r (are) s
+19 r (those) s
+19 r (of) s
+19 r (the) s
+19 r (authors) s
+19 r (and) s
+19 r (should) s
+19 r (not) s
+19 r (be) s
+0 2673 p (interpreted) s
+19 r (as) s
+20 r (representing) s
+19 r (the) s
+19 r (of) s
+0 r 174 c
+0 r (cial) s
+19 r (policies,) s
+20 r (either) s
+20 r (expressed) s
+19 r (or) s
+19 r (implied,) s
+21 r (of) s
+19 r (the) s
+20 r (Defense) s
+19 r (Advanced) s
+0 2730 p (Research) s
+15 r (Projects) s
+15 r (Agency) s
+15 r (or) s
+16 r (the) s
+15 r (US) s
+15 r (Government.) s
+@eop
+@end
+(\nEND-JOB 0 debugger.dvi\n) print flush

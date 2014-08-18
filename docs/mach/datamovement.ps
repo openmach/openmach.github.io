@@ -1,0 +1,7782 @@
+%!PS-Adobe-2.0
+%%Title: kernel.mss
+%%DocumentFonts: (atend)
+%%Creator: Randall Dean and Scribe 7(1700)
+%%CreationDate: 16 March 1992 10:57
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale /showpage {} def} bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: ? 1
+BS
+0 SI
+13 /Times-Bold AF
+19841 8071 MT
+(Data Movement in Kernelized Systems)SH
+10 SS 
+16200 10863 MT
+(Randall W. Dean)SH
+37800 XM
+(Francois Armand)SH
+/Times-Italic SF
+16200 11968 MT
+(School of Computer Science)SH
+37800 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+41340 XM
+(Systemes)SH
+16200 13073 MT
+(Carnegie Mellon University)SH
+37800 XM
+(6 Avenue G. Eiffel)SH
+16200 14178 MT
+(5000 Forbes Avenue)SH
+37800 XM
+(78182 ST-QUENTIN-EN-Y)SH
+16200 15283 MT
+(Pittsburgh, Pennsylvania)
+250 W( 15213)SH
+37800 XM
+(CEDEX-FRANCE)SH
+/Times-Roman SF
+16200 17493 MT
+(\050412\051 268-7654)SH
+37800 XM
+(+33 \0501\051 30-64-82-00)SH
+16200 19703 MT
+(rwd@cs.cmu.edu)SH
+37800 XM
+(francois@chorus.fr)SH
+16200 20808 MT
+(Fax: \050412\051 681-5739)SH
+9 SS 
+12905 23454 MT
+(This paper considers how two kernelized systems, Mach 3.0 with the BSD4.3 Single Server and)80 W
+12600 24831 MT
+(C)SH
+7 SS 
+(HORUS)SH
+9 SS 
+(/MiX V.4, move data to and from files under a variety)
+153 W( of circumstances.  We give an)154 W
+12600 26208 MT
+(overview of the kernel abstractions and)
+29 W( system servers and describe in detail the)28 W
+/Times-Italic SF
+42094 XM
+(read\050\051)SH
+/Times-Roman SF
+44597 XM
+(and)SH
+/Times-Italic SF
+46150 XM
+(write\050\051)SH
+/Times-Roman SF
+12600 27585 MT
+(paths of these two systems.)
+4 W( We)
+234 W( then break down their)5 W
+/Times-Italic SF
+32500 XM
+(read\050\051)SH
+/Times-Roman SF
+34980 XM
+(and)SH
+/Times-Italic SF
+36510 XM
+(write\050\051)SH
+/Times-Roman SF
+39190 XM
+(performance and compare)5 W
+12600 28962 MT
+(them to two monolithic systems, Mach 2.6 MSD\050BSD4.3\051 and System V)
+57 W( R4.0.  We then describe)56 W
+12600 30339 MT
+(the compromises each of the two kernelized systems made in order to achieve a goal of)305 W
+12600 31716 MT
+(performance comparable to)
+197 W( the monolithic systems.  We conclude with a description of what)196 W
+12600 33093 MT
+(techniques each system uses that could benefit both each other and traditional monolithic systems.)SH
+12 /Times-Bold AF
+9000 36777 MT
+(1. Introduction)SH
+10 /Times-Roman AF
+10000 38154 MT
+(A recent trend in operating system research has been towards small)
+155 W( kernels exporting a small set of)156 W
+9000 39531 MT
+(abstractions that are used)
+116 W( by a server or set of servers to implement the services provided by traditional)115 W
+9000 40908 MT
+(operating systems)
+44 W( [7, 9, 14, 18].)
+SH( This)
+339 W( approach to building operating system services gives OS developers)45 W
+9000 42285 MT
+(a sophisticated environment for building and testing new services and meeting)
+5 W( the needs of newer hardware)4 W
+9000 43662 MT
+(platforms. A)
+798 W( kernelized system also allows a developer to mix and match components as needed,)275 W
+9000 45039 MT
+(minimizing or eliminating unneeded capabilities that)
+300 W( are a permanent part of traditional monolithic)299 W
+9000 46416 MT
+(systems. Kernelized)
+424 W( systems have also demonstrated that they are a sound basis)
+87 W( on which one can build)88 W
+9000 47793 MT
+(distributed operating systems)
+127 W( [2, 5])
+SH( and/or provide)
+127 W( features such as real-time)
+126 W( [15, 19])
+SH( or Object-Oriented)126 W
+9000 49170 MT
+(environment [16].)SH
+10000 51649 MT
+(For kernelized)
+4 W( systems to gain acceptance, they must be binary compatible with and perform comparably)5 W
+9000 53026 MT
+(to monolithic systems. Many papers have described efforts and experiences towards)
+59 W( achieving these goals)58 W
+9250 54403 MT
+([6, 13].)
+SH( Some)
+350 W( authors have asserted that some services, such as, the file system, do not belong outside of)50 W
+9000 55780 MT
+(the kernel)
+76 W( [20].)
+SH( One)
+402 W( of the major fears appears to be the need for costly context)
+76 W( switching.  To meet the)75 W
+9000 57157 MT
+(performance goal, a kernelized)
+SH( system must either make context switching faster than in systems where it is)1 W
+9000 58534 MT
+(not in the)
+142 W( critical path, or somehow avoid them entirely where possible.  Data movement must also be)141 W
+9000 59911 MT
+(carefully designed in these systems to avoid extra copying of data.)SH
+10000 62390 MT
+(This paper)
+28 W( considers how two systems, Mach 3.0 with the BSD4.3 Single Server and C)29 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4,)29 W
+9000 63767 MT
+(achieve the)
+15 W( performance goals by controlling data movement.  We are particularly concerned with how fast)14 W
+9000 65144 MT
+(these two systems can move data to and from)
+139 W( files under a variety of circumstances.  First we give an)140 W
+9000 66521 MT
+(overview of the kernel abstractions and system servers and describe in detail the)14 W
+/Times-Italic SF
+41536 XM
+(read\050\051)SH
+/Times-Roman SF
+44299 XM
+(and)SH
+/Times-Italic SF
+46007 XM
+(write\050\051)SH
+/Times-Roman SF
+48993 XM
+(paths of)13 W
+9000 67898 MT
+(these two systems. We then break down their)122 W
+/Times-Italic SF
+28334 XM
+(read\050\051)SH
+/Times-Roman SF
+31205 XM
+(and)SH
+/Times-Italic SF
+33022 XM
+(write\050\051)SH
+/Times-Roman SF
+36117 XM
+(performance and compare them to two)123 W
+9000 69275 MT
+(monolithic systems, Mach 2.6 MSD\050BSD4.3\051 and System V)
+3 W( R4.0.  Next we describe the compromises each)2 W
+9000 70652 MT
+(of the two kernelized)
+7 W( systems has made to achieve performance comparable to the monolithic systems.  We)8 W
+ES
+%%Page: ? 2
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+(conclude with a description of what techniques each system uses that)
+121 W( could benefit both each other and)120 W
+9000 9263 MT
+(traditional monolithic systems.)SH
+12 /Times-Bold AF
+9000 12947 MT
+(2. Microkernel Abstractions)SH
+10 /Times-Roman AF
+10000 14324 MT
+(The Mach 3.0 Microkernel)
+132 W( and the C)133 W
+8 SS 
+(HORUS)SH
+10 SS 
+28749 XM
+(Nucleus supply a similar set of abstractions for building)133 W
+9000 15701 MT
+(systems servers)
+78 W( [10, 17].)
+SH( Unfortunately,)
+406 W( for historical reasons, the two systems often use different)
+78 W( names)77 W
+9000 17078 MT
+(to describe the same thing.  The remainder of this section describes the abstractions)
+177 W( of Mach 3.0 and)178 W
+9000 18455 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+12800 XM
+(relevant for understanding the rest of the paper using either the common)
+170 W( name or both when)169 W
+9000 19832 MT
+(necessary.)SH
+/Symbol SF
+10790 21285 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(A)SH
+/Times-Bold SF
+12508 XM
+(Task)SH
+/Times-Roman SF
+14870 XM
+([4] or)36 W
+/Times-Bold SF
+17441 XM
+(Actor)SH
+/Times-Roman SF
+20134 XM
+([8] is an)
+36 W( execution environment and the basic unit of resource allocation.)37 W
+11500 22390 MT
+(Both include virtual memory and threads.  The Mach task also includes port rights.)
+65 W( An)
+379 W( actor)64 W
+11500 23495 MT
+(includes ports as communication resources.)
+165 W( A task or actor can either be in kernel or user)166 W
+11500 24600 MT
+(space.)SH
+/Symbol SF
+10790 26358 MT
+(\267)SH
+/Times-Bold SF
+11500 XM
+(Threads)SH
+/Times-Roman SF
+15494 XM
+(are the basic unit of execution.  A task or actor)
+188 W( can have multiple simultaneous)187 W
+11500 27463 MT
+(threads of execution. Threads may communicate via)SH
+/Times-Bold SF
+32662 XM
+(Ports)SH
+/Times-Roman SF
+(.)SH
+/Symbol SF
+10790 29221 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Both systems are built around Interprocess Communication or IPC.)SH
+7 /Symbol AF
+13428 30434 MT
+(\267)SH
+10 /Times-Roman AF
+14000 30584 MT
+(Mach ports are protected communication channels)
+223 W( [12])
+SH( managed by the kernel with)224 W
+14000 31689 MT
+(separate port rights residing in each task.  A thread uses the local name and)
+81 W( right for a)80 W
+14000 32794 MT
+(port residing in its task to send typed data to the task having the)
+33 W( unique receive right for)34 W
+14000 33899 MT
+(that port.)78 W
+/Times-Bold SF
+18345 XM
+(Port Sets)78 W
+/Times-Roman SF
+22611 XM
+(allow a task to clump a group of ports together)
+78 W( for the purpose of)77 W
+14000 35004 MT
+(receiving from multiple ports with only one thread.)SH
+7 /Symbol AF
+13428 36612 MT
+(\267)SH
+10 /Times-Roman AF
+14000 36762 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+17883 XM
+(IPC uses a single global name space with each)
+253 W( port named by a Unique)254 W
+14000 37867 MT
+(Identifier \050UI\051 to send untyped data to ports.  C)210 W
+8 SS 
+(HORUS)SH
+10 SS 
+37948 XM
+(ports, which may belong to)209 W
+14000 38972 MT
+(different actors, may be grouped into)23 W
+/Times-Bold SF
+29218 XM
+(port groups)23 W
+/Times-Roman SF
+(. C)296 W
+8 SS 
+(HORUS)SH
+10 SS 
+38718 XM
+(IPC offers)
+23 W( the capability of)24 W
+14000 40077 MT
+(broadcasting a message to all ports in a group.  Actors running)
+51 W( in supervisor space may)50 W
+14000 41182 MT
+(define)SH
+/Times-Bold SF
+16824 XM
+(message handlers)75 W
+/Times-Roman SF
+24696 XM
+(to receive messages.  Instead of explicitly creating threads)
+75 W( to)76 W
+14000 42287 MT
+(receive the messages, an actor may attach a handler, a routine in its)
+22 W( address space, to the)21 W
+14000 43392 MT
+(port on which it waits for messages.  When a message)
+193 W( is delivered to the port, the)194 W
+14000 44497 MT
+(handler is executed within the context of the actor using a kernel provided)
+51 W( thread.  This)50 W
+14000 45602 MT
+(mechanism avoids extra copy of data and context switches)
+50 W( when both the client and the)51 W
+14000 46707 MT
+(server run on the same site. The connection of message handlers is transparent)
+132 W( to the)131 W
+14000 47812 MT
+(client of a server.)SH
+/Symbol SF
+10790 49570 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Address spaces)SH
+7 /Symbol AF
+13428 50783 MT
+(\267)SH
+10 /Times-Roman AF
+14000 50933 MT
+(In Mach, the address space of)
+121 W( a task is made up of)122 W
+/Times-Bold SF
+35815 XM
+(VM Objects)122 W
+/Times-Roman SF
+(. Objects)
+494 W( often map)122 W
+14000 52038 MT
+(secondary storage)
+16 W( managed by an)15 W
+/Times-Bold SF
+27822 XM
+(External Pager)15 W
+/Times-Roman SF
+34558 XM
+([21]. An)
+280 W( object, which is represented)15 W
+14000 53143 MT
+(by a send right to a port, must be)
+5 W( entered into the task's address space with)6 W
+/Times-Bold SF
+44278 XM
+(vm_map)SH
+/Times-Roman SF
+48256 XM
+(and)SH
+14000 54248 MT
+(can subsequently accessed through normal memory accesses.)SH
+7 /Symbol AF
+13428 55856 MT
+(\267)SH
+10 /Times-Roman AF
+14000 56006 MT
+(The address space of a C)211 W
+8 SS 
+(HORUS)SH
+10 SS 
+28198 XM
+(actor is made up)
+211 W( of)210 W
+/Times-Bold SF
+37166 XM
+(Regions)SH
+/Times-Roman SF
+(. Regions)
+670 W( often map)210 W
+14000 57111 MT
+(secondary storage called)38 W
+/Times-Bold SF
+24194 XM
+(segments)SH
+/Times-Roman SF
+28370 XM
+(managed by)38 W
+/Times-Bold SF
+33556 XM
+(Mappers)SH
+/Times-Roman SF
+(. A)
+326 W( segment is)
+38 W( represented by)39 W
+14000 58216 MT
+(a capability, a port UI)
+100 W( and a key.  C)99 W
+8 SS 
+(HORUS)SH
+10 SS 
+32204 XM
+(also allows segments to be read or written)99 W
+14000 59321 MT
+(directly without mapping them using)SH
+/Times-Italic SF
+29028 XM
+(sgRead\050\051)SH
+/Times-Roman SF
+32888 XM
+(and)SH
+/Times-Italic SF
+34582 XM
+(sgWrite\050\051)SH
+/Times-Roman SF
+38609 XM
+(Nucleus calls.)SH
+/Symbol SF
+10790 61079 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Device Access)SH
+7 /Symbol AF
+13428 62292 MT
+(\267)SH
+10 /Times-Roman AF
+14000 62442 MT
+(Mach gives direct access to disks and other devices through)390 W
+/Times-Italic SF
+42062 XM
+(device_read\050\051)SH
+/Times-Roman SF
+48256 XM
+(and)SH
+/Times-Italic SF
+14000 63547 MT
+(device_write\050\051)SH
+/Times-Roman SF
+(. The)446 W
+/Times-Italic SF
+22625 XM
+(device_read\050\051)SH
+/Times-Roman SF
+28526 XM
+(call, which, like most Mach calls, is an RPC to the)98 W
+14000 64652 MT
+(kernel, returns the data in out of line memory directly from the disk)
+69 W( driver without any)70 W
+14000 65757 MT
+(unnecessary copies.)SH
+7 /Symbol AF
+13428 67365 MT
+(\267)SH
+10 /Times-Roman AF
+14000 67515 MT
+(By contrast, the C)231 W
+8 SS 
+(HORUS)SH
+10 SS 
+25109 XM
+(nucleus doesn't know about any device except)
+231 W( the clock.)230 W
+14000 68620 MT
+(Instead, it allows actors to dynamically connect handlers to interrupts and traps.)
+35 W( Device)321 W
+14000 69725 MT
+(drivers are implemented this way by actors running in the supervisor address space.)SH
+/Symbol SF
+10790 71483 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(To allow for binary compatibility, Mach and)
+141 W( C)140 W
+8 SS 
+(HORUS)SH
+10 SS 
+34365 XM
+(each have a mechanism for handling)140 W
+ES
+%%Page: ? 3
+BS
+0 SI
+8 /Times-Roman AF
+13500 7749 MT
+(TM)SH
+10 SS 
+11500 8094 MT
+(Unix)SH
+15180 XM
+(system call traps called)231 W
+/Times-Bold SF
+25658 XM
+(Trap Emulation)231 W
+/Times-Roman SF
+33288 XM
+(or)SH
+/Times-Bold SF
+34602 XM
+(Trap Handlers)231 W
+/Times-Roman SF
+(. The)
+712 W( Mach kernel)231 W
+11500 9199 MT
+(enables a task to redirect any)
+5 W( trap number back into the user task making the trap.  C)4 W
+8 SS 
+(HORUS)SH
+10 SS 
+48367 XM
+(has)SH
+11500 10304 MT
+(a mechanism for allowing traps to be handled by any actor runing in supervisor address space)49 W
+11500 11409 MT
+(which has attached a handler to these traps.)SH
+12 /Times-Bold AF
+9000 15093 MT
+(3. System Servers)SH
+10 /Times-Roman AF
+10000 16470 MT
+(Both Mach 3.0 with the BSD4.3 Single Server and C)3 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 consist)
+3 W( of a small kernel or nucleus)2 W
+9000 17847 MT
+(described in the previous section, and a server or set of servers running in user mode)
+16 W( or possibly supervisor)17 W
+9000 19224 MT
+(mode supporting Unix semantics.)
+281 W( This)
+811 W( section gives on overview of both of these systems server)280 W
+9000 20601 MT
+(components.)SH
+11 /Times-Bold AF
+9000 24218 MT
+(3.1. Mach 3.0 with the BSD4.3 Single Server)SH
+10 /Times-Roman AF
+10000 25595 MT
+(The BSD4.3 Single Server is a single user application which exports Unix semantics)
+206 W( to other user)207 W
+9000 26972 MT
+(applications. To)
+338 W( communicate with this server, an)44 W
+/Times-Bold SF
+29794 XM
+(Emulation Library)44 W
+/Times-Roman SF
+38272 XM
+(is loaded into the address space of)44 W
+9000 28349 MT
+(all clients beginning with /etc/init and inherited subsequently by all of its children.)
+77 W( A)
+405 W( typical system call)78 W
+9000 29726 MT
+(traps into the kernel and is redirected by the)145 W
+/Times-Bold SF
+28107 XM
+(Trap Emulation)145 W
+/Times-Roman SF
+35564 XM
+(mechanism back out into the Emulation)144 W
+9000 31103 MT
+(Library. The)
+498 W( Emulation Library sends a message to the BSD4.3 Single Server which then executes the)124 W
+9000 32480 MT
+(actual Unix call and returns back through the Emulation Library to the)
+42 W( user application.  The remainder of)41 W
+9000 33857 MT
+(this section describes the Emulation Library and BSD4.3 Single Server and how they support Unix files.)SH
+533 1000 270 49294 65680 GB 
+%%BeginDocument: SingleUnixServer.ps
+%!PS-Adobe-2.0
+%%Title: SingleUnixServer.draw Ð /rfr/Images
+%%Creator: Draw
+%%CreationDate: Wed Oct 18 14:08:41 1989
+%%For: rfr
+%%DocumentFonts: (atend)
+%%%Pages: (atend) 1
+%%BoundingBox: (atend)
+%%DocumentPaperSizes: Letter
+%%Orientation: Landscape
+%%EndComments
+
+%%BeginFile: /usr/lib/NextStep//printPackage1.0.ps
+%!PSNext-1.0
+%%Title: Printing Package
+%%Copyright 1988, NeXT, Inc.
+%%CreationDate: 23Feb88
+%%PackageName: printPackage0.8.37
+%%PackageDescription: Routines to support printing
+%%EndComments
+
+%debugging aids
+%/clip {gsave 0.9 setgray 0.5 setlinewidth stroke grestore} def
+
+% simulations of DPS ops
+/__NXUserObjectList 10 array def
+/defineuserobject {
+    exch
+    dup 1 add
+    dup __NXUserObjectList length gt {
+        array dup 0 __NXUserObjectList putinterval
+        /__NXUserObjectList exch def
+    }
+    { pop }
+    ifelse
+    __NXUserObjectList exch 3 -1 roll put
+} def
+/execuserobject {
+    __NXUserObjectList exch get exec
+} def
+/rectclip {/clip __NXdoRectOp newpath} def
+/rectfill {gsave /fill __NXdoRectOp grestore} def
+/rectstroke {gsave /stroke __NXdoRectOp grestore} def
+/__NXdoRectOp {
+    1 index type /arraytype eq {
+        exch aload length
+        dup 2 add -1 roll exch
+        4 idiv
+    }
+    { 1 }
+    ifelse
+    {
+        5 1 roll
+        newpath 4 2 roll moveto 1 index 0 rlineto
+                0 exch rlineto neg 0 rlineto closepath
+        dup cvx exec
+    } repeat pop
+} def
+% simulations of NeXT additions to DPS
+/flushgraphics {} def
+/hidecursor {} def
+/obscurecursor {} def
+/revealcursor {} def
+/setcursor {4 {pop} repeat} def
+/showcursor {} def
+
+
+%%EndFile
+
+%%EndProlog
+%%BeginSetup
+%%PaperSize: Letter
+%%Feature: *ManualFeed False
+%%Feature: *Resolution 400
+/oval {
+    translate scale newpath 0.5 0.5 0.5 0 360 arc
+} def /fillandframeoval {
+    oval gsave eofill grestore 0 setgray stroke
+} def /fillandframerectangle {
+    4 copy rectfill 0 setgray rectstroke
+} def /line {
+    moveto rlineto stroke
+} def /setup {
+    setgray setlinewidth setlinecap setlinejoin gsave
+} def /arrow {
+    newpath moveto dup rotate -13 6 rlineto 4 -6 rlineto -4 -6 rlineto closepath gsave 0 setlinejoin stroke grestore fill neg rotate
+} def
+%%EndSetup
+
+%%%Page: 1 1
+%%%PageBoundingBox: 36.000000 36.000000 756.000000 576.000000
+%%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+36 36 translate
+gsave
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 720 540 rectclip
+0 0 720 540 rectclip
+0 0 0 0.511 setup
+90 110 90 190 fillandframerectangle
+grestore
+0 0 3.35 0 setup
+90 330 90 110 rectstroke
+grestore
+0 0 0 0.798 setup
+30 30 660 60 fillandframerectangle
+grestore
+0 0 0 0 setup
+gsave
+/Courier-Bold findfont 14 scalefont [1 0 0 -1 0 0] makefont
+91
+exch
+defineuserobject
+91 execuserobject setfont
+0 setgray
+52 445 176 20 rectclip
+[1 0 0 -1 52 465] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Emulation Library) show
+grestore
+grestore
+0 0 0 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+82 90 104 20 rectclip
+[1 0 0 -1 82 110] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (User Binary) show
+grestore
+grestore
+0 0 0.007892 0.833 setup
+370 370 300 110 fillandframeoval
+grestore
+0 0 0 0.339 setup
+gsave
+91 execuserobject setfont
+0 setgray
+353 488 255 23 rectclip
+[1 0 0 -1 353 511] concat
+/Courier-BoldOblique findfont 16 scalefont [1 0 0 -1 0 0] makefont
+44
+exch
+defineuserobject
+44 execuserobject setfont
+0 setgray
+2 15 moveto (Multi-threaded Unix Server) show
+grestore
+grestore
+0 0 0 0.339 setup
+gsave
+44 execuserobject setfont
+0 setgray
+521 320 111 23 rectclip
+[1 0 0 -1 521 343] concat
+44 execuserobject setfont
+0 setgray
+2 15 moveto (Inode Pager) show
+grestore
+grestore
+0 0 0 0.339 setup
+gsave
+44 execuserobject setfont
+0 setgray
+346 368 111 46 rectclip
+[1 0 0 -1 346 414] concat
+44 execuserobject setfont
+0 setgray
+2 15 moveto (BSD Service) show
+2 38 moveto (Threads) show
+grestore
+grestore
+0 0 0 0.515 setup
+gsave
+44 execuserobject setfont
+0 setgray
+401 212 140 23 rectclip
+[1 0 0 -1 401 235] concat
+44 execuserobject setfont
+0 setgray
+2 15 moveto (Device threads) show
+grestore
+grestore
+0 0 0 0.515 setup
+340 300 10 60 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+370 300 10 60 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+400 300 10 60 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+430 300 10 60 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+560 270 10 50 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+410 170 10 40 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+440 170 10 40 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+470 170 10 40 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+500 170 10 40 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+460 300 10 60 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+360 220 10 60 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+330 220 10 60 fillandframerectangle
+grestore
+0 0 0 0.515 setup
+gsave
+44 execuserobject setfont
+0 setgray
+289 49 44 23 rectclip
+[1 0 0 -1 289 72] concat
+44 execuserobject setfont
+0 setgray
+2 15 moveto (Mach) show
+grestore
+grestore
+0 0 3.05 0 setup
+180 400 moveto 180 400 180 400 330 400 330 400 curveto stroke
+0 330 400 arrow
+grestore
+0 0 2.92 0 setup
+180 360 moveto 310 360 310 360 310 360 310 360 curveto stroke
+180 180 360 arrow
+grestore
+0 0 3.56 0 setup
+180 160 moveto 210 160 210 160 210 160 210 90 curveto stroke
+-90 210 90 arrow
+grestore
+0 0 2.7 0 setup
+180 330 moveto 230 330 230 330 230 330 230 90 curveto stroke
+180 180 330 arrow
+grestore
+0 0 0 0 setup
+110 330 moveto 110 330 110 330 110 330 110 300 curveto stroke
+-90 110 300 arrow
+grestore
+gsave
+0 0 720 540 rectclip
+[1 0 0 -1 0 540] concat
+grestore
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%PageTrailer
+%%%PageFonts: Courier-Bold
+%+ Courier-BoldOblique
+%%Trailer
+%%DocumentFonts: Courier-Bold
+%+ Courier-BoldOblique
+%%%Pages: 1 1
+%%BoundingBox:36.000000 36.000000 576.000000 756.000000
+
+
+%%EndDocument
+ GE /Times-Bold SF
+16225 65372 MT
+(Figure 3-1:)SH
+/Times-Roman SF
+21474 XM
+(A System Call in Mach 3.0 with the BSD4.3 Single Server)SH
+ES
+%%Page: ? 4
+BS
+0 SI
+10 /Times-Bold AF
+9000 7870 MT
+(3.1.1. BSD4.3 Single Server and Emulation Library Structure)SH
+/Times-Roman SF
+10000 9247 MT
+(The BSD4.3 Single Server is a single task made)
+54 W( up of numerous CThreads)
+55 W( [11].)
+SH( Most)
+360 W( of the CThreads)55 W
+9000 10624 MT
+(are part of a pool which)
+20 W( responds to messages from the Emulation Libraries of Unix processes.  When they)19 W
+9000 12001 MT
+(receive a message from a client Emulation Library, they internally take)
+100 W( on the identity of that client and)101 W
+9000 13378 MT
+(execute the appropriate Unix system call.  Upon completion, they return the result and reenter the)
+63 W( pool of)62 W
+9000 14755 MT
+(waiting threads.  Each of the remaining CThreads provides a particular service.  There is the)27 W
+/Times-Bold SF
+46590 XM
+(Device Reply)28 W
+9000 16132 MT
+(Thread)SH
+/Times-Roman SF
+(, which handles all responses from the server to the kernel for device interaction, the)138 W
+/Times-Bold SF
+48256 XM
+(Softclock)SH
+9000 17509 MT
+(Thread)SH
+/Times-Roman SF
+(, which implements internal timeouts and)
+15 W( callbacks, the)16 W
+/Times-Bold SF
+34788 XM
+(Net Input Thread)16 W
+/Times-Roman SF
+(, which handles network)16 W
+9000 18886 MT
+(device interactions with the kernel, and the)154 W
+/Times-Bold SF
+27519 XM
+(Inode Pager Thread)154 W
+/Times-Roman SF
+(, which implements an external pager)153 W
+9000 20263 MT
+(backing Unix file objects.)SH
+10000 22742 MT
+(The Emulation Library is actually a self-contained module that is loaded into the)
+208 W( address space of)209 W
+9000 24119 MT
+(BSD4.3 Single Server)
+37 W( clients.  It is entered from the kernel's Trap Emulation code in response to a system)36 W
+9000 25496 MT
+(call. The)
+666 W( Emulation Library then either handles the system call locally or)
+208 W( forwards the request as a)209 W
+9000 26873 MT
+(message to the)
+94 W( server to handle it.  To allow the Emulation Library to handle some system calls without)93 W
+9000 28250 MT
+(contacting the)
+9 W( BSD4.3 Single Server, the Emulation Library and the BSD4.3 Single Server share two pages)10 W
+9000 29627 MT
+(of memory.  While the Emulation Library can read both pages, it can only write one)
+207 W( of them.  The)206 W
+9000 31004 MT
+(read-only page contains information that a client can already get through querying system)
+134 W( calls such as)135 W
+/Times-Italic SF
+9000 32381 MT
+(getpid\050\051)SH
+/Times-Roman SF
+(,)SH
+/Times-Italic SF
+12723 XM
+(getuid\050\051)SH
+/Times-Roman SF
+(, and)57 W
+/Times-Italic SF
+18197 XM
+(getrlimit\050\051)SH
+/Times-Roman SF
+(. The)
+364 W( writeable page)
+57 W( contains data that the client can already set through)56 W
+9000 33758 MT
+(system calls)
+31 W( such as)32 W
+/Times-Italic SF
+17404 XM
+(sigblock\050\051)SH
+/Times-Roman SF
+21685 XM
+(and)SH
+/Times-Italic SF
+23411 XM
+(setsigmask\050\051)SH
+/Times-Roman SF
+(. The)
+314 W( writeable page also contains an array of special files)32 W
+9000 35135 MT
+(descriptors used by the mapped files system.)SH
+/Times-Bold SF
+9000 37965 MT
+(3.1.2. Mapped Files)SH
+/Times-Roman SF
+10000 39342 MT
+(The BSD4.3 Single Server is capable of mapping files backed by the)
+192 W( Inode Pager directly into the)191 W
+9000 40719 MT
+(address space of clients for direct access by the Emulation Library.  These mapped regions are actually)126 W
+9000 42096 MT
+(windows into the Unix files that can be moved by a request from the Emulation Library.)
+52 W( There)
+352 W( is exactly)51 W
+9000 43473 MT
+(one window of 64K bytes in size)
+32 W( for each open file.  For each mapped region, there is a corresponding file)33 W
+9000 44850 MT
+(descriptor in the writeable page of shared memory.  This file descriptor)
+22 W( contains information on the current)21 W
+9000 46227 MT
+(mapping window and a copy of the real file descriptor in the BSD4.3 Single Server.)SH
+10000 48706 MT
+(To allow for Unix file semantics which permit multiple readers)
+11 W( and writers of files and the sharing of the)12 W
+9000 50083 MT
+(current file pointer, there is a)91 W
+/Times-Bold SF
+21404 XM
+(Token)SH
+/Times-Roman SF
+24468 XM
+(scheme. The)
+432 W( Token protects the mapping window information, the)91 W
+9000 51460 MT
+(file pointer and the file size.  The Token can be in three states.  These are)65 W
+/Times-Italic SF
+39625 XM
+(active)SH
+/Times-Roman SF
+(,)SH
+/Times-Italic SF
+42578 XM
+(invalid)SH
+/Times-Roman SF
+45671 XM
+(and, to limit the)65 W
+9000 52837 MT
+(number of messages sent to the BSD4.3 Single Server,)133 W
+/Times-Italic SF
+32334 XM
+(passive)SH
+/Times-Roman SF
+(. The)
+514 W( transitions between these states is)132 W
+9000 54214 MT
+(covered in section 4.)SH
+11 /Times-Bold AF
+9000 57831 MT
+(3.2. C)SH
+9 SS 
+(HORUS)SH
+11 SS 
+(/MiX V.4)SH
+10 SS 
+9000 60661 MT
+(3.2.1. The C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 subsystem)SH
+/Times-Roman SF
+10000 62038 MT
+(MiX V.4 is a C)58 W
+8 SS 
+(HORUS)SH
+10 SS 
+19392 XM
+(subsystem providing a Unix interface that is compatible with Unix SVR4.0.)
+58 W( It is)59 W
+9000 63415 MT
+(both BCS and ABI compliant on AT/386 and)
+42 W( 88K platforms. It has been designed to extend Unix services)41 W
+9000 64792 MT
+(to distribution such as access to remote files and remote execution.)SH
+10000 67271 MT
+(MiX V.4 is composed of a set of cooperating servers)
+211 W( running in independent actors on top of the)212 W
+9000 68648 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+12729 XM
+(Nucleus and communicating only by means of the C)99 W
+8 SS 
+(HORUS)SH
+10 SS 
+37581 XM
+(IPC. The)
+448 W( following servers are the)99 W
+9000 70025 MT
+(most important:)SH
+/Symbol SF
+10790 71478 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The)SH
+/Times-Bold SF
+13355 XM
+(Process Manager)50 W
+/Times-Roman SF
+21064 XM
+(\050PM\051 provides the Unix interface to processes.  It)
+50 W( implements services)51 W
+ES
+%%Page: ? 5
+BS
+0 SI
+10 /Times-Roman AF
+11500 7886 MT
+(for process management such as the)
+83 W( creation and destruction of processes and the sending of)82 W
+11500 8991 MT
+(signals. It)
+372 W( manages the system context of each process that runs on its site.  When the PM is)62 W
+11500 10096 MT
+(not able to)
+196 W( serve a Unix system call by itself, it calls other servers, as appropriate, using)195 W
+11500 11201 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+15130 XM
+(IPC.)SH
+/Symbol SF
+10790 12959 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The)SH
+/Times-Bold SF
+13382 XM
+(Object Manager)77 W
+/Times-Roman SF
+20812 XM
+(\050OM\051, also named the)77 W
+/Times-Bold SF
+30147 XM
+(File Manager)78 W
+/Times-Roman SF
+36302 XM
+(\050FM\051, performs file management)78 W
+11500 14064 MT
+(services. It)
+468 W( manages various file system types such as S5, UFS, and NFS.)
+109 W( It)
+466 W( also acts as a)108 W
+11500 15169 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+15423 XM
+(Mapper for "mappable" Unix)
+293 W( files and as the Default Mapper for swap space)294 W
+11500 16274 MT
+(management. Disk)
+250 W( drivers are generally part of the Object Manager.)SH
+/Symbol SF
+10790 18032 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The)SH
+/Times-Bold SF
+13356 XM
+(Streams Manager)51 W
+/Times-Roman SF
+21344 XM
+(\050StM\051 manages all stream devices such as pipes, network access, ttys,)50 W
+11500 19137 MT
+(and named)
+262 W( pipes when they are opened.  It cooperates with the Object Manager which)263 W
+11500 20242 MT
+(provides the secondary storage for the files' meta-data.)SH
+1 1 0 1700 90847 GB 
+%%BeginDocument: mix4.archi.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Helvetica-Bold
+%%%Pages: 1
+%%BoundingBox: 168 505 410 695
+%%EndComments
+
+/IdrawDict 51 dict def
+IdrawDict begin
+
+/reencodeISO {
+dup dup findfont dup length dict begin
+{ 1 index /FID ne { def }{ pop pop } ifelse } forall
+/Encoding ISOLatin1Encoding def
+currentdict end definefont
+} def
+
+/ISOLatin1Encoding [
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/space/exclam/quotedbl/numbersign/dollar/percent/ampersand/quoteright
+/parenleft/parenright/asterisk/plus/comma/minus/period/slash
+/zero/one/two/three/four/five/six/seven/eight/nine/colon/semicolon
+/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N
+/O/P/Q/R/S/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright
+/asciicircum/underscore/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m
+/n/o/p/q/r/s/t/u/v/w/x/y/z/braceleft/bar/braceright/asciitilde
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/dotlessi/grave/acute/circumflex/tilde/macron/breve
+/dotaccent/dieresis/.notdef/ring/cedilla/.notdef/hungarumlaut
+/ogonek/caron/space/exclamdown/cent/sterling/currency/yen/brokenbar
+/section/dieresis/copyright/ordfeminine/guillemotleft/logicalnot
+/hyphen/registered/macron/degree/plusminus/twosuperior/threesuperior
+/acute/mu/paragraph/periodcentered/cedilla/onesuperior/ordmasculine
+/guillemotright/onequarter/onehalf/threequarters/questiondown
+/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla
+/Egrave/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex
+/Idieresis/Eth/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis
+/multiply/Oslash/Ugrave/Uacute/Ucircumflex/Udieresis/Yacute
+/Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis
+/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave
+/iacute/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex
+/otilde/odieresis/divide/oslash/ugrave/uacute/ucircumflex/udieresis
+/yacute/thorn/ydieresis
+] def
+/Helvetica-Bold reencodeISO def
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+dup -1 eq {
+/patternGrayLevel idef
+/patternString idef
+} {
+/patternGrayLevel idef
+} ifelse
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+printFont printSize scalefont setfont
+/descender 0 printFont /FontBBox get 1 get printFont /FontMatrix
+get transform exch pop def
+/vertoffset 1 printSize sub descender sub def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 2 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 9 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.8 0 0 0.8 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.43265 0 0 0.424908 201.936 440.242 ] concat
+%I
+30 460 710 1000 Rect
+End
+
+Begin %I Line
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.43265 0 0 0.5 201.936 365 ] concat
+%I
+30 600 710 600 Line
+End
+
+Begin %I Line
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.43265 0 0 0.5 201.936 365 ] concat
+%I
+30 890 710 890 Line
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 196.008 365 ] concat
+%I
+340 830 51 51 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 356.008 778 ] concat
+%I
+[
+()
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 356.008 778 ] concat
+%I
+[
+()
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 342.258 788.5 ] concat
+%I
+[
+(PROCESS)
+(MANAGER)
+] Text
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 196.008 285 ] concat
+%I
+340 830 51 51 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 342.258 708.5 ] concat
+%I
+[
+(OBJECT)
+(MANAGER)
+] Text
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 311.008 285 ] concat
+%I
+340 830 51 51 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 457.258 708.5 ] concat
+%I
+[
+(STREAMS)
+(MANAGER)
+] Text
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 188.508 355 ] concat
+%I
+140 970 60 30 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 229.758 843.25 ] concat
+%I
+[
+(Unix Process)
+] Text
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 296.008 355 ] concat
+%I
+140 970 60 30 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 337.258 843.25 ] concat
+%I
+[
+(Unix Process)
+] Text
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 403.508 355 ] concat
+%I
+140 970 60 30 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 444.758 843.25 ] concat
+%I
+[
+(Unix Process)
+] Text
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 81.0083 285 ] concat
+%I
+340 830 51 51 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 227.758 717.5 ] concat
+%I
+[
+(    Syst V.)
+(IPC)
+(MANAGER)
+] Text
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 81.0083 345 ] concat
+%I
+340 830 51 51 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 228.258 776.75 ] concat
+%I
+[
+(   Syst V.)
+(KEY)
+(MANAGER)
+] Text
+End
+
+Begin %I Rect
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I
+80 860 80 860 Rect
+End
+
+Begin %I BSpl
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I 3
+370 780
+360 750
+370 720
+3 BSpl
+End
+
+Begin %I BSpl
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I 3
+420 670
+490 650
+550 670
+3 BSpl
+End
+
+Begin %I BSpl
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I 3
+420 810
+510 780
+560 700
+3 BSpl
+End
+
+Begin %I BSpl
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I 3
+330 800
+250 760
+190 690
+3 BSpl
+End
+
+Begin %I BSpl
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I 3
+320 820
+250 800
+190 770
+3 BSpl
+End
+
+Begin %I MLine
+%I b 65535
+2 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I 4
+190 930
+290 900
+260 880
+330 860
+4 MLine
+End
+
+Begin %I MLine
+%I b 65535
+2 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I 4
+360 920
+350 900
+370 910
+360 880
+4 MLine
+End
+
+Begin %I MLine
+%I b 65535
+2 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 181.008 365 ] concat
+%I 4
+550 930
+460 900
+490 880
+420 850
+4 MLine
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 361.008 650.25 ] concat
+%I
+[
+(CHORUS KERNEL)
+] Text
+End
+
+Begin %I BSpl
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 183.008 371 ] concat
+%I 3
+250 570
+280 630
+320 650
+3 BSpl
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0.5 0 0 0.5 217.508 652.5 ] concat
+%I
+[
+(Virtual Memory Management)
+] Text
+End
+
+Begin %I Pict
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.5 0 0 0.5 183.008 364.5 ] concat
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 50 370 ] concat
+%I
+160 390 200 410 Rect
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 50 370 ] concat
+%I
+160 390 200 410 Line
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 50 370 ] concat
+%I
+160 410 200 390 Line
+End
+
+End %I eop
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 251.008 475 ] concat
+%I
+160 390 200 410 Rect
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 251.008 475 ] concat
+%I
+160 390 200 410 Line
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 251.008 475 ] concat
+%I
+160 410 200 390 Line
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 286.008 540 ] concat
+%I
+160 390 200 410 Rect
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 286.008 540 ] concat
+%I
+160 390 200 410 Line
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 286.008 540 ] concat
+%I
+160 410 200 390 Line
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 336.008 505 ] concat
+%I
+160 390 200 410 Rect
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 336.008 505 ] concat
+%I
+160 390 200 410 Line
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 336.008 505 ] concat
+%I
+160 410 200 390 Line
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 361.008 550 ] concat
+%I
+160 390 200 410 Rect
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 361.008 550 ] concat
+%I
+160 390 200 410 Line
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 361.008 550 ] concat
+%I
+160 410 200 390 Line
+End
+
+Begin %I Line
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.5 0 0 0.5 116.008 464 ] concat
+%I
+269 549 269 517 Line
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE /Times-Bold SF
+22132 41957 MT
+(Figure 3-2:)SH
+/Times-Roman SF
+27381 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 subsystem)SH
+10000 44436 MT
+(All MiX servers)
+184 W( are fully independent and do not share any memory and thus can be transparently)183 W
+9000 45813 MT
+(distributed on different sites.  Although they may run in)
+149 W( either user space or supervisor space they are)150 W
+9000 47190 MT
+(usually loaded in the supervisor)
+9 W( address space to avoid numerous and expensive context switches each time)8 W
+9000 48567 MT
+(a new server is invoked.  This paper discusses the case where all servers are loaded into supervisor space.)SH
+/Times-Bold SF
+9000 51397 MT
+(3.2.2. Regular File Management in C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+/Times-Roman SF
+10000 52774 MT
+(The management of regular files is split between three components)
+16 W( in MiX V.4: the Object Manager, the)17 W
+9000 54151 MT
+(Process Manager and the)
+84 W( C)83 W
+8 SS 
+(HORUS)SH
+10 SS 
+23323 XM
+(Nucleus. Pages)
+416 W( of regular files are read, written and cached using the)83 W
+9000 55528 MT
+(Virtual Memory)
+24 W( services,)25 W
+/Times-Italic SF
+19572 XM
+(sgRead\050\051)SH
+/Times-Roman SF
+23457 XM
+(and)SH
+/Times-Italic SF
+25176 XM
+(sgWrite\050\051)SH
+/Times-Roman SF
+(, without having to map them.  This allows the support of)25 W
+9000 56905 MT
+(mapped files and provides the benefit of)
+90 W( the Virtual Memory mechanisms for caching files from local or)89 W
+9000 58282 MT
+(remote file systems.  The Virtual Memory cache replaces the buffer cache, moreover in the distributed)
+1 W( case,)2 W
+9000 59659 MT
+(file consistency are maintained by the same mechanisms that are used to provide)
+253 W( distributed shared)252 W
+9000 61036 MT
+(memory.)SH
+10000 63515 MT
+(In MiX V.4, open files are named by a capability built from a port Unique Identifier and)
+97 W( a 64-bit key)98 W
+9000 64892 MT
+(only meaningful to the server.  This capability is returned to the PM by the OM)
+87 W( when the)86 W
+/Times-Italic SF
+46476 XM
+(open\050\051)SH
+/Times-Roman SF
+49422 XM
+(system)SH
+9000 66269 MT
+(call is made.  All opens of the same file)
+160 W( get the same capability.  For each open system call, the PM)161 W
+9000 67646 MT
+(manages an open file descriptor similar to the)84 W
+/Times-Italic SF
+28169 XM
+(file_t)SH
+/Times-Roman SF
+30559 XM
+(structure of a native Unix, that handles flags and the)84 W
+9000 69023 MT
+(current offset.  In addition, the PM manages an)128 W
+/Times-Bold SF
+29232 XM
+(object descriptor)128 W
+/Times-Roman SF
+36986 XM
+(for each)
+128 W( file in use on its site.  This)129 W
+9000 70400 MT
+(object descriptor handles the following information: size)
+18 W( of the file, mandatory locks posted against the file)17 W
+9000 71777 MT
+(\050if any\051, last access and last modification)
+36 W( time and, the capability of the file exported by the OM.  The PM)37 W
+ES
+%%Page: ? 6
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+(uses this information to convert)46 W
+/Times-Italic SF
+22146 XM
+(read\050\051/write\050\051)SH
+/Times-Roman SF
+27941 XM
+(Unix system calls into)45 W
+/Times-Italic SF
+37288 XM
+(sgRead\050\051/sgWrite\050\051)SH
+/Times-Roman SF
+45248 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+48923 XM
+(Nucleus)SH
+9000 9263 MT
+(calls.)SH
+/Times-Bold SF
+9000 12093 MT
+(3.2.3. File Size Management)SH
+/Times-Roman SF
+10000 13470 MT
+(Due to)
+139 W( the separation between the Process Manager and the Object Manager, a benefit which allows)140 W
+9000 14847 MT
+(them to potentially be distributed)
+13 W( on different nodes, the file size is protected by a)12 W
+/Times-Bold SF
+42180 XM
+(Token)SH
+/Times-Roman SF
+(. Since)
+274 W( the Token)12 W
+9000 16224 MT
+(may have)
+127 W( been granted to another site or recalled by the OM, the PM must check whether the file size)128 W
+9000 17601 MT
+(information it holds is valid or not before using the file size.)
+59 W( If)
+366 W( the information is not valid, the PM must)58 W
+9000 18978 MT
+(retrieve the information first.)SH
+12 /Times-Bold AF
+9000 22687 MT
+(4.)SH
+/Times-BoldItalic SF
+10200 XM
+(Read\050\051)SH
+/Times-Bold SF
+13833 XM
+(and)SH
+/Times-BoldItalic SF
+16067 XM
+(Write\050\051)SH
+/Times-Bold SF
+19902 XM
+(Path Analysis)SH
+10 /Times-Roman AF
+10000 24064 MT
+(This section takes a detailed look at the)144 W
+/Times-Italic SF
+27150 XM
+(read\050\051)SH
+/Times-Roman SF
+30043 XM
+(and)SH
+/Times-Italic SF
+31881 XM
+(write\050\051)SH
+/Times-Roman SF
+34997 XM
+(paths of both Mach 3.0 with the)
+144 W( BSD4.3)145 W
+9000 25441 MT
+(Single Server and C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4.)SH
+11 /Times-Bold AF
+9000 29081 MT
+(4.1. Mach 3.0 with the BSD4.3 Single Server)SH
+/Times-BoldItalic SF
+29960 XM
+(read\050\051)SH
+/Times-Bold SF
+32983 XM
+(Path)SH
+10 /Times-Roman AF
+10000 30458 MT
+(This section describes how)
+116 W( the)115 W
+/Times-Italic SF
+23104 XM
+(read\050\051)SH
+/Times-Roman SF
+25968 XM
+(system call works in Mach 3.0 with the BSD4.3 Single Server.)115 W
+9000 31835 MT
+(When a user makes a)60 W
+/Times-Italic SF
+18048 XM
+(read\050\051)SH
+/Times-Roman SF
+20858 XM
+(call the kernel redirects that call trap back into the Emulation Library.  After)61 W
+9000 33212 MT
+(making sure that the file is mapped, that it has)
+46 W( a valid Token, and that the mapping is into the desired part)45 W
+9000 34589 MT
+(of the file, the Emulation Library copies the data from the mapped region into the user's buffer and returns.)SH
+533 1000 270 49294 66412 GB 
+%%BeginDocument: MachExternalIO.ps
+%!PS-Adobe-2.0
+%%Title: MachExternalIO.draw Ð /rfr/Images
+%%Creator: Draw
+%%CreationDate: Wed Oct 18 14:12:27 1989
+%%For: rfr
+%%DocumentFonts: (atend)
+%%%Pages: (atend) 1
+%%BoundingBox: (atend)
+%%DocumentPaperSizes: Letter
+%%Orientation: Landscape
+%%EndComments
+
+%%BeginFile: /usr/lib/NextStep//printPackage1.0.ps
+%!PSNext-1.0
+%%Title: Printing Package
+%%Copyright 1988, NeXT, Inc.
+%%CreationDate: 23Feb88
+%%PackageName: printPackage0.8.37
+%%PackageDescription: Routines to support printing
+%%EndComments
+
+%debugging aids
+%/clip {gsave 0.9 setgray 0.5 setlinewidth stroke grestore} def
+
+% simulations of DPS ops
+/__NXUserObjectList 10 array def
+/defineuserobject {
+    exch
+    dup 1 add
+    dup __NXUserObjectList length gt {
+        array dup 0 __NXUserObjectList putinterval
+        /__NXUserObjectList exch def
+    }
+    { pop }
+    ifelse
+    __NXUserObjectList exch 3 -1 roll put
+} def
+/execuserobject {
+    __NXUserObjectList exch get exec
+} def
+/rectclip {/clip __NXdoRectOp newpath} def
+/rectfill {gsave /fill __NXdoRectOp grestore} def
+/rectstroke {gsave /stroke __NXdoRectOp grestore} def
+/__NXdoRectOp {
+    1 index type /arraytype eq {
+        exch aload length
+        dup 2 add -1 roll exch
+        4 idiv
+    }
+    { 1 }
+    ifelse
+    {
+        5 1 roll
+        newpath 4 2 roll moveto 1 index 0 rlineto
+                0 exch rlineto neg 0 rlineto closepath
+        dup cvx exec
+    } repeat pop
+} def
+% simulations of NeXT additions to DPS
+/flushgraphics {} def
+/hidecursor {} def
+/obscurecursor {} def
+/revealcursor {} def
+/setcursor {4 {pop} repeat} def
+/showcursor {} def
+
+
+%%EndFile
+
+%%EndProlog
+%%BeginSetup
+%%PaperSize: Letter
+%%Feature: *ManualFeed False
+%%Feature: *Resolution 400
+/oval {
+    translate scale newpath 0.5 0.5 0.5 0 360 arc
+} def /fillandframeoval {
+    oval gsave eofill grestore 0 setgray stroke
+} def /fillandframerectangle {
+    4 copy rectfill 0 setgray rectstroke
+} def /line {
+    moveto rlineto stroke
+} def /setup {
+    setgray setlinewidth setlinecap setlinejoin gsave
+} def /arrow {
+    newpath moveto dup rotate -13 6 rlineto 4 -6 rlineto -4 -6 rlineto closepath gsave 0 setlinejoin stroke grestore fill neg rotate
+} def
+%%EndSetup
+
+%%%Page: 1 1
+%%%PageBoundingBox: 36.000000 36.000000 756.000000 576.000000
+%%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+36 36 translate
+gsave
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 720 540 rectclip
+0 0 720 540 rectclip
+0 0 3.13 0.511 setup
+90 110 90 190 fillandframerectangle
+grestore
+0 0 3.13 0 setup
+90 330 90 110 rectstroke
+grestore
+0 0 3.13 0 setup
+30 30 660 440 rectstroke
+grestore
+0 0 3.13 0.798 setup
+30 30 660 60 fillandframerectangle
+grestore
+0 0 3.13 0.412 setup
+140 370 10 50 fillandframerectangle
+grestore
+0 0 0.018412 0.339 setup
+170 170 420 220 fillandframeoval
+grestore
+0 0 3.13 0 setup
+gsave
+/Courier-BoldOblique findfont 36 scalefont [1 0 0 -1 0 0] makefont
+43
+exch
+defineuserobject
+43 execuserobject setfont
+0 setgray
+131 416 41 20 rectclip
+[1 0 0 -1 131 436] concat
+/Courier-Bold findfont 14 scalefont [1 0 0 -1 0 0] makefont
+91
+exch
+defineuserobject
+91 execuserobject setfont
+0 setgray
+2 13 moveto (file) show
+grestore
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+99 327 23 20 rectclip
+[1 0 0 -1 99 347] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (fd) show
+grestore
+grestore
+0 0 3.13 0 setup
+110 360 moveto 110 380 110 380 140 380 140 380 curveto stroke
+0 140 380 arrow
+grestore
+0 0 3.13 0 setup
+100 350 20 10 fillandframerectangle
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+103 198 59 20 rectclip
+[1 0 0 -1 103 218] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (read\(\)) show
+grestore
+grestore
+0 0 3.13 0 setup
+180 200 moveto 210 200 210 200 210 200 210 70 curveto stroke
+-90 210 70 arrow
+grestore
+0 0 3.13 0 setup
+180 390 moveto 250 390 250 390 250 390 250 70 curveto stroke
+180 180 390 arrow
+grestore
+0 0 3.13 0 setup
+50 70 moveto 50 390 50 390 90 390 90 390 curveto stroke
+-90 50 70 arrow
+grestore
+0 0 3.13 0 setup
+360 70 moveto 360 240 360 240 450 240 450 240 curveto stroke
+0 450 240 arrow
+grestore
+0 0 3.13 0 setup
+380 70 moveto 380 230 380 230 470 230 470 230 curveto stroke
+-90 380 70 arrow
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+454 297 104 20 rectclip
+[1 0 0 -1 454 317] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Unix Server) show
+grestore
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+406 117 158 40 rectclip
+[1 0 0 -1 406 157] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Data_Request/) show
+2 33 moveto (Data_Provided) show
+grestore
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+49 49 41 20 rectclip
+[1 0 0 -1 49 69] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Page) show
+grestore
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+51 34 50 20 rectclip
+[1 0 0 -1 51 54] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Fault) show
+grestore
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+193 51 68 20 rectclip
+[1 0 0 -1 193 71] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Syscall) show
+grestore
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+186 34 77 20 rectclip
+[1 0 0 -1 186 54] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Redirect) show
+grestore
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+52 445 176 20 rectclip
+[1 0 0 -1 52 465] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Emulation Library) show
+grestore
+grestore
+0 0 3.13 0 setup
+gsave
+91 execuserobject setfont
+0 setgray
+82 90 104 20 rectclip
+[1 0 0 -1 82 110] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (User Binary) show
+grestore
+grestore
+0 0 3.13 0.798 setup
+gsave
+91 execuserobject setfont
+0 setgray
+295 49 167 20 rectclip
+[1 0 0 -1 295 69] concat
+91 execuserobject setfont
+0 setgray
+2 13 moveto (Page Fault Handler) show
+grestore
+grestore
+0 0 3.13 0.798 setup
+gsave
+91 execuserobject setfont
+0 setgray
+111 473 502 50 rectclip
+[1 0 0 -1 111 523] concat
+43 execuserobject setfont
+0 setgray
+2 33 moveto (Mach: External Unix I/O) show
+grestore
+grestore
+gsave
+0 0 720 540 rectclip
+[1 0 0 -1 0 540] concat
+grestore
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%PageTrailer
+%%%PageFonts: Courier-Bold
+%+ Courier-BoldOblique
+%%Trailer
+%%DocumentFonts: Courier-Bold
+%+ Courier-BoldOblique
+%%%Pages: 1 1
+%%BoundingBox:36.000000 36.000000 576.000000 756.000000
+
+
+%%EndDocument
+ GE /Times-Bold SF
+15962 66104 MT
+(Figure 4-1:)SH
+/Times-Roman SF
+21211 XM
+(Mach 3.0 with the BSD4.3 Single Server Mapped File Read)SH
+ES
+%%Page: ? 7
+BS
+0 SI
+10 /Times-Bold AF
+9000 7891 MT
+(4.1.1.)SH
+/Times-BoldItalic SF
+11500 XM
+(Read\050\051)SH
+/Times-Bold SF
+14527 XM
+(in the Emulation Library)SH
+/Times-Roman SF
+10000 9268 MT
+(To examine the file descriptor in the writeable)
+35 W( shared page, the Emulation Library must first acquire the)36 W
+/Times-Bold SF
+9000 10645 MT
+(share lock)22 W
+/Times-Roman SF
+13655 XM
+(which protects this region.)
+22 W( A)
+293 W( share lock is different from a simple spin lock in that the BSD4.3)21 W
+9000 12022 MT
+(Single Server does not)
+8 W( trust the Emulation Library.  The Emulation Library resides in user memory and can)9 W
+9000 13399 MT
+(be over-written at any time by an incorrect or)
+168 W( malicious user program.  Therefore, the BSD4.3 Single)167 W
+9000 14776 MT
+(Server must take measures to ensure it does not deadlock on this share lock.  The share lock)
+2 W( is implemented)3 W
+9000 16153 MT
+(as a simple)
+76 W( spin lock in the Emulation Library and as a test-and-set and block with timeout in the server.)75 W
+9000 17530 MT
+(When the server blocks, it requests a callback from the Emulation Library when the Emulation)
+136 W( Library)137 W
+9000 18907 MT
+(releases the lock.  If)
+63 W( the callback is not received in a configurable amount of time, the server assumes the)62 W
+9000 20284 MT
+(client is malicious or incorrect and kills the task.)SH
+10000 22763 MT
+(Once the Emulation Library has acquired the share lock, it can examine)
+91 W( the state of the Token.  If the)92 W
+9000 24140 MT
+(Token is)112 W
+/Times-Italic SF
+12946 XM
+(invalid)SH
+/Times-Roman SF
+(, the Emulation Library must send a message to the server to acquire)
+112 W( the Token.  If the)111 W
+9000 25517 MT
+(Token is)87 W
+/Times-Italic SF
+12896 XM
+(passive)SH
+/Times-Roman SF
+(, it may be switched directly to)87 W
+/Times-Italic SF
+29060 XM
+(active)SH
+/Times-Roman SF
+31786 XM
+(without contacting the server Once the Emulation)88 W
+9000 26894 MT
+(Library has the Token, its file pointer and mapping info are guaranteed to be correct.)
+163 W( If)
+575 W( the mapping)162 W
+9000 28271 MT
+(information is not adequate for the current call, the Emulation Library can send a message to)
+50 W( the server to)51 W
+9000 29648 MT
+(change the mapping.  With a valid mapping, the)
+73 W( Emulation Library simply copies the data into the user's)72 W
+9000 31025 MT
+(buffer, updates)
+142 W( the file pointer, and releases the Token.  If the BSD4.3 Single Server has indicated, by)143 W
+9000 32402 MT
+(setting a bit in the file descriptor, that another task is waiting for)
+36 W( the Token, the Emulation Library sends a)35 W
+9000 33779 MT
+(message to the server to completely release)
+95 W( the Token.  If no call-back is needed, the Emulation Library)96 W
+9000 35156 MT
+(moves the Token to)SH
+/Times-Italic SF
+17166 XM
+(passive)SH
+/Times-Roman SF
+(.)SH
+/Times-Bold SF
+9000 38007 MT
+(4.1.2.)SH
+/Times-BoldItalic SF
+11500 XM
+(Read\050\051)SH
+/Times-Bold SF
+14527 XM
+(in the BSD4.3 Single Server)SH
+/Times-Roman SF
+10000 39384 MT
+(The BSD4.3 Single Server can become involved in a)83 W
+/Times-Italic SF
+32132 XM
+(read\050\051)SH
+/Times-Roman SF
+34963 XM
+(call in a number of ways.  The Emulation)82 W
+9000 40761 MT
+(Library can call it directly in order to request a Token, request a window remapping,)
+84 W( or release a Token.)85 W
+9000 42138 MT
+(The BSD4.3 Single Server can also be called by)
+114 W( the Mach kernel when the Emulation Library faults on)113 W
+9000 43515 MT
+(mapped data and the Inode Pager must be contacted to satisfy the fault.  Each of)
+195 W( these operations is)196 W
+9000 44892 MT
+(described in detail below.)SH
+10000 47371 MT
+(A Token request is straightforward to process.)
+209 W( The)
+667 W( server keeps track of who has the Token and)208 W
+9000 48748 MT
+(examines the state of that)
+114 W( process's file descriptor.  If the holder of the Token has it)115 W
+/Times-Italic SF
+44611 XM
+(passive)SH
+/Times-Roman SF
+(, the server)115 W
+9000 50125 MT
+(invalidates the Token and)
+103 W( grants it to the requester.  If the Token is)102 W
+/Times-Italic SF
+37510 XM
+(active)SH
+/Times-Roman SF
+(, the server leaves a call back)102 W
+9000 51502 MT
+(request with the holder and waits for it to send a Token release call.)SH
+10000 53981 MT
+(A request to)
+117 W( change the mapping window is extremely simple when just reading from a file.  All the)118 W
+9000 55358 MT
+(server has to)
+68 W( do is deallocate the existing window into the file and generate a new mapping which covers)67 W
+9000 56735 MT
+(the range necessary for the)19 W
+/Times-Italic SF
+20063 XM
+(read\050\051)SH
+/Times-Roman SF
+(. The)
+288 W( handling of the remapping)
+19 W( operation for)20 W
+/Times-Italic SF
+41566 XM
+(write\050\051)SH
+/Times-Roman SF
+44558 XM
+(is covered in detail)20 W
+9000 58112 MT
+(in section 4.2.)SH
+10000 60591 MT
+(When the Emulation Library first)
+144 W( touches a page of data mapped into its address space, a page-fault)143 W
+9000 61968 MT
+(occurs. The)
+344 W( kernel receives this fault and resolves it in one of two)
+47 W( ways.  If the page is already present in)48 W
+9000 63345 MT
+(the kernel VM system,)
+19 W( but the task does not have a valid mapping, then the kernel enters the page mapping)18 W
+9000 64722 MT
+(and returns from the fault. If the)
+572 W( page is not present in the kernel, the kernel sends a)573 W
+/Times-Italic SF
+9000 66099 MT
+(memory_object_data_request\050\051)SH
+/Times-Roman SF
+21843 XM
+(message to the External Pager backing this object.  In the case)
+40 W( of Unix file)39 W
+9000 67476 MT
+(data, this is the Inode Pager in the BSD4.3 Single Server.  The Inode)
+34 W( Pager then reads the appropriate data)35 W
+9000 68853 MT
+(off disk with)SH
+/Times-Italic SF
+14361 XM
+(device_read\050\051)SH
+/Times-Roman SF
+20164 XM
+(and provides this page back to the kernel.)SH
+10000 71332 MT
+(For historical reasons, the Inode Pager uses the buffer cache interface to read and write from and)
+18 W( to disk.)17 W
+ES
+%%Page: ? 8
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+(This leads to unnecessary caching in the BSD4.3 Single Server.)
+3 W( This)
+257 W( also results in the Inode Pager using a)4 W
+9000 9263 MT
+(less efficient and now obsolete interface)1193 W
+/Times-Italic SF
+32486 XM
+(memory_object_data_provided\050\051)SH
+/Times-Roman SF
+47092 XM
+(instead of)1192 W
+/Times-Italic SF
+9000 10640 MT
+(memory_object_data_supply\050\051)SH
+/Times-Roman SF
+21654 XM
+(to return the data to the kernel.  The former requires)
+184 W( a copy within the)185 W
+9000 12017 MT
+(kernel, whereas the latter uses a page stealing optimization that eliminates the copying.  In the page stealing)4 W
+9000 13394 MT
+(optimization, the VM system just)
+93 W( removes the physical page from the server and places it directly in the)94 W
+9000 14771 MT
+(Memory Object without copying it.)SH
+11 /Times-Bold AF
+9000 18411 MT
+(4.2. Mach 3.0 with the BSD4.3 Single Server)SH
+/Times-BoldItalic SF
+29960 XM
+(write\050\051)SH
+/Times-Bold SF
+33229 XM
+(Path)SH
+10 /Times-Roman AF
+10000 19788 MT
+(The)SH
+/Times-Italic SF
+11840 XM
+(write\050\051)SH
+/Times-Roman SF
+14847 XM
+(path is almost identical to the)35 W
+/Times-Italic SF
+27057 XM
+(read\050\051)SH
+/Times-Roman SF
+29841 XM
+(path. The)
+320 W( differences)
+35 W( lie in correctly managing the file)34 W
+9000 21165 MT
+(size and writing)
+34 W( out dirty pages in a timely fashion.  As in the)35 W
+/Times-Italic SF
+34403 XM
+(read\050\051)SH
+/Times-Roman SF
+37187 XM
+(case, the Emulation Library sets up a)35 W
+9000 22542 MT
+(valid mapping and copies the user's data into the window.)
+51 W( A)
+351 W( valid mapping may exist past the end of the)50 W
+9000 23919 MT
+(file, so there is no need to handle file extension as a special case in the Emulation Library.)SH
+10000 26398 MT
+(If the Emulation Library write faults on a page that is in the file, the Inode Pager returns the page from)59 W
+9000 27775 MT
+(the disk file to be over written.  In)
+93 W( the case of)92 W
+/Times-Italic SF
+28525 XM
+(write\050\051)SH
+/Times-Roman SF
+31589 XM
+(faulting on a new page, such as filling a whole or)92 W
+9000 29152 MT
+(extending the file, the Inode Pager returns)84 W
+/Times-Italic SF
+26641 XM
+(memory_object_data_unavailable\050\051)SH
+/Times-Roman SF
+41307 XM
+(which causes the kernel to)85 W
+9000 30529 MT
+(supply a zero filled page to the client.  If)
+22 W( the)21 W
+/Times-Italic SF
+27181 XM
+(write\050\051)SH
+/Times-Roman SF
+30174 XM
+(extends the file, the Emulation Library updates the file)21 W
+9000 31906 MT
+(size field in the local file descriptor.)SH
+10000 34385 MT
+(Actual writes to disk and propagation of the file size occur)
+31 W( when the Token is taken away from a writer,)32 W
+9000 35762 MT
+(when the writer changes its mapping, or when the kernel needs free pages and starts sending the)
+81 W( mapped)80 W
+9000 37139 MT
+(file pages to the Inode Pager to be cleaned.  In the first two cases, the mapped file code first updates the file)7 W
+9000 38516 MT
+(size from the writer's file descriptor.  The server then calls)160 W
+/Times-Italic SF
+34476 XM
+(memory_object_lock_request\050\051)SH
+/Times-Roman SF
+47327 XM
+(to force)
+160 W( the)159 W
+9000 39893 MT
+(kernel, which knows which pages have actually been written by the user, to request cleaning of the)
+89 W( dirty)90 W
+9000 41270 MT
+(pages. This)
+318 W( generates)
+34 W( messages from the kernel to the pager requesting that the dirty pages be written out.)33 W
+9000 42647 MT
+(When the Inode Pager receives the dirty pages from the kernel, it writes them out to disk.)SH
+10000 45126 MT
+(Disk block allocation is delayed until the data is actually written out to disk.)
+14 W( It)
+279 W( would be possible for the)15 W
+9000 46503 MT
+(Inode Pager to allocate new blocks)
+182 W( in a timely fashion since it gets a data request message when the)181 W
+9000 47880 MT
+(Emulation Library page-faults on the new page to be written.  The Inode Pager)
+48 W( currently ignores the write)49 W
+9000 49257 MT
+(fault attribute)
+41 W( when returning the empty page to satisfy the page-fault.  By not allocating at the time of the)40 W
+9000 50634 MT
+(initial fault, the semantics for failure in)
+299 W( the BSD4.3 Single Server are not the same as Mach 2.6)300 W
+9000 52011 MT
+(MSD\050BSD4.3\051.)SH
+10000 54490 MT
+(The difficulty occurs when there was a involuntary)
+93 W( request to clean pages from the kernel driven by a)92 W
+9000 55867 MT
+(memory shortage.  In the previous cases)
+85 W( where dirty pages and the file size were written out, the writing)86 W
+9000 57244 MT
+(was initiated by a call from the Emulation Library.  In)
+137 W( this case the Emulation Library could be in the)136 W
+9000 58621 MT
+(middle of a)52 W
+/Times-Italic SF
+13961 XM
+(read\050\051)SH
+/Times-Roman SF
+16762 XM
+(or)SH
+/Times-Italic SF
+17897 XM
+(write\050\051)SH
+/Times-Roman SF
+20921 XM
+(call, so the Inode Pager must read the file size)
+52 W( from the current holder of the)53 W
+9000 59998 MT
+(Token without taking that Token away.)SH
+11 /Times-Bold AF
+9000 63638 MT
+(4.3. C)SH
+9 SS 
+(HORUS)SH
+11 SS 
+(/MiX V.4)SH
+/Times-BoldItalic SF
+19532 XM
+(read\050\051)SH
+/Times-Bold SF
+22555 XM
+(Path)SH
+10 /Times-Roman AF
+10000 65015 MT
+(This section illustrates how a Unix)18 W
+/Times-Italic SF
+24274 XM
+(read\050\051)SH
+/Times-Roman SF
+27040 XM
+(system call is handled in the C)17 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 system.  When)17 W
+9000 66392 MT
+(a Unix process traps to the system, it executes)
+6 W( the trap handler connected by the Process Manager.  The PM)7 W
+9000 67769 MT
+(performs various checks and invokes the)
+204 W( C)203 W
+8 SS 
+(HORUS)SH
+10 SS 
+30608 XM
+(Nucleus call)203 W
+/Times-Italic SF
+36235 XM
+(sgRead\050\051)SH
+/Times-Roman SF
+(. The)
+656 W( Nucleus looks for the)203 W
+9000 69146 MT
+(corresponding page.  If the page is found, data is directly copied into the user's buffer.  If the)
+68 W( page is not)69 W
+9000 70523 MT
+(found, an upcall to the appropriate)
+38 W( mapper is performed by sending a message to the port whose UI is part)37 W
+9000 71900 MT
+(of the file capability.)
+70 W( In)
+392 W( this case, the mapper, which implements the disk driver, reads the data from the)71 W
+ES
+%%Page: ? 9
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+(disk and replys to the Nucleus which copies out the data into the)
+72 W( user's buffer. The overall mechanism is)71 W
+9000 9263 MT
+(summarized in the figure 4-2.)SH
+568 1000 0 14072 55796 GB 
+%%BeginDocument: read_synoptic.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Helvetica-Bold Helvetica
+%%%Pages: 1
+%%BoundingBox: 32 166 550 799
+%%EndComments
+
+/IdrawDict 52 dict def
+IdrawDict begin
+
+/reencodeISO {
+dup dup findfont dup length dict begin
+{ 1 index /FID ne { def }{ pop pop } ifelse } forall
+/Encoding ISOLatin1Encoding def
+currentdict end definefont
+} def
+
+/ISOLatin1Encoding [
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/space/exclam/quotedbl/numbersign/dollar/percent/ampersand/quoteright
+/parenleft/parenright/asterisk/plus/comma/minus/period/slash
+/zero/one/two/three/four/five/six/seven/eight/nine/colon/semicolon
+/less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N
+/O/P/Q/R/S/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright
+/asciicircum/underscore/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m
+/n/o/p/q/r/s/t/u/v/w/x/y/z/braceleft/bar/braceright/asciitilde
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+/.notdef/dotlessi/grave/acute/circumflex/tilde/macron/breve
+/dotaccent/dieresis/.notdef/ring/cedilla/.notdef/hungarumlaut
+/ogonek/caron/space/exclamdown/cent/sterling/currency/yen/brokenbar
+/section/dieresis/copyright/ordfeminine/guillemotleft/logicalnot
+/hyphen/registered/macron/degree/plusminus/twosuperior/threesuperior
+/acute/mu/paragraph/periodcentered/cedilla/onesuperior/ordmasculine
+/guillemotright/onequarter/onehalf/threequarters/questiondown
+/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla
+/Egrave/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex
+/Idieresis/Eth/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis
+/multiply/Oslash/Ugrave/Uacute/Ucircumflex/Udieresis/Yacute
+/Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis
+/aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave
+/iacute/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex
+/otilde/odieresis/divide/oslash/ugrave/uacute/ucircumflex/udieresis
+/yacute/thorn/ydieresis
+] def
+/Helvetica-Bold reencodeISO def
+/Helvetica reencodeISO def
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+dup -1 eq {
+/patternGrayLevel idef
+/patternString idef
+} {
+/patternGrayLevel idef
+} ifelse
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+printFont printSize scalefont setfont
+/descender 0 printFont /FontBBox get 1 get printFont /FontMatrix
+get transform exch pop def
+/vertoffset 1 printSize sub descender sub def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 2 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 9 Grid 10 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.8 0 0 0.8 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Line
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -107 198 ] concat
+%I
+182 649 792 649 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-bold-r-*-140-*
+Helvetica-Bold 14 SetF
+%I t
+[ 0 1 -1 0 54.5 880.5 ] concat
+%I
+[
+(USER SPACE)
+] Text
+End
+
+Begin %I Line
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -107 198 ] concat
+%I
+182 450 792 450 Line
+End
+
+Begin %I Line
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1.0183 0 0 1 -110.313 198 ] concat
+%I
+182 263 780 263 Line
+End
+
+Begin %I Line
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+207 798 207 661 Line
+End
+
+Begin %I Line
+%I b 65535
+2 1 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+207 649 207 14 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-bold-r-*-140-*
+Helvetica-Bold 14 SetF
+%I t
+[ 0 1 -1 0 47 442 ] concat
+%I
+[
+(SUPERVISOR ADDRESS SPACE)
+] Text
+End
+
+Begin %I Line
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -107 210 ] concat
+%I
+182 649 792 649 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 187 984 ] concat
+%I
+[
+(User stack)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 287 971 ] concat
+%I
+[
+(read \(fd, buf, lg\))
+] Text
+End
+
+Begin %I Pict
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t u
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1.13636 -132 92.5909 ] concat
+%I
+319 773 319 686 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1.13636 -132 92.5909 ] concat
+%I
+381 773 381 686 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 761 381 761 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 736 381 736 Line
+End
+
+Begin %I Pict
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t u
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 711 381 711 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 686 381 686 Line
+End
+
+End %I eop
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 212.5 951.5 ] concat
+%I
+[
+(fd)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 208.5 926.5 ] concat
+%I
+[
+(buf)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 212.5 901.5 ] concat
+%I
+[
+(lg)
+] Text
+End
+
+End %I eop
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+580 686 755 761 Rect
+End
+
+Begin %I Line
+%I b 65535
+1 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+381 724 580 761 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0 1 -1 0 99.5 873.5 ] concat
+%I
+[
+(USER PROC)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0 1 -1 0 90 708 ] concat
+%I
+[
+(PROCESS)
+(MANAGER)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0 1 -1 0 95.5 471.5 ] concat
+%I
+[
+(         CHORUS)
+(        NUCLEUS)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f -adobe-helvetica-bold-r-normal--18-180-75-75-p-103-iso8859-1
+Helvetica-Bold 18 SetF
+%I t
+[ 0 1 -1 0 94 323 ] concat
+%I
+[
+( OBJECT)
+(MANAGER)
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 0.259582 -132 660.021 ] concat
+%I
+319 624 319 51 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 0.264808 -132 656.76 ] concat
+%I
+381 624 381 51 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 174 834 ] concat
+%I
+[
+(System stack)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -169 173 ] concat
+%I
+506 562 568 636 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-bold-r-*-140-*
+Helvetica-Bold 14 SetF
+%I t
+[ 1 0 0 1 342.5 798 ] concat
+%I
+[
+(Per)
+(PROC)
+(system)
+(context)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 173 ] concat
+%I
+580 499 643 599 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-bold-r-*-140-*
+Helvetica-Bold 14 SetF
+%I t
+[ 1 0 0 1 452.5 748 ] concat
+%I
+[
+(Per)
+(Thread)
+(System)
+(Context)
+] Text
+End
+
+Begin %I Elli
+%I b 13107
+2 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+344 724 50 38 Elli
+End
+
+Begin %I Line
+%I b 65535
+1 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+531 574 580 574 Line
+End
+
+Begin %I BSpl
+%I b 13107
+2 0 1 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I 4
+394 711
+506 699
+543 624
+593 574
+4 BSpl
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 254 722 ] concat
+%I
+[
+(sgRead \(Capa, buf, lg, offset\))
+] Text
+End
+
+Begin %I Pict
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t u
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 599 381 599 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 574 381 574 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 549 381 549 Line
+End
+
+Begin %I Pict
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t u
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 524 381 524 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 499 381 499 Line
+End
+
+End %I eop
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 201 789.5 ] concat
+%I
+[
+(Capa)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 208.5 764.5 ] concat
+%I
+[
+(buf)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 212.5 739.5 ] concat
+%I
+[
+(lg)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 201 714.5 ] concat
+%I
+[
+(offset)
+] Text
+End
+
+End %I eop
+
+Begin %I Elli
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 0.3 0 0 0.3 148.2 495.5 ] concat
+%I
+406 437 12 12 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 294 633 ] concat
+%I
+[
+(Cache Hit)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1.29545 0 0 0.796875 -314.591 296.328 ] concat
+%I
+531 362 618 425 Rect
+End
+
+Begin %I BSpl
+%I b 13107
+2 0 1 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I 4
+618 412
+705 462
+705 611
+630 711
+4 BSpl
+End
+
+Begin %I Pict
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 1 0 0 1 -16 -19 ] concat
+
+Begin %I Elli
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0 SetP
+%I t
+[ 0.3 0 0 0.3 163.2 419.5 ] concat
+%I
+406 437 12 12 Elli
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 299 560 ] concat
+%I
+[
+(Cache Miss)
+] Text
+End
+
+End %I eop
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1.27273 0 0 0.90625 -301.545 156.938 ] concat
+%I
+531 362 618 425 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 303 481 ] concat
+%I
+[
+(ipcCall\(...\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 185 ] concat
+%I
+319 288 381 288 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 210 ] concat
+%I
+319 362 381 362 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 201 564.5 ] concat
+%I
+[
+(Capa)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 184.5 517 ] concat
+%I
+[
+(Message)
+(Descriptor)
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+318 399 318 270 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+381 400 381 271 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+318 238 318 30 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+382 237 382 32 Line
+End
+
+Begin %I Line
+%I b 13107
+1 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+319 472 319 397 Line
+End
+
+Begin %I Line
+%I b 13107
+1 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+382 473 382 400 Line
+End
+
+Begin %I Line
+%I b 13107
+1 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+318 270 318 241 Line
+End
+
+Begin %I Line
+%I b 13107
+1 0 0 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I
+381 271 381 235 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 301 407 ] concat
+%I
+[
+(ufs_pullIn \(...\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 322 374 ] concat
+%I
+[
+(Driver_Strategy \(bp\))
+] Text
+End
+
+Begin %I Pict
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 1 0 0 1 -95 98 ] concat
+
+Begin %I Pict
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.6 0 0 0.54 207.08 -239.26 ] concat
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.8 0 0 0.8 108.8 353.3 ] concat
+%I
+608 610 26 10 Elli
+End
+
+Begin %I Rect
+none SetB %I b n
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -60 210 ] concat
+%I
+636 630 676 688 Rect
+End
+
+Begin %I Elli
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 0.8 0 0 0.8 108.8 408.7 ] concat
+%I
+608 610 26 10 Elli
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -58.7 210 ] concat
+%I
+635 687 635 631 Line
+End
+
+Begin %I Line
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+1 SetP
+%I t
+[ 1 0 0 1 -60 210 ] concat
+%I
+676 689 676 630 Line
+End
+
+End %I eop
+
+Begin %I Rect
+%I b 65535
+1 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -77 185 ] concat
+%I
+635 38 645 46 Rect
+End
+
+End %I eop
+
+Begin %I BSpl
+%I b 13107
+2 0 1 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 0.755102 -134 272.814 ] concat
+%I 5
+604 63
+741 101
+767 165
+739 235
+591 303
+5 BSpl
+End
+
+Begin %I BSpl
+%I b 13107
+2 0 1 [2 2 2 2 2 2 2 2] 15 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -132 198 ] concat
+%I 4
+618 327
+740 358
+792 490
+681 712
+4 BSpl
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 491 976 ] concat
+%I
+[
+(User's buffer)
+] Text
+End
+
+Begin %I Line
+%I b 65535
+2 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -170 186 ] concat
+%I
+468 769 468 556 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 301 832 ] concat
+%I
+[
+(\(0\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 383 887 ] concat
+%I
+[
+(\(1\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+2 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -170 186 ] concat
+%I
+466 520 466 452 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 301 682 ] concat
+%I
+[
+(\(2a\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 382.148 621.898 ] concat
+%I
+[
+(Cached Page )
+(of the Segment)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 573 731 ] concat
+%I
+[
+(\(3a\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+2 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 2.29779 -170 -343.06 ] concat
+%I
+468 418 468 389 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 301 605 ] concat
+%I
+[
+(\(2b\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -170 186 ] concat
+%I
+357 351 421 351 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 385.148 528.898 ] concat
+%I
+[
+(Free Physical)
+(Page)
+] Text
+End
+
+Begin %I Line
+%I b 65535
+2 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 -170 186 ] concat
+%I
+469 330 469 239 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 583 408 ] concat
+%I
+[
+(\(4b\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 585 610 ] concat
+%I
+[
+(\(5b\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-140-*
+Helvetica 14 SetF
+%I t
+[ 1 0 0 1 306 499 ] concat
+%I
+[
+(\(3b\))
+] Text
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE /Times-Bold SF
+22369 47978 MT
+(Figure 4-2:)SH
+/Times-Roman SF
+27618 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 read path)SH
+/Times-Bold SF
+9000 50808 MT
+(4.3.1. Process Manager)SH
+/Times-Roman SF
+10000 52185 MT
+(As in any Unix system, the library part of a system call runs in user space)
+36 W( and builds a stack frame with)37 W
+9000 53562 MT
+(the system call arguments and then traps.)
+45 W( The)
+339 W( trap is handled by the C)44 W
+8 SS 
+(HORUS)SH
+10 SS 
+40932 XM
+(Nucleus which redirects the)44 W
+9000 54939 MT
+(invocation to the trap handler connected by the PM at init time by means of)
+56 W( the)57 W
+/Times-Italic SF
+41839 XM
+(svTrapConnect\050\051)SH
+/Times-Roman SF
+48923 XM
+(Nucleus)SH
+9000 56316 MT
+(call \050arrow 0 in figure 4-2\051.)SH
+10000 58795 MT
+(The trap handler executes in supervisor space in the context of the process invoking the system call.  The)10 W
+9000 60172 MT
+(system stack used by the trap)
+56 W( handler is the one provided by the C)57 W
+8 SS 
+(HORUS)SH
+10 SS 
+39225 XM
+(Nucleus at thread creation time.)57 W
+9000 61549 MT
+(Using software registers provided by the C)141 W
+8 SS 
+(HORUS)SH
+10 SS 
+30114 XM
+(Nucleus, the)
+141 W( handler retrieves the thread and process)140 W
+9000 62926 MT
+(system context.  The user stack frame is then copied into the thread structure since multiple)
+16 W( threads can run)17 W
+9000 64303 MT
+(concurrently within a process \050arrow 1\051.)SH
+10000 66782 MT
+(Once the file)
+228 W( descriptor has been validated, the PM distinguishes between files that are accessible)227 W
+9000 68159 MT
+(through the Virtual Memory Interface, such as regular files and)
+23 W( mappable character devices, and other files)24 W
+9000 69536 MT
+(such as directories and streams that are read and)
+123 W( written by sending messages to the appropriate server.)122 W
+9000 70913 MT
+(The PM then acquires the current offset)
+86 W( for the file.  This requires that it hold a Token in the distributed)87 W
+ES
+%%Page: ? 10
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+(release of the system.  When)
+36 W( the system runs on a single site, the PM is assured that the offset information)35 W
+9000 9263 MT
+(it has is always valid.)SH
+10000 11742 MT
+(The PM)
+100 W( then must determine whether the read starts beyond the current End Of File, or not, and thus)101 W
+9000 13119 MT
+(must acquire the)
+189 W( file size information.  This information is protected by a token mechanism which is)188 W
+9000 14496 MT
+(separate from)
+146 W( the Token for the current offset.  At the time the)147 W
+/Times-Italic SF
+36126 XM
+(read\050\051)SH
+/Times-Roman SF
+39022 XM
+(occurs, the Token might not be)147 W
+9000 15873 MT
+(present in the PM, but may have been recalled by the OM.  Finally, after having checked the read operation)11 W
+9000 17250 MT
+(against mandatory locks \050if any\051, the PM invokes the)SH
+/Times-Italic SF
+30442 XM
+(sgRead\050\051)SH
+/Times-Roman SF
+34302 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+37932 XM
+(Nucleus call.)SH
+/Times-Bold SF
+9000 20080 MT
+(4.3.2. C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+15317 XM
+(Nucleus)SH
+/Times-Roman SF
+10000 21457 MT
+(The C)271 W
+8 SS 
+(HORUS)SH
+10 SS 
+15977 XM
+(Nucleus first tries to retrieve the local)
+271 W( cache)
+272 W( [1])
+SH( associated with the segment being)272 W
+9000 22834 MT
+(accessed. A)
+316 W( local cache is created for the segment upon the first access to the)
+33 W( segment.  Through the local)32 W
+9000 24211 MT
+(cache descriptor the Nucleus accesses the pages of the)
+38 W( segment that are present in main memory, and their)39 W
+9000 25588 MT
+(associated access rights whether readable or writable.  In)
+51 W( case the page being read is present \050arrow 2a\051 in)50 W
+9000 26965 MT
+(the local cache, data is copied out to the user's buffer)
+89 W( \050arrow 3a\051.  If not present, a free page is acquired)90 W
+9000 28342 MT
+(\050arrow 2b\051 and the Mapper managing the segment is invoked \050arrow)
+83 W( 3b\051.  Upon return from the Mapper,)82 W
+9000 29719 MT
+(the data is copied out into the user's buffer \050arrow 5b\051.)SH
+10000 32198 MT
+(It should be noted)
+26 W( that the)27 W
+/Times-Italic SF
+20825 XM
+(sgRead\050\051)SH
+/Times-Roman SF
+24712 XM
+(operation insures the seriability of concurrent overlapping reads and)27 W
+9000 33575 MT
+(and writes on a segment.)SH
+/Times-Bold SF
+9000 36405 MT
+(4.3.3. Mapper)SH
+/Times-Roman SF
+10000 37782 MT
+(In MiX V.4, regular files are managed by the Object Manager,)
+60 W( which acts as the Mapper for these files)59 W
+9000 39159 MT
+(and thus handles pullIn \050read page\051 and)
+113 W( pushOut \050write page\051 requests for these files.  When the Object)114 W
+9000 40536 MT
+(Manager runs in supervisor address space it uses a message handler to)
+147 W( handle incoming requests.  The)146 W
+9000 41913 MT
+(client thread is made to run in the server context.  Direct access to invoker message descriptors)
+13 W( is permitted)14 W
+9000 43290 MT
+(thus avoiding extra copy of data.)SH
+10000 45769 MT
+(The Object Manager then)
+75 W( invokes the corresponding function \050e.g.:)74 W
+/Times-Italic SF
+38182 XM
+(ufs_pullin\050\051)SH
+/Times-Roman SF
+(\051 using an extension to)74 W
+9000 47146 MT
+(the vnode_ops mechanism.  The file system specific pullin function converts)
+28 W( the page offset in the file into)29 W
+9000 48523 MT
+(a physical block number and then invokes the disk driver to load data.  The)
+59 W( buffer area is set up so that it)58 W
+9000 49900 MT
+(points directly to the physical page provided)
+14 W( by the Nucleus and passed as part of the reply message \050arrow)15 W
+9000 51277 MT
+(4b\051. The)
+250 W( OM only buffers inodes, directory and indirect blocks.)SH
+11 /Times-Bold AF
+9000 54917 MT
+(4.4. C)SH
+9 SS 
+(HORUS)SH
+11 SS 
+(/MiX V.4)SH
+/Times-BoldItalic SF
+19532 XM
+(write\050\051)SH
+/Times-Bold SF
+22801 XM
+(Path)SH
+10 /Times-Roman AF
+10000 56294 MT
+(The basic mechanisms are similar to the ones described for the)76 W
+/Times-Italic SF
+36192 XM
+(read\050\051)SH
+/Times-Roman SF
+39017 XM
+(system call.  However, a)76 W
+/Times-Italic SF
+49478 XM
+(write\050\051)SH
+/Times-Roman SF
+9000 57671 MT
+(may extend a)
+16 W( file or fill a hole in the file.  In such a case, the system must immediately allocate disk blocks)17 W
+9000 59048 MT
+(for the written data.)SH
+10000 61527 MT
+(When the Object)
+116 W( Manager returns a page of a file to the Nucleus, it returns also an associated access)115 W
+9000 62904 MT
+(right enabling the page)
+142 W( to be read-only or read-and-written.  When a process wants to extend a file by)143 W
+9000 64281 MT
+(writing after the EOF, the Nucleus requests the entire page for)
+40 W( read/write access if there was a cache miss,)39 W
+9000 65658 MT
+(or only the write permission if there was a cache hit, with no previous write access granted by the Mapper.)SH
+10000 68137 MT
+(Before the)
+44 W( Object Manager returns a write permission for a page, it insures that blocks will be available)45 W
+9000 69514 MT
+(later to write the data on the disk.  Blocks are allocated to the file at the time the write)
+158 W( permission is)157 W
+9000 70891 MT
+(required. When)
+254 W( the file is closed, blocks that have been allocated but which are not used \050past)
+2 W( the EOF\051 are)3 W
+ES
+%%Page: ? 11
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+(returned to the free block pool.)SH
+10000 10365 MT
+(Finally if the extension of the file has been successful,)
+22 W( the PM changes the size of the file.  This requires)21 W
+9000 11742 MT
+(that the PM has the file size token with a write access granted to the size information.)SH
+12 /Times-Bold AF
+9000 15426 MT
+(5. Performance)SH
+10 /Times-Roman AF
+10000 16803 MT
+(This section contains the performance breakdown for the)237 W
+/Times-Italic SF
+34946 XM
+(read\050\051)SH
+/Times-Roman SF
+37932 XM
+(and)SH
+/Times-Italic SF
+39863 XM
+(write\050\051)SH
+/Times-Roman SF
+43072 XM
+(calls described)
+237 W( in the)238 W
+9000 18180 MT
+(previous sections plus composite numbers for both these systems and from Mach 2.6 MSD\050BSD4.3\051)
+90 W( and)89 W
+9000 19557 MT
+(System V Release 4.0/386.)
+13 W( The)
+277 W( micro-benchmarks show where the time is consumed in the full)14 W
+/Times-Italic SF
+47993 XM
+(read\050\051)SH
+/Times-Roman SF
+50756 XM
+(and)SH
+/Times-Italic SF
+9000 20934 MT
+(write\050\051)SH
+/Times-Roman SF
+12056 XM
+(call. The)
+418 W( benchmarks for Mach 3.0 with the BSD4.3 Single Server and Mach 2.6 MSD\050BSD4.3\051)84 W
+9000 22311 MT
+(were run)
+48 W( on a HP Vectra 25C 80386/25Mhz with 16MB and 32K cache, a WD 1007 disk controller and a)49 W
+9000 23688 MT
+(340MB disk.  The benchmarks for C)99 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 and System V R4.0 were run on Compaq Deskpro)98 W
+9000 25065 MT
+(80386/25Mhz with 16MB of memory and 32K SRAM cache, a WD 1007A disk controller and a 110MB)77 W
+9000 26442 MT
+(disk drive.  The testing methodology)
+104 W( was to run a given test three to ten times and to report the median)103 W
+9000 27819 MT
+(value.)SH
+10000 30298 MT
+(As a number of tests show, the two test platforms, HP Vectra and Compaq)
+25 W( Deskpro, have quite different)26 W
+9000 31675 MT
+(disk and memory)
+69 W( throughput performance characteristics. Basically, the HP Vectra memory throughput is)68 W
+9000 33052 MT
+(between 40% and 50% higher than the Compaq Deskpro throughput \050see table 5-1\051.)
+143 W( In)
+537 W( comparing the)144 W
+9000 34429 MT
+(performance of the different systems below, it is essential to remember)
+144 W( these differences and relate the)143 W
+9000 35806 MT
+(figures to the maximum memory and disk throughput of the two different platforms.)SH
+10000 38285 MT
+(To measure the performance of the)
+5 W( memory system a simple bcopy was run on both machines.  Repeated)6 W
+9000 39662 MT
+(movement of 4096 bytes was used for the)
+57 W( cached result and repeated movement of between 256k and 1M)56 W
+9000 41039 MT
+(was used for the uncached result. Table 5-1 shows throughput and the time for copying a page)
+121 W( of 4096)122 W
+9000 42416 MT
+(bytes.)SH
+27849 44606 MT
+(HP Vectra)SH
+33508 XM
+(Compaq)SH
+16337 50 22431 45224 LH BX1
+22830 46309 MT
+(Cached)SH
+27849 XM
+(21.2MB/sec)SH
+33508 XM
+(14.7MB/sec)SH
+11318 50 27450 46927 LH BX1
+27849 48012 MT
+(184)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+33508 XM
+(265)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+16337 50 22431 48630 LH BX1
+22830 49715 MT
+(UnCached)SH
+27849 XM
+(10.4MB/sec)SH
+33508 XM
+(6.4MB/sec)SH
+11318 50 27450 50333 LH BX1
+27849 51418 MT
+(379)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+33508 XM
+(615)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+16337 8515 50 22431 52036 BX BX1
+-8515 50 27450 52036 LV BX1
+-8515 50 33109 52036 LV BX1
+/Times-Bold SF
+24017 53646 MT
+(Table 5-1:)SH
+/Times-Roman SF
+28878 XM
+(Bcopy of 4096 bytes)SH
+10000 56125 MT
+(Two of the primary primitives)
+31 W( used by the kernelized systems are trap times and Remote Procedure Call)30 W
+9000 57502 MT
+(or RPC times.)
+40 W( We)
+332 W( measured the cost of reaching the Emulation Library or Trap Handler in the kernelized)41 W
+9000 58879 MT
+(system, versus the cost of a kernel trap in the monolithic systems.  For this)
+116 W( test we used)115 W
+/Times-Italic SF
+46304 XM
+(getpid\050\051)SH
+/Times-Roman SF
+49835 XM
+(on all)115 W
+9000 60256 MT
+(architectures. To)
+294 W( show how much overhead there is in reaching the Emulation Library or)
+22 W( Trap Handler for)23 W
+9000 61633 MT
+(a Unix call, including such things as checking for signals, we measured the cost of a null trap into the)138 W
+9000 63010 MT
+(kernel. Table)
+470 W( 5-2 also shows RPC times for the two kernelized systems.  The Mach 3.0)
+110 W( RPC times are)111 W
+9000 64387 MT
+(between two user)
+45 W( tasks since this is the type of communication that occurs between the Emulation Library)44 W
+9000 65764 MT
+(and the BSD4.3 Single Server.  The Chorus Null RPC)
+57 W( times corresponds to a null)58 W
+/Times-Italic SF
+42777 XM
+(ipcCall\050\051)SH
+/Times-Roman SF
+46696 XM
+(issued from a)58 W
+9000 67141 MT
+(supervisor actor)
+137 W( to another supervisor actor handling messages via a message handler, which is what is)136 W
+9000 68518 MT
+(used between PM and OM, and)
+261 W( between Chorus Nucleus and OM.  C)262 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 has a more)262 W
+9000 69895 MT
+(expensive getpid\050\051 call than the native SVR4 implementation.  This is due,)
+7 W( at least partially, to the MiX PM)6 W
+9000 71272 MT
+(having already implemented support for multithreaded processes and)
+36 W( multiprocessor platforms. Thus, MiX)37 W
+ES
+%%Page: ? 12
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+(has some synchronization mechanisms that are not present within the native Unix SVR4.)SH
+23168 10076 MT
+(HP Vectra)SH
+32734 XM
+(Compaq)SH
+21626 50 22769 10694 LH BX1
+23168 11779 MT
+(Mach 3.0)SH
+28159 XM
+(Mach 2.6)SH
+32734 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+40801 XM
+(SVR4.0)SH
+27590 50 16805 12397 LH BX1
+17204 13482 MT
+(Null Trap)SH
+23168 XM
+(40)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+28159 XM
+(61)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+32734 XM
+(36)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+40801 XM
+(85)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+27590 50 16805 14100 LH BX1
+17204 15185 MT
+(Trap to Unix)SH
+23168 XM
+(61)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+28159 XM
+(61)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+32734 XM
+(119)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+40801 XM
+(85)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+27590 50 16805 15803 LH BX1
+17204 16888 MT
+(Null RPC)SH
+23168 XM
+(310)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+32734 XM
+(83)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+27590 8515 50 16805 17506 BX BX1
+-8515 50 22769 17506 LV BX1
+-8515 50 27760 17506 LV BX1
+-8515 50 32335 17506 LV BX1
+-8515 50 40402 17506 LV BX1
+/Times-Bold SF
+24100 19116 MT
+(Table 5-2:)SH
+/Times-Roman SF
+28961 XM
+(Trap and RPC times)SH
+10000 21595 MT
+(The primary measurement we are concerned with in this paper is)74 W
+/Times-Italic SF
+37002 XM
+(read\050\051)SH
+/Times-Roman SF
+39825 XM
+(and)SH
+/Times-Italic SF
+41593 XM
+(write\050\051)SH
+/Times-Roman SF
+44638 XM
+(throughput. Table)396 W
+9000 22972 MT
+(5-3 measures throughput on)
+29 W( all four systems for moving data to and from disk plus the extrapolated time it)30 W
+9000 24349 MT
+(took for each 4096 byte)
+9 W( page.  The)8 W
+/Times-Italic SF
+23259 XM
+(read\050\051)SH
+/Times-Roman SF
+('s and)8 W
+/Times-Italic SF
+28440 XM
+(write\050\051)SH
+/Times-Roman SF
+('s were large enough so no caching effects would be)8 W
+9000 25726 MT
+(seen. As)
+258 W( can be seen, the only case where the kernelized system does not perform as well as the monolithic)5 W
+9000 27103 MT
+(system is the Mach 3.0)SH
+/Times-Italic SF
+18444 XM
+(write\050\051)SH
+/Times-Roman SF
+21416 XM
+(which performs 6% slower.)SH
+20640 29293 MT
+(HP Vectra)SH
+31124 XM
+(Compaq)SH
+23793 50 20241 29911 LH BX1
+20640 30996 MT
+(Mach 3.0)SH
+25882 XM
+(Mach 2.6)SH
+31124 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+39191 XM
+(SVR4.0)SH
+26868 50 17166 31614 LH BX1
+17565 32699 MT
+(Read)SH
+20640 XM
+(320KB/sec)SH
+25882 XM
+(320KB/sec)SH
+31124 XM
+(270KB/sec)SH
+39191 XM
+(270KB/sec)SH
+23793 50 20241 33317 LH BX1
+20640 34402 MT
+(12.5ms)SH
+25882 XM
+(12.5ms)SH
+31124 XM
+(14.8ms)SH
+39191 XM
+(14.8ms)SH
+26868 50 17166 35020 LH BX1
+17565 36105 MT
+(Write)SH
+20640 XM
+(300KB/sec)SH
+25882 XM
+(320KB/sec)SH
+31124 XM
+(250KB/sec)SH
+39191 XM
+(250KB/sec)SH
+23793 50 20241 36723 LH BX1
+20640 37808 MT
+(13.3ms)SH
+25882 XM
+(12.5ms)SH
+31124 XM
+(16.0ms)SH
+39191 XM
+(16.0ms)SH
+26868 10218 50 17166 38426 BX BX1
+-10218 50 20241 38426 LV BX1
+-10218 50 25483 38426 LV BX1
+-10218 50 30725 38426 LV BX1
+-10218 50 38792 38426 LV BX1
+/Times-Bold SF
+22545 40036 MT
+(Table 5-3:)SH
+/Times-Roman SF
+27406 XM
+(Read and Write Throughput)SH
+10000 42515 MT
+(To approximate the cost of the code path for)18 W
+/Times-Italic SF
+28186 XM
+(read\050\051)SH
+/Times-Roman SF
+30953 XM
+(and)SH
+/Times-Italic SF
+32665 XM
+(write\050\051)SH
+/Times-Roman SF
+35655 XM
+(we measured the)
+18 W( cost of)17 W
+/Times-Italic SF
+45656 XM
+(read\050\051)SH
+/Times-Roman SF
+('s without)17 W
+9000 43892 MT
+(requiring disk access.  For this test we did a sequential read of a file)
+42 W( of approximately 2 megabytes in size)43 W
+9000 45269 MT
+(for the kernelized systems)
+20 W( and SVR4 and a file as large as possible and still able to fit into the buffer cache)19 W
+9000 46646 MT
+(for Mach 2.6.  Table 5-4 shows these results.)SH
+19936 48836 MT
+(HP Vectra)SH
+29502 XM
+(Compaq)SH
+22125 50 19537 49454 LH BX1
+19936 50539 MT
+(Mach 3.0)SH
+24927 XM
+(Mach 2.6)SH
+29502 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+37569 XM
+(SVR4.0)SH
+22125 50 19537 51157 LH BX1
+19936 52242 MT
+(4.3M/sec)SH
+24927 XM
+(4.3M/sec)SH
+29502 XM
+(3.3M/sec)SH
+37569 XM
+(3.0M/sec)SH
+22125 50 19537 52860 LH BX1
+19936 53945 MT
+(900)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+24927 XM
+(900)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+29502 XM
+(1100)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+37569 XM
+(1300)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+22125 6812 50 19537 54563 BX BX1
+-6812 50 24528 54563 LV BX1
+-6812 50 29103 54563 LV BX1
+-6812 50 37170 54563 LV BX1
+/Times-Bold SF
+23031 56173 MT
+(Table 5-4:)SH
+/Times-Roman SF
+27892 XM
+(Cached Read Throughput)SH
+10000 58652 MT
+(The next benchmark measures the cost for repeated calls to)73 W
+/Times-Italic SF
+34668 XM
+(read\050\051)SH
+/Times-Roman SF
+37491 XM
+(or)SH
+/Times-Italic SF
+38648 XM
+(write\050\051)SH
+/Times-Roman SF
+41694 XM
+(of one byte with a)74 W
+/Times-Italic SF
+49535 XM
+(lseek\050\051)SH
+/Times-Roman SF
+9000 60029 MT
+(between each iteration.)
+77 W( So)
+402 W( that the)76 W
+/Times-Italic SF
+23809 XM
+(lseek\050\051)SH
+/Times-Roman SF
+26800 XM
+(time can be removed for further comparisons, a benchmark to)76 W
+9000 61406 MT
+(measure)SH
+/Times-Italic SF
+12919 XM
+(lseek\050\051)SH
+/Times-Roman SF
+16171 XM
+(time is included.  Table 5-5 shows the results of)
+337 W( these tests. The read time for)338 W
+9000 62783 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 is consistent with the equivalent)
+487 W( time measured for SVR4:  the difference)486 W
+9000 64160 MT
+(\05080)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s\051corresponds roughly to the additional cost)
+112 W( of the trap handling \05034)113 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s for the seek call and for the)113 W
+9000 65537 MT
+(read call\051.  Among the four systems, all of them except SVR4)
+135 W( exhibit equivalent times for reading and)134 W
+9000 66914 MT
+(writing one byte. The reason why SVR4 writes much faster one byte than it reads it, is quite unclear.)SH
+10000 69393 MT
+(Table 5-4 measured the cost of reading)
+120 W( 4096 bytes from a file when reading sequentially through the)121 W
+9000 70770 MT
+(entire file.  The difference between that result and the results shown in table 5-5 should be the difference of)14 W
+ES
+%%Page: ? 13
+BS
+0 SI
+10 /Times-Roman AF
+21779 8285 MT
+(HP Vectra)SH
+31345 XM
+(Compaq)SH
+21626 50 21380 8903 LH BX1
+21779 9988 MT
+(Mach 3.0)SH
+26770 XM
+(Mach 2.6)SH
+31345 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+39412 XM
+(SVR4.0)SH
+24812 50 18194 10606 LH BX1
+18593 11691 MT
+(Lseek)SH
+21779 XM
+(95)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+26770 XM
+(79)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+31345 XM
+(155)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+39412 XM
+(121)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+24812 50 18194 12309 LH BX1
+18593 13394 MT
+(Read)SH
+21779 XM
+(210)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+26770 XM
+(390)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+31345 XM
+(710)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+39412 XM
+(630)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+24812 50 18194 14012 LH BX1
+18593 15097 MT
+(Write)SH
+21779 XM
+(200)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+26770 XM
+(380)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+31345 XM
+(720)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+39412 XM
+(420)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s)SH
+24812 8515 50 18194 15715 BX BX1
+-8515 50 21380 15715 LV BX1
+-8515 50 26371 15715 LV BX1
+-8515 50 30946 15715 LV BX1
+-8515 50 39013 15715 LV BX1
+/Times-Bold SF
+22032 17325 MT
+(Table 5-5:)SH
+/Times-Roman SF
+26893 XM
+(Cached Read and Write Times)SH
+9000 19116 MT
+(an uncached and a)
+75 W( cached bcopy and the addition of a fast page-fault resolved in the VM cache.  For the)76 W
+9000 20493 MT
+(Mach 3.0 system table 5-4 also includes the cost of a mapping window change every)
+41 W( 16 iterations of 4096)40 W
+9000 21870 MT
+(bytes. To)
+254 W( account for the mapping window change operation in Mach 3.0 with the BSD4.3)
+2 W( Single Server, a)3 W
+9000 23247 MT
+(test was run which)71 W
+/Times-Italic SF
+17005 XM
+(lseek\050\051)SH
+/Times-Roman SF
+(ed 61440 bytes after)
+71 W( each 4096 byte read to force a mapping operation on each)70 W
+/Times-Italic SF
+9000 24624 MT
+(read\050\051)SH
+/Times-Roman SF
+(. This)
+456 W( resulted in a cost)
+103 W( of 2250)104 W
+/Symbol SF
+(u)SH
+/Times-Roman SF
+(s for each iteration including the)104 W
+/Times-Italic SF
+39605 XM
+(lseek\050\051)SH
+/Times-Roman SF
+42624 XM
+(cost. By)
+458 W( looking at 16)104 W
+9000 26001 MT
+(reads covering 64KB, we can extrapolate the cost of just the mapping operation and the cost of a page-)115 W
+9000 27378 MT
+(fault. The)
+340 W( measured result from table 5-4 is)
+45 W( 900)46 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s times 16 which must be equal to 2250)46 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s plus 15 times)46 W
+9000 28755 MT
+(the quantity 115)119 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s, from table 5-5, plus 379)119 W
+/Symbol SF
+(us)SH
+/Times-Roman SF
+28984 XM
+(plus the page-fault time.)
+119 W( From)
+486 W( this, the cost of the fast)118 W
+9000 30132 MT
+(page-fault time is 316)135 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s. By)
+520 W( breaking down the 2250)135 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s measurement, we get the cost of the mapping)136 W
+9000 31509 MT
+(operation to be 1440)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s.)SH
+10000 33988 MT
+(Another test of interest both)
+209 W( for understanding the break down of)208 W
+/Times-Italic SF
+38593 XM
+(read\050\051)SH
+/Times-Roman SF
+41550 XM
+(costs and for comparison)208 W
+9000 35365 MT
+(between the kernelized systems and monolithic systems is the)
+204 W( reading of data directly from raw disk)205 W
+9000 36742 MT
+(partitions. Table)
+396 W( 5-6 shows the throughput and per 4096k byte page performance)
+73 W( of Mach 3.0 and Mach)72 W
+9000 38119 MT
+(2.6 for different size reads.  When these tests were run with block increments of)
+8 W( one between each read, the)9 W
+9000 39496 MT
+(performance was lower than that actually measured for a full)143 W
+/Times-Italic SF
+35034 XM
+(read\050\051)SH
+/Times-Roman SF
+(. This)
+536 W( result is consistent with)
+143 W( the)142 W
+9000 40873 MT
+(BSD4.3 Single Server's uses)
+10 W( of readahead which will not consistently miss disk rotations like this test must)11 W
+9000 42250 MT
+(have. To)
+258 W( account for this and better simulate what is happening in)
+4 W( the BSD4.3 Single Server, various block)3 W
+9000 43627 MT
+(increments from one to eight times the data)
+144 W( size were used in the benchmark and the increment which)145 W
+9000 45004 MT
+(produced the best result was reported.  An interesting point)
+83 W( about the results is Mach 2.6 reads from raw)82 W
+9000 46381 MT
+(partitions slower than it reads from Unix files.)SH
+14718 48571 MT
+(Bytes)SH
+21069 XM
+(4KB)SH
+26311 XM
+(8KB)SH
+31553 XM
+(16KB)SH
+36795 XM
+(32KB)SH
+42037 XM
+(64KB)SH
+32561 50 14319 49189 LH BX1
+14718 50274 MT
+(Mach 3.0)SH
+21069 XM
+(10.5ms)SH
+26311 XM
+(10.0ms)SH
+31553 XM
+(7.5ms)SH
+36795 XM
+(7.5ms)SH
+42037 XM
+(6.5ms)SH
+26210 50 20670 50892 LH BX1
+/Times-Italic SF
+14718 51977 MT
+(device_read\050\051)SH
+/Times-Roman SF
+21069 XM
+(380KB/sec)SH
+26311 XM
+(410KB/sec)SH
+31553 XM
+(530KB/sec)SH
+36795 XM
+(530KB/sec)SH
+42037 XM
+(620KB/sec)SH
+32561 50 14319 52595 LH BX1
+14718 53680 MT
+(Mach 2.6)SH
+21069 XM
+(14.3ms)SH
+26311 XM
+(14.3ms)SH
+31553 XM
+(14.3ms)SH
+36795 XM
+(14.3ms)SH
+42037 XM
+(14.3ms)SH
+26210 50 20670 54298 LH BX1
+/Times-Italic SF
+14718 55383 MT
+(read\050\051)SH
+/Times-Roman SF
+21069 XM
+(280KB/sec)SH
+26311 XM
+(280KB/sec)SH
+31553 XM
+(280KB/sec)SH
+36795 XM
+(280KB/sec)SH
+42037 XM
+(280KB/sec)SH
+32561 8515 50 14319 56001 BX BX1
+-8515 50 20670 56001 LV BX1
+-8515 50 25912 56001 LV BX1
+-8515 50 31154 56001 LV BX1
+-8515 50 36396 56001 LV BX1
+-8515 50 41638 56001 LV BX1
+/Times-Bold SF
+23421 57611 MT
+(Table 5-6:)SH
+/Times-Roman SF
+28282 XM
+(Raw Read Performance)SH
+10000 60090 MT
+(The C)151 W
+8 SS 
+(HORUS)SH
+10 SS 
+15737 XM
+(Nucleus does not provide any)
+151 W( direct access to devices.  MiX Object Manager accesses)152 W
+9000 61467 MT
+(directly the disk driver as a native Unix implementation does, through a bdevsw/cdevsw interface.  Tests)86 W
+9000 62844 MT
+(were done to measure the disk throughput)
+13 W( from within the OM using 4KB, 8KB 16KB and 32KB transfers.)14 W
+9000 64221 MT
+(The test was run in two different ways:  the first run was reading the disk sequentially while the)
+16 W( second run)15 W
+9000 65598 MT
+(was always reading the same block of the disk. As the controller)
+127 W( as an internal cache reading the same)128 W
+9000 66975 MT
+(block goes faster than reading the disk sequentially.)SH
+10000 69454 MT
+(As it was difficult to get the same measure for Unix SVR4, we measured the disk)
+10 W( throughput through the)9 W
+9000 70831 MT
+(raw disk interface using standard read system calls, the throughput achieved is 530KB/sec for 4096 byte)99 W
+ES
+%%Page: ? 14
+BS
+0 SI
+10 /Times-Roman AF
+17685 8285 MT
+(Bytes)SH
+23344 XM
+(4KB)SH
+28586 XM
+(8KB)SH
+33828 XM
+(16KB)SH
+39070 XM
+(32KB)SH
+26627 50 17286 8903 LH BX1
+17685 9988 MT
+(Sequential)SH
+23344 XM
+(7.1ms)SH
+28586 XM
+(7.1ms)SH
+33828 XM
+(7.1ms)SH
+39070 XM
+(7.1ms)SH
+20968 50 22945 10606 LH BX1
+17685 11691 MT
+(read)SH
+23344 XM
+(560KB/sec)SH
+28586 XM
+(560KB/sec)SH
+33828 XM
+(560KB/sec)SH
+39070 XM
+(560KB/sec)SH
+26627 50 17286 12309 LH BX1
+17685 13394 MT
+(Same Block)SH
+23344 XM
+(4.49ms)SH
+28586 XM
+(4.19ms)SH
+33828 XM
+(4.10ms)SH
+39070 XM
+(4.00ms)SH
+20968 50 22945 14012 LH BX1
+17685 15097 MT
+(read)SH
+23344 XM
+(890KB/sec)SH
+28586 XM
+(952KB/sec)SH
+33828 XM
+(975KB/sec)SH
+39070 XM
+(990KB/sec)SH
+26627 8515 50 17286 15715 BX BX1
+-8515 50 22945 15715 LV BX1
+-8515 50 28187 15715 LV BX1
+-8515 50 33429 15715 LV BX1
+-8515 50 38671 15715 LV BX1
+/Times-Bold SF
+19661 17325 MT
+(Table 5-7:)SH
+/Times-Roman SF
+24522 XM
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 Raw Read Performance)SH
+9000 19116 MT
+(pages.)SH
+10000 21595 MT
+(The results in table 5-8 were gathered to)
+70 W( show the combined effect of reading from disk and supplying)69 W
+9000 22972 MT
+(the data to the)
+137 W( VM system and to show what potential improvements could be made by tuning the file)138 W
+9000 24349 MT
+(system implementation to the)
+373 W( kernelized architecture.  The Data_Provided column corresponds to)372 W
+/Times-Italic SF
+9000 25726 MT
+(memory_object_data_provided\050\051)SH
+/Times-Roman SF
+22451 XM
+(the obsolete call that is used in the current implementation.  Data_Supply)38 W
+9000 27103 MT
+(corresponds to)15 W
+/Times-Italic SF
+15140 XM
+(memory_object_data_supply\050\051)SH
+/Times-Roman SF
+(, the new Mach call which has the previously mentioned page)15 W
+9000 28480 MT
+(stealing optimization.)
+116 W( Like)
+484 W( the results from table 5-6, the block increment was adjusted to remove disk)117 W
+9000 29857 MT
+(rotation misses.  Both tests reached maximum throughput of)
+77 W( 530KB/sec at 16k reads and maintained that)76 W
+9000 31234 MT
+(speed for larger block sizes.)SH
+22266 33424 MT
+(Comparison of Mach Per Page Fault Cost)SH
+22523 50 19338 34042 LH BX1
+19737 35127 MT
+(Bytes)SH
+26534 XM
+(4KB)SH
+31776 XM
+(8KB)SH
+37018 XM
+(16KB)SH
+22523 50 19338 35745 LH BX1
+19737 36830 MT
+(Data_Provided)SH
+26534 XM
+(12.1ms)SH
+31776 XM
+(10.0ms)SH
+37018 XM
+(7.5ms)SH
+15726 50 26135 37448 LH BX1
+26534 38533 MT
+(330KB/sec)SH
+31776 XM
+(400KB/sec)SH
+37018 XM
+(530KB/sec)SH
+22523 50 19338 39151 LH BX1
+19737 40236 MT
+(Data_Supply)SH
+26534 XM
+(11.5ms)SH
+31776 XM
+(10.0ms)SH
+37018 XM
+(7.5ms)SH
+15726 50 26135 40854 LH BX1
+26534 41939 MT
+(346KB/sec)SH
+31776 XM
+(410KB/sec)SH
+37018 XM
+(530KB/sec)SH
+22523 10218 50 19338 42557 BX BX1
+-8515 50 26135 42557 LV BX1
+-8515 50 31377 42557 LV BX1
+-8515 50 36619 42557 LV BX1
+/Times-Bold SF
+19573 44167 MT
+(Table 5-8:)SH
+/Times-Roman SF
+24434 XM
+(Mach 3.0 Data_Provided and Data_Supply)SH
+10000 46646 MT
+(Measures have been taken within the C)50 W
+8 SS 
+(HORUS)SH
+10 SS 
+29032 XM
+(Nucleus to measure the cost of)
+50 W( a pullIn operation: a loop)51 W
+9000 48023 MT
+(for loading the same from the Mapper in physical memory has)
+37 W( been measured: this includes the RPC from)36 W
+9000 49400 MT
+(the C)196 W
+8 SS 
+(HORUS)SH
+10 SS 
+14494 XM
+(Nucleus to the Mapper \05083)196 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s\051. This has been run with a 4096 byte page size. The time)196 W
+9000 50777 MT
+(reported is 5ms which leads to a throughput of 800KB/sec. As this test doesn't really access the)
+84 W( disk but)83 W
+9000 52154 MT
+(only the cache of the controller,)
+271 W( this figures must be compared to the figures achieved by reading)272 W
+9000 53531 MT
+(continually the same block of 4096 bytes from the raw disk \0504.49 ms, and 890KB/sec\051.)
+171 W( The overhead)170 W
+9000 54908 MT
+(introduced by the)
+22 W( Object Manager for loading page can then be deduced as 5ms - 4.49 ms: 0.51 ms.  These)23 W
+9000 56285 MT
+(510)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s comprise the 83)59 W
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s due to the RPC from the)
+59 W( Nucleus to the OM. Thus, the actual overhead induced)58 W
+9000 57662 MT
+(by the OM remains to some 430)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s.)SH
+10000 60141 MT
+(To bring together all of the previous results, table 5-9)
+173 W( shows a break down of the)174 W
+/Times-Italic SF
+45353 XM
+(read\050\051)SH
+/Times-Roman SF
+48276 XM
+(path with)174 W
+9000 61518 MT
+(associated costs.  The micro-benchmark total)
+90 W( comes out only 4% higher than the measured result.  Since)89 W
+9000 62895 MT
+(the measurements for)118 W
+/Times-Italic SF
+18213 XM
+(device_read\050\051)SH
+/Times-Roman SF
+24134 XM
+(and)SH
+/Times-Italic SF
+25946 XM
+(memory_object_data_provided\050\051)SH
+/Times-Roman SF
+39478 XM
+(are only an)
+118 W( approximation, the)119 W
+9000 64272 MT
+(measured and projected totals can be considered the same.  The Mach 2.6 numbers were)
+173 W( included for)172 W
+9000 65649 MT
+(comparison. Since)
+356 W( there is no easy way to measure the internal access)
+53 W( time to the disk driver for reading,)54 W
+9000 67026 MT
+(an extrapolated value was supplied for read which yielded a identical measured and projected total.)SH
+10000 69505 MT
+(While the)
+157 W( end measured result for)156 W
+/Times-Italic SF
+24767 XM
+(read\050\051)SH
+/Times-Roman SF
+27672 XM
+(and)SH
+/Times-Italic SF
+29522 XM
+(write\050\051)SH
+/Times-Roman SF
+32650 XM
+(performance is the same in Mach 3.0 with the)156 W
+9000 70882 MT
+(BSD4.3 Single Server and Mach 2.6 MSD\050BSD4.3\051, table 5-9 shows a)
+292 W( result which may question)293 W
+ES
+%%Page: ? 15
+BS
+0 SI
+10 /Times-Roman AF
+20047 8285 MT
+(Operation)SH
+30870 XM
+(Time \050)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s\051)SH
+36410 XM
+(Time \050)SH
+/Symbol SF
+(m)SH
+/Times-Roman SF
+(s\051)SH
+11080 50 30471 8903 LH BX1
+31835 9988 MT
+(Mach 3)SH
+(.0)SH
+37375 XM
+(Mach 2)SH
+(.6)SH
+21903 50 19648 10606 LH BX1
+20047 11691 MT
+(Trap to Unix)SH
+33862 XM
+(61)SH
+39402 XM
+(61)SH
+21903 50 19648 12309 LH BX1
+20047 13394 MT
+(Misc Costs)SH
+33862 XM
+(54)SH
+38902 XM
+(250)SH
+21903 50 19648 14012 LH BX1
+20047 15097 MT
+(1/16th Remap Window)SH
+33862 XM
+(90)SH
+38680 XM
+(N/A)SH
+21903 50 19648 15715 LH BX1
+20047 16800 MT
+(Pagefault)SH
+33362 XM
+(316)SH
+38680 XM
+(N/A)SH
+21903 50 19648 17418 LH BX1
+20047 18503 MT
+(Read from Disk)SH
+32362 XM
+(10500)SH
+37902 XM
+(11810)SH
+21903 50 19648 19121 LH BX1
+20047 20206 MT
+(Data Provided)SH
+32862 XM
+(1600)SH
+38680 XM
+(N/A)SH
+21903 50 19648 20824 LH BX1
+20047 21909 MT
+(Bcopy Uncached to User)SH
+33362 XM
+(379)SH
+38902 XM
+(379)SH
+21903 50 19648 22527 LH BX1
+20047 23612 MT
+(Total w/o Disk Read)SH
+32862 XM
+(2500)SH
+38902 XM
+(690)SH
+21903 50 19648 24230 LH BX1
+20047 25315 MT
+(Total)SH
+32362 XM
+(13000)SH
+37902 XM
+(12500)SH
+21903 50 19648 25933 LH BX1
+20047 27018 MT
+(Measured Total)SH
+32362 XM
+(12500)SH
+37902 XM
+(12500)SH
+21903 20436 50 19648 27636 BX BX1
+-20436 50 30471 27636 LV BX1
+-20436 50 36011 27636 LV BX1
+/Times-Bold SF
+17476 29246 MT
+(Table 5-9:)SH
+/Times-Roman SF
+22337 XM
+(Mach 3.0 with the BSD4.3 Single Server)SH
+/Times-Italic SF
+38975 XM
+(Read\050\051)SH
+/Times-Roman SF
+41946 XM
+(Path)SH
+9000 31037 MT
+(scalability the result under load.  Because the disk latency is so high, the 262% increase in processing)151 W
+9000 32414 MT
+(overhead necessary in the BSD4.3 Single Server is hidden.  Further)
+56 W( measurements should look at whether)57 W
+9000 33791 MT
+(the effects of this increased processing)
+238 W( outweigh the benefits seen in cached performance where the)237 W
+9000 35168 MT
+(BSD4.3 Single Server)SH
+/Times-Italic SF
+18111 XM
+(read\050\051)SH
+/Times-Roman SF
+20860 XM
+(overhead is only 54% of the Mach 2.6 MSD\050BSD4.3\051)SH
+/Times-Italic SF
+42663 XM
+(read\050\051)SH
+/Times-Roman SF
+45412 XM
+(overhead.)SH
+12 /Times-Bold AF
+9000 38852 MT
+(6. Conclusions)SH
+11 SS 
+9000 42469 MT
+(6.1. Compromises)SH
+10 /Times-Roman AF
+10000 43846 MT
+(The kernelized systems have achieved their performance in)
+19 W( a number of cases by compromising some of)20 W
+9000 45223 MT
+(their modularity and portability goals.)SH
+10000 47702 MT
+(Mach 3.0 with the BSD4.3 Single Server makes liberal)
+128 W( use of the shared memory pages between the)127 W
+9000 49079 MT
+(BSD4.3 Single Server and Emulation Library.  While this works well on a uniprocessor or)
+37 W( shared memory)38 W
+9000 50456 MT
+(multiprocessor, it would not work well on)
+179 W( a NUMA or NORMA machine.  The mapping information)178 W
+9000 51833 MT
+(which is used by the Emulation Library could be updated by messages instead of being written)
+43 W( directly by)44 W
+9000 53210 MT
+(the BSD4.3 Single Server.)
+128 W( This)
+505 W( would eliminate the)127 W
+/Times-Italic SF
+31452 XM
+(passive)SH
+/Times-Roman SF
+34773 XM
+(Token state optimization since there is no)127 W
+9000 54587 MT
+(mechanism for an upcall from)
+62 W( the BSD4.3 Single Server to the Emulation Library.  A dedicated thread in)63 W
+9000 55964 MT
+(the Emulation Library for upcalls would solve this problem but with the cost of adding an)
+17 W( additional thread)16 W
+9000 57341 MT
+(creation at each)3 W
+/Times-Italic SF
+15534 XM
+(fork\050\051)SH
+/Times-Roman SF
+18064 XM
+(call. Another)
+256 W( solution would be to)
+3 W( have a proxy task running on each node on behalf)4 W
+9000 58718 MT
+(of the)
+37 W( BSD4.3 Single Server to share the memory with the Emulation Library and respond to upcalls.  The)36 W
+9000 60095 MT
+(cost here would be at startup in the creation of an additional task per node.)SH
+10000 62574 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 is capable of runnings its system)
+176 W( servers in either supervisor or user mode.  The)177 W
+9000 63951 MT
+(configuration used for the previous sections measurements was the version where)
+166 W( the servers reside in)165 W
+9000 65328 MT
+(supervisor mode.  This results in no context switches and faster IPC times to read or write from/to the)
+18 W( disk.)19 W
+9000 66705 MT
+(Moreover, C)59 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 servers do not share)
+59 W( any memory, thus it is quite easy to make a component)58 W
+9000 68082 MT
+(evolve without changing the)
+66 W( other servers as long as the protocol between them remains unchanged.  The)67 W
+9000 69459 MT
+(configuration where C)50 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 is running with its servers in user mode is)
+50 W( primarily intended to be)49 W
+9000 70836 MT
+(used for debugging)
+13 W( purposes, thus no particular attention has been paid yet to achieve similar performances)14 W
+ES
+%%Page: ? 16
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+(in such a configuration. However some experiments have been done in the previous release of MiX)
+60 W( \050MiX)59 W
+9000 9263 MT
+(V3.2\051 to measure the additional costs that such a configuration will imply.  Further details)
+42 W( can be found in)43 W
+9250 10640 MT
+([3].)SH
+10000 13119 MT
+(One of the key point in the design of)
+14 W( C)13 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 has been the introduction of the message handler)13 W
+9000 14496 MT
+(mechanism. However, this mechanism should be extended to work whether the receiver of a message)
+112 W( is)113 W
+9000 15873 MT
+(running in supervisor address space or user address space.)SH
+11 /Times-Bold AF
+9000 19490 MT
+(6.2. Cross Pollenation)SH
+10 /Times-Roman AF
+10000 20867 MT
+(A number of techniques used by C)177 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 could readily)
+177 W( be adopted by Mach 3.0 with the)176 W
+9000 22244 MT
+(BSD4.3 Single Server.  The movement of device drivers such as disk drivers out of the kernel)
+70 W( or nucleus)71 W
+9000 23621 MT
+(into systems servers)
+94 W( is one good example of this.  By locating the device manipulation code in the same)93 W
+9000 24998 MT
+(task which needs the data, context switches and data copies can be avoided.  For this to really work on)
+77 W( a)78 W
+9000 26375 MT
+(Mach based system, the device driver needs to really be able to run in user mode where systems servers are)14 W
+9000 27752 MT
+(run. This)
+712 W( is feasible on architectures which allow user mode access to device)
+231 W( registers such as the)232 W
+9000 29129 MT
+(R2000/R3000 based DECstation)
+134 W( and 80386/80486 based platforms.  The current version of the BSD4.3)133 W
+9000 30506 MT
+(Single Server for the DECstation platform uses a user mode ethernet)
+30 W( driver and preliminary work has been)31 W
+9000 31883 MT
+(done on moving disk drivers.)SH
+10000 34362 MT
+(Another technique which)
+41 W( C)40 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 uses which could be adopted by Mach 3.0 with the BSD4.3)40 W
+9000 35739 MT
+(Single Server is the concept of a handler.  By having the kernel)
+164 W( redirect the trap directly into another)165 W
+9000 37116 MT
+(address space, C)111 W
+8 SS 
+(HORUS)SH
+10 SS 
+18933 XM
+(avoids the protection problem)
+111 W( the BSD4.3 Single Server has with the Emulation)110 W
+9000 38493 MT
+(Library and avoids the associated RPC needed by the Emulation Library to cross into)
+22 W( a trusted server.  The)23 W
+9000 39870 MT
+(question about this technique, is whether the additional)
+164 W( cost of always redirecting into another address)163 W
+9000 41247 MT
+(space outweighs the cost of the occasional RPC.  Since Mach 3.0 servers are run in user mode, the)
+45 W( cost of)46 W
+9000 42624 MT
+(this redirection may turn out to be)
+207 W( much higher than that seen by C)206 W
+8 SS 
+(HORUS)SH
+10 SS 
+41656 XM
+(for the redirection into a)206 W
+9000 44001 MT
+(supervisor mode actor.)SH
+10000 46480 MT
+(Mach 2.6 MSD\050BSD4.3\051 could benefit from a mapped file system using)
+321 W( the Emulation Library)322 W
+9000 47857 MT
+(technique. This)
+418 W( will only work because it already has the complex VM system, a fast IPC, and the)
+84 W( Trap)83 W
+9000 49234 MT
+(Emulation mechanism)
+246 W( that resides in Mach 3.0.  In general, monolithic systems can not benefit the)247 W
+9000 50611 MT
+(kernelized techniques because they do not have the necessary mechanisms for building system)
+19 W( servers with)18 W
+9000 51988 MT
+(new structures.)SH
+10000 54467 MT
+(To fully compare the two approaches taken)
+60 W( by Mach 3.0 and C)61 W
+8 SS 
+(HORUS)SH
+10 SS 
+(, one could use the C)61 W
+8 SS 
+(HORUS)SH
+10 SS 
+50312 XM
+(Trap)SH
+9000 55844 MT
+(Handler mechanism to)
+16 W( implement an Emulation Library instead of a Process Manager in C)15 W
+8 SS 
+(HORUS)SH
+10 SS 
+(. As)
+280 W( long)15 W
+9000 57221 MT
+(as device drivers are part of C)192 W
+8 SS 
+(HORUS)SH
+10 SS 
+25303 XM
+(subsystems' specific actors, it will be)
+192 W( difficult to have multiple)193 W
+9000 58598 MT
+(subsystems running simultaneously sharing the same devices.  The isolation of)
+1 W( the drivers out of the servers)SH
+9000 59975 MT
+(as done in Mach would help to solve this issue. This has been experimented)
+125 W( in C)126 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V3.2 and)126 W
+9000 61352 MT
+(described in [3].)SH
+11 /Times-Bold AF
+9000 64969 MT
+(6.3. Final Words)SH
+10 /Times-Roman AF
+10000 66346 MT
+(Section 5 shows that Mach 3.0 with the BSD4.3 Single Server and C)144 W
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 have achieved)143 W
+9000 67723 MT
+(performance in the movement)
+137 W( of data comparable to the monolithic systems which they are compatible)138 W
+9000 69100 MT
+(with. In)
+536 W( no case was)143 W
+/Times-Italic SF
+18495 XM
+(read\050\051)SH
+/Times-Roman SF
+21387 XM
+(or)SH
+/Times-Italic SF
+22613 XM
+(write\050\051)SH
+/Times-Roman SF
+25728 XM
+(throughput less then 94%)
+143 W( of the performance of the monolithic)142 W
+9000 70477 MT
+(system. Many)
+530 W( of the micro-benchmarks clearly indicated better performance on kernelized systems)
+140 W( for)141 W
+9000 71854 MT
+(certain types of cached access.)SH
+ES
+%%Page: ? 17
+BS
+0 SI
+10 /Times-Roman AF
+10000 7886 MT
+(There is also still clear room for improvement in Mach 3.0 with the BSD4.3 Single Server.)
+50 W( By)
+348 W( moving)49 W
+9000 9263 MT
+(to the)86 W
+/Times-Italic SF
+11672 XM
+(memory_object_data_supply\050\051)SH
+/Times-Roman SF
+24228 XM
+(call from the obsolete)
+86 W( interface and better optimizing read sizes and)87 W
+9000 10640 MT
+(readahead for the performance of the microkernel, disk throughput could approach)
+53 W( 600KB/sec or almost a)52 W
+9000 12017 MT
+(100% improvement over the existing BSD4.3 Single Server and Mach 2.6 MSD\050BSD4.3\051 systems.)SH
+10000 14496 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 may also expect some significant improvement since no readahead is used in the)176 W
+9000 15873 MT
+(systems that have been described)
+314 W( and measured.  Pages being pushed out to the disk are written)313 W
+9000 17250 MT
+(synchronously, adding)
+49 W( some asynchronicity should help to handle multiple disk access more gracefully by)50 W
+9000 18627 MT
+(making the disk sort algorithm much more useful.)SH
+10000 21106 MT
+(Regarding the history of microkernels,)
+150 W( their current performance has been achieved through multiple)149 W
+9000 22483 MT
+(iterations which allows them to now be)
+85 W( used in commercial products as opposed to just being interesting)86 W
+9000 23860 MT
+(research tools.  Yet, microkernel based systems are still)
+201 W( very young and have not benefited from the)200 W
+9000 25237 MT
+(thousands of man-years that have been spent to make monolithic systems as fast as they are)
+37 W( now.  Even as)38 W
+9000 26614 MT
+(young as they are, we believe that kernelized systems have shown themselves to be)
+68 W( both flexible and fast)67 W
+9000 27991 MT
+(enough for the challenging task of building)
+129 W( file systems and moving data.  You can only imagine what)130 W
+9000 29368 MT
+(kernelized systems will look)
+9 W( like a few years from now, after receiving a fraction of the effort that has gone)8 W
+9000 30745 MT
+(into monolithic systems in the past.)SH
+12 /Times-Bold AF
+9000 34429 MT
+(7. Availability)SH
+10 /Times-Roman AF
+10000 35806 MT
+(Mach 3.0 is)
+163 W( free and available for anonymous FTP from cs.cmu.edu.  The BSD4.3 Single Server is)164 W
+9000 37183 MT
+(available free to anyone with an AT&T)
+247 W( source license.  Contact mach@cs.cmu.edu for information.)246 W
+9000 38560 MT
+(C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+12695 XM
+(is available)
+65 W( from C)66 W
+8 SS 
+(HORUS)SH
+10 SS 
+23559 XM
+(Systemes. Contact)
+382 W( info@chorus.fr for licensing information.  Reports)66 W
+9000 39937 MT
+(and documentation is freely accessible by anonymous FTP from opera.chorus.fr.)SH
+12 /Times-Bold AF
+9000 43621 MT
+(8. Acknowledgements)SH
+10 /Times-Roman AF
+10000 44998 MT
+(We would like to thank those who have read and commented on this)
+53 W( paper throughout its development.)52 W
+9000 46375 MT
+(In particular, we thank Dr. J. Karohl, Brian Bershad, Jim Lipkis, Michel Gien, Marc Rozier, Brian)
+30 W( Zill and)31 W
+9000 47752 MT
+(especially Peter Stout.)SH
+ES
+%%Page: ? 18
+BS
+0 SI
+13 /Times-Bold AF
+27568 8071 MT
+(References)SH
+10 /Times-Roman AF
+9000 10444 MT
+([1])SH
+12000 XM
+(Abrossimov V., Rozier M., Shapiro M.)SH
+12000 11549 MT
+(Generic Virtual Memory Management for Operating System Kernels.)SH
+12000 12654 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of the Twelvth ACM Symposium on Operating Systems Principles)SH
+/Times-Roman SF
+(. December,)
+250 W( 1989.)SH
+9000 14445 MT
+([2])SH
+12000 XM
+(Armand F., Gien M., Herrmann F., Rozier M.)SH
+12000 15550 MT
+(Revolution 89: or Distributing Unix brings it back to its Original Virtue.)SH
+12000 16655 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings WEDMS I)SH
+/Times-Roman SF
+(. October,)
+250 W( 1989.)SH
+9000 18446 MT
+([3])SH
+12000 XM
+(Francois Armand.)SH
+12000 19551 MT
+(Give a Process Manager to your drivers!)SH
+12000 20656 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of EurOpen Autumn 1991)SH
+/Times-Roman SF
+(. September,)
+250 W( 1991.)SH
+9000 22447 MT
+([4])SH
+12000 XM
+(Baron, R.V. et al.)SH
+/Times-Italic SF
+12000 23552 MT
+(MACH Kernel Interface Manual)SH
+/Times-Roman SF
+(.)SH
+12000 24657 MT
+(Technical Report, School of Computer Science, Carnegie Mellon University, September, 1988.)SH
+9000 26448 MT
+([5])SH
+12000 XM
+(Joseph S. Barrera III.)SH
+/Times-Italic SF
+12000 27553 MT
+(Kernel Support for Distrubted Memory Multiprocessors)SH
+/Times-Roman SF
+(.)SH
+12000 28658 MT
+(PhD thesis, School of Computer Science, Carnegie Mellon University, To be published, 1992.)SH
+9000 30449 MT
+([6])SH
+12000 XM
+(Bricker, A., Gien, M., Guillemont, M., Lipkis, J., Orr, D., Rozier, M.)SH
+12000 31554 MT
+(A New Look at Microkernel-Based UNIX Operating Systems: Lessons in Performance and)SH
+13500 32659 MT
+(Compatibility.)SH
+12000 33764 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of EurOpen Spring 1991 Conference)SH
+/Times-Roman SF
+(. May,)
+250 W( 1991.)SH
+9000 35555 MT
+([7])SH
+12000 XM
+(Cheriton, D.R., Whitehead, G.R., Szynter, E.W.)SH
+12000 36660 MT
+(Binary Emulation of UNIX using the V Kernel.)SH
+12000 37765 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of Summer 1990 USENIX Conference)SH
+/Times-Roman SF
+(. June,)
+250 W( 1990.)SH
+9000 39556 MT
+([8])SH
+12000 XM
+(Chorus Systemes.)SH
+/Times-Italic SF
+12000 40661 MT
+(CHORUS Kernel v3 r4.0 Programmer's Reference Manual)SH
+/Times-Roman SF
+(.)SH
+12000 41766 MT
+(Technical Report CS/TR-91-71, Chorus Systemes, September, 1991.)SH
+9000 43557 MT
+([9])SH
+12000 XM
+(Rozier, M., et. al.)SH
+12000 44662 MT
+(CHORUS Distrbuted Operating Systems.)SH
+/Times-Italic SF
+12000 45767 MT
+(Computing Systems)SH
+/Times-Roman SF
+20111 XM
+(1\0504\051, December, 1988.)SH
+9000 47558 MT
+([10])SH
+12000 XM
+(Chorus Systemes.)SH
+/Times-Italic SF
+12000 48663 MT
+(CHORUS Kernel v3 r4.0 Specification and Interface)SH
+/Times-Roman SF
+(.)SH
+12000 49768 MT
+(Technical Report CS/TR-91-69, Chorus Systemes, September, 1991.)SH
+9000 51559 MT
+([11])SH
+12000 XM
+(Eric C. Cooper and Richard P. Draves.)SH
+/Times-Italic SF
+12000 52664 MT
+(C Threads)SH
+/Times-Roman SF
+(.)SH
+12000 53769 MT
+(Technical Report CMU-CS-88-154, School of Computer Science, Carnegie Mellon University,)SH
+13500 54874 MT
+(February, 1988.)SH
+9000 56665 MT
+([12])SH
+12000 XM
+(Draves, R.P.)SH
+12000 57770 MT
+(A Revised IPC Interface.)SH
+12000 58875 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of the USENIX Mach Workshop)SH
+/Times-Roman SF
+(, pages 101-121.  October, 1990.)SH
+9000 60666 MT
+([13])SH
+12000 XM
+(Draves, R.P., Bershad, B., Rashid, R.F., Dean, R.W.)SH
+12000 61771 MT
+(Using Continuations to Implement Thread Management and Communication in Operating Systems.)SH
+12000 62876 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of the Thirteenth ACM Symposium on Operating Systems Principles)SH
+/Times-Roman SF
+(. April,)
+250 W( 1991.)SH
+9000 64667 MT
+([14])SH
+12000 XM
+(Golub, D., Dean, R.W., Forin, A., Rashid, R.F.)SH
+12000 65772 MT
+(Unix as an Application Program.)SH
+12000 66877 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of Summer 1990 USENIX Conference)SH
+/Times-Roman SF
+(. June,)
+250 W( 1990.)SH
+9000 68668 MT
+([15])SH
+12000 XM
+(Guillemont M.)SH
+12000 69773 MT
+(Real Time in a Distributed Computing Environment.)SH
+/Times-Italic SF
+12000 70878 MT
+(Computer Technology Review)SH
+/Times-Roman SF
+24304 XM
+(, October, 1990.)SH
+ES
+%%Page: ? 19
+BS
+0 SI
+10 /Times-Roman AF
+9000 7886 MT
+([16])SH
+12000 XM
+(Habert, S., Mosseri, L., Abrossimov, V.)SH
+12000 8991 MT
+(COOL:Kernel support for object oriented environments.)SH
+12000 10096 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of OOPSLA'90 - Canada Ottawa)SH
+/Times-Roman SF
+(. 1990.)250 W
+9000 11887 MT
+([17])SH
+12000 XM
+(Keith Loepere.)SH
+/Times-Italic SF
+12000 12992 MT
+(MACH 3 Kernel Principles.)SH
+/Times-Roman SF
+12000 14097 MT
+(Open Software Foundation and Carnegie Mellon University, 1992.)SH
+9000 15888 MT
+([18])SH
+12000 XM
+(A. S. Tannenbaum and S. J. Mullender.)SH
+12000 16993 MT
+(An Overview of the Amoeba Distributed Operating System.)SH
+12000 18098 MT
+(CWI Syllabus 9.)SH
+12000 19203 MT
+(1982)SH
+9000 20994 MT
+([19])SH
+12000 XM
+(Tokuda, H., Nakajima, T., Rao, P.)SH
+12000 22099 MT
+(Real-Time Mach: Towards a Predictable Real-Time System.)SH
+12000 23204 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of the First Mach USENIX Workshop)SH
+/Times-Roman SF
+(, pages 73--82.  October, 1990.)SH
+9000 24995 MT
+([20])SH
+12000 XM
+(Brent Welch.)SH
+12000 26100 MT
+(The File System Belongs in the Kernel.)SH
+12000 27205 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of the Second USENIX Mach Symposium)SH
+/Times-Roman SF
+(. November,)
+250 W( 1991.)SH
+9000 28996 MT
+([21])SH
+12000 XM
+(Michael Wayne Young.)SH
+/Times-Italic SF
+12000 30101 MT
+(Exporting a User Interface to Memory Management from a Communication-Oriented Operating)SH
+13500 31206 MT
+(System)SH
+/Times-Roman SF
+(.)SH
+12000 32311 MT
+(PhD thesis, School of Computer Science, Carnegie Mellon University, November, 1989.)SH
+ES
+%%Page: i 20
+BS
+0 SI
+10 /Times-Roman AF
+30461 4286 MT
+(i)SH
+12 /Times-Bold AF
+26033 8004 MT
+(Table of Contents)SH
+11 SS 
+10650 9172 MT
+(1. Introduction)SH
+10650 10340 MT
+(2. Microkernel Abstractions)SH
+10650 11508 MT
+(3. System Servers)SH
+10 SS 
+12500 12588 MT
+(3.1. Mach 3.0 with the BSD4.3 Single Server)SH
+14500 13668 MT
+(3.1.1. BSD4.3 Single Server and Emulation Library Structure)SH
+14500 14748 MT
+(3.1.2. Mapped Files)SH
+12500 15828 MT
+(3.2. C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+14500 16908 MT
+(3.2.1. The C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4 subsystem)SH
+14500 17988 MT
+(3.2.2. Regular File Management in C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+14500 19068 MT
+(3.2.3. File Size Management)SH
+11 SS 
+10650 20236 MT
+(4.)SH
+/Times-BoldItalic SF
+11750 XM
+(Read\050\051)SH
+/Times-Bold SF
+15079 XM
+(and)SH
+/Times-BoldItalic SF
+17128 XM
+(Write\050\051)SH
+/Times-Bold SF
+20641 XM
+(Path Analysis)SH
+10 SS 
+12500 21316 MT
+(4.1. Mach 3.0 with the BSD4.3 Single Server)SH
+/Times-BoldItalic SF
+31555 XM
+(read\050\051)SH
+/Times-Bold SF
+34304 XM
+(Path)SH
+14500 22396 MT
+(4.1.1.)SH
+/Times-BoldItalic SF
+17000 XM
+(Read\050\051)SH
+/Times-Bold SF
+20027 XM
+(in the Emulation Library)SH
+14500 23476 MT
+(4.1.2.)SH
+/Times-BoldItalic SF
+17000 XM
+(Read\050\051)SH
+/Times-Bold SF
+20027 XM
+(in the BSD4.3 Single Server)SH
+12500 24556 MT
+(4.2. Mach 3.0 with the BSD4.3 Single Server)SH
+/Times-BoldItalic SF
+31555 XM
+(write\050\051)SH
+/Times-Bold SF
+34527 XM
+(Path)SH
+12500 25636 MT
+(4.3. C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+/Times-BoldItalic SF
+22011 XM
+(read\050\051)SH
+/Times-Bold SF
+24760 XM
+(Path)SH
+14500 26716 MT
+(4.3.1. Process Manager)SH
+14500 27796 MT
+(4.3.2. C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+20817 XM
+(Nucleus)SH
+14500 28876 MT
+(4.3.3. Mapper)SH
+12500 29956 MT
+(4.4. C)SH
+8 SS 
+(HORUS)SH
+10 SS 
+(/MiX V.4)SH
+/Times-BoldItalic SF
+22011 XM
+(write\050\051)SH
+/Times-Bold SF
+24983 XM
+(Path)SH
+11 SS 
+10650 31124 MT
+(5. Performance)SH
+10650 32292 MT
+(6. Conclusions)SH
+10 SS 
+12500 33372 MT
+(6.1. Compromises)SH
+12500 34452 MT
+(6.2. Cross Pollenation)SH
+12500 35532 MT
+(6.3. Final Words)SH
+11 SS 
+10650 36700 MT
+(7. Availability)SH
+10650 37868 MT
+(8. Acknowledgements)SH
+ES
+%%Page: ii 21
+BS
+0 SI
+10 /Times-Roman AF
+30322 4286 MT
+(ii)SH
+12 /Times-Bold AF
+26866 8004 MT
+(List of Figures)SH
+11 SS 
+10650 9172 MT
+(Figure 3-1:)
+SH( A)
+550 W( System Call in Mach 3.0 with the BSD4.3 Single Server)SH
+10650 10340 MT
+(Figure 3-2:)
+SH( C)550 W
+9 SS 
+(HORUS)SH
+11 SS 
+(/MiX V.4 subsystem)SH
+10650 11508 MT
+(Figure 4-1:)
+SH( Mach)
+550 W( 3.0 with the BSD4.3 Single Server Mapped File Read)SH
+10650 12676 MT
+(Figure 4-2:)
+SH( C)550 W
+9 SS 
+(HORUS)SH
+11 SS 
+(/MiX V.4 read path)SH
+ES
+%%Page: iii 22
+BS
+0 SI
+10 /Times-Roman AF
+30183 4286 MT
+(iii)SH
+12 /Times-Bold AF
+27099 8004 MT
+(List of Tables)SH
+11 SS 
+10650 9172 MT
+(Table 5-1:)
+SH( Bcopy)
+550 W( of 4096 bytes)SH
+10650 10340 MT
+(Table 5-2:)
+SH( Trap)
+550 W( and RPC times)SH
+10650 11508 MT
+(Table 5-3:)
+SH( Read)
+550 W( and Write Throughput)SH
+10650 12676 MT
+(Table 5-4:)
+SH( Cached)
+550 W( Read Throughput)SH
+10650 13844 MT
+(Table 5-5:)
+SH( Cached)
+550 W( Read and Write Times)SH
+10650 15012 MT
+(Table 5-6:)
+SH( Raw)
+550 W( Read Performance)SH
+10650 16180 MT
+(Table 5-7:)
+SH( C)550 W
+9 SS 
+(HORUS)SH
+11 SS 
+(/MiX V.4 Raw Read Performance)SH
+10650 17348 MT
+(Table 5-8:)
+SH( Mach)
+550 W( 3.0 Data_Provided and Data_Supply)SH
+10650 18516 MT
+(Table 5-9:)
+SH( Mach)
+550 W( 3.0 with the BSD4.3 Single Server)SH
+/Times-BoldItalic SF
+35307 XM
+(Read\050\051)SH
+/Times-Bold SF
+38636 XM
+(Path)SH
+ES
+%%Trailer
+%%Pages: 22
+%%DocumentFonts: Times-Roman Times-Bold Times-Italic Symbol Times-BoldItalic

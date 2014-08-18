@@ -1,0 +1,1811 @@
+%!PS-Adobe-2.0
+%%Title: paper.mss
+%%DocumentFonts: (atend)
+%%Creator: David Golub and Scribe 7(1700)
+%%CreationDate: 4 October 1991 15:44
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale /showpage {} def} bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 0 1
+BS
+0 SI
+13 /Times-Bold AF
+13361 8071 MT
+(Moving the Default Memory Manager out of the Mach Kernel)SH
+12 /Times-Italic AF
+26817 11026 MT
+(David B. Golub)SH
+26117 12294 MT
+(Richard P. Draves)SH
+23816 14830 MT
+(School of Computer Science)SH
+23865 16098 MT
+(Carnegie Mellon University)SH
+25634 17366 MT
+(5000 Forbes Avenue)SH
+22882 18634 MT
+(Pittsburgh, Pennsylvania 15213)SH
+26850 21170 MT
+(\050412\051 268-7667)SH
+19880 23706 MT
+(Internet: dbg@cs.cmu.edu, rpd@cs.cmu.edu)SH
+/Times-Bold SF
+9000 28658 MT
+(1. Abstract)SH
+10 /Times-Roman AF
+10000 30035 MT
+(We have implemented a default memory manager for the Mach 3.0 kernel)
+95 W( that resides entirely in user)94 W
+9000 31412 MT
+(space. The)
+604 W( default memory manager uses a small set of kernel privileges to lock)
+177 W( itself into memory,)178 W
+9000 32789 MT
+(preventing deadlocks against other Mach)
+59 W( system services.  An extension to the Mach boot sequence loads)58 W
+9000 34166 MT
+(both the)
+83 W( kernel and user program images at system startup time.  The resulting system allows the default)84 W
+9000 35543 MT
+(memory manager to be built and run)
+65 W( in a standard user-level environment, but still operates with the high)64 W
+9000 36920 MT
+(reliability required by the Mach kernel.)SH
+10000 39399 MT
+(The default memory manager is bundled with another component of the)
+43 W( Mach 3.0 system: the bootstrap)44 W
+9000 40776 MT
+(service. This)
+270 W( service starts the initial set of system servers that make up a complete operating system)
+10 W( based)9 W
+9000 42153 MT
+(on the Mach 3.0 kernel.)
+25 W( Since)
+301 W( the real file system may be one of these servers, the bootstrap service needs)26 W
+9000 43530 MT
+(its own copy)
+12 W( of a subset of the file system.  This is shared with the default memory manager.  Placing these)11 W
+9000 44907 MT
+(two components outside the kernel allows them to be easily reconfigured with different file systems.)SH
+12 /Times-Bold AF
+9000 48591 MT
+(2. Introduction)SH
+10 /Times-Roman AF
+10000 49968 MT
+(We have implemented a version of the Mach 3.0 operating system in which all paging traffic to)
+35 W( backing)36 W
+9000 51345 MT
+(storage has been moved outside of the operating)
+114 W( system kernel.  This is a significant departure not only)113 W
+9000 52722 MT
+(from previous versions of Mach 3.0, but also from more)
+91 W( traditional operating systems, in which memory)92 W
+9000 54099 MT
+(management for)
+11 W( at least temporary memory has been an integral part of the kernel.  This work has involved)10 W
+9000 55476 MT
+(solving a number of technical challenges.  The privileges required to)
+80 W( manage temporary memory without)81 W
+9000 56853 MT
+(deadlocking with the rest of the system have traditionally been only available to)
+38 W( services embedded within)37 W
+9000 58230 MT
+(the operating system kernel.  We also had concerns about the time and space required to)
+120 W( handle paging)121 W
+9000 59607 MT
+(requests outside the kernel.  However, the resulting system)
+121 W( runs as reliably as an operating system with)120 W
+9000 60984 MT
+(conventional temporary memory management.  With a reasonable amount of memory,)
+74 W( the system runs as)75 W
+9000 62361 MT
+(fast as previous versions of Mach 3.0.)SH
+10800 50 9000 64808 UL
+8 SS 
+9800 66456 MT
+(This research was sponsored)
+87 W( in part by The Defense Advanced Research Projects Agency, Information Science and Technology)86 W
+9000 67380 MT
+(Office, under the title ``Research on Parallel Computing'', ARPA Order No. 7330, issued by DARPA/CMO)
+223 W( under Contract)224 W
+9000 68304 MT
+(MDS972-90-C-0035 and in part by the Open Software Foundation \050OSF\051.  Draves was supported by a fellowship)
+11 W( from the Fannie and)10 W
+9000 69228 MT
+(John Hertz Foundation.)SH
+9800 71076 MT
+(The views and conclusions contained in)
+76 W( this document are those of the authors and should not be interpreted as representing the)77 W
+9000 72000 MT
+(official policies, either expressed or implied, of DARPA, OSF, the Fannie and John Hertz Foundation, or the U.S. government.)SH
+ES
+%%Page: 1 2
+BS
+0 SI
+10 /Times-Roman AF
+10000 7886 MT
+(The default memory manager is an essential component of the Mach 3.0 operating system.  It)
+72 W( provides)71 W
+9000 9263 MT
+(backing storage for temporary memory objects.  Since its)
+154 W( clients may include other components of the)155 W
+9000 10640 MT
+(system, it cannot depend upon them for any vital)
+166 W( services, such as backing storage allocation, without)165 W
+9000 12017 MT
+(risking deadlock.  Traditionally, such)
+63 W( vital components of an operating system have been integral parts of)64 W
+9000 13394 MT
+(the kernel, often using)
+122 W( services unavailable to other subsystems.  Earlier versions of Mach 3.0 followed)121 W
+9000 14771 MT
+(suit: the default memory manager was built into the kernel.)SH
+10000 17250 MT
+(Over the past year,)
+80 W( we have re-implemented the default memory manager as a task residing entirely in)81 W
+9000 18627 MT
+(user space.  The default memory manager needs only a few)
+127 W( kernel primitives to obtain the privileges it)126 W
+9000 20004 MT
+(needs: wiring)
+308 W( down its own code and)
+29 W( data, ensuring that data given to it is locked in memory, and priority)30 W
+9000 21381 MT
+(in allocating new memory.  These privileges are part of the normal)
+62 W( Mach kernel interface, and potentially)61 W
+9000 22758 MT
+(available to any user task.)
+5 W( All)
+261 W( other communication between the kernel and the default memory manager is)6 W
+9000 24135 MT
+(via the kernel interface used by all other Mach memory managers.)SH
+10000 26614 MT
+(The default memory manager is bundled with the Mach bootstrap service, which)
+67 W( loads the initial set of)66 W
+9000 27991 MT
+(servers. The)
+306 W( bootstrap service and the default memory)
+28 W( manager live in the same task and share a subset of)29 W
+9000 29368 MT
+(the file system code to access existing files.)
+100 W( Moving)
+448 W( this task into user space has required rewriting the)99 W
+9000 30745 MT
+(Mach kernel boot sequence so)
+113 W( that two program images, the kernel and the bootstrap/pager task, can be)114 W
+9000 32122 MT
+(loaded at system boot time.  The kernel)
+181 W( and the bootstrap/pager task are built independently.  A new)180 W
+9000 33499 MT
+(program,)SH
+/Times-Italic SF
+12888 XM
+(makeboot)SH
+/Times-Roman SF
+(, combines the two into a bootable system image.)SH
+10000 35978 MT
+(The Mach kernel can now be built without)
+134 W( the extra support required for embedded server tasks that)135 W
+9000 37355 MT
+(were present in)
+46 W( earlier versions.  There are no more naming conflicts in the kernel between internal kernel)45 W
+9000 38732 MT
+(routines and user-level interfaces to them.  The bootstrap)
+72 W( service and default memory manager, similarly,)73 W
+9000 40109 MT
+(can be built as normal user tasks.  The resulting system is as robust as a standard Mach 3.0 system with the)19 W
+9000 41486 MT
+(default memory manager)
+20 W( inside the kernel.  Performance on machines with reasonable amounts of memory)21 W
+9000 42863 MT
+(is essentially identical.)SH
+12 /Times-Bold AF
+9000 46547 MT
+(3. In-Kernel Default Memory Management)SH
+10 /Times-Roman AF
+10000 47924 MT
+(A manager for temporary virtual memory must operate under some very)
+283 W( adverse conditions.  In)282 W
+9000 49301 MT
+(conventional operating systems, the temporary memory manager must)
+52 W( be able to allocate storage when no)53 W
+9000 50678 MT
+(other component of the system can do so.  In Mach, the)
+123 W( temporary memory manager is, by default, the)122 W
+9000 52055 MT
+(memory manager of last resort for all other)
+160 W( memory managers.  This role of)161 W
+/Times-Italic SF
+41824 XM
+(default)SH
+/Times-Roman SF
+45013 XM
+(memory manager)161 W
+9000 53432 MT
+(forces it to avoid most standard system services.)
+192 W( These)
+633 W( constraints have kept the temporary memory)191 W
+9000 54809 MT
+(manager intimately tied to the kernel in most operating systems, including earlier versions of Mach.)SH
+10000 57288 MT
+(Operating systems have traditionally provided a variety of memory management services implemented)92 W
+9000 58665 MT
+(within the operating system kernel. [1] [5] They include:)SH
+/Symbol SF
+10790 60118 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Allocating temporary memory for user programs and system services.)SH
+/Symbol SF
+10790 61876 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Mapping executable files and data files into a task's address space.)SH
+/Symbol SF
+10790 63634 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Mapping IO devices such as graphics buffers.)SH
+/Symbol SF
+10790 65392 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Sharing files or temporary memory between tasks.)SH
+10000 67871 MT
+(The external memory management interface present in Mach 2.5 and Mach 3.0 has)
+153 W( allowed most of)152 W
+9000 69248 MT
+(these services to be provided)
+46 W( by servers outside the kernel. However, temporary memory management has)47 W
+9000 70625 MT
+(still resided within the kernel.)SH
+ES
+%%Page: 2 3
+BS
+0 SI
+10 /Times-Roman AF
+10000 7886 MT
+(Temporary memory management has traditionally been implemented in the kernel because it)
+31 W( must make)30 W
+9000 9263 MT
+(use of other system services at times when they would normally be unavailable or)
+22 W( risky to use.  Temporary)23 W
+9000 10640 MT
+(memory usually does not have pre-allocated backing storage.  The temporary memory)
+217 W( manager must)216 W
+9000 12017 MT
+(allocate the backing storage when it is needed.  Since pages are written to backing)
+16 W( storage when the system)17 W
+9000 13394 MT
+(is short of main memory, the routines that allocate backing storage must be able)
+228 W( to operate in such)227 W
+9000 14771 MT
+(conditions. Furthermore,)
+394 W( allocating backing)
+72 W( storage often requires allocating memory within the memory)73 W
+9000 16148 MT
+(manager, further increasing the strain on main memory.)SH
+10000 18627 MT
+(In a Mach 3.0 system, the temporary)
+142 W( memory manager acquires an even more difficult role:  that of)141 W
+9000 20004 MT
+(default or last-resort memory manager for the entire system)
+126 W( [6].)
+SH( Memory)
+502 W( management services may)
+126 W( be)127 W
+9000 21381 MT
+(provided by any task in the system, not only by trusted system components.  Therefore memory managers)51 W
+9000 22758 MT
+(cannot be assumed to be timely or reliable.  A memory manager may take)
+72 W( an arbitrary amount of time to)73 W
+9000 24135 MT
+(write a page to its backing storage.  It)
+29 W( may also malfunction \050accidentally or maliciously\051 and not write the)28 W
+9000 25512 MT
+(page at all.  During the time the page)
+20 W( is in transit \050paged out to its memory manager, but not yet written\051, it)21 W
+9000 26889 MT
+(still consumes main memory.  If the operating system is short of memory, this)
+151 W( in-transit page must be)150 W
+9000 28266 MT
+(paged out.  Since the page is viewed as temporary memory while it is in transit,)
+110 W( the temporary memory)111 W
+9000 29643 MT
+(manager thus assumes responsibility for it.)SH
+10000 32122 MT
+(The temporary memory manager therefore)
+85 W( must not depend on other servers in the system, since these)84 W
+9000 33499 MT
+(servers may depend on the temporary memory)
+35 W( manager themselves.  This requirement has, so far, kept the)36 W
+9000 34876 MT
+(temporary memory manager within the Mach kernel.)SH
+12 /Times-Bold AF
+9000 38560 MT
+(4. Constraints on the Default Memory Manager)SH
+10 /Times-Roman AF
+10000 39937 MT
+(The default memory manager faces several)
+99 W( stringent implementation constraints, because of its crucial)98 W
+9000 41314 MT
+(role in the Mach system.  It cannot depend on any system service)
+164 W( that in turn could use it to provide)165 W
+9000 42691 MT
+(temporary memory.  It must also be able to function when the system is short of memory.)SH
+/Symbol SF
+10790 44144 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The default memory manager must be resident)
+57 W( - there is no other service to page its code and)56 W
+11500 45249 MT
+(data into memory.)SH
+/Symbol SF
+10790 47007 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(All pages moving)
+216 W( between the kernel and the default memory manager, and between the)217 W
+11500 48112 MT
+(default memory manager and its backing storage service, must remain resident.)SH
+/Symbol SF
+10790 49870 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The default memory manager cannot block to wait for more physical memory, since freeing)110 W
+11500 50975 MT
+(physical memory requires that)
+345 W( its contents be paged out \050through the default memory)346 W
+11500 52080 MT
+(manager\051.)SH
+/Symbol SF
+10790 53838 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(If the default memory manager is grouped with another service, the threads)
+29 W( that handle default)28 W
+11500 54943 MT
+(memory manager functions must be distinguished from threads that do not.)
+52 W( When)
+355 W( the system)53 W
+11500 56048 MT
+(is short of memory, the unprivileged)
+182 W( threads \050those not handling default memory manager)181 W
+11500 57153 MT
+(functions\051 may)
+62 W( block waiting for physical memory.  If the default memory manager's threads)63 W
+11500 58258 MT
+(can block waiting for the unprivileged threads, a deadlock will result.)SH
+/Symbol SF
+10790 60016 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The default memory manager cannot block to wait for the file system to allocate)
+122 W( temporary)121 W
+11500 61121 MT
+(disk storage, since the file system itself may be pageable.)
+30 W( This)
+312 W( requires that temporary paging)31 W
+11500 62226 MT
+(space be allocated)
+92 W( in advance, or that the file system be as privileged as the default memory)91 W
+11500 63331 MT
+(manager.)SH
+10000 65810 MT
+(To meet these requirements, the Mach 2.5 default memory)
+93 W( manager was implemented as a task bound)94 W
+9000 67187 MT
+(tightly within the kernel.  It used several services that were unavailable to other components of the system.)SH
+/Symbol SF
+10790 68640 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The default memory manager was allowed to allocate kernel)
+104 W( memory even when the system)103 W
+11500 69745 MT
+(was short of)
+357 W( memory.  Threads within the default memory manager were marked as)358 W
+/Times-Italic SF
+11500 70850 MT
+(vm_privileged)SH
+/Times-Roman SF
+17471 XM
+(threads, and were allowed to allocate memory when other threads would block.)SH
+ES
+%%Page: 3 4
+BS
+0 SI
+10 /Symbol AF
+10790 8000 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Threads within the default memory manager)
+68 W( were marked as unswappable.  The kernel could)67 W
+11500 9105 MT
+(unlock and page out the entire kernel stack of a)
+106 W( long-waiting thread when short of memory.)107 W
+11500 10210 MT
+(Doing this to a default memory manager thread would, of course, deadlock the system.)SH
+/Symbol SF
+10790 11968 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The default)
+96 W( memory manager used the existing BSD 4.2 file system code to manage its disk)95 W
+11500 13073 MT
+(storage and allocate new disk space for paging.  The code was written to run)
+133 W( in a standard)134 W
+11500 14178 MT
+(kernel environment, which assumed that)
+72 W( all of the code and data was resident, and the kernel)71 W
+11500 15283 MT
+(stack of any thread executing the file system routines was locked into memory.)SH
+10000 17762 MT
+(However, all paging traffic between the kernel and the)
+58 W( default memory manager took place through the)59 W
+9000 19139 MT
+(external memory management interface - an interface designed to be used)
+31 W( with servers residing outside the)30 W
+9000 20516 MT
+(kernel.)SH
+10000 22995 MT
+(The original Mach default memory manager therefore used a mixture)
+136 W( of user and kernel services.  It)137 W
+9000 24372 MT
+(moved pages to and from the kernel)
+54 W( using the external memory management interface, as if it were a user)53 W
+9000 25749 MT
+(task. It)
+368 W( accessed the kernel memory)
+59 W( and disk allocation routines through its privileged position inside the)60 W
+9000 27126 MT
+(kernel. This)
+276 W( structure, preserved even in the first Mach 3.0 implementations, required the kernel to provide)13 W
+9000 28503 MT
+(the equivalent of a)
+28 W( user-mode interface internally.  It spoiled the clean separation between the Mach kernel)29 W
+9000 29880 MT
+(and user-mode functions.)SH
+12 /Times-Bold AF
+9000 33564 MT
+(5. Moving Out of the Kernel)SH
+10 /Times-Roman AF
+10000 34941 MT
+(To move the default memory manager out of the kernel's address)
+55 W( space, the privileged kernel functions)54 W
+9000 36318 MT
+(had to be replaced by equivalent functions accessible from user programs.)
+8 W( Fortunately,)
+268 W( the default memory)9 W
+9000 37695 MT
+(manager already used the standard external memory management)
+136 W( interface to handle paging operations,)135 W
+9000 39072 MT
+(using external data types \050ports\051 to)
+91 W( represent memory objects, rather than handles to the kernel's internal)92 W
+9000 40449 MT
+(data structures.)SH
+10000 42928 MT
+(Only a few kernel operations were accessed directly:  allocating disk storage, synchronizing threads,)155 W
+9000 44305 MT
+(allocating locked-down memory, and preventing threads from being)
+69 W( swapped out.  These operations were)70 W
+9000 45682 MT
+(replaced with equivalent user-mode routines, or were added to the kernel interface where missing.)SH
+11 /Times-Bold AF
+9000 49299 MT
+(5.1. Kernel Interface Extensions)SH
+10 /Times-Roman AF
+10000 50676 MT
+(The kernel)
+111 W( interface has been extended with two calls originally proposed)
+110 W( [2])
+SH( for supporting real-time)110 W
+9000 52053 MT
+(Mach:)SH
+/Symbol SF
+10790 53777 MT
+(\267)SH
+/Courier SF
+11500 XM
+(kern_return_t vm_wire\050)SH
+16300 54882 MT
+(priv_host_t host_port,)2400 W
+16300 55987 MT
+(task_t task,)5400 W
+16300 57092 MT
+(vm_address_t start,)1800 W
+16300 58197 MT
+(vm_size_t size,)3600 W
+16300 59302 MT
+(vm_prot_t access\051)3600 W
+/Times-Roman SF
+11500 62165 MT
+(Locks \050"wires"\051 the specified range of virtual addresses for)
+105 W( the task into memory.  Accesses)106 W
+11500 63270 MT
+(denoted by)358 W
+/Times-Italic SF
+16882 XM
+(access)SH
+/Times-Roman SF
+20100 XM
+(cannot fault.  Memory is unlocked by specifying)
+358 W( no wired access)357 W
+11500 64375 MT
+(\050)SH
+/Times-Italic SF
+(VM_PROT_NONE)SH
+/Times-Roman SF
+(\051.)SH
+/Symbol SF
+10790 66133 MT
+(\267)SH
+/Courier SF
+11500 XM
+(kern_return_t thread_wire\050)SH
+16300 67238 MT
+(priv_host_t host_port,)2400 W
+16300 68343 MT
+(thread_t thread\051)4200 W
+/Times-Roman SF
+11500 71206 MT
+(Permanently acquires a kernel stack for the thread, so that the thread can always)
+58 W( run.  Allows)59 W
+ES
+%%Page: 4 5
+BS
+0 SI
+10 /Times-Roman AF
+11500 7886 MT
+(the thread's requests for physical memory to always succeed.)SH
+10000 10365 MT
+(Both of these calls are only accessible to tasks with send rights to)
+131 W( the privileged host port.  There is)130 W
+9000 11742 MT
+(currently no other resource control on memory allocated by these calls.)SH
+10000 14221 MT
+(An existing kernel call identifies the default memory manager to the kernel:)SH
+/Courier SF
+11500 15769 MT
+(kern_return_t vm_set_default_memory_manager\050)SH
+16300 16874 MT
+(priv_host_t host_port,)2400 W
+16300 17979 MT
+(mach_port_t *default_manager\051)2400 W
+/Times-Roman SF
+11500 20842 MT
+(Returns the old value of the default memory manager service port.)
+2 W( If)
+256 W( the supplied value for the)3 W
+11500 21947 MT
+(default manager port)
+69 W( is not MACH_PORT_NULL, the kernel will use this port as the default)68 W
+11500 23052 MT
+(memory manager service port.)SH
+10000 25531 MT
+(The kernel uses the default memory manager service port to request the default memory)
+149 W( manager to)150 W
+9000 26908 MT
+(handle paging for temporary objects.  It also arranges that memory)
+66 W( sent to the task with receive rights for)65 W
+9000 28285 MT
+(this port remains locked down in physical memory: see section 5.5.)SH
+11 /Times-Bold AF
+9000 31902 MT
+(5.2. File System Access)SH
+10 /Times-Roman AF
+10000 33279 MT
+(The largest kernel function)
+66 W( used directly by the Mach 2.5 default memory manager was the file system)67 W
+9000 34656 MT
+(code. Since)
+392 W( the file)
+71 W( system code was resident, the default memory manager could take advantage of it to)70 W
+9000 36033 MT
+(allocate new paging space.  However, this required that the all of the file)
+37 W( system code be resident, and that)38 W
+9000 37410 MT
+(any thread that accessed the file system also be resident while it was executing that code.)SH
+10000 39889 MT
+(To preserve the flexibility of being)
+44 W( able to allocate new paging space would have required us to include)43 W
+9000 41266 MT
+(the entire BSD file system code in the default memory manager.  We decided instead to separate)
+84 W( the file)85 W
+9000 42643 MT
+(system and the memory manager, and use other mechanisms to allocate paging storage.)SH
+10000 45122 MT
+(The default memory)
+72 W( manager bypasses the disk allocation problem by using a pre-specified list of disk)71 W
+9000 46499 MT
+(blocks. At)
+444 W( system startup)
+97 W( time, the bootstrap sequence looks for a paging file with a well known name:)98 W
+/Times-Italic SF
+9000 47876 MT
+(/mach_servers/paging_file)SH
+/Times-Roman SF
+(. It)
+760 W( then reads)
+255 W( the index information in the file to obtain the disk blocks)254 W
+9000 49253 MT
+(occupied by the file, and passes them to)
+48 W( the default memory manager.  The paging file must, therefore, be)49 W
+9000 50630 MT
+(pre-allocated with all of the blocks needed for paging.)SH
+11 /Times-Bold AF
+9000 54247 MT
+(5.3. Synchronization and Locking)SH
+10 /Times-Roman AF
+10000 55624 MT
+(The default memory manager uses the CThreads package)
+159 W( [3])
+SH( to provide locking and synchronization)158 W
+9000 57001 MT
+(between different threads.)
+306 W( The)
+863 W( CThreads package provides two synchronization primitives: mutual)307 W
+9000 58378 MT
+(exclusion locks, for controlling exclusive access to)
+260 W( data structures, and condition variables, used by)259 W
+9000 59755 MT
+(multiple threads to wait for events and signal)
+SH( them.  Mutual exclusion locks were used to replace the simple)1 W
+9000 61132 MT
+(spin locks used inside the kernel.)
+88 W( Explicit)
+425 W( calls to the kernel sleep and wakeup primitives were replaced)87 W
+9000 62509 MT
+(with condition variables.  The CThreads package does not provide)
+62 W( multiple reader/single writer locks, but)63 W
+9000 63886 MT
+(since these were used only in one)
+173 W( routine in the file system, they were easily replaced with exclusive)172 W
+9000 65263 MT
+(locking.)SH
+ES
+%%Page: 5 6
+BS
+0 SI
+11 /Times-Bold AF
+9000 7937 MT
+(5.4. Allocating Locked-Down Memory)SH
+10 /Times-Roman AF
+10000 9314 MT
+(We replaced the standard C library memory allocator \050)98 W
+/Times-Italic SF
+(malloc)SH
+/Times-Roman SF
+35737 XM
+(and)SH
+/Times-Italic SF
+37529 XM
+(free)SH
+/Times-Roman SF
+(\051 with our own routines.)
+98 W( These)448 W
+9000 10691 MT
+(call the kernel routine)186 W
+/Times-Italic SF
+18742 XM
+(vm_allocate)SH
+/Times-Roman SF
+24066 XM
+(to allocate full)
+186 W( pages.  This is replaced by a routine that allocates)185 W
+9000 12068 MT
+(memory from the kernel \050using)160 W
+/Times-Italic SF
+22549 XM
+(vm_map)SH
+/Times-Roman SF
+(\051, and locks it into memory using the new)161 W
+/Times-Italic SF
+44274 XM
+(vm_wire)SH
+/Times-Roman SF
+48129 XM
+(call. The)572 W
+/Times-Italic SF
+9000 13445 MT
+(thread_wire)SH
+/Times-Roman SF
+14139 XM
+(call allows the threads in the default memory manager to always allocate memory.)SH
+11 /Times-Bold AF
+9000 17062 MT
+(5.5. Locking Memory sent to the Default Memory Manager)SH
+10 /Times-Roman AF
+10000 18439 MT
+(The default memory manager receives memory in messages from only)
+83 W( a few sources in the kernel and)82 W
+9000 19816 MT
+(the device service.  These have been modified to know when)
+172 W( they are sending memory to the default)173 W
+9000 21193 MT
+(memory manager, and to lock it in memory.)SH
+/Symbol SF
+10790 22646 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The pageout daemon locks pages being paged-out from temporary memory objects.)
+154 W( These)556 W
+11500 23751 MT
+(memory objects are created by the kernel to hold temporary memory, or to shadow)
+104 W( memory)105 W
+11500 24856 MT
+(that is passed copy-on-write from)
+38 W( one task to another.  If a page in one of these objects is sent)37 W
+11500 25961 MT
+(to the default memory manager, it is locked down.)SH
+/Symbol SF
+10790 27719 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The device service locks memory being read)
+39 W( from backing storage devices \050typically the disk\051)40 W
+11500 28824 MT
+(to the default memory manager.  The)140 W
+/Times-Italic SF
+27588 XM
+(device_read)SH
+/Times-Roman SF
+32865 XM
+(routine looks at the)
+140 W( task holding receive)139 W
+11500 29929 MT
+(rights for the destination of its reply message.  If that task is also the receiver for the default)84 W
+11500 31034 MT
+(memory manager's service port, the memory is locked down.)SH
+11 /Times-Bold AF
+9000 34651 MT
+(5.6. Locking Memory sent to Backing Storage)SH
+10 /Times-Roman AF
+10000 36028 MT
+(The default memory manager)
+111 W( writes data to disk via the kernel device service, using the)110 W
+/Times-Italic SF
+47090 XM
+(device_write)SH
+/Times-Roman SF
+9000 37405 MT
+(call. This)
+350 W( routine must not allow)
+50 W( the data to be paged out, and must not block to wait for other paged-out)51 W
+9000 38782 MT
+(data to be paged in.)
+19 W( To)
+286 W( avoid blocking, the)18 W
+/Times-Italic SF
+26793 XM
+(device_write)SH
+/Times-Roman SF
+32171 XM
+(request message is processed in the context of the)18 W
+9000 40159 MT
+(calling thread, not by a separate device service task.  The message-send)
+43 W( operation does not return until the)44 W
+9000 41536 MT
+(memory to be written is queued for the disk.)SH
+10000 44015 MT
+(If the device service)
+69 W( were a separate task, it would need two classes of service threads.  One set would)68 W
+9000 45392 MT
+(handle write requests from the default memory)
+118 W( manager, containing locked-down memory; the other set)119 W
+9000 46769 MT
+(would handle requests from all other clients, containing pageable memory.)
+69 W( If)
+386 W( one pool of service threads)68 W
+9000 48146 MT
+(handled both pageable and locked-down)
+44 W( memory, a write request from the default memory manager could)45 W
+9000 49523 MT
+(be blocked because pageable memory in a previous write request was paged out.  This would result)
+143 W( in)142 W
+9000 50900 MT
+(deadlock, since the device service would need the)
+207 W( default memory manager to retrieve the paged-out)208 W
+9000 52277 MT
+(memory.)SH
+12 /Times-Bold AF
+9000 55961 MT
+(6. User-mode Environment for the Default Memory Manager)SH
+10 /Times-Roman AF
+10000 57338 MT
+(The default memory manager is built and operates as part of the Mach 3.0 bootstrap service task.  This)64 W
+9000 58715 MT
+(task is the first to run in the)
+172 W( system once the kernel is initialized.  In addition to the default memory)173 W
+9000 60092 MT
+(manager, it contains the bootstrap loader for user-mode)
+90 W( servers.  Since both of these components share a)89 W
+9000 61469 MT
+(common file system, they were moved out of the kernel as a unit.)SH
+11 /Times-Bold AF
+9000 65086 MT
+(6.1. Structure of the Bootstrap Service Task)SH
+10 /Times-Roman AF
+10000 66463 MT
+(The bootstrap loader loads and executes the first server task: the BSD server for the BSD)
+72 W( single-server)73 W
+9000 67840 MT
+(system, or the configuration manager for)
+8 W( the multi-server operating system.  It makes use of a bootstrap file)7 W
+9000 69217 MT
+(system module to find the server file)
+20 W( and read it into a new user task.  It passes the privileged host port and)21 W
+9000 70594 MT
+(the device server port to the initial server, thus giving the initial server access to all)
+156 W( system privileged)155 W
+9000 71971 MT
+(operations.)SH
+ES
+%%Page: 6 7
+BS
+0 SI
+10 /Times-Roman AF
+10000 7886 MT
+(The default memory manager runs after)
+SH( the bootstrap service.  It uses the bootstrap file system to find the)1 W
+9000 9263 MT
+(paging file, and to read and write the file as paging operations take place.)
+58 W( It)
+365 W( exports an interface to allow)57 W
+9000 10640 MT
+(other tasks to use it as a shared memory)
+9 W( service; however, it provides no network consistency management,)10 W
+9000 12017 MT
+(so the objects it exports cannot be shared across multiple machines.)SH
+10000 14496 MT
+(The bootstrap file system that both of these components)
+107 W( use provides a small subset of the operations)106 W
+9000 15873 MT
+(available on a)
+107 W( BSD 4.2 or 4.3 file system.  It can look up files by device and name, and read and write)108 W
+9000 17250 MT
+(existing data blocks in files.  It cannot allocate new blocks)
+95 W( to files, or create new files.  To do so would)94 W
+9000 18627 MT
+(conflict with the real file system.  The interface to the bootstrap file system is well defined;)
+78 W( the code can)79 W
+9000 20004 MT
+(readily be replaced by one that understands a different disk format.)SH
+11 /Times-Bold AF
+9000 23621 MT
+(6.2. Loading Two Boot Images)SH
+10 /Times-Roman AF
+10000 24998 MT
+(Since the default memory)
+52 W( manager and bootstrap service have been separated from the kernel, there are)51 W
+9000 26375 MT
+(now two executable images \050kernel and bootstrap\051 to)
+22 W( be loaded when the system is run.  We decided not to)23 W
+9000 27752 MT
+(modify the existing initial bootstrap loaders to load both images.)
+166 W( Most)
+580 W( of them are proprietary to the)165 W
+9000 29129 MT
+(individual manufacturers; in at least one case, we do not even have access to the)
+43 W( source code.  Instead, we)44 W
+9000 30506 MT
+(expanded the kernel boot file to contain both images.)SH
+10000 32985 MT
+(A new program called)48 W
+/Times-Italic SF
+19356 XM
+(makeboot)SH
+/Times-Roman SF
+23542 XM
+(builds an executable out of both boot)
+48 W( images \050kernel and bootstrap\051 so)47 W
+9000 34362 MT
+(that the complete image of the default memory manager and bootstrap task is in)
+92 W( the kernel data segment)93 W
+9000 35739 MT
+(when the kernel is loaded.  The kernel then moves the bootstrap image)
+102 W( to a newly created user task and)101 W
+9000 37116 MT
+(starts a user-mode thread in it.)SH
+10000 39595 MT
+(The boot file looks)
+16 W( like a normal bootable image, but has no uninitialized storage \050BSS\051 or symbol table.)17 W
+9000 40972 MT
+(The size of the combined text and data segments is set to include the)
+54 W( entire file.  At the start of the kernel)53 W
+9000 42349 MT
+(uninitialized data \050)SH
+/Times-Italic SF
+(BSS)SH
+/Times-Roman SF
+(\051 is a)SH
+/Times-Italic SF
+20304 XM
+(struct boot_info)SH
+/Times-Roman SF
+26916 XM
+(describing the sizes of the rest of the file:)SH
+/Courier SF
+9000 43897 MT
+(struct boot_info {)SH
+11400 45002 MT
+(vm_size_t kern_sym_size; /*)
+1200 W( size of kernel symbol table */)SH
+11400 46107 MT
+(vm_size_t boot_image_size;)
+1200 W( /* size of bootstrap image */)SH
+11400 47212 MT
+(vm_size_t load_info_size;)
+1200 W( /*)
+600 W( size of load information for)SH
+30600 48317 MT
+(bootstrap image */)SH
+9000 49422 MT
+(};)SH
+/Times-Roman SF
+10000 53006 MT
+(Following this are three new sections:)SH
+/Symbol SF
+10790 54459 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The kernel symbol table.  This)
+16 W( may include information pulled from the normal executable file)17 W
+11500 55564 MT
+(header to make the symbol table self-describing.)SH
+/Symbol SF
+10790 57322 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(The boot image.  This is)
+3 W( identical to the bootstrap's executable file, except that its symbol table)2 W
+11500 58427 MT
+(has also been made self-describing.)SH
+/Symbol SF
+10790 60185 MT
+(\267)SH
+/Times-Roman SF
+11500 XM
+(Loader information for the)
+SH( boot image.  This is in a compiler-independent format, to reduce the)1 W
+11500 61290 MT
+(amount of machine-dependent code needed in the kernel.)SH
+10000 63769 MT
+(At startup, the Mach boot file is loaded into)
+72 W( contiguous physical memory.  The kernel must, as its first)71 W
+9000 65146 MT
+(action, move the)
+106 W( symbol table, the bootstrap image, and the load information out of its BSS section.  In)107 W
+9000 66523 MT
+(addition, it)
+37 W( must align the bootstrap image on a page boundary, so that the bootstrap image can be mapped)36 W
+9000 67900 MT
+(to the bootstrap task rather than being copied.)
+136 W( All)
+523 W( of this may have to be done before virtual memory)137 W
+9000 69277 MT
+(mapping is set up, since the kernel typically uses the first few pages of physical memory after the BSS for)43 W
+9000 70654 MT
+(building page tables.)SH
+ES
+%%Page: 7 8
+BS
+0 SI
+10 /Times-Roman AF
+10000 7886 MT
+(The kernel proceeds with its normal initialization.  After starting all)
+33 W( the internal threads, it creates a task)34 W
+9000 9263 MT
+(and thread to run the bootstrap)
+57 W( code.  It then creates a memory object mapping the resident pages holding)56 W
+9000 10640 MT
+(the bootstrap code.  It maps this memory object into the first task as it)
+61 W( would a normal executable file.  It)62 W
+9000 12017 MT
+(then allocates a stack for the task, passes it a small set of arguments, and starts it running in user space.)SH
+12 /Times-Bold AF
+9000 15701 MT
+(7. Results)SH
+10 /Times-Roman AF
+10000 17078 MT
+(Moving the default memory manager outside the kernel has both benefits and drawbacks.  The build)136 W
+9000 18455 MT
+(environment for both the kernel and the default pager \050and bootstrap)
+32 W( task\051 is considerably simplified, since)33 W
+9000 19832 MT
+(user and kernel environments are not mixed.  The system operates almost as fast as previous)
+94 W( versions of)93 W
+9000 21209 MT
+(Mach 3.0 that contained the default memory manager within the kernel.)
+70 W( However,)
+391 W( it does occupies more)71 W
+9000 22586 MT
+(physical memory than previous versions.  Using a pre-allocated paging file is adequate for development)116 W
+9000 23963 MT
+(systems, but not for production use.)SH
+11 /Times-Bold AF
+9000 27580 MT
+(7.1. Building the System)SH
+10 /Times-Roman AF
+10000 28957 MT
+(Building the Mach 3.0 kernel and default memory manager is much easier.  Both)
+141 W( the kernel and the)142 W
+9000 30334 MT
+(default memory manager are now self-contained.  A)
+80 W( new bootstrap service can be added to the Mach 3.0)79 W
+9000 31711 MT
+(boot file without rebuilding the kernel.)SH
+10000 34190 MT
+(The kernel no longer has to support a)
+15 W( user environment for otherwise self-contained servers.  There is no)16 W
+9000 35567 MT
+(longer a naming conflict between kernel interface)
+214 W( routines called by servers and the kernel functions)213 W
+9000 36944 MT
+(themselves. The)
+334 W( default memory manager no longer has to distinguish)
+42 W( global kernel names for ports from)43 W
+9000 38321 MT
+(its own local names for them; this was a source of confusion in the Mach 2.5 default memory manager.)SH
+10000 40800 MT
+(The default pager and)
+170 W( bootstrap service can be built as a standard user task, using the Mach kernel)169 W
+9000 42177 MT
+(primitives and)
+14 W( device support routines, and the standard CThreads library.  Where we have re-implemented)15 W
+9000 43554 MT
+(routines from)
+51 W( the standard Mach libraries, we have done so for performance or space reasons, not for new)50 W
+9000 44931 MT
+(functions.)SH
+10000 47410 MT
+(The kernel and the bootstrap service are built)
+56 W( independently and combined with the)57 W
+/Times-Italic SF
+44367 XM
+(makeboot)SH
+/Times-Roman SF
+48562 XM
+(program.)SH
+9000 48787 MT
+(If someone wants to experiment with a new default memory manager, or change the bootstrap)
+60 W( file system)59 W
+9000 50164 MT
+(to accommodate different disk formats, it is not necessary to rebuild the kernel.  Only the boot)
+18 W( file needs to)19 W
+9000 51541 MT
+(be rebuilt.)SH
+11 /Times-Bold AF
+9000 55158 MT
+(7.2. Performance)SH
+10 /Times-Roman AF
+10000 56535 MT
+(Performance figures, comparing the MK63 release of Mach 3.0 with the out-of-kernel default)
+91 W( memory)90 W
+9000 57912 MT
+(manager, are shown in table)
+17 W( 7-1.  All measurements were run on a 25Mhz 386 processor with 8 Megabytes)18 W
+9000 59289 MT
+(of memory and an ISA bus.)SH
+10000 61768 MT
+(When operating with a reasonable amount of main memory, moving the default)
+234 W( memory manager)233 W
+9000 63145 MT
+(outside of the kernel has)
+73 W( only a small effect on overall system performance.  A memory-intensive paging)74 W
+9000 64522 MT
+(benchmark, paging)
+98 W( 7 megabytes of virtual memory against 6.5 megabytes of available physical memory,)97 W
+9000 65899 MT
+(runs less than 1% slower with the default memory manager out of)
+72 W( the kernel.  We expect that a balanced)73 W
+9000 67276 MT
+(workload, not dominated by paging operations, will show no difference.)SH
+10000 69755 MT
+(We expected that)
+237 W( overall system performance would be unchanged by having the default memory)236 W
+9000 71132 MT
+(manager outside of the kernel.  When the system)
+113 W( is paging heavily, disk operations would dominate the)114 W
+ES
+%%Page: 8 9
+BS
+0 SI
+10 /Times-Italic AF
+20362 8283 MT
+(Memory Size,)SH
+20918 9373 MT
+(Megabytes)SH
+30689 XM
+(Elapsed Time, Seconds)SH
+24459 25 18370 9978 LH BX1
+-2778 25 27798 9978 LV BX1
+18769 11061 MT
+(Maximum)SH
+23566 XM
+(Available)SH
+37959 XM
+(Difference,)SH
+19102 12151 MT
+(Memory)SH
+23816 XM
+(Memory)SH
+28197 XM
+(MK63)SH
+31495 XM
+(Out-of-Kernel)SH
+38639 XM
+(Percent)SH
+24459 25 18370 12756 LH BX1
+-2778 25 23167 12756 LV BX1
+-2778 25 27798 12756 LV BX1
+-2778 25 31096 12756 LV BX1
+-2778 25 37560 12756 LV BX1
+/Times-Roman SF
+18769 13841 MT
+(8)SH
+23566 XM
+(6)SH
+(.5)SH
+28697 XM
+(97)SH
+(.0)SH
+31995 XM
+(97)SH
+(.6)SH
+37959 XM
+(0)SH
+(.6)SH
+24459 25 18370 14459 LH BX1
+18769 15544 MT
+(4)SH
+23566 XM
+(2)SH
+(.5)SH
+28197 XM
+(124)SH
+(.2)SH
+31495 XM
+(131)SH
+(.4)SH
+37959 XM
+(5)SH
+(.8)SH
+24459 25 18370 16162 LH BX1
+18769 17247 MT
+(3)SH
+23566 XM
+(1)SH
+(.5)SH
+28197 XM
+(131)SH
+(.6)SH
+31495 XM
+(138)SH
+(.9)SH
+37959 XM
+(5)SH
+(.5)SH
+24459 10665 50 18370 17865 BX BX1
+-5109 25 23167 17865 LV BX1
+-5109 25 27798 17865 LV BX1
+-5109 25 31096 17865 LV BX1
+-5109 25 37560 17865 LV BX1
+/Times-Bold SF
+18671 19475 MT
+(Table 7-1:)SH
+/Times-Roman SF
+23532 XM
+(Performance of out-of-kernel system vs. MK63)SH
+9000 21266 MT
+(cost anyway.  Otherwise, the only difference would be the)
+52 W( cost of crossing the user/kernel boundary.  The)51 W
+9000 22643 MT
+(previous implementation of the default memory manager was already structured)
+285 W( as a separate task,)286 W
+9000 24020 MT
+(communicating with the kernel and the disk driver via IPC: this already forced messages to be copied and)53 W
+9000 25397 MT
+(data to be)
+41 W( remapped from the default memory manager's address space to the kernel's address space.  The)42 W
+9000 26774 MT
+(only added cost would be the actual kernel-to-user mode switch.)
+92 W( These)
+433 W( expectations correspond to what)91 W
+9000 28151 MT
+(we have measured.)SH
+10000 30630 MT
+(As the available)
+13 W( memory decreases, the performance drops, but slowly.  With 2.5 megabytes of memory,)14 W
+9000 32007 MT
+(the paging test runs about 6% slower.  The extra memory taken by the out-of-kernel bootstrap task does)
+10 W( not)9 W
+9000 33384 MT
+(account for the)
+18 W( slowdown: adjusting the available memory to compensate does not change the performance)19 W
+9000 34761 MT
+(figures.)SH
+10000 37240 MT
+(One cause of the slowdown is the difference between)
+170 W( the kernel and the CThread locking facilities.)169 W
+9000 38617 MT
+(Mutual exclusion locks in the)
+39 W( kernel compile into null routines when the kernel is built for a uniprocessor;)40 W
+9000 39994 MT
+(since kernel threads)
+90 W( are not preemptible, locks are not needed when the thread cannot block.  Locking is)89 W
+9000 41371 MT
+(always needed, however, when running in user)
+45 W( space, since user-mode threads are preemptible.  When the)46 W
+9000 42748 MT
+(default memory manager was first moved outside the)
+107 W( kernel, it grabbed and released a mutual exclusion)106 W
+9000 44125 MT
+(lock nine times while reading)
+77 W( one page from the disk.  Reducing the number of lock/unlock pairs to four)78 W
+9000 45502 MT
+(reduced the performance degradation from 10% to 6%.  We expect that further tuning of)
+140 W( the code will)139 W
+9000 46879 MT
+(regain nearly all of the lost time.)SH
+11 /Times-Bold AF
+9000 50496 MT
+(7.3. Memory Usage)SH
+10 /Times-Roman AF
+10000 51873 MT
+(The sizes for the kernel and bootstrap image are)
+28 W( compared with the size of an MK63 kernel in table 7-2.)29 W
+9000 53250 MT
+(The extra memory used by the out-of-kernel default pager system is)
+29 W( broken down in table 7-3.  The loaded)28 W
+9000 54627 MT
+(image occupies more space than it does in the file)
+6 W( because the text and data segments and the symbol tables)7 W
+9000 56004 MT
+(are rounded to page boundaries \0504096 bytes\051.)SH
+/Times-Italic SF
+22532 58464 MT
+(File)SH
+26719 XM
+(Text)SH
+30128 XM
+(Data)SH
+33620 XM
+(BSS)SH
+36474 XM
+(Symbols)SH
+19212 25 20994 59069 LH BX1
+-1688 25 25681 59069 LV BX1
+-1688 25 29479 59069 LV BX1
+-1688 25 32777 59069 LV BX1
+-1688 25 36075 59069 LV BX1
+/Times-Roman SF
+21393 60154 MT
+(MK63)SH
+26080 XM
+(315360)SH
+29878 XM
+(33096)SH
+33176 XM
+(54364)SH
+36474 XM
+(69524)SH
+19212 25 20994 60772 LH BX1
+21393 61857 MT
+(Kernel)SH
+26080 XM
+(294880)SH
+29878 XM
+(32224)SH
+33176 XM
+(52992)SH
+36474 XM
+(65386)SH
+19212 25 20994 62475 LH BX1
+21393 63560 MT
+(Bootstrap)SH
+26580 XM
+(40928)SH
+30378 XM
+(2676)SH
+33676 XM
+(3616)SH
+36474 XM
+(19345)SH
+19212 6797 50 20994 64178 BX BX1
+-5109 25 25681 64178 LV BX1
+-5109 25 29479 64178 LV BX1
+-5109 25 32777 64178 LV BX1
+-5109 25 36075 64178 LV BX1
+/Times-Bold SF
+23393 67165 MT
+(Table 7-2:)SH
+/Times-Roman SF
+28254 XM
+(Executable Image Sizes)SH
+10000 69644 MT
+(Splitting the default memory manager out of the kernel does increase)
+19 W( the system's locked-down memory)18 W
+9000 71021 MT
+(usage. The)
+368 W( default memory manager's code and data is still locked in memory.  The C)
+59 W( Threads library is)60 W
+ES
+%%Page: 9 10
+BS
+0 SI
+10 /Times-Italic AF
+18536 8283 MT
+(Size in)SH
+18439 9373 MT
+(KBytes)SH
+30735 XM
+(Used By)SH
+25119 25 18040 9978 LH BX1
+-2778 25 21671 9978 LV BX1
+/Times-Roman SF
+18939 11063 MT
+(48)SH
+22070 XM
+(Code and Data for Bootstrap)SH
+25119 25 18040 11681 LH BX1
+18939 12766 MT
+(24)SH
+22070 XM
+(Symbol Table for Bootstrap)SH
+25119 25 18040 13384 LH BX1
+18606 14469 MT
+(-24)SH
+22070 XM
+(\050Code and Data Removed from Kernel\051)SH
+25119 25 18040 15087 LH BX1
+19106 16172 MT
+(-4)SH
+22070 XM
+(\050Symbol Table Removed from Kernel\051)SH
+25119 25 18040 16790 LH BX1
+18939 17875 MT
+(12)SH
+22070 XM
+(Page Table for Bootstrap Task)SH
+25119 25 18040 18493 LH BX1
+18939 19578 MT
+(40)SH
+22070 XM
+(CThread Stacks for Each CThread)SH
+25119 25 18040 20196 LH BX1
+19439 21281 MT
+(4)SH
+22070 XM
+(Extra Waiting Stack allocated by CThreads)SH
+25119 25 18040 21899 LH BX1
+18939 22984 MT
+(12)SH
+22070 XM
+(Temporary Storage Managed by Memory Allocator)SH
+25119 25 18040 23602 LH BX1
+18439 24687 MT
+(112)SH
+22070 XM
+(Total)SH
+25119 18105 50 18040 25305 BX BX1
+-15327 25 21671 25305 LV BX1
+/Times-Bold SF
+20295 28292 MT
+(Table 7-3:)SH
+/Times-Roman SF
+25156 XM
+(Extra Memory Used by Bootstrap Task)SH
+9000 30083 MT
+(larger than the equivalent kernel locking)
+116 W( primitives, and is not shared with other functions as the kernel)115 W
+9000 31460 MT
+(primitives are.  Each thread in the default memory manager has a user-mode stack as well)
+10 W( as a kernel-mode)11 W
+9000 32837 MT
+(stack. Since)
+448 W( the threads must be wired, their kernel stacks cannot be discarded or handed-off to)
+99 W( another)98 W
+9000 34214 MT
+(thread.)SH
+10000 36693 MT
+(Careful work on the default memory manager could)
+35 W( reduce the extra memory usage, but not eliminate it)36 W
+9000 38070 MT
+(entirely. The)
+298 W( user-mode stacks could be reduced to 4 K bytes each, since only the bootstrap server)
+24 W( loading)23 W
+9000 39447 MT
+(code needs as much as 8 K bytes of)
+86 W( stack.  It would also be possible to discard the code pages occupied)87 W
+9000 40824 MT
+(only by the bootstrap)
+34 W( service loader routines once they have been used.  In a production system, the kernel)33 W
+9000 42201 MT
+(and bootstrap loader would be configured without run-time debugging information: this would save 20)
+78 W( K)79 W
+9000 43578 MT
+(bytes from the bootstrap task alone.)SH
+11 /Times-Bold AF
+9000 47195 MT
+(7.4. Backing Storage Allocation)SH
+10 /Times-Roman AF
+10000 48572 MT
+(Using a pre-allocated paging file is currently the least)
+20 W( satisfactory aspect of the default memory manager)19 W
+9000 49949 MT
+(design. Mach)
+310 W( 2.5, since it integrated the file system with the default memory manager, could use a variety)30 W
+9000 51326 MT
+(of paging space allocation strategies:  reserved disk partitions, pre-allocated paging files,)
+91 W( and expandable)90 W
+9000 52703 MT
+(paging files.  In Mach 3.0, the file system is expected to)
+76 W( be separated from the default memory manager.)77 W
+9000 54080 MT
+(The two tasks must cooperate to supply more)
+11 W( disk blocks for paging; otherwise they could both allocate the)10 W
+9000 55457 MT
+(same blocks from the file system, destroying it.  There is currently no way to)
+10 W( give more paging space to the)11 W
+9000 56834 MT
+(default memory manager; one could be added.)SH
+12 /Times-Bold AF
+9000 60518 MT
+(8. Further Work)SH
+10 /Times-Roman AF
+10000 61895 MT
+(Since the bootstrap service is now)
+196 W( independent of the kernel environment, we can experiment with)195 W
+9000 63272 MT
+(adding additional functions.  The default)
+197 W( memory manager interface could be extended, as previously)198 W
+9000 64649 MT
+(mentioned, to request additional paging storage from the file system and to)
+32 W( return paging storage that is no)31 W
+9000 66026 MT
+(longer needed.)
+148 W( The)
+547 W( bootstrap loader could be used to load all of the servers for the multi-server BSD)149 W
+9000 67403 MT
+(emulation, not just its configuration service.  The bootstrap task is also the logical place to put any)226 W
+9000 68780 MT
+(out-of-kernel disk drivers)
+195 W( [4]that)
+SH( need to be shared)
+195 W( between the default memory manager and the file)196 W
+9000 70157 MT
+(system. To)
+416 W( accommodate the space taken by)
+83 W( these functions, we would need to restructure the bootstrap)82 W
+9000 71534 MT
+(service so that code used only at startup can be freed.)SH
+ES
+%%Page: 10 11
+BS
+0 SI
+10 /Times-Roman AF
+10000 7886 MT
+(For the)
+89 W( adventurous, the default memory manager could even be made into a loadable server, separate)90 W
+9000 9263 MT
+(from the bootstrap service.  The default)
+6 W( memory manager views backing storage as a list of disk blocks, not)5 W
+9000 10640 MT
+(as files.  Therefore it does not actually need to share the file system code with the)
+63 W( bootstrap service.  The)64 W
+9000 12017 MT
+(default memory manager could be loaded and run)
+77 W( just as any other system server; at some later time \050for)76 W
+9000 13394 MT
+(example, when)SH
+/Times-Italic SF
+15304 XM
+(swapon)SH
+/Times-Roman SF
+18610 XM
+(is executed\051, a file system server could provide it with a list of disk blocks to use.)SH
+12 /Times-Bold AF
+9000 17078 MT
+(9. Conclusions)SH
+10 /Times-Roman AF
+10000 18455 MT
+(We have shown)
+57 W( that moving all memory management outside the Mach 3.0 kernel is not only possible,)58 W
+9000 19832 MT
+(but beneficial.  The resulting system runs as reliably and almost as fast as earlier versions of Mach 3.0.)
+2 W( It)
+253 W( is)1 W
+9000 21209 MT
+(considerably easier to build and can more flexibly be reconfigured.  These benefits are)
+35 W( obtained at the cost)36 W
+9000 22586 MT
+(of only a small amount of extra memory.)SH
+ES
+%%Page: 11 12
+BS
+0 SI
+13 /Times-Bold AF
+27568 8071 MT
+(References)SH
+10 /Times-Roman AF
+9000 10444 MT
+([1])SH
+12000 XM
+(L. A. Belady, R. P. Parmelee, and C. A. Scalzi.)SH
+12000 11549 MT
+(The IBM History of Memory Management Technology.)SH
+/Times-Italic SF
+12000 12654 MT
+(IBM Journal of Research and Development)SH
+/Times-Roman SF
+29663 XM
+(25\0505\051:491-503, September, 1981.)SH
+9000 14445 MT
+([2])SH
+12000 XM
+(David L. Black.)SH
+12000 15550 MT
+(Mach Interface Proposals - Priorities, Handoff, Wiring.)SH
+12000 16655 MT
+(Internal Mach Project Memo - 13 August 1989.)SH
+9000 18446 MT
+([3])SH
+12000 XM
+(Eric C. Cooper and Richard P. Draves.)SH
+/Times-Italic SF
+12000 19551 MT
+(C Threads)SH
+/Times-Roman SF
+(.)SH
+12000 20656 MT
+(Technical Report, Department of Computer Science, Carnegie Mellon University, July, 1987.)SH
+9000 22447 MT
+([4])SH
+12000 XM
+(Alessandro Forin, David Golub, and Brian Bershad.)SH
+12000 23552 MT
+(An I/O System for Mach 3.0.)SH
+12000 24657 MT
+(In)SH
+/Times-Italic SF
+13083 XM
+(Proceedings of the Second Mach Symposium)SH
+/Times-Roman SF
+(. The)
+250 W( UseNIX Association, November, 1991.)SH
+9000 26448 MT
+([5])SH
+12000 XM
+(E. L. Organick.)SH
+/Times-Italic SF
+12000 27553 MT
+(The Multics System: An Examination of its Structure.)SH
+/Times-Roman SF
+12000 28658 MT
+(MIT Press, Cambridge, Mass., 1972.)SH
+9000 30449 MT
+([6])SH
+12000 XM
+(Michael W. Young.)SH
+/Times-Italic SF
+12000 31554 MT
+(Exporting a User Interface to Memory Management from a Communication-Oriented Operating)SH
+13500 32659 MT
+(System)SH
+/Times-Roman SF
+(.)SH
+12000 33764 MT
+(PhD thesis, Carnegie Mellon University, November, 1989.)SH
+ES
+%%Page: i 13
+BS
+0 SI
+12 /Times-Bold AF
+26033 8004 MT
+(Table of Contents)SH
+11 SS 
+10650 9172 MT
+(1. Abstract)SH
+51650 XM
+(0)SH
+10650 10340 MT
+(2. Introduction)SH
+51650 XM
+(0)SH
+10650 11508 MT
+(3. In-Kernel Default Memory Management)SH
+51650 XM
+(1)SH
+10650 12676 MT
+(4. Constraints on the Default Memory Manager)SH
+51650 XM
+(2)SH
+10650 13844 MT
+(5. Moving Out of the Kernel)SH
+51650 XM
+(3)SH
+10 SS 
+12500 14924 MT
+(5.1. Kernel Interface Extensions)SH
+51700 XM
+(3)SH
+12500 16004 MT
+(5.2. File System Access)SH
+51700 XM
+(4)SH
+12500 17084 MT
+(5.3. Synchronization and Locking)SH
+51700 XM
+(4)SH
+12500 18164 MT
+(5.4. Allocating Locked-Down Memory)SH
+51700 XM
+(5)SH
+12500 19244 MT
+(5.5. Locking Memory sent to the Default Memory Manager)SH
+51700 XM
+(5)SH
+12500 20324 MT
+(5.6. Locking Memory sent to Backing Storage)SH
+51700 XM
+(5)SH
+11 SS 
+10650 21492 MT
+(6. User-mode Environment for the Default Memory Manager)SH
+51650 XM
+(5)SH
+10 SS 
+12500 22572 MT
+(6.1. Structure of the Bootstrap Service Task)SH
+51700 XM
+(5)SH
+12500 23652 MT
+(6.2. Loading Two Boot Images)SH
+51700 XM
+(6)SH
+11 SS 
+10650 24820 MT
+(7. Results)SH
+51650 XM
+(7)SH
+10 SS 
+12500 25900 MT
+(7.1. Building the System)SH
+51700 XM
+(7)SH
+12500 26980 MT
+(7.2. Performance)SH
+51700 XM
+(7)SH
+12500 28060 MT
+(7.3. Memory Usage)SH
+51700 XM
+(8)SH
+12500 29140 MT
+(7.4. Backing Storage Allocation)SH
+51700 XM
+(9)SH
+11 SS 
+10650 30308 MT
+(8. Further Work)SH
+51650 XM
+(9)SH
+10650 31476 MT
+(9. Conclusions)SH
+51100 XM
+(10)SH
+ES
+%%Page: ii 14
+BS
+0 SI
+12 /Times-Bold AF
+27099 8004 MT
+(List of Tables)SH
+11 SS 
+10650 9172 MT
+(Table 7-1:)
+SH( Performance)
+550 W( of out-of-kernel system vs. MK63)SH
+51650 XM
+(8)SH
+10650 10340 MT
+(Table 7-2:)
+SH( Executable)
+550 W( Image Sizes)SH
+51650 XM
+(8)SH
+10650 11508 MT
+(Table 7-3:)
+SH( Extra)
+550 W( Memory Used by Bootstrap Task)SH
+51650 XM
+(9)SH
+ES
+%%Trailer
+%%Pages: 14
+%%DocumentFonts: Times-Roman Times-Bold Times-Italic Symbol Courier

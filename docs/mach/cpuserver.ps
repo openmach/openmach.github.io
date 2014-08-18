@@ -1,0 +1,949 @@
+%!PS-Adobe-2.0
+%%Title: cpuserver.mss
+%%DocumentFonts: (atend)
+%%Creator: Mary Thompson and Scribe 7(1700)
+%%CreationDate: 14 August 1990 11:32
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale /showpage {} def} bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 0 1
+BS
+0 SI
+15 /Helvetica-Bold AF
+22678 14054 MT
+(The Mach cpu_server:)SH
+15217 15963 MT
+(An Implementation of Processor Allocation)SH
+10 /Helvetica AF
+27543 20922 MT
+(David L.Black)SH
+23180 23774 MT
+(Department of Computer Science)SH
+24599 25200 MT
+(Carnegie-Mellon University)SH
+25875 26626 MT
+(Pittsburgh, PA 15213)SH
+/Helvetica-Bold SF
+27988 28052 MT
+(Version of:)SH
+/Helvetica SF
+27097 29478 MT
+(14 August 1990)SH
+13 /Helvetica-Bold AF
+27963 46816 MT
+(Abstract)SH
+10 /Helvetica AF
+7200 49349 MT
+(The CPU-Server is a user-mode server that)
+9 W( performs processor allocation for the Mach operating system.)8 W
+7200 50492 MT
+(This document describes the server and it's user interfaces.)SH
+8312 61929 MT
+(This research was sponsored by the Defense)
+199 W( Advanced Research Projects Agency \050DOD\051, ARPA)200 W
+7200 63072 MT
+(Order No. 4864, monitored by the Space and)
+347 W( Naval Warfare Systems Command under contract)346 W
+7200 64215 MT
+(N00039-84-C-0467.)SH
+8312 66499 MT
+(The views and conclusions contained in this document are those of the authors and should)
+156 W( not be)157 W
+7200 67642 MT
+(interpreted as)
+316 W( representing official policies, either expressed or implied, of the Defense Advanced)315 W
+7200 68785 MT
+(Research Projects Agency or of the U.S.  Government.)SH
+ES
+%%Page: 1 2
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(1)SH
+12 SS 
+7200 8075 MT
+(1. Introduction)SH
+10 /Helvetica AF
+8312 9501 MT
+(This document describes the cpu_server, a user-mode server that performs)
+SH( processor allocation for the)1 W
+7200 10927 MT
+(Mach operating system, and)
+29 W( its library interfaces.  The server implements processor allocation policy; the)28 W
+7200 12353 MT
+(actual mechanisms are contained in the Mach kernel \050see related document\051.)
+37 W( The)
+353 W( library interfaces hide)38 W
+7200 13779 MT
+(the details of server interaction)
+53 W( from applications with simple scheduling requirements.  This server is an)52 W
+7200 15205 MT
+(example implementation of processor allocation policy; many)
+4 W( other policies can be implemented using the)5 W
+7200 16631 MT
+(mechanisms provided by the kernel.)SH
+8312 19198 MT
+(Not all releases of Mach)
+15 W( support this server. It is mainly interesting on multi-processor machines, so no)14 W
+7200 20624 MT
+(major effort has been made to support it on)
+76 W( the standard uni-processor versions of Mach. However, the)77 W
+7200 22050 MT
+(new releases of Mach support it on all machines. On systems that support it, this software \050MiG)
+33 W( interface)32 W
+7200 23476 MT
+(to server and library interfaces\051 is available in the cpu library \050/usr/mach/lib/libcpu.a, -lcpu command to ld\051.)SH
+12 /Helvetica-Bold AF
+7200 27231 MT
+(2. Concepts)SH
+10 /Helvetica AF
+8312 28657 MT
+(The server performs processor)
+145 W( allocation by assigning processors to processor sets provided by its)146 W
+7200 30083 MT
+(clients. This)
+362 W( allows the clients to use and manage the processors without giving clients)
+42 W( complete control)41 W
+7200 31509 MT
+(over them; only the server)
+62 W( has the port capabilities required to reassign processors.  Processor sets are)63 W
+7200 32935 MT
+(entities exported by)
+64 W( the Mach kernel; threads assigned to a processor set run exclusively on processors)63 W
+8 SS 
+37325 34010 MT
+(tm)SH
+10 SS 
+7200 34361 MT
+(assigned to that set and vice versa \050with the exception of some Unix)SH
+38491 XM
+(system calls\051.)SH
+8312 36928 MT
+(The server interface is designed around a class of objects)
+78 W( called requests.  A request consists of the)79 W
+7200 38354 MT
+(following components:)SH
+/Symbol SF
+9242 39826 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(A run duration,)SH
+/Symbol SF
+9242 41641 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(A sequence of <processor set, number of processor> pairs.)SH
+7200 43067 MT
+(A request is satisfied by assigning each processor set its corresponding number of processors for the run)21 W
+7200 44493 MT
+(duration specified.  The server enforces)
+10 W( internal limits on the number of processors and the maximum run)11 W
+7200 45919 MT
+(time. Current)
+278 W( limits are 15 minutes and 75% or less of the processors on the system.)SH
+12 /Helvetica-Bold AF
+7200 49674 MT
+(3. Implementation)SH
+10 /Helvetica AF
+8312 51100 MT
+(The server satisfies requests in a greedy fashion with strict adherence to)
+92 W( the order in which they are)91 W
+7200 52526 MT
+(received. For)
+326 W( example,)
+24 W( if the server has 10 processors and receives requests for 4, 7, and 2 processors,)25 W
+7200 53952 MT
+(it will satisfy the request for 4 first, and then the requests for 7 and 2 together.  This algorithm was)
+8 W( chosen)7 W
+7200 55378 MT
+(for its simplicity and lack of starvation; more)
+285 W( sophisticated algorithms that make better use of the)286 W
+7200 56804 MT
+(processors by satisfying requests out of order could be used.)SH
+8312 59371 MT
+(The server implementation was based on the cthreads library and the Mach Interface Generator\050MiG\051.)43 W
+7200 60797 MT
+(Two threads are used internally; one manages the assignment of processors)
+226 W( to requests, the other)227 W
+7200 62223 MT
+(manages all interactions with clients.)
+232 W( Clients)
+741 W( communicate with the server via rpcs; MiG-generated)231 W
+7200 63649 MT
+(interfaces hide the details of the message formats.  In addition the server can optionally generate)263 W
+7200 65075 MT
+(notification messages to)
+100 W( indicate that processors have been allocated to a request and that processors)99 W
+7200 66501 MT
+(are about to be removed from a request; these messages can)
+142 W( be used for internal synchronization of)143 W
+7200 67927 MT
+(applications that require multiple processors for proper execution.)SH
+ES
+%%Page: 2 3
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(2)SH
+12 SS 
+7200 8075 MT
+(4. Interface)SH
+10 /Helvetica AF
+8312 9501 MT
+(The server's interface to its clients uses remote procedure calls to implement the following primitives:)SH
+/Symbol SF
+9242 10973 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(cpu_request_create)SH
+/Helvetica SF
+(\050server, total_processors, run_time, *delay, *request\051)
+509 W( -- create a)508 W
+9980 12116 MT
+(request for)180 W
+/Helvetica-Oblique SF
+15398 XM
+(total_processors)SH
+/Helvetica SF
+23192 XM
+(processors for)180 W
+/Helvetica-Oblique SF
+30165 XM
+(run_time)SH
+/Helvetica SF
+34514 XM
+(seconds. The)
+640 W( request object and a)181 W
+9980 13259 MT
+(delay estimate are returned.)
+149 W( The)
+575 W( initial server port \050)148 W
+/Helvetica-Oblique SF
+(server)SH
+/Helvetica SF
+(\051 is obtained by looking up the)148 W
+9980 14402 MT
+(name "cpu_server" with the local name service.)SH
+/Symbol SF
+9242 16217 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(cpu_request_add)SH
+/Helvetica SF
+(\050request, processor_set, processors, *processors_left\051 --)
+262 W( Add the tuple)263 W
+9980 17360 MT
+(<)SH
+/Helvetica-Oblique SF
+(processor_set)SH
+/Helvetica SF
+(,)SH
+/Helvetica-Oblique SF
+17653 XM
+(processors)SH
+/Helvetica SF
+(> to the specified request.)
+253 W( Return)
+783 W( the number of processor)252 W
+9980 18503 MT
+(remaining in the request \050i.e. that can be used in future)SH
+/Helvetica-Bold SF
+34493 XM
+(cpu_request_add)SH
+/Helvetica SF
+43051 XM
+(calls\051.)SH
+/Symbol SF
+9242 20318 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(cpu_request_set_notify)SH
+/Helvetica SF
+(\050request, notify_port\051 - Ask the server to send a notification)451 W
+9980 21461 MT
+(message to)43 W
+/Helvetica-Oblique SF
+15513 XM
+(notify_port)SH
+/Helvetica SF
+20503 XM
+(after the processors are allocated)
+43 W( and 1 second before removing the)42 W
+9980 22604 MT
+(processors. Applications)
+714 W( that receive these messages can use them to make sure that)218 W
+9980 23747 MT
+(execution only takes place while all of the processors are allocated;)
+15 W( the end message can be)14 W
+9980 24890 MT
+(used to initiate a barrier synchronization to stop cleanly, and the start message can be used)48 W
+9980 26033 MT
+(to exit the barrier.)SH
+/Symbol SF
+9242 27848 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(cpu_request_activate)SH
+/Helvetica SF
+(\050request, options, total_time,)
+376 W( *delay\051 -- Activate the request \050i.e.)375 W
+9980 28991 MT
+(request the server to)
+155 W( satisfy it\051.  A maximum delay until the requested processors will be)156 W
+9980 30134 MT
+(allocated is returned.  No further)52 W
+/Helvetica-Bold SF
+24854 XM
+(cpu_request_add)SH
+/Helvetica SF
+33464 XM
+(calls are permitted)
+52 W( on the request.  The)51 W
+9980 31277 MT
+(following options are supported:)SH
+7 /Symbol AF
+12160 32528 MT
+(\267)SH
+10 /Helvetica AF
+12760 32678 MT
+(Destroy - Destroy the processor)
+39 W( sets when the request is completed.  This is intended)40 W
+3445 50 12760 32878 UL
+12760 33821 MT
+(to support naive users by)
+116 W( preventing a program that overruns its request from going)115 W
+12760 34964 MT
+(into suspended animation; destroying)
+80 W( its processor sets forces the program back into)81 W
+12760 36107 MT
+(the default processor set where it will continue to run.)SH
+7 /Symbol AF
+12160 37772 MT
+(\267)SH
+10 /Helvetica AF
+12760 37922 MT
+(Repeat - Repeat the request for)52 W
+/Helvetica-Oblique SF
+27413 XM
+(total_time)SH
+/Helvetica SF
+(. The)
+382 W( time)
+52 W( for each instance of the request)51 W
+3224 50 12760 38122 UL
+12760 39065 MT
+(is specified by the run_time argument of the)294 W
+/Helvetica-Bold SF
+34789 XM
+(cpu_request_create)SH
+/Helvetica SF
+44810 XM
+(operation that)295 W
+12760 40208 MT
+(created the request.)SH
+/Symbol SF
+9242 42023 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(cpu_request_activate_task)SH
+/Helvetica SF
+(\050request, options, total_time, task, *delay\051 --)
+572 W( Identical to)571 W
+/Helvetica-Bold SF
+9980 43166 MT
+(cpu_request_activate)SH
+/Helvetica SF
+(, but informs the server that the application using the processor sets is)SH
+9980 44309 MT
+(a task; this allows the server to optimize assignment and removal of processors by using)151 W
+/Helvetica-Bold SF
+9980 45452 MT
+(task_suspend)SH
+/Helvetica SF
+16978 XM
+(and)SH
+/Helvetica-Bold SF
+18975 XM
+(task_resume)SH
+/Helvetica SF
+25418 XM
+(-- processor assignment is much faster if the)
+51 W( processor is)52 W
+9980 46595 MT
+(idle.)SH
+/Symbol SF
+9242 48410 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(cpu_request_destroy)SH
+/Helvetica SF
+(\050request\051 - Destroy the)
+75 W( specified request, freeing any processors that)74 W
+9980 49553 MT
+(were allocated to it.  If the Notify end option)
+61 W( applies, an end notification will be sent and the)62 W
+2556 50 22080 49753 UL
+1668 50 24975 49753 UL
+9980 50696 MT
+(freeing of the processors will be delayed by 1 second.)SH
+/Symbol SF
+9242 52511 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(cpu_request_status)SH
+/Helvetica SF
+(\050request, *reserved_processors,)
+1206 W( *assigned_processors, *active,)1205 W
+9980 53654 MT
+(*options, *time\051 - Find out information about a request including whether it has processors)124 W
+9980 54797 MT
+(assigned to it, and how long until the assigned)
+45 W( processors will be removed, or the maximum)44 W
+9980 55940 MT
+(delay until processors will be assigned to it.)SH
+/Symbol SF
+9242 57755 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(cpu_server_info)SH
+/Helvetica SF
+(\050server, *max_time, *max_total_time, *max_processors, *delay\051 -- Obtain)214 W
+9980 58898 MT
+(information about the server.)310 W
+/Helvetica-Oblique SF
+24814 XM
+(max_time)SH
+/Helvetica SF
+29736 XM
+(is the maximum time for a single)
+310 W( request in)309 W
+/Helvetica-Bold SF
+9980 60041 MT
+(cpu_request_create)SH
+/Helvetica SF
+(.)SH
+/Helvetica-Oblique SF
+20666 XM
+(max_total_time)SH
+/Helvetica SF
+27926 XM
+(is the maximum total time for)
+202 W( a repeating request)203 W
+9980 61184 MT
+(created by the Repeat option to)285 W
+/Helvetica-Bold SF
+25920 XM
+(cpu_request_activate)SH
+/Helvetica SF
+36708 XM
+(or)SH
+/Helvetica-Bold SF
+38159 XM
+(cpu_request_activate_task)SH
+/Helvetica SF
+(.)SH
+3224 50 17450 61384 UL
+/Helvetica-Oblique SF
+9980 62327 MT
+(max_processors)SH
+/Helvetica SF
+17625 XM
+(is the maximum number of processors for any request.)32 W
+/Helvetica-Oblique SF
+42676 XM
+(delay)SH
+/Helvetica SF
+45376 XM
+(is the current)32 W
+9980 63470 MT
+(maximum delay until a new request can be satisfied.  The)49 W
+/Helvetica-Bold SF
+36252 XM
+(cpuinfo)SH
+/Helvetica SF
+40190 XM
+(program uses)
+49 W( this call to)48 W
+9980 64613 MT
+(determine if the cpu_server is available and what its current situation is.)SH
+ES
+%%Page: 3 4
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(3)SH
+12 SS 
+7200 8075 MT
+(5. Library Interfaces)SH
+10 /Helvetica AF
+8312 9501 MT
+(The above server interface along with the kernel interface will be used directly by programs)
+7 W( that require)8 W
+7200 10927 MT
+(explicit control over which threads are executing on which processors at which time.)
+4 W( For)
+285 W( applications with)3 W
+7200 12353 MT
+(less stringent processor allocation requirements, simple library interfaces which hide all of the)
+150 W( internal)151 W
+7200 13779 MT
+(details of interaction with the kernel and)
+323 W( server may be appropriate.  Four interfaces have been)322 W
+7200 15205 MT
+(developed, the allocate, task, hook, and task-hook interfaces.)SH
+3446 50 14038 15405 UL
+1834 50 18040 15405 UL
+2168 50 20430 15405 UL
+4335 50 25100 15405 UL
+8312 17772 MT
+(The allocate interface supports a)
+45 W( single allocation of a pool of processors.  It exports the following two)46 W
+3446 50 10358 17972 UL
+7200 19198 MT
+(calls:)SH
+/Symbol SF
+9242 20670 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(allocate_processors)SH
+/Helvetica SF
+(\050num_processors, time, interactive\051 - Allocate)768 W
+/Helvetica-Oblique SF
+43829 XM
+(num_processors)SH
+/Helvetica SF
+9980 21813 MT
+(processors for)
+48 W( the specified time.  If the time is larger than the server's maximum slice time,)49 W
+9980 22956 MT
+(then a repeating request is)
+82 W( automatically submitted.  If)81 W
+/Helvetica-Oblique SF
+34947 XM
+(interactive)SH
+/Helvetica SF
+39863 XM
+(is TRUE, errors generate)81 W
+9980 24099 MT
+(printfs, and the user is asked whether the)
+316 W( server's maximum delay is acceptable; no)317 W
+9980 25242 MT
+(allocation is performed if the answer is no.)SH
+/Symbol SF
+9242 27057 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(deallocate_processors)SH
+/Helvetica SF
+(\050\051 - Free the processors)
+186 W( allocated by)185 W
+/Helvetica-Bold SF
+38456 XM
+(allocate_processors)SH
+/Helvetica SF
+(. This)648 W
+9980 28200 MT
+(must be called by a thread in the same task as the thread that did the allocation.)SH
+/Helvetica-Bold SF
+7200 29626 MT
+(allocate_processors)SH
+/Helvetica SF
+17474 XM
+(does not return until the allocation of processors has started; it performs a)325 W
+/Helvetica-Bold SF
+7200 31052 MT
+(task_assign)SH
+/Helvetica SF
+13240 XM
+(internally so that the initial thread and all threads and tasks subsequently created share)
+37 W( the)36 W
+7200 32478 MT
+(allocated processors.  If a program)
+267 W( overruns its time allocation, it will continue to run, but without)268 W
+7200 33904 MT
+(dedicated processors.)SH
+8312 36471 MT
+(The task interface is identical to the allocate interface, but is restricted to applications)
+94 W( consisting of a)93 W
+1834 50 10407 36671 UL
+7200 37897 MT
+(single task so that the server can exploit efficiencies available in this case)
+104 W( \050suspending the task before)105 W
+7200 39323 MT
+(removing processors\051.)
+5 W( The)
+287 W( server will perform its own)4 W
+/Helvetica-Bold SF
+31521 XM
+(task_suspend)SH
+/Helvetica SF
+38472 XM
+(and)SH
+/Helvetica-Bold SF
+40422 XM
+(task_resume)SH
+/Helvetica SF
+46818 XM
+(calls on the task)4 W
+7200 40749 MT
+(in this case.  The task interface exports the following two calls:)SH
+/Symbol SF
+9242 42221 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(task_allocate_processors)SH
+/Helvetica SF
+(\050num_processors, num_seconds, interactive\051 - Identical)
+667 W( to)668 W
+/Helvetica-Bold SF
+9980 43364 MT
+(allocate_processors)SH
+/Helvetica SF
+(, but also promises the server)
+371 W( that all or the threads using the)370 W
+9980 44507 MT
+(processors will be in the current task.)SH
+/Symbol SF
+9242 46322 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(task_deallocate_processors)SH
+/Helvetica SF
+(\050\051 - Deallocate the processors)
+1519 W( allocated by)1520 W
+/Helvetica-Bold SF
+9980 47465 MT
+(task_allocate_processors)SH
+/Helvetica SF
+(.)SH
+8312 50032 MT
+(The hook interface supports allocation of a pool of processors,)
+56 W( with user scheduling hooks.  It exports)55 W
+2168 50 10369 50232 UL
+7200 51458 MT
+(the following two calls:)SH
+/Symbol SF
+9242 52930 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(allocate_processors_with_hooks)SH
+/Helvetica SF
+(\050num_processors, num_seconds, start_hook,)
+185 W( end_hook,)186 W
+9980 54073 MT
+(interactive\051 - Allocate the specified number of processors for the specified number)
+329 W( of)328 W
+9980 55216 MT
+(seconds. If)
+730 W( the number of seconds is greater than the server's maximum slice)
+226 W( time, a)227 W
+9980 56359 MT
+(repeating request is automatically submitted.)315 W
+/Helvetica-Oblique SF
+32212 XM
+(start_hook)SH
+/Helvetica SF
+37474 XM
+(is called each time after)
+315 W( the)314 W
+9980 57502 MT
+(processors are allocated.  Similarly,)88 W
+/Helvetica-Oblique SF
+26480 XM
+(end_hook)SH
+/Helvetica SF
+31238 XM
+(is called approximately 1 second before)
+88 W( any)89 W
+9980 58645 MT
+(processor deallocation.)SH
+/Helvetica-Oblique SF
+20818 XM
+(interactive)SH
+/Helvetica SF
+25653 XM
+(functions identically to the previous interfaces.)SH
+/Symbol SF
+9242 60460 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(deallocate_processors_with_hooks)SH
+/Helvetica SF
+(\050\051 - Free the processors)
+1381 W( allocated by)1380 W
+/Helvetica-Bold SF
+9980 61603 MT
+(allocate_processors_with_hooks)SH
+/Helvetica SF
+(. The)530 W
+/Helvetica-Oblique SF
+28921 XM
+(end_hook)SH
+/Helvetica SF
+33717 XM
+(will not be called, but users)
+126 W( should be)127 W
+9980 62746 MT
+(aware of the race between this deallocate call and the server ending a time slice.)SH
+7200 64172 MT
+(A thread must be dedicated to the)8 W
+/Helvetica-Bold SF
+22543 XM
+(allocate_processors_with_hooks)SH
+/Helvetica SF
+38557 XM
+(call; i.e. the calling thread)
+8 W( does not)7 W
+7200 65598 MT
+(return until the allocation request is finished)
+180 W( or terminated.  This dedicated thread is assigned to the)181 W
+7200 67024 MT
+(allocated processors \050this can)
+29 W( be reversed by performing a)28 W
+/Helvetica-Bold SF
+33743 XM
+(thread_assign_default)SH
+/Helvetica SF
+44663 XM
+(or)SH
+/Helvetica-Bold SF
+45858 XM
+(thread_assign)SH
+/Helvetica SF
+52944 XM
+(as)SH
+7200 68450 MT
+(part of the first invocation of)101 W
+/Helvetica-Oblique SF
+20368 XM
+(start_hook)SH
+/Helvetica SF
+(. All)
+480 W( threads within its)
+101 W( task and subsequently created tasks are)102 W
+7200 69876 MT
+(also assigned \050c.f.)SH
+/Helvetica-Bold SF
+15537 XM
+(task_assign)SH
+/Helvetica SF
+(\051. Both)278 W
+/Helvetica-Oblique SF
+24764 XM
+(start_hook)SH
+/Helvetica SF
+29711 XM
+(and)SH
+/Helvetica-Oblique SF
+31657 XM
+(end_hook)SH
+/Helvetica SF
+36327 XM
+(must return.)SH
+ES
+%%Page: 4 5
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(4)SH
+/Helvetica SF
+8312 7929 MT
+(Finally, there is the task-hook interface, which combines the functionality of the hook)
+41 W( interface with the)40 W
+4335 50 17146 8129 UL
+7200 9355 MT
+(server optimization of the task interface; the calls in this interface are the hook interface calls with)
+72 W( task_)73 W
+7200 10781 MT
+(prefixed. Users)
+308 W( should note that the interfaces are independent; processors must)
+15 W( be deallocated with the)14 W
+7200 12207 MT
+(deallocate call from the same interface that was used to allocate them.)SH
+12 /Helvetica-Bold AF
+7200 15962 MT
+(6. Extensions)SH
+10 /Helvetica AF
+8312 17388 MT
+(The cpu_server could be extended in a number of ways:)SH
+/Symbol SF
+9242 18860 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Time Sensitivity - Allow more of the machine to be allocated during off peak periods.)SH
+/Symbol SF
+9242 20675 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Request Size Sensitivity - Use)
+179 W( a declining priority system instead of absolute ordering to)180 W
+9980 21818 MT
+(speed throughput.  This is a standard technique from schedulers for)
+292 W( physical memory)291 W
+9980 22961 MT
+(machines; other similar techniques are also applicable \050the current processor allocation)267 W
+9980 24104 MT
+(problem for multiprocessors is essentially similar to the memory)
+299 W( allocation problem for)298 W
+9980 25247 MT
+(schedulers for physical memory machines\051.)SH
+/Symbol SF
+9242 27062 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(User Sensitivity)
+384 W( - Reserve some portion of the machine for certain users based on)385 W
+9980 28205 MT
+(administrative decisions \050e.g.)
+206 W( they paid for some portion of the machine, so they should)205 W
+9980 29348 MT
+(always be able to get at least that portion\051.)SH
+/Symbol SF
+9242 31163 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Non-Uniform Topologies)
+15 W( - For NUMA \050Non Uniform Memory Access\051, all topology knowledge)16 W
+9980 32306 MT
+(and policy is located in the server.)
+11 W( Techniques)
+299 W( such as first-fit and best-fit may be applicable)10 W
+9980 33449 MT
+(to the processor)
+89 W( allocation server for such a machine \050e.g. the clustered Gigamax machine)90 W
+9980 34592 MT
+(being built by Encore\051.)SH
+7200 36018 MT
+(In addition the server and the)
+84 W( kernel interface \050thread assignment\051 could be used directly in a language)83 W
+7200 37444 MT
+(runtime that is sophisticated enough to control and allocate processors to its threads.)SH
+ES
+%%Page: i 6
+BS
+0 SI
+10 /Helvetica-Bold AF
+30461 4329 MT
+(i)SH
+12 SS 
+25533 8075 MT
+(Table of Contents)SH
+11 SS 
+9036 9319 MT
+(1. Introduction)SH
+53388 XM
+(1)SH
+9036 10563 MT
+(2. Concepts)SH
+53388 XM
+(1)SH
+9036 11807 MT
+(3. Implementation)SH
+53388 XM
+(1)SH
+9036 13051 MT
+(4. Interface)SH
+53388 XM
+(2)SH
+9036 14295 MT
+(5. Library Interfaces)SH
+53388 XM
+(3)SH
+9036 15539 MT
+(6. Extensions)SH
+53388 XM
+(4)SH
+ES
+%%Trailer
+%%Pages: 6
+%%DocumentFonts: Helvetica Helvetica-Bold Symbol Helvetica-Oblique

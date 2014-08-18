@@ -1,0 +1,5908 @@
+%!PS-Adobe-2.0
+%%Title: iwooos92.mss
+%%DocumentFonts: (atend)
+%%Creator: Michael Jones and Scribe 7(1700)
+%%CreationDate: 10 July 1992 14:07
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale /showpage {} def} bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 1 1
+BS
+0 SI
+13 /Times-Bold AF
+22060 10919 MT
+(Inheritance in Unlikely Places:)SH
+12185 12492 MT
+(Using Objects to Build Derived Implementations of Flat Interfaces)SH
+25888 15050 MT
+(Michael B. Jones)SH
+10 /Times-Roman AF
+26670 17423 MT
+(Microsoft Research)SH
+26086 18528 MT
+(Microsoft Corporation)SH
+26601 19633 MT
+(One Microsoft Way)SH
+24822 20738 MT
+(Redmond, WA  98052, USA)SH
+25015 21843 MT
+(Michael.Jones@cs.cmu.edu)SH
+32700 25253 MT
+(On the other hand, traditional operating systems)582 W
+13 /Times-Bold AF
+15311 25438 MT
+(Abstract)SH
+10 /Times-Roman AF
+31500 26358 MT
+(typically provide one or more flat interfaces)
+266 W( containing)265 W
+31500 27463 MT
+(interface specific abstractions.  For)
+329 W( example, the)330 W
+8 SS 
+53440 XM
+(UNIX)SH
+10 /Times-Italic AF
+6960 27809 MT
+(Traditional operating systems typically provide a)598 W
+/Times-Roman SF
+31500 28568 MT
+(interface presents abstractions such as pathnames,)789 W
+/Times-Italic SF
+5760 28914 MT
+(number of flat,)
+383 W( non-object oriented interfaces through)384 W
+/Times-Roman SF
+31500 29673 MT
+(descriptors, files, directories, processes,)
+606 W( etc.; the X)607 W
+/Times-Italic SF
+5760 30019 MT
+(which system services are provided to applications.  Two)135 W
+/Times-Roman SF
+31500 30778 MT
+(Window System interface presents)
+306 W( abstractions such as)305 W
+8 /Times-Italic AF
+16740 30782 MT
+(1)SH
+10 SS 
+5760 31124 MT
+(such examples are the)1 W
+8 SS 
+14873 XM
+(UNIX)SH
+10 SS 
+17391 XM
+(system call interface and the X)1 W
+/Times-Roman SF
+31500 31883 MT
+(resource IDs, windows,)
+79 W( pixmaps, input events, etc.  While)80 W
+8 /Times-Italic AF
+12348 31887 MT
+(2)SH
+10 SS 
+5760 32229 MT
+(Window System)283 W
+13282 XM
+(protocol. Typically)
+818 W( such services are)284 W
+/Times-Roman SF
+31500 32988 MT
+(these interfaces)
+473 W( typically contain a small number of)472 W
+/Times-Italic SF
+5760 33334 MT
+(provided by large,)
+287 W( monolithic implementations, with no)286 W
+/Times-Roman SF
+31500 34093 MT
+(abstractions with largely independent semantics,)
+444 W( these)445 W
+/Times-Italic SF
+5760 34439 MT
+(provision for deriving related implementations)
+360 W( through)361 W
+/Times-Roman SF
+31500 35198 MT
+(abstractions are)
+223 W( not presented to applications as objects.)222 W
+/Times-Italic SF
+5760 35544 MT
+(inheritance or other means.)SH
+/Times-Roman SF
+31500 36303 MT
+(Thus, no clear means)
+123 W( of inheritance for such interfaces is)124 W
+/Times-Italic SF
+6960 36760 MT
+(Nonetheless, it is possible)
+277 W( to provide flexible, object)276 W
+/Times-Roman SF
+31500 37408 MT
+(supported. However,)
+560 W( recently several systems have been)155 W
+/Times-Italic SF
+5760 37865 MT
+(oriented views of otherwise flat, non-object oriented)504 W
+/Times-Roman SF
+31500 38513 MT
+(built which overcome these problems, allowing)
+282 W( derived)283 W
+/Times-Italic SF
+5760 38970 MT
+(interfaces. Furthermore,)
+417 W( these views can be used to build)83 W
+/Times-Roman SF
+31500 39618 MT
+(implementations of flat interfaces to be easily built in terms)9 W
+/Times-Italic SF
+5760 40075 MT
+(new implementations of these same flat interfaces in terms)69 W
+/Times-Roman SF
+31500 40723 MT
+(of existing)
+448 W( implementations of these same interfaces.)449 W
+/Times-Italic SF
+5760 41180 MT
+(of other ones.  This approach can bring the benefits of)219 W
+/Times-Roman SF
+31500 41828 MT
+(While these systems have typically)
+565 W( been developed)564 W
+/Times-Italic SF
+5760 42285 MT
+(objects such as enhanced)
+462 W( and/or application specific)463 W
+/Times-Roman SF
+31500 42933 MT
+(independently, the structure of the solutions arrived at is in)43 W
+/Times-Italic SF
+5760 43390 MT
+(implementations of standard services to)
+91 W( both building and)90 W
+/Times-Roman SF
+31500 44038 MT
+(many cases substantially similar.)SH
+/Times-Italic SF
+5760 44495 MT
+(using otherwise fixed, flat interfaces which for)
+86 W( one reason)87 W
+/Times-Roman SF
+32700 45254 MT
+(In particular, objects are constructed which correspond)129 W
+/Times-Italic SF
+5760 45600 MT
+(or another cannot be changed.)SH
+/Times-Roman SF
+31500 46359 MT
+(to the abstractions)
+523 W( present in the original interface,)524 W
+/Times-Italic SF
+6960 46816 MT
+(My recent)
+177 W( thesis work has taken this approach; other)176 W
+/Times-Roman SF
+31500 47464 MT
+(providing an object oriented view of the original interface.)66 W
+/Times-Italic SF
+5760 47921 MT
+(seemingly unrelated systems also use this paradigm.)
+93 W( This)438 W
+/Times-Roman SF
+31500 48569 MT
+(Such objects are typically part of)
+350 W( a toolkit, providing)351 W
+/Times-Italic SF
+5760 49026 MT
+(paper presents this)
+285 W( paradigm and some of the benefits)284 W
+/Times-Roman SF
+31500 49674 MT
+(different sets of objects and interfaces appropriate)
+417 W( to)416 W
+/Times-Italic SF
+5760 50131 MT
+(derived from it, citing several real systems as examples.)SH
+/Times-Roman SF
+31500 50779 MT
+(different applications.  Next, an implementation)
+313 W( of the)314 W
+31500 51884 MT
+(original interface is constructed)
+299 W( in terms of the toolkit)298 W
+12 /Times-Bold AF
+5760 52191 MT
+(1. Introduction)SH
+10 /Times-Roman AF
+31500 52989 MT
+(objects. Taken)
+1178 W( together, these components map)
+464 W( the)465 W
+6960 53296 MT
+(The ability to implement a given interface)
+147 W( in terms of)148 W
+31500 54094 MT
+(original flat interface onto an object oriented)
+294 W( interface,)293 W
+5760 54401 MT
+(another implementation of the same interface is taken for)132 W
+31500 55199 MT
+(which is)
+141 W( in turn mapped back onto the original interface.)142 W
+5760 55506 MT
+(granted by the object oriented programming community.)208 W
+31500 56304 MT
+(This having been done, inheritance may be)
+241 W( used in the)240 W
+5760 56611 MT
+(Some of the benefits of this ability include)
+150 W( being able to)149 W
+31500 57409 MT
+(usual fashion to construct)
+138 W( derived implementations of the)139 W
+5760 57716 MT
+(utilize enhanced)
+1638 W( and/or application specific)1639 W
+31500 58514 MT
+(object oriented interface.)
+469 W( When)
+1186 W( composed with the)468 W
+5760 58821 MT
+(implementations of nonetheless standard interfaces.)
+125 W( Such)499 W
+31500 59619 MT
+(mappings from and to the original)
+253 W( interface, these then)254 W
+5760 59926 MT
+(an implementation of one instance of an interface in terms)71 W
+31500 60724 MT
+(become derived implementations of the original interface,)125 W
+5760 61031 MT
+(of another is typically)
+565 W( accomplished through object)564 W
+31500 61829 MT
+(accomplishing the desired result.)SH
+5760 62136 MT
+(oriented interfaces and the use of inheritance.)SH
+12 /Times-Bold AF
+31500 63889 MT
+(2. Parallel Structure in Two Different)SH
+32700 64994 MT
+(Problem Domains)SH
+10 /Times-Roman AF
+32700 66099 MT
+(This section illustrates)
+78 W( the paradigm of using objects to)79 W
+10800 50 5760 66140 UL
+31500 67204 MT
+(build derived implementations of flat interfaces through)259 W
+6 SS 
+6560 67479 MT
+(1)SH
+6860 67788 MT
+(UNIX)SH
+8 SS 
+8559 XM
+(is a trademark of UNIX System Laboratories, Inc.)SH
+10 SS 
+31500 68309 MT
+(two examples in two different)
+61 W( problem domains.  The first)62 W
+6 SS 
+6560 69327 MT
+(2)SH
+10 SS 
+31500 69414 MT
+(is in the)
+408 W( domain of operating system interfaces.  In)407 W
+8 SS 
+6860 69636 MT
+(The X Window System is a trademark of Massachusetts)
+121 W( Institute of)120 W
+10 SS 
+31500 70519 MT
+(particular, my thesis work [7] [8] [9] has demonstrated both)SH
+8 SS 
+5760 70560 MT
+(Technology.)SH
+ES
+%%Page: 2 2
+BS
+0 SI
+10 /Times-Roman AF
+5760 6446 MT
+(the usefulness of and)
+91 W( an effective method for constructing)90 W
+5760 7551 MT
+(what I have)
+158 W( termed system interface interposition agents.)159 W
+5760 8656 MT
+(Interposition agents are user code which provide the system)SH
+5760 9761 MT
+(interface to normal)
+232 W( clients of the system interface \050e.g.,)233 W
+5760 10866 MT
+(application programs\051 and which are)
+44 W( implemented in terms)43 W
+5760 11971 MT
+(another instance of)
+240 W( the same interface.  Agents look to)241 W
+5760 13076 MT
+(normal applications like the operating system, and to)
+163 W( the)162 W
+5760 14181 MT
+(operating system like a normal application.  In other)
+9 W( words,)10 W
+5760 15286 MT
+(interposition agents are derived)
+315 W( implementations of the)314 W
+5760 16391 MT
+(operating system interface.)SH
+6960 17607 MT
+(The second is in the domain of)
+42 W( network window system)43 W
+5760 18712 MT
+(interfaces. A)
+634 W( number)
+192 W( of systems have been built which)191 W
+5760 19817 MT
+(provide the X Window System)
+149 W( [14])
+SH( server)
+149 W( interface to X)150 W
+5760 20922 MT
+(client programs, and which are)
+48 W( themselves implemented as)47 W
+1 1 0 27800 34660 GB 
+%%BeginDocument: full_interposition.bsd.small.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Helvetica-Oblique
+%%%Pages: 1
+%%BoundingBox: 37 133 272 289
+%%EndComments
+
+50 dict begin
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+/patternGrayLevel idef
+patternGrayLevel -1 eq {
+/patternString idef
+} if
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+/fontDict printFont findfont printSize scalefont dup setfont def
+/descender fontDict begin 0 [FontBBox] 1 get FontMatrix end
+transform exch pop def
+/vertoffset 0 descender sub printSize sub printFont /Courier ne
+printFont /Courier-Bold ne and { 1 add } if def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 3 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 7 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.9 0 0 0.9 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 97 172.572 ] concat
+%I
+[
+(Mach 4.3BSD OS Implementation)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 230 310.144 ] concat
+%I
+[
+(HP-UX)
+(Compiler)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 230 265.144 ] concat
+%I
+[
+(HP-UX)
+(Emulator)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 159 260.572 ] concat
+%I
+[
+(make)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 71 216.572 ] concat
+%I
+[
+(mail)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 124 ] concat
+%I
+193 106 255 115 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 124 ] concat
+%I
+114 106 176 115 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 133 ] concat
+%I
+25 53 87 62 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 133 ] concat
+%I
+114 53 176 62 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 133 ] concat
+%I
+193 53 255 62 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 151 221 ] concat
+%I
+[
+(Agent Implementing)
+(Customized Filesystem View)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+16 9 273 44 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 133 ] concat
+%I
+105 62 264 97 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 133 ] concat
+%I
+25 62 87 97 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 124 ] concat
+%I
+114 115 176 150 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+193 97 255 133 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+193 141 255 177 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+193 133 255 141 Rect
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE 5760 22027 MT
+(X client)
+113 W( programs.  Such programs are often known as X)114 W
+/Times-Bold SF
+33444 22970 MT
+(Figure 2-3:)SH
+/Times-Roman SF
+38693 XM
+(Operating system interface examples)SH
+5760 23132 MT
+(pseudo-servers [15].)
+SH( Thus,)
+612 W( X pseudo-servers are derived)181 W
+40122 24075 MT
+(with derived implementations)SH
+5760 24237 MT
+(implementations of the X Window System interface.)SH
+1 1 0 1360 53442 GB 
+%%BeginDocument: no_interposition.bsd.small.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Helvetica-Oblique Courier
+%%%Pages: 1
+%%BoundingBox: 44 155 242 281
+%%EndComments
+
+50 dict begin
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+/patternGrayLevel idef
+patternGrayLevel -1 eq {
+/patternString idef
+} if
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+/fontDict printFont findfont printSize scalefont dup setfont def
+/descender fontDict begin 0 [FontBBox] 1 get FontMatrix end
+transform exch pop def
+/vertoffset 0 descender sub printSize sub printFont /Courier ne
+printFont /Courier-Bold ne and { 1 add } if def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 3 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 7 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.9 0 0 0.9 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 185.423 295.438 ] concat
+%I
+[
+(make)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 106.423 295.438 ] concat
+%I
+[
+(mail)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 97.4227 212.866 ] concat
+%I
+[
+(Operating System Interface)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-courier-medium-r-*-100-*
+/Courier 10 SetF
+%I t
+[ 1 0 0 1 62 194.866 ] concat
+%I
+[
+(open\(\), read\(\), stat\(\), fork\(\),)
+(kill\(\), _exit\(\), signals, ...)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 53 194.866 ] concat
+%I
+[
+(\()
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 248 185.866 ] concat
+%I
+[
+(\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1.60869 0 0 1 -67.3599 97.8659 ] concat
+%I
+185 110 207 110 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 54.4227 79.8659 ] concat
+%I
+211 190 185 190 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 79 252.572 ] concat
+%I
+[
+(Mach 4.3BSD OS Implementation)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+61 133 123 168 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+140 133 202 168 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+61 124 123 133 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+140 124 202 133 Rect
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+238 128 238 66 Line
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+43 88 220 124 Rect
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE /Times-Bold SF
+7704 39552 MT
+(Figure 2-1:)SH
+/Times-Roman SF
+12953 XM
+(Operating system interface examples)SH
+1 1 0 27800 54080 GB 
+%%BeginDocument: full_interposition.x11.small.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Helvetica-Oblique
+%%%Pages: 1
+%%BoundingBox: 37 133 277 289
+%%EndComments
+
+50 dict begin
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+/patternGrayLevel idef
+patternGrayLevel -1 eq {
+/patternString idef
+} if
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+/fontDict printFont findfont printSize scalefont dup setfont def
+/descender fontDict begin 0 [FontBBox] 1 get FontMatrix end
+transform exch pop def
+/vertoffset 0 descender sub printSize sub printFont /Courier ne
+printFont /Courier-Bold ne and { 1 add } if def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 3 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 7 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.9 0 0 0.9 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 234.572 314.572 ] concat
+%I
+[
+(Engineering)
+(Drawing)
+(Application)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 235.572 265.144 ] concat
+%I
+[
+(3D Graphics)
+(Extension)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 160 260.572 ] concat
+%I
+[
+(idraw)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 71 216.572 ] concat
+%I
+[
+(xterm)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 37 124 ] concat
+%I
+105 106 167 115 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 133 ] concat
+%I
+25 53 87 62 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 88 177.144 ] concat
+%I
+[
+(X Window)
+(System Server)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 230 177.144 ] concat
+%I
+[
+(X Window)
+(System Server)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 151 221 ] concat
+%I
+[
+(X Pseudo-Server)
+(Implementing Shared Windows)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 116 ] concat
+%I
+202 168 269 203 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 116 ] concat
+%I
+202 159 269 168 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 124 ] concat
+%I
+202 106 269 115 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 133 ] concat
+%I
+202 53 269 62 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 124 ] concat
+%I
+114 115 176 150 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 133 ] concat
+%I
+25 62 87 97 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+16 9 185 44 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+202 97 269 133 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+114 44 176 53 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+105 53 278 88 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+193 9 278 44 Rect
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE /Times-Bold SF
+33152 42390 MT
+(Figure 2-4:)SH
+/Times-Roman SF
+38401 XM
+(X Window System interface examples)SH
+40122 43495 MT
+(with derived implementations)SH
+31500 45505 MT
+(suit application requirements.  This agent might)
+39 W( implement)40 W
+31500 46610 MT
+(enhancements such)
+1095 W( as viewpaths and/or union)1094 W
+31500 47715 MT
+(directories [11] [6].)
+SH( The)
+694 W( second agent might)
+222 W( provide an)223 W
+31500 48820 MT
+(adapter between two variants of the)235 W
+8 SS 
+47406 XM
+(UNIX)SH
+10 SS 
+49891 XM
+(interface. In)718 W
+31500 49925 MT
+(particular, such an agent would make it possible)
+406 W( for)407 W
+31500 51030 MT
+(binaries from one)156 W
+8 SS 
+39272 XM
+(UNIX)SH
+10 SS 
+41678 XM
+(variant to)
+156 W( be run on a somewhat)155 W
+31500 52135 MT
+(different one through the use of a derived)
+108 W( and specialized)109 W
+31500 53240 MT
+(implementation of the system interface.)SH
+1 1 0 2160 67957 GB 
+%%BeginDocument: no_interposition.x11.small.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Helvetica-Oblique Courier
+%%%Pages: 1
+%%BoundingBox: 36 147 245 273
+%%EndComments
+
+50 dict begin
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+/patternGrayLevel idef
+patternGrayLevel -1 eq {
+/patternString idef
+} if
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+/fontDict printFont findfont printSize scalefont dup setfont def
+/descender fontDict begin 0 [FontBBox] 1 get FontMatrix end
+transform exch pop def
+/vertoffset 0 descender sub printSize sub printFont /Courier ne
+printFont /Courier-Bold ne and { 1 add } if def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 3 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 7 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.9 0 0 0.9 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 44 186 ] concat
+%I
+[
+(\()
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 266 177 ] concat
+%I
+[
+(\))
+] Text
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1.60869 0 0 1 -67.2156 89 ] concat
+%I
+185 110 207 110 Line
+End
+
+Begin %I Line
+%I b 65535
+1 0 1 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 54.567 72 ] concat
+%I
+211 190 185 190 Line
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 106.567 288.572 ] concat
+%I
+[
+(xterm)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 186.567 288.572 ] concat
+%I
+[
+(idraw)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 96.567 204 ] concat
+%I
+[
+(Window System Interface)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-courier-medium-r-*-100-*
+/Courier 10 SetF
+%I t
+[ 1 0 0 1 53 186 ] concat
+%I
+[
+(X_CreateWindow, X_Bell, X_PolyLine,)
+(X_OpenFont, input events, ...)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 125 249.144 ] concat
+%I
+[
+(X Window)
+(System Server)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+61 124 123 159 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+140 124 202 159 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+43 79 220 115 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+61 115 123 124 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+140 115 202 124 Rect
+End
+
+Begin %I Line
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+238 119 238 57 Line
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE 32700 54456 MT
+(Figure 2-4)
+230 W( contains two X Window System interface)229 W
+/Times-Bold SF
+7412 54867 MT
+(Figure 2-2:)SH
+/Times-Roman SF
+12661 XM
+(X Window System interface examples)SH
+31500 55561 MT
+(pseudo-servers which have been motivated by needs of)266 W
+6960 56658 MT
+(To make these examples more concrete, figures 2-1)
+48 W( and)49 W
+31500 56666 MT
+(other groups.)
+399 W( The)
+1047 W( first provides a shared X server,)398 W
+5760 57763 MT
+(2-2 demonstrate use of their respective)
+70 W( interfaces by client)69 W
+31500 57771 MT
+(allowing users on)
+384 W( different physical displays to share)385 W
+5760 58868 MT
+(programs in the normal manner.  Figures)
+302 W( 2-3 and 2-4)303 W
+31500 58876 MT
+(logically combined displays or windows.  The)
+349 W( second)348 W
+5760 59973 MT
+(expand these pictures)
+466 W( to include the use of derived)465 W
+31500 59981 MT
+(pseudo-server provides)
+11 W( an implementation of an X protocol)12 W
+5760 61078 MT
+(implementations of their)
+93 W( respective interfaces.  As well as)94 W
+31500 61086 MT
+(extension as a layer on top of)
+3 W( another X server which might)2 W
+5760 62183 MT
+(providing examples of the use of derived implementations)91 W
+31500 62191 MT
+(not otherwise provide)
+126 W( it.  Such pseudo-servers potentially)127 W
+5760 63288 MT
+(of flat interfaces in the abstract,)
+8 W( figures 2-3 and 2-4 provide)9 W
+31500 63296 MT
+(provide more flexibility)
+417 W( for both experimentation and)416 W
+5760 64393 MT
+(a few such examples of derived implementations which)
+28 W( are)27 W
+31500 64401 MT
+(implementation of X)
+11 W( server functions than would otherwise)12 W
+5760 65498 MT
+(clearly also useful in their own right.)SH
+31500 65506 MT
+(be present.)SH
+6960 66714 MT
+(Figure 2-3 contains two)
+188 W( system interface interposition)189 W
+32700 66722 MT
+(While the structure of the two figures is)
+447 W( slightly)446 W
+5760 67819 MT
+(agents which have been motivated by software)
+36 W( engineering)35 W
+31500 67827 MT
+(different, this does not reflect any)
+127 W( fundamental difference)128 W
+5760 68924 MT
+(needs of)
+27 W( the Mach project)
+28 W( [1].)
+SH( The)
+306 W( first provides for views)28 W
+31500 68932 MT
+(between the two problem domains.  Rather,)
+42 W( the differences)41 W
+5760 70029 MT
+(of the filesystem namespace which may be customized to)118 W
+31500 70037 MT
+(are merely)
+364 W( an artifact of the actual examples chosen.)365 W
+ES
+%%Page: 3 3
+BS
+0 SI
+10 /Times-Roman AF
+5760 6446 MT
+(Although not strictly parallel in)
+262 W( structure, the examples)261 W
+5760 7551 MT
+(were chosen because they demonstrate real solutions to)258 W
+5760 8656 MT
+(actual problems.)SH
+12 /Times-Bold AF
+5760 10716 MT
+(3. Solution Structure)SH
+10 SS 
+1 1 0 27800 54460 GB 
+%%BeginDocument: agent_structure.x11.small.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Helvetica-Oblique Helvetica
+%%%Pages: 1
+%%BoundingBox: 37 133 272 487
+%%EndComments
+
+50 dict begin
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+/patternGrayLevel idef
+patternGrayLevel -1 eq {
+/patternString idef
+} if
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+/fontDict printFont findfont printSize scalefont dup setfont def
+/descender fontDict begin 0 [FontBBox] 1 get FontMatrix end
+transform exch pop def
+/vertoffset 0 descender sub printSize sub printFont /Courier ne
+printFont /Courier-Bold ne and { 1 add } if def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 3 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 7 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.9 0 0 0.9 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+25 63 123 98 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0.75 SetP
+%I t
+[ 1 0 0 1 45 141 ] concat
+%I
+43 195 140 231 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 37 141 ] concat
+%I
+34 240 131 275 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+25 284 123 319 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 45 141 ] concat
+%I
+43 151 140 187 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 37 141 ] concat
+%I
+34 107 131 142 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+16 54 273 355 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+16 364 273 399 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+16 355 273 364 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+16 45 273 54 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-120-*
+/Helvetica-Oblique 12 SetF
+%I t
+[ 1 0 0 1 124 526.572 ] concat
+%I
+[
+(X Client Program)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-120-*
+/Helvetica-Oblique 12 SetF
+%I t
+[ 1 0 0 1 125 482.572 ] concat
+%I
+[
+(X Pseudo-Server)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-120-*
+/Helvetica-Oblique 12 SetF
+%I t
+[ 1 0 0 1 106 172.572 ] concat
+%I
+[
+(X Window System Server)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+16 9 273 44 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 62 452 ] concat
+%I
+[
+(Implement numeric)
+(X interface)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 80 411.572 ] concat
+%I
+[
+(Implement)
+(typed symbolic)
+(X interface)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 97 319 ] concat
+%I
+[
+(X toolkit \(Xt,)
+(InterViews, etc.\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 106 270.572 ] concat
+%I
+[
+(XLib)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 62 230 ] concat
+%I
+[
+(Numeric)
+(X protocol)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 168 452 ] concat
+%I
+[
+(Calls typed symbolic)
+(X interface)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 186 411.572 ] concat
+%I
+[
+(Performs invocations)
+(on OO X interface)
+(objects)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 204 363 ] concat
+%I
+[
+(Derived from OO)
+(X interface objects)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 204 323.572 ] concat
+%I
+[
+(Provides OO view)
+(of underlying)
+(X facilities)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 186 278.572 ] concat
+%I
+[
+(Provides typed)
+(symbolic view of)
+(underlying X facilities)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 168 234.572 ] concat
+%I
+[
+(Provides numeric)
+(view of underlying)
+(X facilties)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 98 363 ] concat
+%I
+[
+(Pseudo-Server)
+(specific objects)
+] Text
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE 37874 42770 MT
+(Figure 3-2:)SH
+/Times-Roman SF
+43123 XM
+(Structure of an)SH
+39359 43875 MT
+(X Window System pseudo-server)SH
+31500 45885 MT
+(be constructed in terms of derived implementations of the)104 W
+31500 46990 MT
+(object oriented)
+24 W( interface.  This key idea should be effective)25 W
+1 1 0 2060 60521 GB 
+%%BeginDocument: agent_structure.bsd.small.ps
+%!PS-Adobe-2.0 EPSF-1.2
+%%DocumentFonts: Helvetica-Oblique Helvetica
+%%%Pages: 1
+%%BoundingBox: 37 133 272 487
+%%EndComments
+
+50 dict begin
+
+/arrowHeight 8 def
+/arrowWidth 4 def
+/none null def
+/numGraphicParameters 17 def
+/stringLimit 65535 def
+
+/Begin {
+save
+numGraphicParameters dict begin
+} def
+
+/End {
+end
+restore
+} def
+
+/SetB {
+dup type /nulltype eq {
+pop
+false /brushRightArrow idef
+false /brushLeftArrow idef
+true /brushNone idef
+} {
+/brushDashOffset idef
+/brushDashArray idef
+0 ne /brushRightArrow idef
+0 ne /brushLeftArrow idef
+/brushWidth idef
+false /brushNone idef
+} ifelse
+} def
+
+/SetCFg {
+/fgblue idef
+/fggreen idef
+/fgred idef
+} def
+
+/SetCBg {
+/bgblue idef
+/bggreen idef
+/bgred idef
+} def
+
+/SetF {
+/printSize idef
+/printFont idef
+} def
+
+/SetP {
+dup type /nulltype eq {
+pop true /patternNone idef
+} {
+/patternGrayLevel idef
+patternGrayLevel -1 eq {
+/patternString idef
+} if
+false /patternNone idef
+} ifelse
+} def
+
+/BSpl {
+0 begin
+storexyn
+newpath
+n 1 gt {
+0 0 0 0 0 0 1 1 true subspline
+n 2 gt {
+0 0 0 0 1 1 2 2 false subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 2 copy false subspline
+} if
+n 2 sub dup n 1 sub dup 2 copy 2 copy false subspline
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Circ {
+newpath
+0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/CBSpl {
+0 begin
+dup 2 gt {
+storexyn
+newpath
+n 1 sub dup 0 0 1 1 2 2 true subspline
+1 1 n 3 sub {
+/i exch def
+i 1 sub dup i dup i 1 add dup i 2 add dup false subspline
+} for
+n 3 sub dup n 2 sub dup n 1 sub dup 0 0 false subspline
+n 2 sub dup n 1 sub dup 0 0 1 1 false subspline
+patternNone not { ifill } if
+brushNone not { istroke } if
+} {
+Poly
+} ifelse
+end
+} dup 0 4 dict put def
+
+/Elli {
+0 begin
+newpath
+4 2 roll
+translate
+scale
+0 0 1 0 360 arc
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 1 dict put def
+
+/Line {
+0 begin
+2 storexyn
+newpath
+x 0 get y 0 get moveto
+x 1 get y 1 get lineto
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+0 0 1 1 rightarrow
+end
+} dup 0 4 dict put def
+
+/MLine {
+0 begin
+storexyn
+newpath
+n 1 gt {
+x 0 get y 0 get moveto
+1 1 n 1 sub {
+/i exch def
+x i get y i get lineto
+} for
+patternNone not brushLeftArrow not brushRightArrow not and and { ifill } if
+brushNone not { istroke } if
+0 0 1 1 leftarrow
+n 2 sub dup n 1 sub dup rightarrow
+} if
+end
+} dup 0 4 dict put def
+
+/Poly {
+3 1 roll
+newpath
+moveto
+-1 add
+{ lineto } repeat
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+} def
+
+/Rect {
+0 begin
+/t exch def
+/r exch def
+/b exch def
+/l exch def
+newpath
+l b moveto
+l t lineto
+r t lineto
+r b lineto
+closepath
+patternNone not { ifill } if
+brushNone not { istroke } if
+end
+} dup 0 4 dict put def
+
+/Text {
+ishow
+} def
+
+/idef {
+dup where { pop pop pop } { exch def } ifelse
+} def
+
+/ifill {
+0 begin
+gsave
+patternGrayLevel -1 ne {
+fgred bgred fgred sub patternGrayLevel mul add
+fggreen bggreen fggreen sub patternGrayLevel mul add
+fgblue bgblue fgblue sub patternGrayLevel mul add setrgbcolor
+eofill
+} {
+eoclip
+originalCTM setmatrix
+pathbbox /t exch def /r exch def /b exch def /l exch def
+/w r l sub ceiling cvi def
+/h t b sub ceiling cvi def
+/imageByteWidth w 8 div ceiling cvi def
+/imageHeight h def
+bgred bggreen bgblue setrgbcolor
+eofill
+fgred fggreen fgblue setrgbcolor
+w 0 gt h 0 gt and {
+l b translate w h scale
+w h true [w 0 0 h neg 0 h] { patternproc } imagemask
+} if
+} ifelse
+grestore
+end
+} dup 0 8 dict put def
+
+/istroke {
+gsave
+brushDashOffset -1 eq {
+[] 0 setdash
+1 setgray
+} {
+brushDashArray brushDashOffset setdash
+fgred fggreen fgblue setrgbcolor
+} ifelse
+brushWidth setlinewidth
+originalCTM setmatrix
+stroke
+grestore
+} def
+
+/ishow {
+0 begin
+gsave
+fgred fggreen fgblue setrgbcolor
+/fontDict printFont findfont printSize scalefont dup setfont def
+/descender fontDict begin 0 [FontBBox] 1 get FontMatrix end
+transform exch pop def
+/vertoffset 0 descender sub printSize sub printFont /Courier ne
+printFont /Courier-Bold ne and { 1 add } if def {
+0 vertoffset moveto show
+/vertoffset vertoffset printSize sub def
+} forall
+grestore
+end
+} dup 0 3 dict put def
+
+/patternproc {
+0 begin
+/patternByteLength patternString length def
+/patternHeight patternByteLength 8 mul sqrt cvi def
+/patternWidth patternHeight def
+/patternByteWidth patternWidth 8 idiv def
+/imageByteMaxLength imageByteWidth imageHeight mul
+stringLimit patternByteWidth sub min def
+/imageMaxHeight imageByteMaxLength imageByteWidth idiv patternHeight idiv
+patternHeight mul patternHeight max def
+/imageHeight imageHeight imageMaxHeight sub store
+/imageString imageByteWidth imageMaxHeight mul patternByteWidth add string def
+0 1 imageMaxHeight 1 sub {
+/y exch def
+/patternRow y patternByteWidth mul patternByteLength mod def
+/patternRowString patternString patternRow patternByteWidth getinterval def
+/imageRow y imageByteWidth mul def
+0 patternByteWidth imageByteWidth 1 sub {
+/x exch def
+imageString imageRow x add patternRowString putinterval
+} for
+} for
+imageString
+end
+} dup 0 12 dict put def
+
+/min {
+dup 3 2 roll dup 4 3 roll lt { exch } if pop
+} def
+
+/max {
+dup 3 2 roll dup 4 3 roll gt { exch } if pop
+} def
+
+/arrowhead {
+0 begin
+transform originalCTM itransform
+/taily exch def
+/tailx exch def
+transform originalCTM itransform
+/tipy exch def
+/tipx exch def
+/dy tipy taily sub def
+/dx tipx tailx sub def
+/angle dx 0 ne dy 0 ne or { dy dx atan } { 90 } ifelse def
+gsave
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+patternNone not {
+originalCTM setmatrix
+/padtip arrowHeight 2 exp 0.25 arrowWidth 2 exp mul add sqrt brushWidth mul
+arrowWidth div def
+/padtail brushWidth 2 div def
+tipx tipy translate
+angle rotate
+padtip 0 translate
+arrowHeight padtip add padtail add arrowHeight div dup scale
+arrowheadpath
+ifill
+} if
+brushNone not {
+originalCTM setmatrix
+tipx tipy translate
+angle rotate
+arrowheadpath
+istroke
+} if
+grestore
+end
+} dup 0 9 dict put def
+
+/arrowheadpath {
+newpath
+0 0 moveto
+arrowHeight neg arrowWidth 2 div lineto
+arrowHeight neg arrowWidth 2 div neg lineto
+closepath
+} def
+
+/leftarrow {
+0 begin
+y exch get /taily exch def
+x exch get /tailx exch def
+y exch get /tipy exch def
+x exch get /tipx exch def
+brushLeftArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/rightarrow {
+0 begin
+y exch get /tipy exch def
+x exch get /tipx exch def
+y exch get /taily exch def
+x exch get /tailx exch def
+brushRightArrow { tipx tipy tailx taily arrowhead } if
+end
+} dup 0 4 dict put def
+
+/midpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 x1 add 2 div
+y0 y1 add 2 div
+end
+} dup 0 4 dict put def
+
+/thirdpoint {
+0 begin
+/y1 exch def
+/x1 exch def
+/y0 exch def
+/x0 exch def
+x0 2 mul x1 add 3 div
+y0 2 mul y1 add 3 div
+end
+} dup 0 4 dict put def
+
+/subspline {
+0 begin
+/movetoNeeded exch def
+y exch get /y3 exch def
+x exch get /x3 exch def
+y exch get /y2 exch def
+x exch get /x2 exch def
+y exch get /y1 exch def
+x exch get /x1 exch def
+y exch get /y0 exch def
+x exch get /x0 exch def
+x1 y1 x2 y2 thirdpoint
+/p1y exch def
+/p1x exch def
+x2 y2 x1 y1 thirdpoint
+/p2y exch def
+/p2x exch def
+x1 y1 x0 y0 thirdpoint
+p1x p1y midpoint
+/p0y exch def
+/p0x exch def
+x2 y2 x3 y3 thirdpoint
+p2x p2y midpoint
+/p3y exch def
+/p3x exch def
+movetoNeeded { p0x p0y moveto } if
+p1x p1y p2x p2y p3x p3y curveto
+end
+} dup 0 17 dict put def
+
+/storexyn {
+/n exch def
+/y n array def
+/x n array def
+n 1 sub -1 0 {
+/i exch def
+y i 3 2 roll put
+x i 3 2 roll put
+} for
+} def
+
+%%EndProlog
+
+%I Idraw 7 Grid 8 
+
+%%%Page: 1 1
+
+Begin
+%I b u
+%I cfg u
+%I cbg u
+%I f u
+%I p u
+%I t
+[ 0.9 0 0 0.9 0 0 ] concat
+/originalCTM matrix currentmatrix def
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-120-*
+/Helvetica-Oblique 12 SetF
+%I t
+[ 1 0 0 1 80 172.572 ] concat
+%I
+[
+(Operating System Kernel or Agent)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 61 233.572 ] concat
+%I
+[
+(Numeric system)
+(interface \(system)
+(call traps\))
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 96 322.572 ] concat
+%I
+[
+(Toolkit providing)
+(OO system)
+(interface)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+25 63 123 98 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+0.75 SetP
+%I t
+[ 1 0 0 1 45 141 ] concat
+%I
+43 195 140 231 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 37 141 ] concat
+%I
+34 240 131 275 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+25 284 123 319 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 45 141 ] concat
+%I
+43 151 140 187 Rect
+End
+
+Begin %I Rect
+%I b 65535
+1 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 37 141 ] concat
+%I
+34 107 131 142 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-120-*
+/Helvetica-Oblique 12 SetF
+%I t
+[ 1 0 0 1 106 482.572 ] concat
+%I
+[
+(Operating System Agent)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+16 54 273 355 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+16 364 273 399 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+16 355 273 364 Rect
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+%I p
+< 11 22 44 88 11 22 44 88 > -1 SetP
+%I t
+[ 1 0 0 1 28 141 ] concat
+%I
+16 45 273 54 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-120-*
+/Helvetica-Oblique 12 SetF
+%I t
+[ 1 0 0 1 115 526.572 ] concat
+%I
+[
+(Application Program)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 80 275 ] concat
+%I
+[
+(System call)
+(routines)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 168 451 ] concat
+%I
+[
+(Calls typed symbolic)
+(system interface)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 203 367.572 ] concat
+%I
+[
+(Derived from OO)
+(system interface)
+(objects)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 203 323.572 ] concat
+%I
+[
+(Provides OO view)
+(of underlying)
+(system)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 186 278.572 ] concat
+%I
+[
+(Provides typed)
+(symbolic view of)
+(underlying system)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 168 234.572 ] concat
+%I
+[
+(Provides numeric)
+(view of underlying)
+(system)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-o-*-100-*
+/Helvetica-Oblique 10 SetF
+%I t
+[ 1 0 0 1 186 410.572 ] concat
+%I
+[
+(Performs invocations)
+(on OO system)
+(interface objects)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 80 410.572 ] concat
+%I
+[
+(Implement typed)
+(symbolic system)
+(interface)
+] Text
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 62 455.572 ] concat
+%I
+[
+(Implement)
+(numeric system)
+(interface)
+] Text
+End
+
+Begin %I Rect
+%I b 65535
+2 0 0 [] 0 SetB
+%I cfg Black
+0 0 0 SetCFg
+%I cbg White
+1 1 1 SetCBg
+none SetP %I p n
+%I t
+[ 1 0 0 1 28 142 ] concat
+%I
+16 9 273 44 Rect
+End
+
+Begin %I Text
+%I cfg Black
+0 0 0 SetCFg
+%I f *-helvetica-medium-r-*-100-*
+/Helvetica 10 SetF
+%I t
+[ 1 0 0 1 98 363 ] concat
+%I
+[
+(Agent specific)
+(objects)
+] Text
+End
+
+End %I eop
+
+showpage
+
+%%Trailer
+
+end
+
+%%EndDocument
+ GE 31500 48095 MT
+(across a number of problem domains.)SH
+/Times-Bold SF
+12384 48831 MT
+(Figure 3-1:)SH
+/Times-Roman SF
+17633 XM
+(Structure of a)SH
+32700 49311 MT
+(For instance, an object oriented toolkit)
+11 W( providing objects)10 W
+13230 49936 MT
+(system interface interposition agent)SH
+31500 50416 MT
+(corresponding to)51 W
+8 SS 
+38601 XM
+(UNIX)SH
+10 SS 
+40902 XM
+(abstractions was constructed as part)52 W
+31500 51521 MT
+(of my thesis work)
+244 W( [9].)
+SH( Multiple)
+738 W( layers of objects exist)243 W
+6960 51727 MT
+(When an interface is presented)
+142 W( to clients in an object-)141 W
+31500 52626 MT
+(which allow derived forms of such abstractions as system)111 W
+5760 52832 MT
+(oriented manner derived implementations can be)
+74 W( produced)75 W
+31500 53731 MT
+(calls, descriptors, open)
+47 W( objects, pathnames, directories, etc.)46 W
+5760 53937 MT
+(a in straight forward fashion through)
+19 W( the use of inheritance.)18 W
+31500 54836 MT
+(to be implemented via inheritance.)
+61 W( Similar)
+373 W( toolkits can be)62 W
+5760 55042 MT
+(Indeed, examples of the success of this)
+154 W( approach in both)155 W
+31500 55941 MT
+(provided for other interfaces.)SH
+5760 56147 MT
+(example domains exist)
+111 W( [4] [13].)
+SH( A)
+472 W( means of doing so for)111 W
+32700 57157 MT
+(To use this approach for a given flat)
+72 W( interface, a toolkit)71 W
+5760 57252 MT
+(the flat,)
+615 W( non-object oriented interfaces prevalent in)616 W
+31500 58262 MT
+(providing object oriented views)
+159 W( of that interface must be)160 W
+5760 58357 MT
+(traditional operating systems is not as readily apparent.)SH
+31500 59367 MT
+(constructed. The)
+572 W( structure)
+161 W( of each such toolkit is highly)160 W
+6960 59573 MT
+(Nonetheless, derived implementations of)
+127 W( flat interfaces)126 W
+31500 60472 MT
+(interface-specific, and while)
+71 W( the ideas underlying them are)72 W
+5760 60678 MT
+(can be supported by transforming the flat interface)
+77 W( into an)78 W
+31500 61577 MT
+(similar, the code for each)
+195 W( is likely to be quite different.)194 W
+5760 61783 MT
+(object oriented interface, producing a)
+207 W( derived version of)206 W
+31500 62682 MT
+(Each toolkit, and)
+3 W( indeed, each derived implementation built)4 W
+5760 62888 MT
+(the object oriented)
+159 W( interface in the usual manner through)160 W
+31500 63787 MT
+(with them, must)
+81 W( be carefully constructed so as to preserve)80 W
+5760 63993 MT
+(inheritance, and then transforming the object oriented)412 W
+31500 64892 MT
+(the semantics of the underlying interface.)
+86 W( The)
+424 W( good news)87 W
+5760 65098 MT
+(interface back)
+203 W( into a client of the original flat interface.)204 W
+31500 65997 MT
+(is that once such a toolkit has been built for a given flat)148 W
+5760 66203 MT
+(Once the superstructure has been)
+322 W( constructed which is)321 W
+31500 67102 MT
+(interface it can be reused to build many)
+611 W( derived)612 W
+5760 67308 MT
+(necessary to)
+145 W( perform the transformations to and from the)146 W
+31500 68207 MT
+(implementations of that interface.)SH
+5760 68413 MT
+(new object oriented interface,)
+207 W( any number of potentially)206 W
+32700 69423 MT
+(Figures 3-1 and 3-2 demonstrate the application)
+100 W( of this)99 W
+5760 69518 MT
+(unrelated derived implementations of)
+75 W( the flat interface can)76 W
+31500 70528 MT
+(paradigm in the two example problem domains.)
+160 W( In)
+571 W( both)161 W
+ES
+%%Page: 4 4
+BS
+0 SI
+10 /Times-Roman AF
+5760 6446 MT
+(figures, structures are presented which transform)
+191 W( the flat)190 W
+31500 XM
+(this property.  Others, such as)
+209 W( the use of an X pseudo-)210 W
+5760 7551 MT
+(interface into)
+158 W( invocations on an object oriented interface,)159 W
+31500 XM
+(server, do)
+6 W( not.  Even for those calls which are modified, the)5 W
+5760 8656 MT
+(and which then)
+77 W( implement this object oriented interface in)76 W
+31500 XM
+(costs need)
+160 W( not be prohibitive.  For instance, on a 25mhz)161 W
+5760 9761 MT
+(terms of the original)
+91 W( flat interface.  Both figures present a)92 W
+31500 XM
+(i486, running)
+199 W( Mach 2.5 \050X144\051, system call interception)198 W
+5760 10866 MT
+(general framework which can be)
+235 W( specialized to produce)234 W
+31500 XM
+(takes only 30)917 W
+/Symbol SF
+39834 XM
+(m)SH
+/Times-Roman SF
+(s. and calling)
+917 W( the underlying)918 W
+5760 11971 MT
+(any number of different derived implementations.)
+31 W( The)
+313 W( key)32 W
+31500 XM
+(implementation takes)
+12 W( 37)11 W
+/Symbol SF
+41617 XM
+(m)SH
+/Times-Roman SF
+(s., for a total additional overhead)11 W
+5760 13076 MT
+(to both illustrations)
+292 W( is that specializations can be done)291 W
+31500 XM
+(of 67)52 W
+/Symbol SF
+33937 XM
+(m)SH
+/Times-Roman SF
+(s. This)
+354 W( compares to 245)52 W
+/Symbol SF
+44852 XM
+(m)SH
+/Times-Roman SF
+(s. to do an unintercepted)52 W
+5760 14181 MT
+(through application specific objects which are derived from)12 W
+/Times-Italic SF
+31500 XM
+(read\050\051)SH
+/Times-Roman SF
+34249 XM
+(of 1K on the same implementation.)SH
+5760 15286 MT
+(the object oriented interface objects.  These application)262 W
+32700 15397 MT
+(Another potential)
+427 W( cost of this approach is that of)426 W
+5760 16391 MT
+(specific derived)
+64 W( objects are indicated by the shaded box in)65 W
+31500 16502 MT
+(constructing software)
+314 W( which is somewhat more general)315 W
+5760 17496 MT
+(each diagram.)
+435 W( While)
+1118 W( the interfaces provided in the)434 W
+31500 17607 MT
+(than strictly necessary)
+330 W( to solve any particular problem)329 W
+5760 18601 MT
+(different problem domains differ widely, the)
+634 W( same)635 W
+31500 18712 MT
+(requiring a changed)
+174 W( implementation of a given interface.)175 W
+5760 19706 MT
+(approach can be effective in both.)SH
+31500 19817 MT
+(For instance, one competing approach would be to take the)37 W
+31500 20922 MT
+(original implementation, and make changes to it.)
+180 W( While)612 W
+12 /Times-Bold AF
+5760 21766 MT
+(4. Applicability)SH
+10 /Times-Roman AF
+31500 22027 MT
+(this approach is time-honored and well)
+101 W( understood, so are)100 W
+6960 22871 MT
+(The success)
+3 W( of this approach hinges on the ability to cast)2 W
+31500 23132 MT
+(its drawbacks; it tends)
+777 W( towards unstructured and)778 W
+5760 23976 MT
+(an existing interface into a well-structured object)
+115 W( oriented)116 W
+31500 24237 MT
+(undisciplined growth without bound.)
+324 W( Furthermore,)
+896 W( the)323 W
+5760 25081 MT
+(interface. I)
+312 W( believe that)
+31 W( this should be possible for existing)30 W
+31500 25342 MT
+(result tends)
+160 W( to be, if anything, harder to modify the next)161 W
+5760 26186 MT
+(interfaces which satisfy two key requirements:)SH
+31500 26447 MT
+(time. Yet,)
+362 W( once the work has)
+56 W( been done to build an object)55 W
+/Symbol SF
+7550 27291 MT
+(\267)SH
+/Times-Roman SF
+8260 XM
+(the interface)
+538 W( contains a reasonably small)539 W
+31500 27552 MT
+(oriented structure supporting inheritance)
+518 W( for a given)519 W
+8260 28396 MT
+(number of abstractions;)SH
+31500 28657 MT
+(interface, it can easily be)
+229 W( reused to build many derived)228 W
+/Symbol SF
+7550 29612 MT
+(\267)SH
+/Times-Roman SF
+8260 XM
+(the behavior of)
+269 W( these abstractions is largely)268 W
+31500 29762 MT
+(implementations. Thus,)
+374 W( while the initial work to construct)62 W
+8260 30717 MT
+(independent.)SH
+31500 30867 MT
+(a changed implementation of)
+189 W( a flat interface in terms of)188 W
+31500 31972 MT
+(objects may be somewhat greater, the software engineering)32 W
+5760 32056 MT
+(Interfaces satisfying these properties should be amenable to)12 W
+31500 33077 MT
+(cost has the potential to actually be less in the long term.)SH
+5760 33161 MT
+(this approach.)SH
+32700 34293 MT
+(This approach also provides another)
+203 W( potential benefit.)202 W
+6960 34377 MT
+(The two examples presented)
+218 W( earlier, the)217 W
+8 SS 
+24455 XM
+(UNIX)SH
+10 SS 
+26922 XM
+(system)SH
+31500 35398 MT
+(Derived implementations)
+38 W( can be independently constructed)39 W
+5760 35482 MT
+(interface and the X Window System,)
+246 W( both satisfy these)247 W
+31500 36503 MT
+(and dynamically composed, providing more)
+23 W( flexibility than)22 W
+5760 36587 MT
+(properties. Not)
+1084 W( every interface does.  As)
+417 W( a glaring)416 W
+31500 37608 MT
+(simply changing the original)
+3 W( implementation.  In particular,)4 W
+5760 37692 MT
+(counterexample, consider libc)
+297 W( taken as a whole, which)298 W
+31500 38713 MT
+(there are situations where it is infeasible)
+244 W( to modify the)243 W
+5760 38797 MT
+(satisfies neither.)
+532 W( Libc)
+1312 W( contains a huge number of)531 W
+31500 39818 MT
+(original implementation.  In such cases, using a)
+208 W( derived)209 W
+5760 39902 MT
+(abstractions that are often implemented in terms of one)236 W
+31500 40923 MT
+(implementation may be the only choice.)SH
+5760 41007 MT
+(another in interdependent and non-obvious ways.)SH
+12 /Times-Bold AF
+31500 42983 MT
+(6. Further Insights)SH
+5760 43067 MT
+(5. Costs)SH
+10 /Times-Roman AF
+32700 44088 MT
+(The approach presented in this paper clearly)
+10 W( builds upon)9 W
+6960 44172 MT
+(One obvious potential cost)
+260 W( of this approach is some)259 W
+31500 45193 MT
+(techniques in common use in more)
+416 W( traditional object)417 W
+5760 45277 MT
+(performance loss.  It is easy to incur additional overhead)142 W
+31500 46298 MT
+(oriented systems.  Operating system agents utilize many)
+45 W( of)44 W
+5760 46382 MT
+(whenever more)
+32 W( layers of abstraction are added to a system.)31 W
+31500 47403 MT
+(the techniques used by such object oriented operating)361 W
+5760 47487 MT
+(On the other hand, the)
+47 W( derived implementation presumedly)48 W
+31500 48508 MT
+(systems as Choices)
+133 W( [4].)
+SH( Other)
+516 W( systems)
+133 W( such as the Mach)132 W
+5760 48592 MT
+(provides some benefit to)
+31 W( the applications which use it, or it)30 W
+31500 49613 MT
+(Multi-Server [5])
+SH( have used)
+402 W( objects to provide flexible)403 W
+5760 49697 MT
+(wouldn't be used.  In this sense, the performance)
+61 W( costs are)62 W
+31500 50718 MT
+(implementations of a flat interface, although do not do)
+111 W( so)110 W
+5760 50802 MT
+(of a pay-per-use nature.  While the benefit provided might)68 W
+31500 51823 MT
+(in terms of an instance)
+7 W( of the flat interface itself.  Likewise,)8 W
+5760 51907 MT
+(be enhanced or modified)
+98 W( functionality, it could also be an)99 W
+31500 52928 MT
+(X pseudo-servers capitalize on)
+658 W( the object oriented)657 W
+5760 53012 MT
+(increase in)
+395 W( performance.  Such performance increases)394 W
+31500 54033 MT
+(approaches taken by such X toolkits as Motif)
+281 W( [12])
+SH( and)282 W
+5760 54117 MT
+(might be)
+323 W( gained by capitalizing on application-specific)324 W
+31500 55138 MT
+(InterViews [3].)SH
+5760 55222 MT
+(knowledge of how the original interface is used.)
+133 W( Indeed,)514 W
+5760 56327 MT
+(one of the benefits of implementational reflection is)
+215 W( the)216 W
+32700 56354 MT
+(A more surprising and deeper result is that the ability)
+41 W( to)40 W
+5760 57432 MT
+(ability of an application to specialize and/or tune)
+368 W( the)367 W
+31500 57459 MT
+(produce derived implementations of flat interfaces)
+148 W( allows)149 W
+8 SS 
+44020 58227 MT
+(3)SH
+10 SS 
+5760 58537 MT
+(implementations of services which it uses.)
+95 W( Thus,)
+441 W( in some)96 W
+31500 58572 MT
+(for implementational reflection)11 W
+44670 XM
+([13] [10])
+SH( and introspection)11 W
+5760 59642 MT
+(cases, performance may actually)
+124 W( be enhanced, despite the)123 W
+31500 59677 MT
+(to be applied despite the often closed, monolithic)
+49 W( nature of)50 W
+5760 60747 MT
+(overheads caused by additional layers of abstraction.)SH
+31500 60782 MT
+(the usual)
+453 W( implementations of these interfaces.  Such)452 W
+31500 61887 MT
+(derived implementations)
+212 W( can expose relevant portions of)213 W
+6960 61963 MT
+(The actual)
+1086 W( costs of interposing a derived)1087 W
+31500 62992 MT
+(their implementations, allowing)
+357 W( for effective local and)356 W
+5760 63068 MT
+(implementation of an interface between)
+60 W( normal clients and)59 W
+31500 64097 MT
+(incremental adjustment.  While)
+47 W( reflection has been gaining)48 W
+5760 64173 MT
+(providers of the interface)
+48 W( will depend upon the mechanism)49 W
+5760 65278 MT
+(used. Some)
+1104 W( mechanisms can be used to)
+427 W( selectively)426 W
+5760 66383 MT
+(interpose on)
+346 W( only those calls actually modified in the)347 W
+10800 50 31500 67064 UL
+5760 67488 MT
+(derived implementation, allowing the)
+162 W( unmodified calls to)161 W
+6 SS 
+32300 68403 MT
+(3)SH
+10 SS 
+5760 68593 MT
+(incur no)
+229 W( additional overhead.)230 W
+8 SS 
+19129 XM
+(UNIX)SH
+10 SS 
+21609 XM
+(interposition agents)230 W
+8 SS 
+32600 68712 MT
+(Implementational reflection, as used in this paper, is the ability for a)92 W
+31500 69636 MT
+(program to inspect, manipulate, and/or)
+94 W( participate in the implementation)95 W
+10 SS 
+5760 69698 MT
+(constructed in the manner described in)
+108 W( my thesis)
+107 W( [9])
+SH( have)107 W
+8 SS 
+31500 70560 MT
+(of the facilities used by the program.)SH
+ES
+%%Page: 5 5
+BS
+0 SI
+10 /Times-Roman AF
+5760 6446 MT
+(popularity through its use in object)
+14 W( oriented languages such)13 W
+/Times-Bold SF
+31500 XM
+(3.)SH
+/Times-Roman SF
+32750 XM
+(Paul Calder and Mark Linton.  Glyphs: Flyweight)SH
+5760 7551 MT
+(as CLOS)
+63 W( [2] [16],)
+SH( object oriented window systems)
+63 W( such as)64 W
+31500 XM
+(Objects for User Interfaces.  Proceedings of the ACM)SH
+5760 8656 MT
+(Silica [13])
+SH( and object oriented)
+175 W( operating systems such as)174 W
+31500 XM
+(SIGGRAPH Symposium on User Interface Software and)SH
+5760 9761 MT
+(Muse [17],)
+SH( its applicability to non-object oriented flat)407 W
+31500 XM
+(Technology, Oct, 1990, pp. 92-101.)SH
+5760 10866 MT
+(interfaces is a new result.)SH
+/Times-Bold SF
+31500 11552 MT
+(4.)SH
+/Times-Roman SF
+32750 XM
+(Roy H. Campbell, Vincent Russo, and Gary Johnston.)SH
+31500 12657 MT
+(Choices: The)
+250 W( Design of a Multiprocessor Operating)SH
+12 /Times-Bold AF
+5760 12926 MT
+(7. Conclusion)SH
+10 /Times-Roman AF
+31500 13762 MT
+(System. Proceedings)
+250 W( of the USENIX C++ Workshop,)SH
+6960 14031 MT
+(Traditional operating systems often provide)
+443 W( system)442 W
+31500 14867 MT
+(Santa Fe, New Mexico, November, 1987, pp. 109-123.)SH
+5760 15136 MT
+(services through)
+578 W( flat interfaces, which are typically)579 W
+5760 16241 MT
+(implemented in a monolithic, closed)
+14 W( manner.  No provision)13 W
+/Times-Bold SF
+31500 16658 MT
+(5.)SH
+/Times-Roman SF
+32750 XM
+(Paulo Guedes and Daniel Julin.  Object-Oriented)SH
+5760 17346 MT
+(is made for enhanced, restricted, or otherwise modified)266 W
+31500 17763 MT
+(Interfaces in the Mach 3.0 Multi-Server System.)SH
+5760 18451 MT
+(implementations of these)
+187 W( same interfaces to coexist with)186 W
+31500 18868 MT
+(Proceedings of the Second International Workshop on)SH
+5760 19556 MT
+(the standard implementations.)SH
+31500 19973 MT
+(Object-Orientation in Operating Systems, Palo Alto,)SH
+6960 20772 MT
+(In this paper, I have argued that)
+175 W( a common paradigm)176 W
+31500 21078 MT
+(October, 1991.)SH
+5760 21877 MT
+(can be)
+355 W( used to produce derived implementations of a)354 W
+/Times-Bold SF
+31500 22869 MT
+(6.)SH
+/Times-Roman SF
+32750 XM
+(Hendricks, David.  A Filesystem For Software)SH
+5760 22982 MT
+(diverse class of)
+58 W( flat interfaces such as those which provide)59 W
+31500 23974 MT
+(Development. Summer)
+250 W( Usenix Conference Proceedings,)SH
+5760 24087 MT
+(system services.)
+296 W( This)
+840 W( provides a means of effectively)295 W
+31500 25079 MT
+(June, 1990, pp. 333-340.)SH
+5760 25192 MT
+(``opening up'' the implementations)
+152 W( such system services,)153 W
+5760 26297 MT
+(allowing for a)
+155 W( multiplicity of derived implementations of)154 W
+/Times-Bold SF
+31500 26870 MT
+(7.)SH
+/Times-Roman SF
+32750 XM
+(Michael B. Jones.  "A Toolkit for Interposing User)SH
+5760 27402 MT
+(such interfaces to)
+232 W( be easily constructed.  This approach)233 W
+31500 27975 MT
+(Code at the System Interface".)SH
+/Times-Italic SF
+44211 XM
+(IEEE Computer Society)SH
+/Times-Roman SF
+5760 28507 MT
+(makes it possible)
+145 W( to bring many of the benefits of object)144 W
+/Times-Italic SF
+31500 29080 MT
+(Technical Committee on Operating Systems and)SH
+/Times-Roman SF
+5760 29612 MT
+(oriented methodologies)
+499 W( to domains where they were)500 W
+/Times-Italic SF
+31500 30185 MT
+(Applications Environments \050TCOS\051 Technical Committee)SH
+/Times-Roman SF
+5760 30717 MT
+(previously unavailable.)SH
+/Times-Italic SF
+31500 31290 MT
+(Newsletter 5)SH
+/Times-Roman SF
+(, 1 \050Spring 1991\051, 26-31.)SH
+12 /Times-Bold AF
+5760 32777 MT
+(Acknowledgments)SH
+10 SS 
+31500 33081 MT
+(8.)SH
+/Times-Roman SF
+32750 XM
+(Michael B. Jones.  Transparently Interposing User Code)SH
+6960 33882 MT
+(I'd like to extend a special thanks to Gregor Kiczales)
+8 W( for)7 W
+31500 34186 MT
+(at the System Interface.  Proceedings of the Second)SH
+5760 34987 MT
+(the conversation which he insisted that we)
+52 W( have during my)53 W
+31500 35291 MT
+(Workshop on Workstation Operating Systems, April, 1992.)SH
+5760 36092 MT
+(recent visit to Xerox PARC.  It was stimulating,)
+157 W( thought)156 W
+/Times-Bold SF
+31500 37082 MT
+(9.)SH
+/Times-Roman SF
+32750 XM
+(Michael B. Jones.)SH
+/Times-Italic SF
+40416 XM
+(Transparently Interposing User)SH
+/Times-Roman SF
+5760 37197 MT
+(provoking, and helped)
+203 W( water the germ of an idea which)204 W
+/Times-Italic SF
+31500 38187 MT
+(Code at the System Interface)SH
+/Times-Roman SF
+(. Ph.D.)
+250 W( Th., Carnegie Mellon)SH
+5760 38302 MT
+(became this paper.  I'd also like to thank Daniel)
+64 W( Duchamp)63 W
+31500 39292 MT
+(University, 1992. To be published Summer, 1992.)SH
+5760 39407 MT
+(and Chris Kent Kantarjiev for lending me their perspectives)SH
+5760 40512 MT
+(on X pseudo-servers.)SH
+/Times-Bold SF
+31500 41083 MT
+(10.)SH
+/Times-Roman SF
+33250 XM
+(Gregor Kiczales, Jim des Rivieres, and Daniel)SH
+6960 41728 MT
+(This research was)
+782 W( sponsored by the Avionics)781 W
+31500 42188 MT
+(G. Bobrow.)SH
+/Times-Italic SF
+36694 XM
+(The Art of the Metaobject Protocol.)SH
+/Times-Roman SF
+51471 XM
+(MIT)SH
+5760 42833 MT
+(Laboratory, Wright Research and Development)
+350 W( Center,)351 W
+31500 43293 MT
+(Press, 1991.)SH
+5760 43938 MT
+(Aeronautical Systems)
+171 W( Division \050AFSC\051, U. S. Air Force,)170 W
+5760 45043 MT
+(Wright-Patterson AFB,)
+321 W( OH 45433-6543 under Contract)322 W
+/Times-Bold SF
+31500 45084 MT
+(11.)SH
+/Times-Roman SF
+33250 XM
+(Korn, David G. and Krell, Eduardo.  "A New)SH
+5760 46148 MT
+(F33615-90-C-1465, ARPA Order No. 7597.)SH
+31500 46189 MT
+(Dimension for the Unix File System".)SH
+/Times-Italic SF
+47186 XM
+(Software - Practice)SH
+31500 47294 MT
+(and Experience 20)SH
+/Times-Roman SF
+(, S1 \050Jun 1990\051, 19-34.)SH
+6960 47364 MT
+(The views and conclusions contained in this)
+126 W( document)125 W
+5760 48469 MT
+(are those of the authors and should not be interpreted)
+161 W( as)162 W
+/Times-Bold SF
+31500 49085 MT
+(12.)SH
+/Times-Italic SF
+33250 XM
+(OSF/MOTIF Manual.)SH
+/Times-Roman SF
+42777 XM
+(Open Software Foundation,)SH
+5760 49574 MT
+(representing the official policies,)
+496 W( either expressed or)495 W
+31500 50190 MT
+(Cambridge, MA, 1989.)SH
+5760 50679 MT
+(implied, of the Defense Advanced Research Projects)477 W
+5760 51784 MT
+(Agency or the U.S. government.)SH
+/Times-Bold SF
+31500 51981 MT
+(13.)SH
+/Times-Roman SF
+33250 XM
+(Ramana Rao.  Implementational Reflection in Silica.)SH
+31500 53086 MT
+(Proceedings of the European Conference on Object-)SH
+31500 54191 MT
+(Oriented Programming \050ECOOP\051, 1991.)SH
+13 /Times-Bold AF
+14698 55143 MT
+(References)SH
+10 SS 
+31500 55982 MT
+(14.)SH
+/Times-Roman SF
+33250 XM
+(R. W. Scheifler and J. Gettys.  "The X Window)SH
+31500 57087 MT
+(System".)SH
+/Times-Italic SF
+35603 XM
+(ACM Transactions on Graphics 5)SH
+/Times-Roman SF
+(, 2 \0501986\051.)SH
+/Times-Bold SF
+5760 57516 MT
+(1.)SH
+/Times-Roman SF
+7010 XM
+(M. Accetta, R. Baron, D. Golub, R. Rashid,)SH
+5760 58621 MT
+(A. Tevanian, and M. Young.  Mach:  A New Kernel)SH
+/Times-Bold SF
+31500 58878 MT
+(15.)SH
+/Times-Roman SF
+33250 XM
+(Ian Smith and Elizabeth Mynatt.  What You See Is)SH
+5760 59726 MT
+(Foundation for UNIX Development.  Proc. Summer 1986)SH
+31500 59983 MT
+(What I Want:  Experiences With The Virtual X Shared)SH
+5760 60831 MT
+(USENIX Technical Conference and Exhibition, June,)SH
+31500 61088 MT
+(Window System.  Tech. Rept. GT-GVU-91-33, Georgia)SH
+5760 61936 MT
+(1986.)SH
+31500 62193 MT
+(Tech College of Computing, 1991.)SH
+/Times-Bold SF
+5760 63727 MT
+(2.)SH
+/Times-Roman SF
+7010 XM
+(Bobrow, Daniel G., Linda G. Demichiel, Richard)SH
+/Times-Bold SF
+31500 63984 MT
+(16.)SH
+/Times-Roman SF
+33250 XM
+(Steele, Guy.)SH
+/Times-Italic SF
+38666 XM
+(Common Lisp:  The Language,)SH
+/Times-Roman SF
+51333 XM
+(Second)SH
+5760 64832 MT
+(P. Gabriel, Sonya E. Kleene, Gregor Kiczales, and David)SH
+31500 65089 MT
+(Edition)SH
+/Times-Italic SF
+(.)SH
+/Times-Roman SF
+35195 XM
+(Digital Press, 1990.)SH
+5760 65937 MT
+(A. Moon.)SH
+/Times-Italic SF
+10121 XM
+(Common Lisp Object System Specification.)SH
+/Times-Bold SF
+31500 66880 MT
+(17.)SH
+/Times-Roman SF
+33250 XM
+(Yashuhiko Yokote, Atsushi Mitsuzawa, Nobuhisa)SH
+5760 67042 MT
+(X3J13 Document Number 88-002R, 1988.  Also appears as)SH
+31500 67985 MT
+(Fujinami, and Mario Tokoro.  Reflective Object)SH
+5760 68147 MT
+(Chapter 28 of)SH
+/Times-Italic SF
+11509 XM
+(Common Lisp, The Language)SH
+/Times-Roman SF
+(, Second)SH
+31500 69090 MT
+(Management in the Muse Operating System.  Proceedings)SH
+5760 69252 MT
+(Edition.)SH
+31500 70195 MT
+(of the International Workshop on Object Orientation in)SH
+31500 71300 MT
+(Operating Systems, October, 1991, pp. 16-23.)SH
+ES
+%%Trailer
+%%Pages: 5
+%%DocumentFonts: Times-Roman Times-Bold Times-Italic Symbol

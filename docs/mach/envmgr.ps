@@ -1,0 +1,1384 @@
+%!PS-Adobe-1.0
+%%Title: envmgr.mss
+%%DocumentFonts: (atend)
+%%Creator: Mary Thompson and Scribe 6(1600)
+%%CreationDate: 4 August 1989 11:45
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale /showpage {} def} bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+%%EndProlog
+%%Page: 0 1
+BS
+0 SI
+15 /Helvetica-Bold AF
+20262 14054 MT
+(MACH Environment Manager)SH
+10 /Helvetica AF
+26349 17104 MT
+(Mary R. Thompson)SH
+23180 19956 MT
+(Department of Computer Science)SH
+24599 21382 MT
+(Carnegie-Mellon University)SH
+25875 22808 MT
+(Pittsburgh, PA 15213)SH
+/Helvetica-Bold SF
+27988 24234 MT
+(Version of:)SH
+/Helvetica SF
+27375 25660 MT
+(4 August 1989)SH
+13 /Helvetica-Bold AF
+27963 46816 MT
+(Abstract)SH
+10 /Helvetica AF
+7200 49349 MT
+(The Environment Manager is a Mach server which facilities the sharing of named)
+191 W( variables between)190 W
+7200 50492 MT
+(tasks.)SH
+8312 61929 MT
+(This research was sponsored by the Defense)
+199 W( Advanced Research Projects Agency \050DOD\051, ARPA)200 W
+7200 63072 MT
+(Order No. 4864, monitored by the Space and)
+347 W( Naval Warfare Systems Command under contract)346 W
+7200 64215 MT
+(N00039-84-C-0467.)SH
+8312 66499 MT
+(The views and conclusions contained in this document are those of the authors and should)
+156 W( not be)157 W
+7200 67642 MT
+(interpreted as)
+316 W( representing official policies, either expressed or implied, of the Defense Advanced)315 W
+7200 68785 MT
+(Research Projects Agency or of the U.S.  Government.)SH
+ES
+%%Page: 1 2
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(1)SH
+12 SS 
+7200 8075 MT
+(1. Introduction)SH
+10 /Helvetica AF
+8312 9501 MT
+(The Environment Manager is)
+55 W( a server which facilitates the sharing of named variables between tasks.)56 W
+7200 10927 MT
+(An environment is a set of named variables, which can be read or changed via calls on)
+65 W( an)64 W
+/Helvetica-Oblique SF
+48387 XM
+(Environment)SH
+7200 12353 MT
+(Port)SH
+/Helvetica SF
+(. A)
+138 W( single environment may be shared between parent and child tasks, or an environment can be)139 W
+7200 13779 MT
+(copied, and a copy can be)
+215 W( passed to a child task. It is also possible to get a)214 W
+/Helvetica-Oblique SF
+44687 XM
+(read-only)SH
+/Helvetica SF
+49347 XM
+(port to an)214 W
+7200 15205 MT
+(environment which allows reading but not modification of the environment.)SH
+8312 17772 MT
+(The Environment Manager stores two types of named objects: strings and ports. The names)
+74 W( of these)75 W
+7200 19198 MT
+(two types may)
+14 W( not overlap, and each type must be set and retrieved by the appropriately typed primitives.)13 W
+7200 20624 MT
+(Sets of variables \050called an environment\051 are)
+10 W( accessible through a specific server port. There may be one)11 W
+7200 22050 MT
+(read/write and one read-only port to the same environment.)SH
+8312 24617 MT
+(Environments are passed to child tasks in one of two ways. Either the parent's)16 W
+/Courier SF
+43385 XM
+(environment_port)SH
+/Helvetica SF
+53278 XM
+(is)SH
+7200 26043 MT
+(passed to the child in which case the two processes share the same environment)
+39 W( with both having equal)40 W
+7200 27469 MT
+(write access to all variables; or the parent clones his environment)
+45 W( and passes a copy of it to the child. In)44 W
+7200 28895 MT
+(the latter case the two environments are then completely disjoint. It is also possible to create)
+3 W( a new empty)4 W
+7200 30321 MT
+(\050or default\051 environment.)SH
+8312 32888 MT
+(It is also possible for one task to use more than one environment.)
+3 W( In)
+283 W( this way a task could have access)2 W
+7200 34314 MT
+(to a widely-shared "global" environment as well as its own local environment.)SH
+12 /Helvetica-Bold AF
+7200 38069 MT
+(2. Types)SH
+10 /Helvetica AF
+8312 39495 MT
+(The following types are defined as smallish fixed length strings in order to)
+9 W( make the passing of them as)10 W
+7200 40921 MT
+(in-line message data efficient.)SH
+8312 43488 MT
+(The following types can be included in C programs from)SH
+/Courier SF
+33266 XM
+(<servers/emdefs.h>)SH
+/Helvetica SF
+(.)SH
+/Courier SF
+8400 44977 MT
+(#define env_name_size  \05080\051)SH
+8400 46008 MT
+(#define env_val_size)
+SH( \050256\051)1200 W
+8400 48070 MT
+(typedef char env_name_t[env_name_size];)
+SH( /*)
+1200 W( environment variable name */)SH
+8400 49101 MT
+(typedef char env_str_val_t[env_val_size]; /* string env variable value */)SH
+8400 51163 MT
+(typedef env_name_t)
+SH( *env_name_list;)
+2400 W( /*)
+600 W( list of names */)SH
+8400 52194 MT
+(typedef env_str_val_t  *env_str_list;)
+SH( /*)
+1200 W( list of string values */)SH
+12 /Helvetica-Bold AF
+7200 56980 MT
+(3. Primitives)SH
+10 /Helvetica AF
+8312 58406 MT
+(The following primitives are provided:)SH
+ES
+%%Page: 2 3
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(2)SH
+12 SS 
+7200 8075 MT
+(env_string)SH
+10 /Courier AF
+7200 9564 MT
+(#include <servers/env_mgr.h>)SH
+7200 12084 MT
+(kern_return_t env_get_string\050env_port,env_name,env_val\051)SH
+9600 13115 MT
+(port_t env_port;)7800 W
+9600 14146 MT
+(env_name_t env_name;)5400 W
+9600 15177 MT
+(env_str_val_t env_val;)3600 W
+7200 16666 MT
+(kern_return_t env_set_string\050env_port,env_name,env_val\051)SH
+9600 17697 MT
+(port_t env_port;)7800 W
+9600 18728 MT
+(env_name_t env_name;)5400 W
+9600 19759 MT
+(env_str_val_t env_val;)3600 W
+7200 21248 MT
+(kern_return_t env_del_string\050env_port,env_name\051)SH
+9600 22279 MT
+(port_t env_port;)7800 W
+9600 23310 MT
+(env_name_t env_name;)5400 W
+12 /Helvetica-Bold AF
+7200 25296 MT
+(Arguments)SH
+10 /Courier AF
+10904 27168 MT
+(env_port)SH
+/Helvetica SF
+19800 XM
+(port identifying environment)SH
+/Courier SF
+10904 28883 MT
+(env_name)SH
+/Helvetica SF
+19800 XM
+(name of string to be found | set | deleted)SH
+/Courier SF
+10904 30598 MT
+(env_val)SH
+/Helvetica SF
+19800 XM
+(returned pointing to value of string)SH
+12 /Helvetica-Bold AF
+7200 32616 MT
+(Description)SH
+10 /Courier AF
+8312 34115 MT
+(env_get_string)SH
+/Helvetica SF
+16990 XM
+(returns the value of the string variable with the name)SH
+/Courier SF
+40501 XM
+(env_name)SH
+/Helvetica SF
+(.)SH
+/Courier SF
+8312 36682 MT
+(env_set_string)SH
+/Helvetica SF
+16990 XM
+(sets the string variable)SH
+/Courier SF
+27272 XM
+(env_name)SH
+/Helvetica SF
+32350 XM
+(to)SH
+/Courier SF
+33462 XM
+(env_val)SH
+/Helvetica SF
+(;)SH
+/Courier SF
+8312 39249 MT
+(env_del_string)SH
+/Helvetica SF
+16990 XM
+(deletes the string variable)SH
+/Courier SF
+28662 XM
+(env_name)SH
+/Helvetica SF
+(.)SH
+12 /Helvetica-Bold AF
+7200 41235 MT
+(Returns)SH
+10 /Courier AF
+10904 43107 MT
+(KERN_SUCCESS)SH
+/Helvetica SF
+19800 XM
+(operation succeeded)SH
+/Courier SF
+10904 44822 MT
+(ENV_UNKNOWN_PORT)SH
+19800 45965 MT
+(env_port)SH
+/Helvetica SF
+24878 XM
+(does not reference a known environment)SH
+/Courier SF
+10904 47680 MT
+(ENV_VAR_NOT_FOUND)SH
+/Helvetica SF
+19800 48823 MT
+(name does not exist.)SH
+/Courier SF
+10904 50538 MT
+(ENV_WRONG_VAR_TYPE)SH
+/Helvetica SF
+19800 51681 MT
+(names exists, but is a port variable)SH
+/Courier SF
+10904 53396 MT
+(ENV_READ_ONLY)SH
+19800 XM
+(env_port)SH
+/Helvetica SF
+24892 XM
+(only allows read access to the)
+14 W( environment. \050)15 W
+/Courier SF
+(env_set_string,)SH
+19800 54539 MT
+(env_del_string)SH
+/Helvetica SF
+(\051)SH
+12 /Helvetica-Bold AF
+7200 56557 MT
+(See Also)SH
+10 /Courier AF
+8312 57983 MT
+(env_port[3], env_conn[3], env_list[3])SH
+ES
+%%Page: 3 4
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(3)SH
+12 SS 
+7200 8075 MT
+(env_port)SH
+10 /Courier AF
+7200 9564 MT
+(#include <servers/env_mgr.h>)SH
+7200 12084 MT
+(kern_return_t env_get_port\050env_port,env_name,env_val\051)SH
+9600 13115 MT
+(port_t env_port;)7800 W
+9600 14146 MT
+(env_name_t env_name;)5400 W
+9600 15177 MT
+(port_t *env_val;)7800 W
+7200 16666 MT
+(kern_return_t env_set_port\050env_port,env_name,env_val\051)SH
+9600 17697 MT
+(port_t env_port;)7800 W
+9600 18728 MT
+(env_name_t env_name;)5400 W
+9600 19759 MT
+(port_t env_val;)7800 W
+7200 21248 MT
+(kern_return_t env_del_port\050env_port,env_name\051)SH
+9600 22279 MT
+(port_t env_port;)7800 W
+9600 23310 MT
+(env_name_t env_name;)5400 W
+12 /Helvetica-Bold AF
+7200 25296 MT
+(Arguments)SH
+10 /Courier AF
+10904 27168 MT
+(env_port)SH
+/Helvetica SF
+19800 XM
+(port identifying environment)SH
+/Courier SF
+10904 28883 MT
+(env_name)SH
+/Helvetica SF
+19800 XM
+(name of port to be found | set | deleted)SH
+/Courier SF
+10904 30598 MT
+(env_val)SH
+/Helvetica SF
+19800 XM
+(returned pointing to value of port)SH
+12 /Helvetica-Bold AF
+7200 32616 MT
+(Description)SH
+10 /Courier AF
+8312 34115 MT
+(env_get_port)SH
+/Helvetica SF
+15790 XM
+(returns the value of the port variable with the name)SH
+/Courier SF
+38579 XM
+(env_name)SH
+/Helvetica SF
+(.)SH
+/Courier SF
+8312 36682 MT
+(env_set_port)SH
+/Helvetica SF
+15790 XM
+(sets the value of the port variable,)SH
+/Courier SF
+31076 XM
+(env_name)SH
+/Helvetica SF
+36154 XM
+(to)SH
+/Courier SF
+37266 XM
+(env_val)SH
+/Helvetica SF
+(.)SH
+/Courier SF
+8312 39249 MT
+(env_del_port)SH
+/Helvetica SF
+15790 XM
+(deletes the port)SH
+/Courier SF
+22961 XM
+(env_name)SH
+/Helvetica SF
+(;)SH
+12 /Helvetica-Bold AF
+7200 41235 MT
+(Returns)SH
+10 /Courier AF
+10904 43107 MT
+(KERN_SUCCESS)SH
+/Helvetica SF
+19800 XM
+(variable found)SH
+/Courier SF
+10904 44822 MT
+(ENV_UNKNOWN_PORT)SH
+19800 45965 MT
+(ENV_PORT)SH
+/Helvetica SF
+24878 XM
+(does not reference a known environment)SH
+/Courier SF
+10904 47680 MT
+(ENV_VAR_NOT_FOUND)SH
+/Helvetica SF
+19800 48823 MT
+(name does not exist.)SH
+/Courier SF
+10904 50538 MT
+(ENV_WRONG_VAR_TYPE)SH
+/Helvetica SF
+19800 51681 MT
+(names exists, but is a string variable)SH
+/Courier SF
+10904 53396 MT
+(ENV_READ_ONLY)SH
+19800 XM
+(env_port)SH
+/Helvetica SF
+25059 XM
+(only allows)
+181 W( read access to the environment. \050)182 W
+/Courier SF
+46800 XM
+(env_set_port)SH
+/Helvetica SF
+19800 54539 MT
+(and)SH
+/Courier SF
+21746 XM
+(env_del_port)SH
+/Helvetica SF
+(\051)SH
+12 /Helvetica-Bold AF
+7200 56557 MT
+(See Also)SH
+10 /Courier AF
+8312 57983 MT
+(env_string[3], env_conn[3], env_list[3])SH
+ES
+%%Page: 4 5
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(4)SH
+12 SS 
+7200 8075 MT
+(env_list)SH
+10 /Courier AF
+7200 9564 MT
+(#include <servers/env_mgr.h>)SH
+7200 12084 MT
+(kern_return_t env_list_strings\050env_port,env_names,name_cnt,)SH
+25800 13115 MT
+(env_string_vals,string_cnt\051)SH
+9600 14146 MT
+(port_t env_port;)4800 W
+9600 15177 MT
+(env_name_list *env_names)SH
+9600 16208 MT
+(int *name_cnt;)6000 W
+9600 17239 MT
+(env_str_list *env_string_vals;)600 W
+9600 18270 MT
+(int *string_cnt\051;)6000 W
+7200 19759 MT
+(kern_return_t env_list_ports\050env_port,env_names,name_cnt,)SH
+25800 20790 MT
+(env_port_vals,port_cnt\051)SH
+9600 21821 MT
+(port_t env_port;)4800 W
+9600 22852 MT
+(env_name_list *env_names)SH
+9600 23883 MT
+(int *name_cnt;)6000 W
+9600 24914 MT
+(port_array_t *env_port_vals;)600 W
+9600 25945 MT
+(int *port_cnt\051;)6000 W
+7200 27434 MT
+(kern_return_t env_set_stlist\050env_port,env_names,name_cntf,)SH
+24600 28465 MT
+(env_string_vals,string_cnt\051)SH
+9600 29496 MT
+(port_t env_port;)4800 W
+9600 30527 MT
+(env_name_list env_names)600 W
+9600 31558 MT
+(int name_cnt;)6600 W
+9600 32589 MT
+(env_str_list env_string_vals;)1200 W
+9600 33620 MT
+(int string_cnt\051;)6600 W
+7200 35109 MT
+(kern_return_t env_set_ptlist\050env_port,env_names,name_cnt,)SH
+24600 36140 MT
+(env_port_vals,port_cnt\051)SH
+9600 37171 MT
+(port_t env_port;)4800 W
+9600 38202 MT
+(env_name_list env_names;)600 W
+9600 39233 MT
+(int name_cnt;)6600 W
+9600 40264 MT
+(port_array_t env_port_vals;)1200 W
+9600 41295 MT
+(int port_cnt\051;)6600 W
+12 /Helvetica-Bold AF
+7200 43281 MT
+(Arguments)SH
+10 /Courier AF
+10904 45153 MT
+(env_port)SH
+/Helvetica SF
+19800 XM
+(port identifying environment)SH
+/Courier SF
+10904 46868 MT
+(env_names)SH
+/Helvetica SF
+19800 XM
+(pointer to list of names of all string variables)SH
+/Courier SF
+10904 48583 MT
+(name_cnt)SH
+/Helvetica SF
+19800 XM
+(number of names)SH
+/Courier SF
+10904 50298 MT
+(env_string_vals)SH
+/Helvetica SF
+19800 51441 MT
+(pointer to values of string variables \050for)98 W
+/Courier SF
+37993 XM
+(env_list_strings)SH
+/Helvetica SF
+(\051 list of values)98 W
+19800 52584 MT
+(of string variables \050 for)SH
+/Courier SF
+29970 XM
+(env_set_stlist)SH
+/Helvetica SF
+38648 XM
+(\051)SH
+/Courier SF
+10904 54299 MT
+(string_cnt)SH
+/Helvetica SF
+19800 XM
+(number of string values \050equal to)SH
+/Courier SF
+34640 XM
+(name_cnt)SH
+/Helvetica SF
+(\051)SH
+/Courier SF
+10904 56014 MT
+(env_port_vals)SH
+/Helvetica SF
+19800 XM
+(pointer to values of port variables \050for)163 W
+/Courier SF
+37726 XM
+(env_list_ports)SH
+/Helvetica SF
+(\051 list)
+163 W( of values of)162 W
+19800 57157 MT
+(port variables \050for)SH
+/Courier SF
+27858 XM
+(env_set_ptlist)SH
+/Helvetica SF
+(\051)SH
+/Courier SF
+10904 58872 MT
+(port_cnt)SH
+/Helvetica SF
+19800 XM
+(number of port values \050equal to)SH
+/Courier SF
+33918 XM
+(name_cnt)SH
+/Helvetica SF
+(\051)SH
+12 /Helvetica-Bold AF
+7200 60890 MT
+(Description)SH
+10 /Courier AF
+8312 62389 MT
+(env_list_string)SH
+/Helvetica SF
+17697 XM
+(returns a complete list of)
+107 W( all the string variables in the environment specified by)108 W
+/Courier SF
+7200 63815 MT
+(env_port)SH
+/Helvetica SF
+(. The two arrays)91 W
+/Courier SF
+19811 XM
+(env_names)SH
+/Helvetica SF
+25580 XM
+(and)SH
+/Courier SF
+27617 XM
+(env_string_vals)SH
+/Helvetica SF
+36986 XM
+(are returned in)
+91 W( newly allocated virtual)90 W
+7200 65241 MT
+(memory. This memory should be released by a)
+127 W( call to)128 W
+/Courier SF
+32481 XM
+(vm_deallocate)SH
+/Helvetica SF
+40687 XM
+(once the items are no longer)128 W
+7200 66667 MT
+(needed.)SH
+/Courier SF
+8312 69234 MT
+(env_list_ports)SH
+/Helvetica SF
+17193 XM
+(returns a complete list of all the port variables in the environment specified by)202 W
+/Courier SF
+7200 70660 MT
+(env_port)SH
+/Helvetica SF
+(. The two arrays)190 W
+/Courier SF
+20208 XM
+(env_names)SH
+/Helvetica SF
+26077 XM
+(and)SH
+/Courier SF
+28214 XM
+(env_port_vals)SH
+/Helvetica SF
+36483 XM
+(are returned in newly allocated virtual)191 W
+ES
+%%Page: 5 6
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(5)SH
+/Helvetica SF
+7200 7929 MT
+(memory. This memory should be released by a call to)128 W
+/Courier SF
+32487 XM
+(vm_deallocate)SH
+/Helvetica SF
+40692 XM
+(once the items are no longer)127 W
+7200 9355 MT
+(needed.)SH
+/Courier SF
+8312 11922 MT
+(env_set_stlist)SH
+/Helvetica SF
+17326 XM
+(sets a number of string variables environment specified)
+336 W( by)337 W
+/Courier SF
+46418 XM
+(env_port)SH
+/Helvetica SF
+(. This)337 W
+7200 13348 MT
+(primitive is provided for)
+36 W( efficiency and is mainly intended to be used to set a Mach environment to be the)35 W
+7200 14774 MT
+(same as the Unix)SH
+/Helvetica-Bold SF
+15203 XM
+(environ)SH
+/Helvetica SF
+19093 XM
+(area.)SH
+/Courier SF
+8312 17341 MT
+(env_set_ptlist)SH
+/Helvetica SF
+17025 XM
+(sets a number of port variables environment specified by)35 W
+/Courier SF
+42684 XM
+(env_port)SH
+/Helvetica SF
+(. This)
+35 W( primitive)36 W
+7200 18767 MT
+(is provided for efficiency.)SH
+12 /Helvetica-Bold AF
+7200 20753 MT
+(Returns)SH
+10 /Courier AF
+10904 22625 MT
+(KERN_SUCCESS)SH
+/Helvetica SF
+19800 XM
+(operation succeeded)SH
+/Courier SF
+10904 24340 MT
+(ENV_UNKNOWN_PORT)SH
+19800 25483 MT
+(env_port)SH
+/Helvetica SF
+24878 XM
+(does not reference a known environment)SH
+/Courier SF
+10904 27198 MT
+(ENV_READ_ONLY)SH
+19800 XM
+(env_port)SH
+/Helvetica SF
+25039 XM
+(only allows read access to the environment \050 for)
+161 W( env_set_stlist)162 W
+19800 28341 MT
+(and env_set_plist\051.)SH
+/Courier SF
+10904 30056 MT
+(ENV_WRONG_VAR_TYPE)SH
+/Helvetica SF
+19800 31199 MT
+(one of the)
+597 W( variables was already defined as a port variable \050for)598 W
+19800 32342 MT
+(env_set_stlist\051 or as as string variable \050 for env_set_ptlist\051.)SH
+12 /Helvetica-Bold AF
+7200 34360 MT
+(See Also)SH
+10 /Courier AF
+8312 35786 MT
+(env_string[3], env_port[3], env_conn[3])SH
+ES
+%%Page: 6 7
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(6)SH
+12 SS 
+7200 8075 MT
+(env_conn)SH
+10 /Courier AF
+7200 9564 MT
+(#include <servers/env_mgr.h>)SH
+7200 12084 MT
+(void init_env_mgr\050reply_port\051;)SH
+9600 13115 MT
+(port_t reply_port;)3000 W
+7200 14604 MT
+(kern_return_t env_new_conn\050env_port,new_env_port\051)SH
+9600 15635 MT
+(port_t env_port;)3000 W
+9600 16666 MT
+(port_t *new_env_port\051)3000 W
+7200 18155 MT
+(kern_return_t env_copy_conn\050env_port,new_env_port\051)SH
+9600 19186 MT
+(port_t env_port;)3000 W
+9600 20217 MT
+(port_t *new_env_port\051)3000 W
+7200 21706 MT
+(kern_return_t env_restrict_conn\050env_port,new_env_port\051)SH
+9600 22737 MT
+(port_t env_port;)3000 W
+9600 23768 MT
+(port_t *new_env_port\051)3000 W
+7200 25257 MT
+(kern_return-t env_disconnect\050env_port\051)SH
+9600 26288 MT
+(port_t env_port;)3000 W
+12 /Helvetica-Bold AF
+7200 28274 MT
+(Arguments)SH
+10 /Courier AF
+10904 30146 MT
+(reply_port)SH
+/Helvetica SF
+19800 XM
+(if equal)130 W
+/Courier SF
+23561 XM
+(PORT_NULL)SH
+/Helvetica SF
+(, a reply port will be allocated, otherwise)129 W
+/Courier SF
+48000 XM
+(reply_port)SH
+/Helvetica SF
+19800 31289 MT
+(will be used by the interface to receive the message replies.)SH
+/Courier SF
+10904 33004 MT
+(env_port)SH
+/Helvetica SF
+19800 XM
+(port identifying environment)SH
+/Courier SF
+10904 34719 MT
+(new_env_port)SH
+/Helvetica SF
+19800 XM
+(returned pointing to value of new port)SH
+12 /Helvetica-Bold AF
+7200 36737 MT
+(Description)SH
+10 /Courier AF
+8312 38236 MT
+(init_env_mgr)SH
+/Helvetica SF
+15859 XM
+(initializes the user interface to the Environment Manager.)
+69 W( Must)
+417 W( be called before any)70 W
+7200 39662 MT
+(of the other primitives are used. However,it is called by)
+78 W( the library initialization program)77 W
+/Courier SF
+46911 XM
+(mach_init)SH
+/Helvetica SF
+(, so)77 W
+7200 41088 MT
+(the user does not need to make this call unless a different value of)SH
+/Courier SF
+36827 XM
+(Reply_port)SH
+/Helvetica SF
+43105 XM
+(is desired.)SH
+/Courier SF
+8312 43655 MT
+(env_new_conn)SH
+/Helvetica SF
+15969 XM
+(create a new, default environment to be handed to)
+179 W( a new process. This could be)180 W
+7200 45081 MT
+(initialized with public values such as host_name and Network nameserver port.)SH
+/Courier SF
+8312 47648 MT
+(env_copy_conn)SH
+/Helvetica SF
+16535 XM
+(makes a complete copy of the environment specified by)145 W
+/Courier SF
+42740 XM
+(env_port)SH
+/Helvetica SF
+(, allocates the)145 W
+/Courier SF
+7200 49074 MT
+(new_env_port)SH
+/Helvetica SF
+14718 XM
+(and returns it to the caller. Subquently, all)
+40 W( requests on)41 W
+/Courier SF
+39300 XM
+(new_env_port)SH
+/Helvetica SF
+46819 XM
+(will use the new)41 W
+7200 50500 MT
+(copy, and requests on)70 W
+/Courier SF
+17597 XM
+(env_port)SH
+/Helvetica SF
+22745 XM
+(will continue to refer to the original version. Used by parent to)
+70 W( pass a)69 W
+7200 51926 MT
+(copy of its environment to a child process.)SH
+/Courier SF
+8312 54493 MT
+(env_restrict_conn)SH
+/Helvetica SF
+18901 XM
+(makes a new)
+111 W( port to the environment specified by)112 W
+/Courier SF
+42195 XM
+(env_port)SH
+/Helvetica SF
+(, through which)112 W
+7200 55919 MT
+(only reading will be allowed.)SH
+/Courier SF
+8312 58486 MT
+(env_disconnect)SH
+/Helvetica SF
+17328 XM
+(informs the environment manager that this enviroment is no longer)
+338 W( needed.)337 W
+7200 59912 MT
+(EnvMgr will deallocate)SH
+/Courier SF
+17425 XM
+(env_port)SH
+/Helvetica SF
+(;)SH
+8312 62479 MT
+(Ownership rights to)
+58 W( all the new environment ports are returned to the user. Thus when a process that)59 W
+7200 63905 MT
+(has created)
+267 W( and environment dies, these rights are returned to the environment manager who will)266 W
+7200 65331 MT
+(disconnect \050and)
+45 W( destroy\051 the environment.  If a creator process wishes its environment to live on after its)46 W
+7200 66757 MT
+(death, it must pass the ownership rights a process that will continue to exist as long as)
+65 W( the environment)64 W
+7200 68183 MT
+(should exist.)SH
+ES
+%%Page: 7 8
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(7)SH
+12 SS 
+7200 8075 MT
+(Returns)SH
+10 /Courier AF
+10904 9947 MT
+(KERN_SUCCESS)SH
+19800 XM
+(new_env_port)SH
+/Helvetica SF
+27278 XM
+(references a new default environment)SH
+/Courier SF
+10904 11662 MT
+(ENV_NO_MORE_CONN)SH
+/Helvetica SF
+19800 12805 MT
+(implementation restriction, no more)
+10 W( connections to the Environment Manager)9 W
+19800 13948 MT
+(are available.)SH
+/Courier SF
+10904 15663 MT
+(ENV_UNKNOWN_PORT)SH
+19800 16806 MT
+(env_port)SH
+/Helvetica SF
+24878 XM
+(does not reference a known environment)SH
+12 /Helvetica-Bold AF
+7200 18824 MT
+(See Also)SH
+10 /Courier AF
+8312 20250 MT
+(env_string[3], env_port[3], env_list[3], mach_init[3])SH
+ES
+%%Page: 8 9
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(8)SH
+12 SS 
+7200 8075 MT
+(4. Integration with Unix environ)SH
+10 /Helvetica AF
+8312 9501 MT
+(In order to allow binary)
+190 W( compatibility with Unix, the)189 W
+/Courier SF
+32469 XM
+(environ)SH
+/Helvetica SF
+37136 XM
+(area will have to be maintained and)189 W
+7200 10927 MT
+(passed on as usual by)130 W
+/Courier SF
+18078 XM
+(execve)SH
+/Helvetica SF
+(. If)130 W
+/Courier SF
+23328 XM
+(execve)SH
+/Helvetica SF
+27336 XM
+(also clones the current Mach environment and passes)
+130 W( the)131 W
+7200 12353 MT
+(new port on to the child, then the Mach environment will)
+158 W( have the same copy semantics as the Unix)157 W
+/Courier SF
+7200 13779 MT
+(environ)SH
+/Helvetica SF
+(. If)520 W
+/Courier SF
+13431 XM
+(execve)SH
+/Helvetica SF
+17430 XM
+(were to enter all the variables in)121 W
+/Courier SF
+32672 XM
+(environ)SH
+/Helvetica SF
+37271 XM
+(into the Mach environment then new)122 W
+7200 15205 MT
+(programs could get all their variables from the Mach environment.  The)
+170 W( primitive)169 W
+/Courier SF
+45031 XM
+(env_set_slist)SH
+/Helvetica SF
+53278 XM
+(is)SH
+7200 16631 MT
+(provided to allow a set of environment string variables to be entered with one message.)SH
+8312 19198 MT
+(If)SH
+/Courier SF
+9255 XM
+(getenv)SH
+/Helvetica SF
+13242 XM
+(is changed to call)109 W
+/Courier SF
+21682 XM
+(get_env_string)SH
+/Helvetica SF
+(, after failing to)
+109 W( find a variable in the)110 W
+/Courier SF
+47133 XM
+(environ)SH
+/Helvetica SF
+51721 XM
+(area,)SH
+7200 20624 MT
+(then old programs will be able to find environment variables set)
+341 W( by new programs in the Mach)340 W
+7200 22050 MT
+(environment. The)36 W
+/Courier SF
+15331 XM
+(environment_port)SH
+/Helvetica SF
+25246 XM
+(will be passed to a new task as part of the few special ports that)37 W
+7200 23476 MT
+(all processes know about.)SH
+8312 26043 MT
+(At some)
+183 W( point, the shells will have to be changed to use the Mach environment in addition to the)182 W
+/Courier SF
+7200 27469 MT
+(environ)SH
+/Helvetica SF
+11766 XM
+(area. Existing)
+454 W( Unix variables could be entered)
+88 W( in both places while Mach variables would be)89 W
+7200 28895 MT
+(put in the Mach environment only.)SH
+ES
+%%Page: 9 10
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(9)SH
+12 SS 
+7200 8075 MT
+(I. Summary of Calls)SH
+10 /Helvetica AF
+8312 9947 MT
+(The following is a summary of the C calls to the Environment Manger.  The)
+235 W( page on which the)234 W
+7200 11090 MT
+(operation is fully described appears within square brackets.)SH
+/Courier SF
+7200 13800 MT
+([2])SH
+10800 XM
+(kern_return_t env_get_string\050env_port,env_name,env_val\051)SH
+13200 14831 MT
+(port_t env_port;)7800 W
+13200 15862 MT
+(env_name_t env_name;)5400 W
+13200 16893 MT
+(env_str_val_t env_val;)3600 W
+7200 19986 MT
+([2])SH
+10800 XM
+(kern_return_t env_set_string\050env_port,env_name,env_val\051)SH
+13200 21017 MT
+(port_t env_port;)7800 W
+13200 22048 MT
+(env_name_t env_name;)5400 W
+13200 23079 MT
+(env_str_val_t env_val;)3600 W
+7200 26172 MT
+([2])SH
+10800 XM
+(kern_return_t env_del_string\050env_port,env_name\051)SH
+13200 27203 MT
+(port_t env_port;)7800 W
+13200 28234 MT
+(env_name_t env_name;)5400 W
+7200 31327 MT
+([3])SH
+10800 XM
+(kern_return_t env_get_port\050env_port,env_name,env_val\051)SH
+13200 32358 MT
+(port_t env_port;)7800 W
+13200 33389 MT
+(env_name_t env_name;)5400 W
+13200 34420 MT
+(port_t *env_val;)7800 W
+7200 37513 MT
+([3])SH
+10800 XM
+(kern_return_t env_set_port\050env_port,env_name,env_val\051)SH
+13200 38544 MT
+(port_t env_port;)7800 W
+13200 39575 MT
+(env_name_t env_name;)5400 W
+13200 40606 MT
+(port_t env_val;)7800 W
+7200 43699 MT
+([3])SH
+10800 XM
+(kern_return_t env_del_port\050env_port,env_name\051)SH
+13200 44730 MT
+(port_t env_port;)7800 W
+13200 45761 MT
+(env_name_t env_name;)5400 W
+7200 48854 MT
+([4])SH
+10800 XM
+(kern_return_t env_list_strings\050env_port,env_names,name_cnt,)SH
+29400 49885 MT
+(env_string_vals,string_cnt\051)SH
+13200 50916 MT
+(port_t env_port;)4800 W
+13200 51947 MT
+(env_name_list *env_names)SH
+13200 52978 MT
+(int *name_cnt;)6000 W
+13200 54009 MT
+(env_str_list *env_string_vals;)600 W
+13200 55040 MT
+(int *string_cnt\051;)6000 W
+7200 58133 MT
+([4])SH
+10800 XM
+(kern_return_t env_list_ports\050env_port,env_names,name_cnt,)SH
+29400 59164 MT
+(env_port_vals,port_cnt\051)SH
+13200 60195 MT
+(port_t env_port;)4800 W
+13200 61226 MT
+(env_name_list *env_names)SH
+13200 62257 MT
+(int *name_cnt;)6000 W
+13200 63288 MT
+(port_array_t *env_port_vals;)600 W
+13200 64319 MT
+(int *port_cnt\051;)6000 W
+7200 67412 MT
+([4])SH
+10800 XM
+(kern_return_t env_set_stlist\050env_port,env_names,name_cntf,)SH
+28200 68443 MT
+(env_string_vals,string_cnt\051)SH
+13200 69474 MT
+(port_t env_port;)4800 W
+13200 70505 MT
+(env_name_list env_names)600 W
+13200 71536 MT
+(int name_cnt;)6600 W
+ES
+%%Page: 10 11
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(10)SH
+/Courier SF
+13200 7824 MT
+(env_str_list env_string_vals;)1200 W
+13200 8855 MT
+(int string_cnt\051;)6600 W
+7200 11948 MT
+([4])SH
+10800 XM
+(kern_return_t env_set_ptlist\050env_port,env_names,name_cnt,)SH
+28200 12979 MT
+(env_port_vals,port_cnt\051)SH
+13200 14010 MT
+(port_t env_port;)4800 W
+13200 15041 MT
+(env_name_list env_names;)600 W
+13200 16072 MT
+(int name_cnt;)6600 W
+13200 17103 MT
+(port_array_t env_port_vals;)1200 W
+13200 18134 MT
+(int port_cnt\051;)6600 W
+7200 21227 MT
+([6])SH
+10800 XM
+(void init_env_mgr\050reply_port\051;)SH
+13200 22258 MT
+(port_t reply_port;)3000 W
+7200 25351 MT
+([6])SH
+10800 XM
+(kern_return_t env_new_conn\050env_port,new_env_port\051)SH
+13200 26382 MT
+(port_t env_port;)3000 W
+13200 27413 MT
+(port_t *new_env_port\051)3000 W
+7200 30506 MT
+([6])SH
+10800 XM
+(kern_return_t env_copy_conn\050env_port,new_env_port\051)SH
+13200 31537 MT
+(port_t env_port;)3000 W
+13200 32568 MT
+(port_t *new_env_port\051)3000 W
+7200 35661 MT
+([6])SH
+10800 XM
+(kern_return_t env_restrict_conn\050env_port,new_env_port\051)SH
+13200 36692 MT
+(port_t env_port;)3000 W
+13200 37723 MT
+(port_t *new_env_port\051)3000 W
+7200 40816 MT
+([6])SH
+10800 XM
+(kern_return-t env_disconnect\050env_port\051)SH
+13200 41847 MT
+(port_t env_port;)3000 W
+ES
+%%Page: i 12
+BS
+0 SI
+10 /Helvetica-Bold AF
+30461 4329 MT
+(i)SH
+12 SS 
+25533 8075 MT
+(Table of Contents)SH
+11 SS 
+9036 9319 MT
+(1. Introduction)SH
+53388 XM
+(1)SH
+9036 10563 MT
+(2. Types)SH
+53388 XM
+(1)SH
+9036 11807 MT
+(3. Primitives)SH
+53388 XM
+(1)SH
+9036 13051 MT
+(4. Integration with Unix environ)SH
+53388 XM
+(8)SH
+9036 14295 MT
+(I. Summary of Calls)SH
+53388 XM
+(9)SH
+ES
+%%Trailer
+%%Pages: 12 
+%%DocumentFonts: Helvetica Helvetica-Bold Helvetica-Oblique Courier

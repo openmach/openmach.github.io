@@ -1,0 +1,2612 @@
+%!PS-Adobe-2.0
+%%Title: threads.mss
+%%DocumentFonts: (atend)
+%%Creator: Mary Thompson and Scribe 7(1700)
+%%CreationDate: 11 September 1990 15:25
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale /showpage {} def} bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 0 1
+BS
+0 SI
+15 /Helvetica-Bold AF
+26931 14054 MT
+(C Threads)SH
+10 /Helvetica AF
+27321 17104 MT
+(Eric C. Cooper)SH
+26543 18530 MT
+(Richard P. Draves)SH
+23180 21382 MT
+(Department of Computer Science)SH
+24626 22808 MT
+(Carnegie Mellon University)SH
+23568 24234 MT
+(Pittsburgh, Pennsylvania 15213)SH
+/Helvetica-Bold SF
+24153 27086 MT
+(Draft of 11 September 1990)SH
+13 SS 
+27963 44148 MT
+(Abstract)SH
+10 /Helvetica AF
+7200 46681 MT
+(The C Threads package allows parallel programming in C under the MACH operating system.)
+208 W( The)692 W
+7200 47824 MT
+(package provides multiple)
+21 W( threads of control for parallelism, shared variables, mutual exclusion for critical)22 W
+7200 48967 MT
+(sections, and condition variables for synchronization of threads.)SH
+7200 61929 MT
+(This research was sponsored by the Defense Advanced Research Projects Agency \050DoD\051,)
+86 W( ARPA order)85 W
+7200 63072 MT
+(4864, monitored by the Space and Naval Warfare Systems Command under contract N00039-84-C-0467.)SH
+7200 65356 MT
+(The views and conclusions contained in this)
+225 W( document are those of the authors and should not be)226 W
+7200 66499 MT
+(interpreted as)
+316 W( representing official policies, either expressed or implied, of the Defense Advanced)315 W
+7200 67642 MT
+(Research Projects Agency or of the U.S. Government.)SH
+ES
+%%Page: 1 2
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(1)SH
+12 SS 
+7200 8075 MT
+(1. Introduction)SH
+10 /Helvetica AF
+7200 9501 MT
+(MACH provides a set of low-level, language-independent primitives for manipulating)
+SH( threads of control)
+1 W( [3].)SH
+7200 10927 MT
+(The C Threads package is a run-time library that provides a C language interface to)
+101 W( these facilities)
+100 W( [1].)SH
+7200 12353 MT
+(The constructs provided are similar to those found in Mesa)
+64 W( [4])
+SH( and Modula-2+)
+64 W( [5]:)
+SH( forking)
+407 W( and joining of)65 W
+7200 13779 MT
+(threads, protection of critical regions with mutex variables, and synchronization by means)
+150 W( of condition)149 W
+7200 15205 MT
+(variables.)SH
+12 /Helvetica-Bold AF
+7200 18960 MT
+(2. Naming Conventions)SH
+10 /Helvetica AF
+7200 20386 MT
+(An attempt has been made to use a consistent)
+21 W( style of naming for the abstractions implemented by the C)22 W
+7200 21812 MT
+(Threads package.  All types, macros, and functions implementing a given abstract data)
+41 W( type are prefixed)40 W
+7200 23238 MT
+(with the)
+SH( type name and an underscore.  The name of the type itself is suffixed with)1 W
+/Courier SF
+43901 XM
+(_t)SH
+/Helvetica SF
+45380 XM
+(and is defined via a)1 W
+7200 24664 MT
+(C)SH
+/Courier SF
+8200 XM
+(typedef)SH
+/Helvetica SF
+(. Documentation)
+278 W( of the form)SH
+/Courier SF
+19200 26070 MT
+(typedef struct mutex {...} *mutex_t;)SH
+/Helvetica SF
+7200 27581 MT
+(indicates that the)131 W
+/Courier SF
+15431 XM
+(mutex_t)SH
+/Helvetica SF
+20040 XM
+(type is defined)
+131 W( as a pointer to a)130 W
+/Helvetica-Oblique SF
+35257 XM
+(referent type)130 W
+/Courier SF
+41409 XM
+(struct mutex)130 W
+/Helvetica SF
+49147 XM
+(which may)130 W
+7200 29007 MT
+(itself be useful to the programmer.)
+173 W( \050In)
+625 W( cases where the referent type should be considered)174 W
+/Helvetica-Oblique SF
+50386 XM
+(opaque)SH
+/Helvetica SF
+(,)SH
+7200 30433 MT
+(documentation such as)SH
+/Courier SF
+19200 31839 MT
+(typedef ... cthread_t;)SH
+/Helvetica SF
+7200 33350 MT
+(is used instead.\051)SH
+7200 35917 MT
+(Continuing the example of the)286 W
+/Courier SF
+22193 XM
+(mutex_t)SH
+/Helvetica SF
+26957 XM
+(type, the functions)285 W
+/Courier SF
+36206 XM
+(mutex_alloc\050\051)SH
+/Helvetica SF
+44569 XM
+(and)SH
+/Courier SF
+46800 XM
+(mutex_free\050\051)SH
+/Helvetica SF
+7200 37343 MT
+(provide dynamic storage allocation and deallocation.)
+758 W( The)
+1795 W( functions)759 W
+/Courier SF
+44095 XM
+(mutex_init\050\051)SH
+/Helvetica SF
+52332 XM
+(and)SH
+/Courier SF
+7200 38769 MT
+(mutex_clear\050\051)SH
+/Helvetica SF
+15353 XM
+(provide initialization and finalization of the referent type.  These functions are useful if)74 W
+7200 40195 MT
+(the programmer wishes to include the referent)
+78 W( type itself \050rather than a pointer\051 in a larger structure, for)79 W
+7200 41621 MT
+(more efficient storage allocation.)
+39 W( They)
+355 W( should not be called on objects that are dynamically allocated via)38 W
+/Courier SF
+7200 43047 MT
+(mutex_alloc\050\051)SH
+/Helvetica SF
+(. Type-specific)
+744 W( functions such as)233 W
+/Courier SF
+31405 XM
+(mutex_lock\050\051)SH
+/Helvetica SF
+39117 XM
+(and)SH
+/Courier SF
+41297 XM
+(mutex_unlock\050\051)SH
+/Helvetica SF
+50209 XM
+(are also)234 W
+7200 44473 MT
+(defined, of course.)SH
+12 /Helvetica-Bold AF
+7200 48228 MT
+(3. Initializing the C Threads Package)SH
+11 SS 
+7200 51910 MT
+(3.1. cthreads.h)SH
+10 /Courier AF
+9600 53316 MT
+(#include <cthreads.h>)SH
+/Helvetica SF
+7200 55883 MT
+(The header file)22 W
+/Courier SF
+14213 XM
+(cthreads.h)SH
+/Helvetica SF
+20512 XM
+(defines the C threads interface.  All programs using C threads must include)21 W
+7200 57309 MT
+(this file.)SH
+11 /Helvetica-Bold AF
+7200 60991 MT
+(3.2. cthread_init)SH
+10 /Courier AF
+9600 62397 MT
+(void)SH
+9600 63428 MT
+(cthread_init\050\051)SH
+/Helvetica SF
+7200 65995 MT
+(The)SH
+/Courier SF
+9290 XM
+(cthread_init\050\051)SH
+/Helvetica SF
+18057 XM
+(procedure initializes the C threads implementation.)
+89 W( A)
+458 W( program using C threads)90 W
+7200 67421 MT
+(must explicitly call)168 W
+/Courier SF
+15983 XM
+(cthread_init\050\051)SH
+/Helvetica SF
+24829 XM
+(\050typically from)168 W
+/Courier SF
+31610 XM
+(main\050\051)SH
+/Helvetica SF
+(\051 before using any of the other functions)167 W
+7200 68847 MT
+(described below.  Multiple calls to)SH
+/Courier SF
+22372 XM
+(cthread_init\050\051)SH
+/Helvetica SF
+31050 XM
+(are harmless.)SH
+ES
+%%Page: 2 3
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(2)SH
+12 SS 
+7200 8075 MT
+(4. Threads of Control)SH
+11 SS 
+7200 11757 MT
+(4.1. Creation)SH
+10 /Helvetica AF
+7200 13183 MT
+(When a C program starts, it contains a single thread of control, the one)
+12 W( executing)13 W
+/Courier SF
+43566 XM
+(main\050\051)SH
+/Helvetica SF
+(. The)
+304 W( thread of)13 W
+7200 14609 MT
+(control is an)
+140 W( active entity, moving from statement to statement, calling and returning from procedures.)139 W
+7200 16035 MT
+(New threads are created by)SH
+/Helvetica-Oblique SF
+19761 XM
+(fork)SH
+/Helvetica SF
+21706 XM
+(operations.)SH
+7200 18602 MT
+(Forking a)
+84 W( new thread of control is similar to calling a procedure, except that the caller does not wait for)85 W
+7200 20028 MT
+(the procedure to return.  Instead, the caller continues to execute)
+167 W( in parallel with the execution of the)166 W
+7200 21454 MT
+(procedure in the newly forked thread.  At)
+18 W( some later time, the caller may rendez-vous with the thread and)19 W
+7200 22880 MT
+(retrieve its result \050if any\051 by means of a)44 W
+/Helvetica-Oblique SF
+25102 XM
+(join)SH
+/Helvetica SF
+26980 XM
+(operation, or the caller may)44 W
+/Helvetica-Oblique SF
+39594 XM
+(detach)SH
+/Helvetica SF
+42918 XM
+(the newly created thread)44 W
+7200 24306 MT
+(to assert that no thread will ever be interested in joining it.)SH
+11 /Helvetica-Bold AF
+7200 27988 MT
+(4.2. Termination)SH
+8 /Helvetica AF
+45055 29063 MT
+(1)SH
+10 SS 
+7200 29414 MT
+(A thread)74 W
+/Courier SF
+11406 XM
+(t)SH
+/Helvetica SF
+12358 XM
+(terminates when it returns from the top-level procedure it was executing.)74 W
+46206 XM
+(If)SH
+/Courier SF
+47115 XM
+(t)SH
+/Helvetica SF
+48068 XM
+(has not been)75 W
+7200 30840 MT
+(detached, it remains in limbo until another thread either joins it or detaches it;)
+33 W( if)32 W
+/Courier SF
+42820 XM
+(t)SH
+/Helvetica SF
+43730 XM
+(has been detached, no)32 W
+7200 32266 MT
+(rendez-vous is necessary.)SH
+11 /Helvetica-Bold AF
+7200 35948 MT
+(4.3. cthread_fork)SH
+10 /Courier AF
+9600 37354 MT
+(typedef ... any_t;)SH
+9600 38385 MT
+(typedef ... cthread_t;)SH
+/Helvetica SF
+7200 40952 MT
+(The)SH
+/Courier SF
+9311 XM
+(any_t)SH
+/Helvetica SF
+12699 XM
+(type represents a)
+110 W( pointer to any C type.  The)111 W
+/Courier SF
+33873 XM
+(cthread_t)SH
+/Helvetica SF
+39662 XM
+(type is an integer-size ``handle'')111 W
+7200 42378 MT
+(that uniquely identifies a thread of control.  Values of type)196 W
+/Courier SF
+35036 XM
+(cthread_t)SH
+/Helvetica SF
+40909 XM
+(will be referred to as thread)195 W
+7200 43804 MT
+(identifiers.)SH
+/Courier SF
+9600 45210 MT
+(cthread_t)SH
+9600 46241 MT
+(cthread_fork\050func, arg\051)SH
+14400 47272 MT
+(any_t \050*func\051\050\051;)SH
+14400 48303 MT
+(any_t arg;)SH
+/Helvetica SF
+7200 50870 MT
+(The)SH
+/Courier SF
+9409 XM
+(cthread_fork\050\051)SH
+/Helvetica SF
+18295 XM
+(procedure creates a new thread of control in)
+208 W( which)209 W
+/Courier SF
+42846 XM
+(func\050arg\051)SH
+/Helvetica SF
+48733 XM
+(is executed)209 W
+7200 52296 MT
+(concurrently with the caller's thread.  This is the sole means of creating new threads.)
+69 W( Arguments)
+415 W( larger)68 W
+7200 53722 MT
+(than a pointer must be passed by reference.  Similarly, multiple arguments must be simulated by passing)28 W
+7200 55148 MT
+(a pointer to a structure containing several components.  The call to)85 W
+/Courier SF
+38011 XM
+(cthread_fork\050\051)SH
+/Helvetica SF
+46773 XM
+(returns a thread)84 W
+7200 56574 MT
+(identifier that can be passed to)116 W
+/Courier SF
+21793 XM
+(cthread_join\050\051)SH
+/Helvetica SF
+30587 XM
+(or)SH
+/Courier SF
+31870 XM
+(cthread_detach\050\051)SH
+/Helvetica SF
+41864 XM
+(\050see below\051.  Every)
+116 W( thread)117 W
+/Helvetica-Oblique SF
+7200 58000 MT
+(must)SH
+/Helvetica SF
+9645 XM
+(be either joined or detached exactly once.)SH
+10800 50 7200 68384 UL
+6 SS 
+8090 69779 MT
+(1)SH
+8 SS 
+8424 70092 MT
+(Currently, this is not true of the initial thread executing)144 W
+/Courier SF
+29160 XM
+(main\050\051)SH
+/Helvetica SF
+(. Instead,)
+510 W( an implicit call to)144 W
+/Courier SF
+42873 XM
+(exit\050\051)SH
+/Helvetica SF
+46119 XM
+(occurs when)144 W
+/Courier SF
+51120 XM
+(main\050\051)SH
+/Helvetica SF
+7200 71046 MT
+(returns, terminating the entire program.)
+79 W( If)
+378 W( the programmer wishes detached threads to continue executing, the final statement of)78 W
+/Courier SF
+7200 72000 MT
+(main\050\051)SH
+/Helvetica SF
+10302 XM
+(should be a call to)SH
+/Courier SF
+16973 XM
+(cthread_exit\050\051)SH
+/Helvetica SF
+(.)SH
+ES
+%%Page: 3 4
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(3)SH
+11 SS 
+7200 8002 MT
+(4.4. cthread_exit)SH
+10 /Courier AF
+9600 9408 MT
+(void)SH
+9600 10439 MT
+(cthread_exit\050result\051)SH
+14400 11470 MT
+(any_t result;)SH
+/Helvetica SF
+7200 14037 MT
+(This procedure causes termination)
+60 W( of the calling thread.  An implicit)59 W
+/Courier SF
+37864 XM
+(cthread_exit\050\051)SH
+/Helvetica SF
+46601 XM
+(occurs when the)59 W
+7200 15463 MT
+(top-level function of a thread returns,)
+41 W( but it may also be called explicitly.  The result will be passed to the)42 W
+7200 16889 MT
+(thread that joins the caller, or discarded if the caller is detached.)SH
+11 /Helvetica-Bold AF
+7200 20571 MT
+(4.5. cthread_join)SH
+10 /Courier AF
+9600 21977 MT
+(any_t)SH
+9600 23008 MT
+(cthread_join\050t\051)SH
+14400 24039 MT
+(cthread_t t;)SH
+/Helvetica SF
+7200 26606 MT
+(This function suspends the caller until the)
+1 W( specified thread)SH
+/Courier SF
+33163 XM
+(t)SH
+/Helvetica SF
+34041 XM
+(terminates via)SH
+/Courier SF
+40543 XM
+(cthread_exit\050\051)SH
+/Helvetica SF
+(. \050It)
+278 W( follows)SH
+7200 28032 MT
+(that attempting to join one's own thread will result in)
+9 W( deadlock.\051  The caller receives either the result of)10 W
+/Courier SF
+52678 XM
+(t)SH
+/Helvetica SF
+('s)SH
+7200 29458 MT
+(top-level function or the argument with which)SH
+/Courier SF
+27264 XM
+(t)SH
+/Helvetica SF
+28142 XM
+(explicitly called)SH
+/Courier SF
+35088 XM
+(cthread_exit\050\051)SH
+/Helvetica SF
+(.)SH
+11 /Helvetica-Bold AF
+7200 33140 MT
+(4.6. cthread_detach)SH
+10 /Courier AF
+9600 34546 MT
+(void)SH
+9600 35577 MT
+(cthread_detach\050t\051)SH
+14400 36608 MT
+(cthread_t t;)SH
+/Helvetica SF
+7200 39175 MT
+(The detach operation is)
+33 W( used to indicate that the given thread will never be joined.  This is usually known)32 W
+7200 40601 MT
+(at the time the thread is forked, so the most efficient usage is the following:)SH
+/Courier SF
+14400 42007 MT
+(cthread_detach\050cthread_fork\050procedure, argument\051\051;)SH
+/Helvetica SF
+7200 43518 MT
+(A thread may, however, be detached at any time after it is forked, as long as no other attempt is made)
+29 W( to)30 W
+7200 44944 MT
+(join it or detach it.)SH
+11 /Helvetica-Bold AF
+7200 48626 MT
+(4.7. cthread_yield)SH
+10 /Courier AF
+9600 50032 MT
+(void)SH
+9600 51063 MT
+(cthread_yield\050\051)SH
+/Helvetica SF
+7200 53630 MT
+(This procedure is a hint to the scheduler, suggesting)
+105 W( that this would be a convenient point to schedule)104 W
+7200 55056 MT
+(another thread to run on the current processor.)
+185 W( Calls)
+650 W( to)186 W
+/Courier SF
+34140 XM
+(cthread_yield\050\051)SH
+/Helvetica SF
+43604 XM
+(are unnecessary in an)186 W
+7200 56482 MT
+(implementation with preemptive scheduling, but may be required to)
+39 W( avoid starvation in a coroutine-based)38 W
+7200 57908 MT
+(implementation.)SH
+11 /Helvetica-Bold AF
+7200 61590 MT
+(4.8. cthread_self)SH
+10 /Courier AF
+9600 62996 MT
+(cthread_t)SH
+9600 64027 MT
+(cthread_self\050\051)SH
+/Helvetica SF
+7200 66594 MT
+(This function returns the)
+180 W( caller's own thread identifier, which is the same value that was returned by)181 W
+/Courier SF
+7200 68020 MT
+(cthread_fork\050\051)SH
+/Helvetica SF
+15970 XM
+(to the creator of the thread.  The thread identifier uniquely identifies the thread,)
+92 W( and)91 W
+7200 69446 MT
+(hence may be used as)
+98 W( a key in data structures that associate user data with individual threads.  Since)99 W
+7200 70872 MT
+(thread identifiers may be reused by the underlying implementation, the)
+64 W( programmer should be careful to)63 W
+ES
+%%Page: 4 5
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(4)SH
+/Helvetica SF
+7200 7929 MT
+(clean up such associations when threads exit.)SH
+11 /Helvetica-Bold AF
+7200 11611 MT
+(4.9. cthread_set_data, cthread_data)SH
+10 /Courier AF
+9600 13017 MT
+(void)SH
+9600 14048 MT
+(cthread_set_data\050t, data\051)SH
+14400 15079 MT
+(cthread_t t;)SH
+14400 16110 MT
+(any_t data;)SH
+9600 18172 MT
+(any_t)SH
+9600 19203 MT
+(cthread_data\050t\051)SH
+14400 20234 MT
+(cthread_t t;)SH
+/Helvetica SF
+7200 22801 MT
+(These functions allow the user to associate arbitrary data with a thread, providing a simple)
+73 W( form thread-)74 W
+7200 24227 MT
+(specific ``global'' variable.  More elaborate mechanisms, such as per-thread property lists or hash tables,)52 W
+7200 25653 MT
+(can then be built with these primitives.)SH
+12 /Helvetica-Bold AF
+7200 29408 MT
+(5. Synchronization)SH
+10 /Courier AF
+9600 30814 MT
+(typedef struct mutex {...} *mutex_t;)SH
+9600 32876 MT
+(typedef struct condition {...} *condition_t;)SH
+/Helvetica SF
+7200 35443 MT
+(This section describes mutual exclusion and synchronization primitives,)
+187 W( called mutexes and condition)188 W
+7200 36869 MT
+(variables. In)
+842 W( general, these primitives are used to constrain the possible interleavings of threads')282 W
+7200 38295 MT
+(execution streams.  They separate the two most common uses of Dijkstra's)39 W
+/Courier SF
+41180 XM
+(P\050\051)SH
+/Helvetica SF
+43297 XM
+(and)SH
+/Courier SF
+45283 XM
+(V\050\051)SH
+/Helvetica SF
+47401 XM
+(operations into)40 W
+7200 39721 MT
+(distinct facilities.  This approach basically implements monitors [2, 4], but without the syntactic sugar.)SH
+7200 42288 MT
+(Mutually exclusive access to)
+1 W( mutable data is necessary to prevent corruption of data.  As simple example,)SH
+7200 43714 MT
+(consider concurrent attempts to update a simple counter.  If two threads fetch the current)
+124 W( value into a)125 W
+7200 45140 MT
+(\050thread-local\051 register, increment, and write the value back in some order,)
+260 W( the counter will only be)259 W
+7200 46566 MT
+(incremented once, losing one thread's operation.  A mutex solves this problem by making the)
+189 W( fetch-)190 W
+7200 47992 MT
+(increment-deposit action atomic.  Before fetching a counter, a)
+82 W( thread locks the associated mutex.  After)81 W
+7200 49418 MT
+(depositing a new value, the thread unlocks the mutex.  If any other)
+55 W( thread tries to use the counter in the)56 W
+7200 50844 MT
+(meantime, it will block when it)
+59 W( tries to lock the mutex.  If more than one thread tries to lock the mutex at)58 W
+7200 52270 MT
+(the same time, the C threads package guarantees that only one will succeed; the rest will block.)SH
+7200 54837 MT
+(Condition variables are used when one thread wants to wait)
+207 W( until another thread has finished doing)208 W
+7200 56263 MT
+(something. Every)
+508 W( condition variable should be protected by a mutex.)
+115 W( Conceptually,)
+506 W( the condition is a)114 W
+7200 57689 MT
+(boolean function)
+97 W( of the shared data that the mutex protects.  Commonly, a thread locks the mutex and)98 W
+7200 59115 MT
+(inspects the shared data.  If it doesn't like what it finds, it waits using a condition)
+28 W( variable.  This operation)27 W
+7200 60541 MT
+(also temporarily unlocks the mutex, to give other threads a chance to get)
+49 W( in and modify the shared data.)50 W
+7200 61967 MT
+(Eventually, one of them should signal the condition \050which wakes up the blocked thread\051 before)
+14 W( it unlocks)13 W
+7200 63393 MT
+(the mutex.  At that point, the original thread)
+70 W( will regain its lock and can look at the shared data to see if)71 W
+7200 64819 MT
+(things have improved.  It)
+36 W( can't assume that it will like what it sees, because some other thread may have)35 W
+7200 66245 MT
+(slipped in and mucked with the data after the the condition was signaled.)SH
+7200 68812 MT
+(One must take special care with)
+218 W( data structures that are dynamically allocated and deallocated.  In)219 W
+7200 70238 MT
+(particular, if the mutex that is controlling access to a dynamically allocated record is part)
+105 W( of the record,)104 W
+7200 71664 MT
+(one must be sure that no thread is waiting for the mutex before freeing the record.)SH
+ES
+%%Page: 5 6
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(5)SH
+/Helvetica SF
+7200 7929 MT
+(Attempting to lock a mutex)
+117 W( that one already holds is another common error.  The offending thread will)118 W
+7200 9355 MT
+(block waiting for itself.  This can happen when)
+17 W( a thread is traversing a complicated data structure, locking)16 W
+7200 10781 MT
+(as it goes,)
+99 W( and reaches the same data by different paths.  Another instance of this is when a thread is)100 W
+7200 12207 MT
+(locking elements in an array, say to swap them, and)
+229 W( it doesn't check for the special case that the)228 W
+7200 13633 MT
+(elements are the same.)SH
+7200 16200 MT
+(In general, one must be)
+5 W( very careful to avoid deadlock.  Deadlock is defined as the condition in which one)6 W
+7200 17626 MT
+(or more threads are)
+14 W( permanently blocked waiting for each other.  The above scenarios are a special case)13 W
+7200 19052 MT
+(of deadlock.  The easiest way to avoid deadlock with mutexes is to impose a total ordering on)
+213 W( the)214 W
+7200 20478 MT
+(mutexes, and then ensure that threads only lock mutexes in increasing order.)SH
+7200 23045 MT
+(One important issue)
+74 W( the programmer must decide is what kind of granularity to use in protecting shared)73 W
+7200 24471 MT
+(data with mutexes.  The two extremes are to have one mutex protecting all)
+43 W( shared memory, and to have)44 W
+7200 25897 MT
+(one mutex for every byte of shared memory.)
+370 W( Finer)
+1017 W( granularity normally increases the possible)369 W
+7200 27323 MT
+(parallelism, because less data is locked at any one time.  However, it also increases the overhead lost to)31 W
+7200 28749 MT
+(locking and unlocking mutexes and increases the possibility of deadlock.)SH
+11 /Helvetica-Bold AF
+7200 32431 MT
+(5.1. mutex_lock)SH
+10 /Courier AF
+9600 33837 MT
+(void)SH
+9600 34868 MT
+(mutex_lock\050m\051)SH
+14400 35899 MT
+(mutex_t m;)SH
+/Helvetica SF
+7200 38466 MT
+(The)SH
+/Courier SF
+9367 XM
+(mutex_lock\050\051)SH
+/Helvetica SF
+17011 XM
+(procedure attempts to lock the mutex)166 W
+/Courier SF
+34737 XM
+(m)SH
+/Helvetica SF
+35781 XM
+(and blocks)
+166 W( until it succeeds.  If several)165 W
+7200 39892 MT
+(threads attempt to lock the same mutex concurrently, one will)
+25 W( succeed, and the others will block until)26 W
+/Courier SF
+52374 XM
+(m)SH
+/Helvetica SF
+53278 XM
+(is)SH
+7200 41318 MT
+(unlocked. The)
+384 W( case of a thread attempting to lock a mutex it)
+53 W( has already locked is)52 W
+/Helvetica-Oblique SF
+44725 XM
+(not)SH
+/Helvetica SF
+46445 XM
+(treated specially;)52 W
+7200 42744 MT
+(deadlock will result.)SH
+11 /Helvetica-Bold AF
+7200 46426 MT
+(5.2. mutex_try_lock)SH
+10 /Courier AF
+9600 47832 MT
+(int)SH
+9600 48863 MT
+(mutex_try_lock\050m\051)SH
+14400 49894 MT
+(mutex_t m;)SH
+/Helvetica SF
+7200 52461 MT
+(The)SH
+/Courier SF
+9259 XM
+(mutex_try_lock\050\051)SH
+/Helvetica SF
+19195 XM
+(function attempts to lock the mutex)59 W
+/Courier SF
+35279 XM
+(m)SH
+/Helvetica SF
+(, like)59 W
+/Courier SF
+38331 XM
+(mutex_lock\050\051)SH
+/Helvetica SF
+(, and returns)59 W
+/Courier SF
+51600 XM
+(TRUE)SH
+/Helvetica SF
+7200 53887 MT
+(if it succeeds.  If)98 W
+/Courier SF
+15138 XM
+(m)SH
+/Helvetica SF
+16114 XM
+(is already locked,)
+98 W( however,)97 W
+/Courier SF
+28842 XM
+(mutex_try_lock\050\051)SH
+/Helvetica SF
+38817 XM
+(immediately returns)97 W
+/Courier SF
+48013 XM
+(FALSE)SH
+/Helvetica SF
+51388 XM
+(rather)SH
+7200 55313 MT
+(than blocking.  For example, a busy-waiting version of the)46 W
+/Courier SF
+33449 XM
+(mutex_lock\050\051)SH
+/Helvetica SF
+40973 XM
+(procedure could be written in)47 W
+7200 56739 MT
+(terms of)SH
+/Courier SF
+11090 XM
+(mutex_try_lock\050\051)SH
+/Helvetica SF
+20968 XM
+(as follows:)SH
+/Courier SF
+14400 58145 MT
+(void)SH
+14400 59176 MT
+(mutex_lock\050m\051)SH
+19200 60207 MT
+(mutex_t m;)SH
+14400 61238 MT
+({)SH
+19200 62269 MT
+(for \050;;\051)SH
+24000 63300 MT
+(if \050mutex_try_lock\050m\051\051)SH
+28800 64331 MT
+(return;)SH
+14400 65362 MT
+(})SH
+ES
+%%Page: 6 7
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(6)SH
+11 SS 
+7200 8002 MT
+(5.3. mutex_unlock)SH
+10 /Courier AF
+9600 9408 MT
+(void)SH
+9600 10439 MT
+(mutex_unlock\050m\051)SH
+14400 11470 MT
+(mutex_t m;)SH
+/Helvetica SF
+7200 14037 MT
+(The)SH
+/Courier SF
+9201 XM
+(mutex_unlock\050\051)SH
+/Helvetica SF
+17879 XM
+(procedure unlocks the mutex)SH
+/Courier SF
+30996 XM
+(m)SH
+/Helvetica SF
+(, giving other threads a chance to lock it.)SH
+11 /Helvetica-Bold AF
+7200 17719 MT
+(5.4. condition_signal)SH
+10 /Courier AF
+9600 19125 MT
+(void)SH
+9600 20156 MT
+(condition_signal\050c\051)SH
+14400 21187 MT
+(condition_t c;)SH
+/Helvetica SF
+7200 23754 MT
+(The)SH
+/Courier SF
+9371 XM
+(condition_signal\050\051)SH
+/Helvetica SF
+20619 XM
+(procedure should be called when one)
+170 W( thread wishes to indicate that the)169 W
+7200 25180 MT
+(condition represented by)
+284 W( the condition variable is now true.  If any other threads are waiting \050via)285 W
+/Courier SF
+7200 26606 MT
+(condition_wait\050\051)SH
+/Helvetica SF
+(\051, then at least one of them will be awakened.  If no)
+213 W( threads are waiting, then)212 W
+7200 28032 MT
+(nothing happens.)SH
+11 /Helvetica-Bold AF
+7200 31714 MT
+(5.5. condition_broadcast)SH
+10 /Courier AF
+9600 33120 MT
+(void)SH
+9600 34151 MT
+(condition_broadcast\050c\051)SH
+14400 35182 MT
+(condition_t c;)SH
+/Helvetica SF
+7200 37749 MT
+(The)SH
+/Courier SF
+9262 XM
+(condition_broadcast\050\051)SH
+/Helvetica SF
+22201 XM
+(procedure is similar to)61 W
+/Courier SF
+32503 XM
+(condition_signal\050\051)SH
+/Helvetica SF
+(, except)
+61 W( that it awakens)62 W
+/Helvetica-Oblique SF
+7200 39175 MT
+(all)SH
+/Helvetica SF
+8478 XM
+(threads waiting for the condition, not just one of them.)SH
+11 /Helvetica-Bold AF
+7200 42857 MT
+(5.6. condition_wait)SH
+10 /Courier AF
+9600 44263 MT
+(void)SH
+9600 45294 MT
+(condition_wait\050c, m\051)SH
+14400 46325 MT
+(condition_t c;)SH
+14400 47356 MT
+(mutex_t m;)SH
+/Helvetica SF
+7200 49923 MT
+(The)SH
+/Courier SF
+9273 XM
+(condition_wait\050\051)SH
+/Helvetica SF
+19223 XM
+(procedure unlocks)72 W
+/Courier SF
+27815 XM
+(m)SH
+/Helvetica SF
+(, suspends the calling thread)
+72 W( until the specified condition)71 W
+7200 51349 MT
+(is)SH
+/Helvetica-Oblique SF
+8322 XM
+(likely)SH
+/Helvetica SF
+10944 XM
+(to be true, and)
+122 W( locks)123 W
+/Courier SF
+20839 XM
+(m)SH
+/Helvetica SF
+21840 XM
+(again when the thread resumes.  Since there is no guarantee that the)123 W
+7200 52775 MT
+(condition will be true when the thread resumes, use of this procedure should always be of the form)SH
+/Courier SF
+14400 54181 MT
+(mutex_lock\050m\051;)SH
+14400 55212 MT
+(...)SH
+14400 56243 MT
+(while \050/* condition is not true */\051)SH
+19200 57274 MT
+(condition_wait\050c, m\051;)SH
+14400 58305 MT
+(...)SH
+14400 59336 MT
+(mutex_unlock\050m\051;)SH
+/Helvetica SF
+7200 60847 MT
+(Shared variables should be inspected on each iteration to determine whether the condition is true.)SH
+12 /Helvetica-Bold AF
+7200 64602 MT
+(6. Management of Synchronization Variables)SH
+10 /Helvetica AF
+7200 66028 MT
+(A mutex or condition variable can be allocated dynamically from the heap,)
+7 W( or the programmer can take an)6 W
+7200 67454 MT
+(object of the referent type, initialize it appropriately, and then use its address.)SH
+ES
+%%Page: 7 8
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(7)SH
+11 SS 
+7200 8002 MT
+(6.1. Allocation)SH
+10 /Courier AF
+9600 9408 MT
+(mutex_t)SH
+9600 10439 MT
+(mutex_alloc\050\051)SH
+9600 12501 MT
+(condition_t)SH
+9600 13532 MT
+(condition_alloc\050\051)SH
+/Helvetica SF
+7200 16099 MT
+(These functions provide dynamic allocation of mutex and condition objects.)SH
+11 /Helvetica-Bold AF
+7200 19781 MT
+(6.2. Deallocation)SH
+10 /Courier AF
+9600 21187 MT
+(void)SH
+9600 22218 MT
+(mutex_free\050m\051)SH
+14400 23249 MT
+(mutex_t m;)SH
+9600 25311 MT
+(void)SH
+9600 26342 MT
+(condition_free\050c\051)SH
+14400 27373 MT
+(condition_t c;)SH
+/Helvetica SF
+7200 29940 MT
+(These functions allow the programmer to deallocate mutex)
+192 W( and condition objects that were allocated)193 W
+7200 31366 MT
+(dynamically. Before)
+502 W( deallocating such an object, the programmer must guarantee that no other thread)111 W
+7200 32792 MT
+(will reference it.  In particular, a thread blocked in)138 W
+/Courier SF
+30589 XM
+(mutex_lock\050\051)SH
+/Helvetica SF
+38205 XM
+(or)SH
+/Courier SF
+39510 XM
+(condition_wait\050\051)SH
+/Helvetica SF
+49526 XM
+(should be)138 W
+7200 34218 MT
+(viewed as referencing the object continually, so freeing the object ``out from)
+181 W( under'' such a thread is)180 W
+7200 35644 MT
+(erroneous, and can result in bugs that are extremely difficult to track down.)SH
+11 /Helvetica-Bold AF
+7200 39326 MT
+(6.3. Initialization)SH
+10 /Courier AF
+9600 40732 MT
+(void)SH
+9600 41763 MT
+(mutex_init\050m\051)SH
+14400 42794 MT
+(struct mutex *m;)SH
+9600 44856 MT
+(void)SH
+9600 45887 MT
+(condition_init\050c\051)SH
+14400 46918 MT
+(struct condition *c;)SH
+/Helvetica SF
+7200 49485 MT
+(These functions allow the programmer to initialize an object of the)372 W
+/Courier SF
+40638 XM
+(struct mutex)372 W
+/Helvetica SF
+48860 XM
+(or)SH
+/Courier SF
+50400 XM
+(struct)SH
+7200 50911 MT
+(condition)SH
+/Helvetica SF
+13095 XM
+(referent type, so that)
+217 W( its address can be used wherever an object of type)216 W
+/Courier SF
+48417 XM
+(mutex_t)SH
+/Helvetica SF
+53111 XM
+(or)SH
+/Courier SF
+7200 52337 MT
+(condition_t)SH
+/Helvetica SF
+14252 XM
+(is expected.  For example, the)174 W
+/Courier SF
+28969 XM
+(mutex_alloc\050\051)SH
+/Helvetica SF
+37221 XM
+(function could be written in terms of)175 W
+/Courier SF
+7200 53763 MT
+(mutex_init\050\051)SH
+/Helvetica SF
+14678 XM
+(as follows:)SH
+/Courier SF
+14400 55169 MT
+(mutex_t)SH
+14400 56200 MT
+(mutex_alloc\050\051)SH
+14400 57231 MT
+({)SH
+19200 58262 MT
+(register mutex_t m;)SH
+19200 60324 MT
+(m = \050mutex_t\051 malloc\050sizeof\050struct mutex\051\051;)SH
+19200 61355 MT
+(mutex_init\050m\051;)SH
+19200 62386 MT
+(return m;)SH
+14400 63417 MT
+(})SH
+/Helvetica SF
+7200 65984 MT
+(Initialization of the referent type is most often used)
+63 W( when the programmer has included the referent type)62 W
+7200 67410 MT
+(itself \050rather than a pointer\051 in a larger structure, for more efficient storage allocation.)
+6 W( For)
+292 W( instance, a data)7 W
+7200 68836 MT
+(structure might contain a component of type)2 W
+/Courier SF
+26946 XM
+(struct mutex)1 W
+/Helvetica SF
+34426 XM
+(to allow each instance of that structure to be)1 W
+7200 70262 MT
+(locked independently.)
+14 W( During)
+308 W( initialization of the instance, the programmer would call)15 W
+/Courier SF
+45395 XM
+(mutex_init\050\051)SH
+/Helvetica SF
+52888 XM
+(on)SH
+7200 71688 MT
+(the)SH
+/Courier SF
+8931 XM
+(struct mutex)63 W
+/Helvetica SF
+16535 XM
+(component. The)
+404 W( alternative of using)
+63 W( a)62 W
+/Courier SF
+34261 XM
+(mutex_t)SH
+/Helvetica SF
+38801 XM
+(component and initializing it using)62 W
+ES
+%%Page: 8 9
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(8)SH
+/Courier SF
+7200 7929 MT
+(mutex_alloc\050\051)SH
+/Helvetica SF
+15278 XM
+(would be less efficient.)SH
+11 /Helvetica-Bold AF
+7200 11611 MT
+(6.4. Finalization)SH
+10 /Courier AF
+9600 13017 MT
+(void)SH
+9600 14048 MT
+(mutex_clear\050m\051)SH
+14400 15079 MT
+(struct mutex *m;)SH
+9600 17141 MT
+(void)SH
+9600 18172 MT
+(condition_clear\050c\051)SH
+14400 19203 MT
+(struct condition *c;)SH
+/Helvetica SF
+7200 21770 MT
+(These functions allow the)
+403 W( programmer to finalize an object of the)404 W
+/Courier SF
+40543 XM
+(struct mutex)404 W
+/Helvetica SF
+48829 XM
+(or)SH
+/Courier SF
+50400 XM
+(struct)SH
+7200 23196 MT
+(condition)SH
+/Helvetica SF
+13070 XM
+(referent type.  For example, the)192 W
+/Courier SF
+28451 XM
+(mutex_free\050\051)SH
+/Helvetica SF
+36121 XM
+(procedure could be written in)
+192 W( terms of)191 W
+/Courier SF
+7200 24622 MT
+(mutex_clear\050\051)SH
+/Helvetica SF
+15278 XM
+(as follows:)SH
+/Courier SF
+14400 26028 MT
+(void)SH
+14400 27059 MT
+(mutex_free\050m\051)SH
+19200 28090 MT
+(mutex_t m;)SH
+14400 29121 MT
+({)SH
+19200 30152 MT
+(mutex_clear\050m\051;)SH
+19200 31183 MT
+(free\050\050char *\051 m\051;)SH
+14400 32214 MT
+(})SH
+12 /Helvetica-Bold AF
+7200 35969 MT
+(7. Shared Variables)SH
+10 /Helvetica AF
+7200 37395 MT
+(All global and static variables are shared among all)
+114 W( threads: if one thread modifies such a variable, all)115 W
+7200 38821 MT
+(other threads will observe the new value.)
+187 W( In)
+651 W( addition, a variable reachable from a pointer is shared)186 W
+7200 40247 MT
+(among all threads that can dereference that pointer.  This includes objects pointed)
+24 W( to by shared variables)25 W
+7200 41673 MT
+(of pointer type, as well as arguments passed by reference in)SH
+/Courier SF
+34157 XM
+(cthread_fork\050\051)SH
+/Helvetica SF
+(.)SH
+7200 44240 MT
+(When pointers are shared, some care is required to avoid dangling)
+8 W( reference problems.  The programmer)7 W
+7200 45666 MT
+(must ensure that the)
+246 W( lifetime of the object pointed to is long enough to allow the other threads to)247 W
+7200 47092 MT
+(dereference the pointer.  Since there is no bound on the relative execution)
+23 W( speed of threads, the simplest)22 W
+7200 48518 MT
+(solution is to share pointers)
+125 W( to global or heap-allocated objects only.  If a pointer to a local variable is)126 W
+7200 49944 MT
+(shared, the procedure in which that variable is defined)
+43 W( must remain active until it can be guaranteed that)42 W
+7200 51370 MT
+(the pointer will no longer be dereferenced by other threads.)
+69 W( The)
+417 W( synchronization functions can be used)70 W
+7200 52796 MT
+(to ensure this.)SH
+7200 55363 MT
+(The programmer must remember that unless a library, like the standard C library,)
+70 W( has been designed to)69 W
+7200 56789 MT
+(work in the presence of reentrancy, the)
+128 W( operations provided by the library must be presumed to make)129 W
+7200 58215 MT
+(unprotected use)
+76 W( of shared data.  Hence, the programmer must protect against this through the use of a)75 W
+7200 59641 MT
+(mutex that is locked before every library call \050or sequence of library calls\051 and unlocked afterwards.)SH
+11 /Helvetica-Bold AF
+7200 63323 MT
+(7.1. Dynamic Allocation)SH
+10 /Helvetica AF
+7200 64749 MT
+(Dynamic allocation and freeing of user-defined data structures is typically accomplished with the)
+13 W( standard)14 W
+7200 66175 MT
+(C functions)104 W
+/Courier SF
+12688 XM
+(malloc\050\051)SH
+/Helvetica SF
+17870 XM
+(and)SH
+/Courier SF
+19919 XM
+(free\050\051)SH
+/Helvetica SF
+(. The)
+484 W( C threads package provides versions of these functions that)103 W
+7200 67601 MT
+(work correctly in the presence of multiple threads.)SH
+ES
+%%Page: 9 10
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(9)SH
+12 SS 
+7200 8075 MT
+(8. Using the C Threads Package)SH
+10 /Helvetica AF
+7200 9501 MT
+(All of the functions described have been implemented for the MACH multiprocessor operating)
+137 W( system.)138 W
+7200 10927 MT
+(Three implementations of threads)
+1 W( are provided, in the form of libraries.  Programs need not be recompiled)SH
+7200 12353 MT
+(to use a different thread implementation, only relinked.)
+91 W( To)
+462 W( compile a program that uses C threads, the)92 W
+7200 13779 MT
+(user must include the file)122 W
+/Courier SF
+19148 XM
+(cthreads.h)SH
+/Helvetica SF
+(. \050The)
+520 W( directory)121 W
+/Courier SF
+32912 XM
+(/usr/mach/include)SH
+/Helvetica SF
+43511 XM
+(should be in the user's)121 W
+/Courier SF
+7200 15205 MT
+(CPATH)SH
+/Helvetica SF
+10971 XM
+(search list for the C preprocessor)
+493 W( to find this header file.\051  The program must call)494 W
+/Courier SF
+7200 16631 MT
+(cthread_init\050\051)SH
+/Helvetica SF
+15888 XM
+(before using any other C threads)
+10 W( features.  To link a program that uses C threads, the)9 W
+7200 18057 MT
+(user must)
+128 W( specify on the)129 W
+/Courier SF
+18960 XM
+(cc)SH
+/Helvetica SF
+20567 XM
+(command line one of the three libraries described below, followed by the)129 W
+/Courier SF
+7200 19483 MT
+(-lmach)SH
+/Helvetica SF
+11141 XM
+(library. \050The)
+404 W( directory)63 W
+/Courier SF
+21395 XM
+(/usr/mach/lib)SH
+/Helvetica SF
+29536 XM
+(should be in)
+63 W( the user's)62 W
+/Courier SF
+40131 XM
+(LPATH)SH
+/Helvetica SF
+43471 XM
+(search list for the linker)62 W
+7200 20909 MT
+(to find these libraries.\051)SH
+11 /Helvetica-Bold AF
+7200 24591 MT
+(8.1. The Coroutine Implementation)SH
+10 /Helvetica AF
+7200 26017 MT
+(The first implementation,)127 W
+/Courier SF
+18807 XM
+(-lco_threads)SH
+/Helvetica SF
+(, uses coroutines within a single MACH task \050UNIX process\051.)128 W
+7200 27443 MT
+(Scheduling of these threads)
+52 W( is non-preemptive, hence)51 W
+/Courier SF
+31739 XM
+(cthread_yield\050\051)SH
+/Helvetica SF
+41068 XM
+(should be called within loops)51 W
+7200 28869 MT
+(that do not otherwise call synchronization procedures.  The programmer will typically link with this version)19 W
+7200 30295 MT
+(while debugging.)SH
+7200 32862 MT
+(This implementation includes versions of the MACH interprocess communication primitives)742 W
+/Courier SF
+7200 34288 MT
+(msg_receive\050\051)SH
+/Helvetica SF
+(,)SH
+/Courier SF
+15556 XM
+(msg_send\050\051)SH
+/Helvetica SF
+(, and)SH
+/Courier SF
+24059 XM
+(msg_rpc\050\051)SH
+/Helvetica SF
+(, and a version of the UNIX)1 W
+/Courier SF
+41750 XM
+(select\050\051)SH
+/Helvetica SF
+46829 XM
+(system call, that)1 W
+7200 35714 MT
+(can be called)
+146 W( from one thread without blocking the other threads in the program.  The other forms of)145 W
+7200 37140 MT
+(UNIX I/O have not been redefined for use with)339 W
+/Courier SF
+30984 XM
+(-lco_threads)SH
+/Helvetica SF
+(, however.  For example, calling)340 W
+/Courier SF
+7200 38566 MT
+(getchar\050\051)SH
+/Helvetica SF
+12977 XM
+(from one thread may block all threads in)
+99 W( the program, not just the caller.  To work around)98 W
+7200 39992 MT
+(this, the programmer should)
+198 W( first call)199 W
+/Courier SF
+24785 XM
+(select\050\051)SH
+/Helvetica SF
+30062 XM
+(on the relevant file descriptor to guarantee that the)199 W
+7200 41418 MT
+(subsequent input operation will not block.)SH
+11 /Helvetica-Bold AF
+7200 45100 MT
+(8.2. The MACH Thread Implementation)SH
+10 /Helvetica AF
+7200 46526 MT
+(The second implementation,)202 W
+/Courier SF
+20645 XM
+(-lthreads)SH
+/Helvetica SF
+(, uses one MACH thread per C thread.  These threads)
+202 W( are)201 W
+7200 47952 MT
+(preemptively scheduled, and may execute in parallel on a multiprocessor.)
+11 W( This)
+301 W( is the implementation that)12 W
+7200 49378 MT
+(should be used in the production version of a C threads program.)SH
+7200 51945 MT
+(The current)25 W
+/Courier SF
+12641 XM
+(-lco_threads)SH
+/Helvetica SF
+20144 XM
+(and)SH
+/Courier SF
+22115 XM
+(-lthreads)SH
+/Helvetica SF
+27818 XM
+(implementations allocate large fixed-size stacks for)
+25 W( each C)24 W
+7200 53371 MT
+(thread in virtual memory.  The implementations rely on the)
+178 W( MACH virtual memory system to allocate)179 W
+7200 54797 MT
+(physical memory only as needed by the thread.)SH
+11 /Helvetica-Bold AF
+7200 58479 MT
+(8.3. The MACH Task Implementation)SH
+10 /Helvetica AF
+7200 59905 MT
+(The third implementation,)26 W
+/Courier SF
+18838 XM
+(-ltask_threads)SH
+/Helvetica SF
+(, uses one)
+26 W( MACH task \050UNIX process\051 per thread, and uses)25 W
+7200 61331 MT
+(the MACH virtual memory primitives to share memory between threads.  In most)
+191 W( circumstances, the)192 W
+/Courier SF
+7200 62757 MT
+(-lthreads)SH
+/Helvetica SF
+12959 XM
+(implementation should be used instead of this one.  An exception is when the)
+81 W( programmer)80 W
+7200 64183 MT
+(wishes to use the)
+122 W( MACH virtual memory primitives to provide a specialized pattern of memory sharing)123 W
+7200 65609 MT
+(between C threads.)SH
+7200 68176 MT
+(Users of the)128 W
+/Courier SF
+13253 XM
+(-ltask_threads)SH
+/Helvetica SF
+22059 XM
+(implementation should note that capabilities such as MACH)
+128 W( ports and)127 W
+7200 69602 MT
+(UNIX file descriptors are private to the task)
+126 W( that creates them, and so cannot be shared.  The current)127 W
+/Courier SF
+7200 71028 MT
+(-ltask_threads)SH
+/Helvetica SF
+15906 XM
+(implementation also makes stack segments private)
+28 W( to each task, so automatic \050stack-)27 W
+ES
+%%Page: 10 11
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(10)SH
+/Helvetica SF
+7200 7929 MT
+(allocated\051 variables cannot be shared.)SH
+7200 10496 MT
+(The MACH operating system currently limits the number of tasks \050and hence the)
+49 W( number of C threads in)50 W
+7200 11922 MT
+(the)SH
+/Courier SF
+8876 XM
+(-ltask_threads)SH
+/Helvetica SF
+17562 XM
+(implementation\051 that a user may create.)
+8 W( Applications)
+292 W( that create large numbers of)7 W
+7200 13348 MT
+(threads will encounter run-time errors when they exceed this limit.  It may be the)
+121 W( case that concurrent)122 W
+7200 14774 MT
+(execution is required to avoid deadlock \050for example, in a multi-stage pipeline\051.  For)
+156 W( applications with)155 W
+7200 16200 MT
+(largely independent threads, however, a limited)
+128 W( degree of parallelism may still allow correct execution.)129 W
+7200 17626 MT
+(The following function can be used in such applications.)SH
+/Courier SF
+9600 19032 MT
+(void)SH
+9600 20063 MT
+(cthread_set_limit\050n\051)SH
+14400 21094 MT
+(int n;)SH
+/Helvetica SF
+7200 23661 MT
+(This function limits the number of active threads to)86 W
+/Courier SF
+30539 XM
+(n)SH
+/Helvetica SF
+(. If)
+448 W( a newly created thread of control exceeds this)85 W
+7200 25087 MT
+(limit, it will not begin execution until another thread terminates.)SH
+12 /Helvetica-Bold AF
+7200 28842 MT
+(9. Debugging)SH
+10 /Helvetica AF
+7200 30268 MT
+(It is strongly recommended that the)
+295 W( coroutine-based implementation \050)296 W
+/Courier SF
+(-lco_threads)SH
+/Helvetica SF
+(\051 be used for)296 W
+7200 31694 MT
+(debugging, for the following reasons:)SH
+/Symbol SF
+9242 33166 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The order of)
+35 W( thread context switching is repeatable in successive executions of the program,)34 W
+9980 34309 MT
+(so obvious synchronization bugs may be found easily.)SH
+/Symbol SF
+9242 36124 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Since the program is a single MACH task, existing debuggers can be used.)SH
+/Symbol SF
+9242 37939 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The user need not worry about concurrent calls to C library routines.)SH
+11 /Helvetica-Bold AF
+7200 41621 MT
+(9.1. Low-Level Tracing)SH
+10 /Courier AF
+9600 43027 MT
+(int cthread_debug;)SH
+/Helvetica SF
+7200 45594 MT
+(Setting this variable to 1 causes diagnostic information to be printed when each C threads)
+132 W( primitive is)133 W
+7200 47020 MT
+(executed. Trace)
+278 W( output appears on)SH
+/Courier SF
+23265 XM
+(stdout)SH
+/Helvetica SF
+(.)SH
+11 /Helvetica-Bold AF
+7200 50702 MT
+(9.2. Associating Names with C Thread Objects)SH
+ES
+%%Page: 11 12
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(11)SH
+/Courier SF
+9600 7824 MT
+(void)SH
+9600 8855 MT
+(cthread_set_name\050t, name\051)SH
+14400 9886 MT
+(cthread_t t;)SH
+14400 10917 MT
+(string_t name;)SH
+9600 12979 MT
+(string_t)SH
+9600 14010 MT
+(cthread_name\050t\051)SH
+14400 15041 MT
+(cthread_t t;)SH
+9600 17103 MT
+(void)SH
+9600 18134 MT
+(mutex_set_name\050m, name\051)SH
+14400 19165 MT
+(mutex_t m;)SH
+14400 20196 MT
+(string_t name;)SH
+9600 22258 MT
+(string_t)SH
+9600 23289 MT
+(mutex_name\050m\051)SH
+14400 24320 MT
+(mutex_t m;)SH
+9600 26382 MT
+(void)SH
+9600 27413 MT
+(condition_set_name\050c, name\051)SH
+14400 28444 MT
+(condition_t c;)SH
+14400 29475 MT
+(string_t name;)SH
+9600 31537 MT
+(string_t)SH
+9600 32568 MT
+(condition_name\050c\051)SH
+14400 33599 MT
+(condition_t c;)SH
+/Helvetica SF
+7200 36166 MT
+(These functions allow the user to associate a name with a thread, mutex,)
+15 W( or condition.  The name is used)14 W
+7200 37592 MT
+(when trace information)
+117 W( is displayed \050see above\051.  The name may also be used by the programmer for)118 W
+7200 39018 MT
+(application-specific diagnostics.)SH
+11 /Helvetica-Bold AF
+7200 42700 MT
+(9.3. Pitfalls of Preemptively Scheduled Threads)SH
+10 /Helvetica AF
+7200 44126 MT
+(The C run-time)
+81 W( library needs a substantial amount of modification in order to be used with preemptively)80 W
+7200 45552 MT
+(scheduled threads \050)6 W
+/Courier SF
+(-lthreads)SH
+/Helvetica SF
+21679 XM
+(and)SH
+/Courier SF
+23632 XM
+(-ltask_threads)SH
+/Helvetica SF
+(\051. Currently)
+292 W( the user must ensure that calls to the)7 W
+7200 46978 MT
+(standard I/O library are serialized,)
+251 W( through the use of one or more mutex variables.  \050The storage)250 W
+7200 48404 MT
+(allocation functions)SH
+/Courier SF
+15982 XM
+(malloc\050\051)SH
+/Helvetica SF
+21060 XM
+(and)SH
+/Courier SF
+23006 XM
+(free\050\051)SH
+/Helvetica SF
+26884 XM
+(do not require any special precautions.\051)SH
+7200 50971 MT
+(The debuggers currently available under MACH cannot be used on programs linked with)63 W
+/Courier SF
+47369 XM
+(-lthreads)SH
+/Helvetica SF
+53111 XM
+(or)SH
+/Courier SF
+7200 52397 MT
+(-ltask_threads)SH
+/Helvetica SF
+(. Furthermore,)
+738 W( the very act of turning on tracing or adding print)
+230 W( statements may)229 W
+7200 53823 MT
+(perturb programs that incorrectly depend on thread execution speed.  One technique that)
+159 W( is useful in)160 W
+7200 55249 MT
+(such cases is to vary the granularity of locking and synchronization used)
+7 W( in the program, making sure that)6 W
+7200 56675 MT
+(the program works with coarse-grained synchronization before refining it further.)SH
+ES
+%%Page: 12 13
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(12)SH
+12 SS 
+7200 8075 MT
+(10. Examples)SH
+10 /Helvetica AF
+7200 9501 MT
+(The following example illustrates how the facilities described here can be used to program)
+286 W( Hoare)287 W
+7200 10927 MT
+(monitors [2].  The program would be compiled and linked by the command)SH
+/Courier SF
+14400 12333 MT
+(cc hoaremonitor.c -lthreads -lmach)SH
+9600 13739 MT
+(/*)SH
+10200 14770 MT
+(* Producer/consumer with bounded buffer.)SH
+10200 15801 MT
+(*)SH
+10200 16832 MT
+(* The producer reads characters from stdin)SH
+10200 17863 MT
+(* and puts them into the buffer.  The consumer)SH
+10200 18894 MT
+(* gets characters from the buffer and writes them)SH
+10200 19925 MT
+(* to stdout.  The two threads execute concurrently)SH
+10200 20956 MT
+(* except when synchronized by the buffer.)SH
+10200 21987 MT
+(*/)SH
+9600 23018 MT
+(#include <stdio.h>)SH
+9600 24049 MT
+(#include <cthreads.h>)SH
+9600 25080 MT
+(typedef struct buffer {)SH
+12000 26111 MT
+(struct mutex lock;)SH
+12000 27142 MT
+(char *chars;)
+SH( /*)
+3000 W( chars[0..size-1] */)SH
+12000 28173 MT
+(int size;)SH
+12000 29204 MT
+(int px, cx;)
+SH( /*)
+3600 W( producer and consumer indices */)SH
+12000 30235 MT
+(int count;)
+SH( /*)
+4200 W( number of unconsumed chars in buffer */)SH
+12000 31266 MT
+(struct condition non_empty, non_full;)SH
+9600 32297 MT
+(} *buffer_t;)SH
+9600 33328 MT
+(void)SH
+9600 34359 MT
+(buffer_put\050ch, b\051)SH
+12000 35390 MT
+(char ch;)SH
+12000 36421 MT
+(buffer_t b;)SH
+9600 37452 MT
+({)SH
+12000 38483 MT
+(mutex_lock\050&b->lock\051;)SH
+12000 39514 MT
+(while \050b->count == b->size\051)SH
+14400 40545 MT
+(condition_wait\050&b->non_full, &b->lock\051;)SH
+12000 41576 MT
+(ASSERT\0500 <= b->count && b->count < b->size\051;)SH
+12000 42607 MT
+(b->chars[b->px] = ch;)SH
+12000 43638 MT
+(b->px = \050b->px + 1\051 % b->size;)SH
+12000 44669 MT
+(b->count += 1;)SH
+12000 45700 MT
+(condition_signal\050&b->non_empty\051;)SH
+12000 46731 MT
+(mutex_unlock\050&b->lock\051;)SH
+9600 47762 MT
+(})SH
+9600 48793 MT
+(char)SH
+9600 49824 MT
+(buffer_get\050b\051)SH
+12000 50855 MT
+(buffer_t b;)SH
+9600 51886 MT
+({)SH
+12000 52917 MT
+(char ch;)SH
+12000 53948 MT
+(mutex_lock\050&b->lock\051;)SH
+12000 54979 MT
+(while \050b->count == 0\051)SH
+14400 56010 MT
+(condition_wait\050&b->non_empty, &b->lock\051;)SH
+12000 57041 MT
+(ASSERT\0500 < b->count && b->count <= b->size\051;)SH
+12000 58072 MT
+(ch = b->chars[b->cx];)SH
+12000 59103 MT
+(b->cx = \050b->cx + 1\051 % b->size;)SH
+12000 60134 MT
+(b->count -= 1;)SH
+12000 61165 MT
+(condition_signal\050&b->non_full\051;)SH
+12000 62196 MT
+(mutex_unlock\050&b->lock\051;)SH
+12000 63227 MT
+(return ch;)SH
+9600 64258 MT
+(})SH
+9600 65289 MT
+(void)SH
+9600 66320 MT
+(producer\050b\051)SH
+12000 67351 MT
+(buffer_t b;)SH
+9600 68382 MT
+({)SH
+12000 69413 MT
+(int ch;)SH
+ES
+%%Page: 13 14
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(13)SH
+/Courier SF
+12000 7824 MT
+(do buffer_put\050\050ch = getchar\050\051\051, b\051;)SH
+12000 8855 MT
+(while \050ch != EOF\051;)SH
+9600 9886 MT
+(})SH
+9600 10917 MT
+(void)SH
+9600 11948 MT
+(consumer\050b\051)SH
+12000 12979 MT
+(buffer_t b;)SH
+9600 14010 MT
+({)SH
+12000 15041 MT
+(int ch;)SH
+12000 16072 MT
+(while \050\050ch = buffer_get\050b\051\051 != EOF\051)SH
+14400 17103 MT
+(printf\050"%c", ch\051;)SH
+9600 18134 MT
+(})SH
+9600 19165 MT
+(buffer_t)SH
+9600 20196 MT
+(buffer_alloc\050size\051)SH
+12000 21227 MT
+(int size;)SH
+9600 22258 MT
+({)SH
+12000 23289 MT
+(buffer_t b;)SH
+12000 24320 MT
+(extern char *malloc\050\051;)SH
+12000 25351 MT
+(b = \050buffer_t\051 malloc\050sizeof\050struct buffer\051\051;)SH
+12000 26382 MT
+(mutex_init\050&b->lock\051;)SH
+12000 27413 MT
+(b->size = size;)SH
+12000 28444 MT
+(b->chars = malloc\050\050unsigned\051 size\051;)SH
+12000 29475 MT
+(b->px = b->cx = b->count = 0;)SH
+12000 30506 MT
+(condition_init\050&b->non_empty\051;)SH
+12000 31537 MT
+(condition_init\050&b->non_full\051;)SH
+12000 32568 MT
+(return b;)SH
+9600 33599 MT
+(})SH
+9600 34630 MT
+(#define BUFFER_SIZE 10)SH
+9600 35661 MT
+(main\050\051)SH
+9600 36692 MT
+({)SH
+12000 37723 MT
+(buffer_t b;)SH
+12000 38754 MT
+(cthread_init\050\051;)SH
+12000 39785 MT
+(b = buffer_alloc\050BUFFER_SIZE\051;)SH
+12000 40816 MT
+(cthread_detach\050cthread_fork\050producer, b\051\051;)SH
+12000 41847 MT
+(cthread_detach\050cthread_fork\050consumer, b\051\051;)SH
+12000 42878 MT
+(cthread_exit\0500\051;)SH
+9600 43909 MT
+(})SH
+ES
+%%Page: 14 15
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(14)SH
+/Helvetica SF
+7200 7929 MT
+(The following example shows how to structure)
+185 W( a program in which a single master thread spawns a)184 W
+7200 9355 MT
+(number of concurrent)
+130 W( slaves and then waits until they all finish.  The program would be compiled and)131 W
+7200 10781 MT
+(linked by the command)SH
+/Courier SF
+14400 12187 MT
+(cc masterslave.c -lthreads -lmach)SH
+9600 13593 MT
+(/*)SH
+10200 14624 MT
+(* Master/slave program structure.)SH
+10200 15655 MT
+(*/)SH
+9600 16686 MT
+(#include <stdio.h>)SH
+9600 17717 MT
+(#include <cthreads.h>)SH
+9600 18748 MT
+(int count;)
+SH( /*)
+4800 W( number of slaves active */)SH
+9600 19779 MT
+(mutex_t lock;)
+SH( /*)
+3000 W( mutual exclusion for count */)SH
+9600 20810 MT
+(condition_t done;  /* signalled each time a slave finishes */)SH
+9600 21841 MT
+(extern long random\050\051;)SH
+9600 22872 MT
+(init\050\051)SH
+9600 23903 MT
+({)SH
+12000 24934 MT
+(cthread_init\050\051;)SH
+12000 25965 MT
+(count = 0;)SH
+12000 26996 MT
+(lock = mutex_alloc\050\051;)SH
+12000 28027 MT
+(done = condition_alloc\050\051;)SH
+12000 29058 MT
+(srandom\050time\050\050int *\051 0\051\051;  /* initialize random number generator *)SH
+9600 30089 MT
+(})SH
+9600 31120 MT
+(/*)SH
+10200 32151 MT
+(* Each slave just counts up to its argument,)SH
+10200 33182 MT
+(* yielding the processor on each iteration.)SH
+10200 34213 MT
+(* When it is finished, it decrements the global count)SH
+10200 35244 MT
+(* and signals that it is done.)SH
+10200 36275 MT
+(*/)SH
+9600 37306 MT
+(slave\050n\051)SH
+12000 38337 MT
+(int n;)SH
+9600 39368 MT
+({)SH
+12000 40399 MT
+(int i;)SH
+12000 41430 MT
+(for \050i = 0; i < n; i += 1\051)SH
+14400 42461 MT
+(cthread_yield\050\051;)SH
+12000 43492 MT
+(mutex_lock\050lock\051;)SH
+12000 44523 MT
+(count -= 1;)SH
+12000 45554 MT
+(printf\050"Slave finished %d cycles.\134n", n\051;)SH
+12000 46585 MT
+(condition_signal\050done\051;)SH
+12000 47616 MT
+(mutex_unlock\050lock\051;)SH
+9600 48647 MT
+(})SH
+9600 49678 MT
+(/*)SH
+10200 50709 MT
+(* The master spawns a given number of slaves)SH
+10200 51740 MT
+(* and then waits for them all to finish.)SH
+10200 52771 MT
+(*/)SH
+9600 53802 MT
+(master\050nslaves\051)SH
+12000 54833 MT
+(int nslaves;)SH
+9600 55864 MT
+({)SH
+12000 56895 MT
+(int i;)SH
+ES
+%%Page: 15 16
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(15)SH
+/Courier SF
+12000 7824 MT
+(for \050i = 1; i <= nslaves; i += 1\051 {)SH
+14400 8855 MT
+(mutex_lock\050lock\051;)SH
+14400 9886 MT
+(/*)SH
+15000 10917 MT
+(* Fork a slave and detach it,)SH
+15000 11948 MT
+(* since the master never joins it individually.)SH
+15000 12979 MT
+(*/)SH
+14400 14010 MT
+(count += 1;)SH
+14400 15041 MT
+(cthread_detach\050cthread_fork\050slave, random\050\051 % 1000\051\051;)SH
+14400 16072 MT
+(mutex_unlock\050lock\051;)SH
+12000 17103 MT
+(})SH
+12000 18134 MT
+(mutex_lock\050lock\051;)SH
+12000 19165 MT
+(while \050count != 0\051)SH
+14400 20196 MT
+(condition_wait\050done, lock\051;)SH
+12000 21227 MT
+(mutex_unlock\050lock\051;)SH
+12000 22258 MT
+(printf\050"All %d slaves have finished.\134n", nslaves\051;)SH
+12000 23289 MT
+(cthread_exit\0500\051;)SH
+9600 24320 MT
+(})SH
+9600 25351 MT
+(main\050\051)SH
+9600 26382 MT
+({)SH
+12000 27413 MT
+(init\050\051;)SH
+12000 28444 MT
+(master\050\050int\051 random\050\051 % 16\051;  /* create up to 15 slaves */)SH
+9600 29475 MT
+(})SH
+ES
+%%Page: 16 17
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(16)SH
+13 SS 
+27095 8148 MT
+(References)SH
+10 /Helvetica AF
+7200 10681 MT
+([1])SH
+10536 XM
+(Brian W. Kernighan and Dennis M. Ritchie.)SH
+/Helvetica-Oblique SF
+10536 11824 MT
+(The C Programming Language.)SH
+/Helvetica SF
+10536 12967 MT
+(Prentice-Hall, 1978.)SH
+7200 14839 MT
+([2])SH
+10536 XM
+(C. A. R. Hoare.)SH
+10536 15982 MT
+(Monitors: An Operating System Structuring Concept.)SH
+/Helvetica-Oblique SF
+10536 17125 MT
+(Communications of the ACM)SH
+/Helvetica SF
+23540 XM
+(17\05010\051:549-557, October, 1974.)SH
+7200 18997 MT
+([3])SH
+10536 XM
+(Robert V. Baron, Richard F. Rashid, Ellen Siegel, Avadis Tevanian, and Michael W. Young.)SH
+10536 20140 MT
+(MACH-1: A Multiprocessor Oriented Operating System and Environment.)SH
+10536 21283 MT
+(In Arthur Wouk \050editor\051,)SH
+/Helvetica-Oblique SF
+21206 XM
+(New Computing Environments: Parallel, Vector, and Symbolic)SH
+/Helvetica SF
+(. SIAM,)SH
+12204 22426 MT
+(1986.)SH
+7200 24298 MT
+([4])SH
+10536 XM
+(Butler W. Lampson and David D. Redell.)SH
+10536 25441 MT
+(Experience with Processes and Monitors in Mesa.)SH
+/Helvetica-Oblique SF
+10536 26584 MT
+(Communications of the ACM)SH
+/Helvetica SF
+23540 XM
+(23\0502\051:105-117, February, 1980.)SH
+7200 28456 MT
+([5])SH
+10536 XM
+(Paul Rovner, Roy Levin, and John Wick.)SH
+/Helvetica-Oblique SF
+10536 29599 MT
+(On Extending Modula-2 for Building Large, Integrated Systems)SH
+/Helvetica SF
+(.)SH
+10536 30742 MT
+(Technical Report 3, DEC Systems Research Center, January, 1985.)SH
+ES
+%%Page: i 18
+BS
+0 SI
+10 /Helvetica-Bold AF
+30461 4329 MT
+(i)SH
+12 SS 
+25533 8075 MT
+(Table of Contents)SH
+11 SS 
+9036 9319 MT
+(1. Introduction)SH
+53388 XM
+(1)SH
+9036 10563 MT
+(2. Naming Conventions)SH
+53388 XM
+(1)SH
+9036 11807 MT
+(3. Initializing the C Threads Package)SH
+53388 XM
+(1)SH
+10 SS 
+11092 12956 MT
+(3.1. cthreads.h)SH
+53444 XM
+(1)SH
+11092 14105 MT
+(3.2. cthread_init)SH
+53444 XM
+(1)SH
+11 SS 
+9036 15349 MT
+(4. Threads of Control)SH
+53388 XM
+(2)SH
+10 SS 
+11092 16498 MT
+(4.1. Creation)SH
+53444 XM
+(2)SH
+11092 17647 MT
+(4.2. Termination)SH
+53444 XM
+(2)SH
+11092 18796 MT
+(4.3. cthread_fork)SH
+53444 XM
+(2)SH
+11092 19945 MT
+(4.4. cthread_exit)SH
+53444 XM
+(3)SH
+11092 21094 MT
+(4.5. cthread_join)SH
+53444 XM
+(3)SH
+11092 22243 MT
+(4.6. cthread_detach)SH
+53444 XM
+(3)SH
+11092 23392 MT
+(4.7. cthread_yield)SH
+53444 XM
+(3)SH
+11092 24541 MT
+(4.8. cthread_self)SH
+53444 XM
+(3)SH
+11092 25690 MT
+(4.9. cthread_set_data, cthread_data)SH
+53444 XM
+(4)SH
+11 SS 
+9036 26934 MT
+(5. Synchronization)SH
+53388 XM
+(4)SH
+10 SS 
+11092 28083 MT
+(5.1. mutex_lock)SH
+53444 XM
+(5)SH
+11092 29232 MT
+(5.2. mutex_try_lock)SH
+53444 XM
+(5)SH
+11092 30381 MT
+(5.3. mutex_unlock)SH
+53444 XM
+(6)SH
+11092 31530 MT
+(5.4. condition_signal)SH
+53444 XM
+(6)SH
+11092 32679 MT
+(5.5. condition_broadcast)SH
+53444 XM
+(6)SH
+11092 33828 MT
+(5.6. condition_wait)SH
+53444 XM
+(6)SH
+11 SS 
+9036 35072 MT
+(6. Management of Synchronization Variables)SH
+53388 XM
+(6)SH
+10 SS 
+11092 36221 MT
+(6.1. Allocation)SH
+53444 XM
+(7)SH
+11092 37370 MT
+(6.2. Deallocation)SH
+53444 XM
+(7)SH
+11092 38519 MT
+(6.3. Initialization)SH
+53444 XM
+(7)SH
+11092 39668 MT
+(6.4. Finalization)SH
+53444 XM
+(8)SH
+11 SS 
+9036 40912 MT
+(7. Shared Variables)SH
+53388 XM
+(8)SH
+10 SS 
+11092 42061 MT
+(7.1. Dynamic Allocation)SH
+53444 XM
+(8)SH
+11 SS 
+9036 43305 MT
+(8. Using the C Threads Package)SH
+53388 XM
+(9)SH
+10 SS 
+11092 44454 MT
+(8.1. The Coroutine Implementation)SH
+53444 XM
+(9)SH
+11092 45603 MT
+(8.2. The MACH Thread Implementation)SH
+53444 XM
+(9)SH
+11092 46752 MT
+(8.3. The MACH Task Implementation)SH
+53444 XM
+(9)SH
+11 SS 
+9036 47996 MT
+(9. Debugging)SH
+52776 XM
+(10)SH
+10 SS 
+11092 49145 MT
+(9.1. Low-Level Tracing)SH
+52888 XM
+(10)SH
+11092 50294 MT
+(9.2. Associating Names with C Thread Objects)SH
+52888 XM
+(10)SH
+11092 51443 MT
+(9.3. Pitfalls of Preemptively Scheduled Threads)SH
+52888 XM
+(11)SH
+11 SS 
+9036 52687 MT
+(10. Examples)SH
+52776 XM
+(12)SH
+ES
+%%Trailer
+%%Pages: 18
+%%DocumentFonts: Helvetica Helvetica-Bold Courier Helvetica-Oblique Symbol

@@ -1,0 +1,3153 @@
+%!PS-Adobe-1.0
+%%Title: nps.mss
+%%DocumentFonts: (atend)
+%%Creator: Alessandro Forin and Scribe 5(1501)
+%%CreationDate: 12 January 1989 13:07
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def translate 100.0 -100.0 scale pop} bind def
+/PE {PV restore} bind def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+%%EndProlog
+%%Page: 0 1 
+BS
+0 SI
+12 /Helvetica-Bold AF
+15742 18181 MT
+(Design, Implementation, and Performance Evaluation of)SH
+18642 19513 MT
+(a Distributed Shared Memory Server for Mach)SH
+10 /Helvetica AF
+16924 22622 MT
+(Alessandro Forin, Joseph Barrera, Michael Young, Richard Rashid)SH
+28872 25731 MT
+(August 1988)SH
+27957 27414 MT
+(CMU-CS-88-165)SH
+24816 41989 MT
+(Computer Science Department)SH
+25679 43132 MT
+(Carnegie-Mellon University)SH
+26955 44275 MT
+(Pittsburgh, PA 15213)SH
+/Helvetica-Oblique SF
+21092 47384 MT
+(A shorter version of this report will appear in the)SH
+18451 48527 MT
+(1988 Winter USENIX conference, San Diego, January 1989)SH
+/Helvetica SF
+12722 58400 MT
+(Copyright)SH
+/Symbol SF
+17279 XM
+(\343)SH
+/Helvetica SF
+18625 XM
+(1988 Alessandro Forin, Joseph Barrera, Michael Young, Richard Rashid)SH
+8280 61929 MT
+(This research was sponsored by the Defense Advanced Research Projects)
+99 W( Agency \050DOD\051, Arpa Order)98 W
+8280 63072 MT
+(No. 4864, monitored by the Space and Naval Warfare)
+282 W( Systems Command under contract number)283 W
+8280 64215 MT
+(N00039-87-C-0251. The)
+346 W( views and)
+34 W( conclusions contained in this document are those of the authors and)33 W
+8280 65358 MT
+(should not be interpreted as representing the official policies, either expressed or implied, of the)
+37 W( Defense)38 W
+8280 66501 MT
+(Advanced Research Projects Agency or the US Government.)SH
+ES
+%%Page: 1 2 
+BS
+0 SI
+10 /Helvetica-Bold AF
+54524 4329 MT
+(1)SH
+13 SS 
+29043 8148 MT
+(Abstract)SH
+10 /Helvetica AF
+8280 10681 MT
+(This report describes the design, implementation and)
+35 W( performance evaluation of a virtual shared memory)34 W
+8280 11824 MT
+(server for the Mach operating system.  The)
+131 W( server provides unrestricted sharing of read-write memory)132 W
+8280 12967 MT
+(between tasks running on)
+236 W( either strongly coupled or loosely coupled architectures, and any mixture)235 W
+8280 14110 MT
+(thereof. A)
+404 W( number of memory coherency)
+63 W( algorithms have been implemented and evaluated, including a)64 W
+8280 15253 MT
+(new distributed algorithm that is shown to outperform centralized ones.)
+181 W( Some)
+639 W( of the features of the)180 W
+8280 16396 MT
+(server include)
+39 W( support for machines with multiple page sizes, for heterogeneous shared memory, and for)40 W
+8280 17539 MT
+(fault tolerance.  Extensive performance measures of applications)
+116 W( are presented, and the intrinsic costs)115 W
+8280 18682 MT
+(evaluated.)SH
+ES
+%%Page: 1 3 
+BS
+0 SI
+10 /Helvetica-Bold AF
+8280 4329 MT
+(2)SH
+14 SS 
+8280 8221 MT
+(1. Introduction)SH
+10 /Helvetica AF
+9392 9647 MT
+(Shared memory multiprocessors are becoming increasingly available, and with)
+124 W( them a faster way to)125 W
+8280 11073 MT
+(program applications and system services via the use of shared memory.)
+60 W( Currently,)
+397 W( the major limitation)59 W
+8280 12499 MT
+(in using shared memory is that)
+91 W( it is not extensible network-wise, and therefore is not suited for building)92 W
+8280 13925 MT
+(distributed applications and services.  Example uses)
+236 W( of a distributed shared memory facility include)235 W
+8280 15351 MT
+(operating system services such)
+171 W( as file systems and process migration, distributed databases, parallel)172 W
+8280 16777 MT
+(languages like Ada or Multilisp, and systems for parallel and distributed programming)
+103 W( [11, 2, 10].)
+SH( More)482 W
+8280 18203 MT
+(motivation for a distributed shared memory facility comes)
+218 W( from the increasing interest that hardware)219 W
+8280 19629 MT
+(designers show)
+49 W( in non-shared memory multiprocessors:  the Nectar project)
+48 W( [1])
+SH( at CMU for instance uses)48 W
+8280 21055 MT
+(fast fiber optic links.  This will reduce)
+2 W( the end-to-end time to send a 1 kilobyte data packet from the tens of)3 W
+8280 22481 MT
+(milliseconds range of the current ethernet to the tens of microseconds range of the fiber.  Fast)330 W
+8280 23907 MT
+(communication makes distributed shared memory an appealing complement to message passing.)SH
+9392 26474 MT
+(The Mach virtual memory system allows the user to create memory objects that are)
+204 W( managed by)205 W
+8280 27900 MT
+(user-defined processes \050external pagers\051)
+86 W( [13].)
+SH( An)
+450 W( external pager is a)
+86 W( process responsible for providing)85 W
+8280 29326 MT
+(data in response to page)
+13 W( faults \050pagein\051 and backing storage for page cleaning \050page-out\051 requests.  This)14 W
+8280 30752 MT
+(is precisely the function of the in-kernel disk pager.)
+79 W( The)
+435 W( only difference is that the user-specified pager)78 W
+8280 32178 MT
+(task can manage the data in more creative ways)
+176 W( than the designer of the in-kernel pager may have)177 W
+8280 33604 MT
+(envisioned. This)
+476 W( paper describes)
+99 W( the design, implementation, and performance evaluation of one such)98 W
+8280 35030 MT
+(memory server which provides a shared memory semantics for the objects it)
+204 W( manages.  The server)205 W
+8280 36456 MT
+(provides unrestricted sharing of)
+13 W( read-write memory between tasks running either on the same machine or)12 W
+8280 37882 MT
+(on different machines.  In the)
+83 W( first case, all processors have direct access to common physical memory)84 W
+8280 39308 MT
+(\050architectures with Uniform Memory Access time \050UMA\051 or Non-Uniform Memory Access time \050NUMA\051\051)108 W
+8280 40734 MT
+(and the server provides)
+100 W( a flexible management of shared memory.  In the second case, processors do)101 W
+8280 42160 MT
+(not have any way to access common memory \050architectures)
+29 W( with No Remote Memory Access \050NORMA\051\051)28 W
+8280 43586 MT
+(and the server provides it in)
+393 W( software, migrating and replicating virtual memory pages between)394 W
+8280 45012 MT
+(processors as needed.)SH
+9392 47579 MT
+(To understand the)
+31 W( properties of a distributed shared memory facility the performance characteristics of)30 W
+8280 49005 MT
+(the server itself and of some application programs have been evaluated.  To measure the effects)
+184 W( of)185 W
+8280 50431 MT
+(different page management policies)
+108 W( in the server, a number of algorithms have been implemented and)107 W
+8280 51857 MT
+(evaluated, including a new distributed)
+35 W( algorithm that outperforms centralized ones.  Some of the features)36 W
+8280 53283 MT
+(of the algorithms described include support for machines)
+163 W( with differing page sizes, for heterogeneous)162 W
+8280 54709 MT
+(processors, and for fault tolerance.  The algorithms service page faults on multiple machines by)
+15 W( migrating)16 W
+8280 56135 MT
+(pages that must be shared, scheduling)
+195 W( conflicting or overlapping requests appropriately, tagging and)194 W
+8280 57561 MT
+(translating memory pages across incompatible processors and keeping a duplicate copy in)
+248 W( case of)249 W
+8280 58987 MT
+(machine crashes.  The experiments with application programs were designed under)
+56 W( the assumption that)55 W
+8280 60413 MT
+(the amount of information that is communicated in each)
+214 W( synchronization operation is the key factor.)215 W
+8280 61839 MT
+(Applications at the extreme of the spectrum were selected for testing.)SH
+14 /Helvetica-Bold AF
+8280 65740 MT
+(2. Shared Memory Within a Machine)SH
+10 /Helvetica AF
+9392 67166 MT
+(The first goal of the server is to provide sharing of read/write memory between)
+69 W( tasks allocated on the)68 W
+8280 68592 MT
+(same machine.  This overcomes the constraint of the standard Mach)
+4 W( memory inheritance mechanism that)5 W
+8280 70018 MT
+(the shared memory must have been allocated by some common ancestor, as well as a security check in)46 W
+8280 71444 MT
+(the implementation of the Unix exec\0502\051)
+55 W( system call that deallocates all of the task's address space.  The)56 W
+ES
+%%Page: 2 4 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(2)SH
+/Helvetica SF
+6120 7929 MT
+(server provides the user)
+24 W( with a call to create)23 W
+/Helvetica-Oblique SF
+26171 XM
+(memory objects)23 W
+/Helvetica SF
+(, logical pieces of memory that are identified)23 W
+6120 9355 MT
+(by ports.  A memory object can be used by a thread in a call to the)128 W
+/Helvetica-Oblique SF
+37922 XM
+(vm_map\050\051)SH
+/Helvetica SF
+42828 XM
+(kernel primitive,)
+128 W( which)129 W
+6120 10781 MT
+(maps some portion of the object into the task's)
+24 W( address space at some virtual address.  Note that since a)23 W
+6120 12207 MT
+(port can only be transmitted in a message, memory objects are entities protected by the kernel.)
+121 W( Note)521 W
+6120 13633 MT
+(also that access to ports can be transmitted over the network, and therefore the)193 W
+/Helvetica-Oblique SF
+44228 XM
+(vm_map\050\051)SH
+/Helvetica SF
+49198 XM
+(primitive)SH
+6120 15059 MT
+(allows for networked shared memory.)SH
+8 /Helvetica-Oblique AF
+6120 16785 MT
+(From user to pager)SH
+/Helvetica-Bold SF
+6120 18165 MT
+(create_memory_object)SH
+/Helvetica SF
+(\050 initial size \051)SH
+13240 19119 MT
+(RPC, Creates a new memory object and returns the associated port.)SH
+/Helvetica-Bold SF
+6120 20499 MT
+(memory_object_replicate)SH
+/Helvetica SF
+(\050 object \051)SH
+13240 21453 MT
+(RPC, When using the distributed pager, create a local copy of the memory object.)SH
+/Helvetica-Bold SF
+6120 22833 MT
+(memory_object_tag)SH
+/Helvetica SF
+(\050 tag, page range \051)SH
+13240 23787 MT
+(RPC, When using heterogeneous processors, assign a type tag to a portion of the memory object.)SH
+/Helvetica-Oblique SF
+6120 25167 MT
+(From user to kernel)SH
+/Helvetica-Bold SF
+6120 26547 MT
+(vm_map)SH
+/Helvetica SF
+(\050 task, memory_object, address range, attributes \051)SH
+13240 27501 MT
+(RPC, Maps an object into a task's address space.)SH
+/Helvetica-Bold SF
+6120 28881 MT
+(vm_deallocate)SH
+/Helvetica SF
+(\050task, address range\051)SH
+13240 29835 MT
+(RPC, Removes all mappings for the given address range.)SH
+/Helvetica-Oblique SF
+6120 31215 MT
+(From kernel to server)SH
+/Helvetica-Bold SF
+6120 32595 MT
+(memory_object_init)SH
+/Helvetica SF
+(\050pager, control_port\051)SH
+13240 33549 MT
+(MSG, Contact the pager of an object which is mapped for the first time, for initial handshake.)SH
+/Helvetica-Bold SF
+6120 34929 MT
+(memory_object_data_request)SH
+/Helvetica SF
+(\050 page range, protection \051)SH
+13240 35883 MT
+(MSG, Request for a \050range of\051 page which the kernel does not have in its cache.)SH
+/Helvetica-Bold SF
+6120 37263 MT
+(memory_object_data_unlock)SH
+/Helvetica SF
+(\050 page range, protection \051)SH
+13240 38217 MT
+(MSG, Requires more access permissions for a page.)SH
+/Helvetica-Bold SF
+6120 39597 MT
+(memory_object_data_write)SH
+/Helvetica SF
+(\050 page range, pages \051)SH
+13240 40551 MT
+(MSG, Pageout of dirty pages from main memory.)SH
+/Helvetica-Bold SF
+6120 41931 MT
+(memory_object_lock_completed)SH
+/Helvetica SF
+(\050 page range \051)SH
+13240 42885 MT
+(MSG, Completion of the requested paging operation.)SH
+/Helvetica-Bold SF
+6120 44265 MT
+(memory_object_terminate)SH
+/Helvetica SF
+(\050\051)SH
+13240 45219 MT
+(Notification of removal from cache.)SH
+/Helvetica-Oblique SF
+6120 46599 MT
+(From server to kernel)SH
+/Helvetica-Bold SF
+6120 47979 MT
+(memory_object_set_attributes)SH
+/Helvetica SF
+(\050 attributes \051)SH
+13240 48933 MT
+(MSG, Confirms availability completing initial handshake, specifies initial attributes.)SH
+/Helvetica-Bold SF
+6120 50313 MT
+(memory_object_data_provided)SH
+/Helvetica SF
+(\050 page range, pages \051)SH
+13240 51267 MT
+(MSG, Provides page\050s\051 data to the cache.)SH
+/Helvetica-Bold SF
+6120 52647 MT
+(memory_object_data_unavailable)SH
+/Helvetica SF
+(\050 page range \051)SH
+13240 53601 MT
+(MSG, Zero fill page\050s\051.)SH
+/Helvetica-Bold SF
+6120 54981 MT
+(memory_object_lock_request)SH
+/Helvetica SF
+(\050 object, request, reply_port \051)SH
+13240 55935 MT
+(MSG, Cache control request, e.g. page flush or granting of write access.)SH
+10 /Helvetica-Bold AF
+17654 57618 MT
+(Figure 1:)SH
+/Helvetica SF
+22711 XM
+(Summary Of The External Pager Interface)SH
+7232 60185 MT
+(The thread can access the memory normally,)
+77 W( and the kernel delegates the paging duties to the user-)76 W
+6120 61611 MT
+(level memory manager \050external pager\051 that is responsible for the memory object.  This is)
+108 W( done via an)109 W
+6120 63037 MT
+(asynchronous message protocol between the pager and)
+97 W( the kernel which is described in more detail in)96 W
+6398 64463 MT
+([13]. The)
+356 W( external pager interface allows pagers to control the managing of)
+39 W( main memory by the kernel,)40 W
+6120 65889 MT
+(so that)
+102 W( main memory effectively acts as a common cache for memory objects.  The various operations)101 W
+6120 67315 MT
+(have the flavor of cache control functions:  when a thread first accesses a page)
+44 W( it takes a page fault and)45 W
+6120 68741 MT
+(the kernel sends to)
+129 W( the pager a)128 W
+/Helvetica-Oblique SF
+21083 XM
+(memory_object_data_request\050\051)SH
+/Helvetica SF
+35383 XM
+(message to request the missing page,)128 W
+6120 70167 MT
+(which is similar to a cache miss.  The server)
+163 W( provides the page in a)164 W
+/Helvetica-Oblique SF
+38526 XM
+(memory_object_data_provided\050\051)SH
+/Helvetica SF
+6120 71593 MT
+(message. Other)
+278 W( messages allow a pager to request a page flush or specify the caching and copy policies)SH
+ES
+%%Page: 3 5 
+BS
+0 SI
+10 /Helvetica-Bold AF
+54524 4329 MT
+(3)SH
+/Helvetica SF
+8280 7929 MT
+(for the object.  Figure 1 informally lists the messages and remote)
+39 W( procedure calls defined by the external)40 W
+8280 9355 MT
+(pager interface and by the virtual shared memory server.)SH
+14 /Helvetica-Bold AF
+8280 13256 MT
+(3. A Simple Algorithm)SH
+10 /Helvetica AF
+9392 14682 MT
+(The shared memory server has been structured in)
+84 W( an object-oriented fashion, so that it is possible to)83 W
+8280 16108 MT
+(have memory objects with different behaviors.  When a)
+104 W( memory object is mapped by tasks on multiple)105 W
+8280 17534 MT
+(machines, the pager needs to manage multiple copies of)
+143 W( memory pages in some coherent way.  The)142 W
+8280 18960 MT
+(various management policies for memory objects are provided by different)
+30 W( implementations of a common)31 W
+8280 20386 MT
+(set of operations: an implementation is called)136 W
+/Helvetica-Oblique SF
+29518 XM
+(fault scheduler)135 W
+/Helvetica SF
+36569 XM
+(in the following, because the goal of the)135 W
+8280 21812 MT
+(module is to schedule read and write faults on different kernels in the best way, just)
+255 W( like ordinary)256 W
+8280 23238 MT
+(schedulers schedule the execution order of various threads.  One of the many reasons for this choice is to)SH
+8280 24664 MT
+(allow experimentation with various algorithms and heuristics.  At object creation time, a user)
+52 W( can choose)53 W
+8280 26090 MT
+(which specific scheduling policy will be applied to the new object, or rely on the default one.)
+164 W( All)
+604 W( the)163 W
+8280 27516 MT
+(algorithms we describe maintain)31 W
+/Helvetica-Oblique SF
+22964 XM
+(strict memory coherence)31 W
+/Helvetica SF
+34282 XM
+(on the)
+31 W( objects they manage.  There is no stale)32 W
+8280 28942 MT
+(data because at any given time each page exists in only one version.)SH
+9392 31509 MT
+(This Section describes a very simple scheduler that provides centralized, single)
+172 W( page-size memory)171 W
+8280 32935 MT
+(objects. There)
+352 W( is only one pager task for each memory object, but different objects might be allocated)
+37 W( to)38 W
+8280 34361 MT
+(different pager tasks to reduce service contention.  Since Mach IPC is location transparent, the location)
+7 W( of)6 W
+8280 35787 MT
+(the pager task is also transparent to the client kernels.  A later Section will describe)
+38 W( how this algorithm is)39 W
+8280 37213 MT
+(modified to allow distributed, coordinated management of a single object between separate pagers on)141 W
+8280 38639 MT
+(different machines.  Ownership of a page is transferred among kernels on demand:)
+137 W( the)554 W
+/Helvetica-Oblique SF
+49301 XM
+(owner)SH
+/Helvetica SF
+52440 XM
+(of the)138 W
+8280 40065 MT
+(page is the kernel that currently has)
+123 W( write access to the page.  When no kernel has write access to a)122 W
+8280 41491 MT
+(page the scheduler itself is the owner, multiple kernels are allowed to have read-only)
+39 W( copies of the page.)40 W
+8280 42917 MT
+(The simple scheduler's algorithm is an automaton)
+23 W( with four per-page states, which correspond to the four)22 W
+8280 44343 MT
+(conditions in which a page can be:)SH
+/Symbol SF
+10322 45815 MT
+(\267)SH
+/Helvetica-Bold SF
+11060 XM
+(Read)SH
+/Helvetica SF
+(: There are no writers, there may be readers with a copy, the server has a valid copy.)72 W
+11060 46958 MT
+(This is the initial state.)SH
+/Symbol SF
+10322 48773 MT
+(\267)SH
+/Helvetica-Bold SF
+11060 XM
+(Write)SH
+/Helvetica SF
+(: There is one writer, there are no readers and no one is queued waiting, the server)125 W
+11060 49916 MT
+(does not have a valid copy.)SH
+/Symbol SF
+10322 51731 MT
+(\267)SH
+/Helvetica-Bold SF
+11060 XM
+(ReadWait)SH
+/Helvetica SF
+(: There is one writer, some readers are waiting, the server does not have a)
+89 W( valid)90 W
+11060 52874 MT
+(copy and has asked the current owner to return the page to the server.)SH
+/Symbol SF
+10322 54689 MT
+(\267)SH
+/Helvetica-Bold SF
+11060 XM
+(WriteWait)SH
+/Helvetica SF
+(: There)
+215 W( is one writer, some writers are queued waiting, there may be readers)214 W
+11060 55832 MT
+(waiting, the server does not have a valid copy and has asked the current)
+29 W( owner to return the)30 W
+11060 56975 MT
+(page to the server.)SH
+9392 59542 MT
+(Transitions between states are driven)
+40 W( by the requests that are made by client kernels.  In practice, not)39 W
+8280 60968 MT
+(all requests make sense in all states.  For instance, a kernel will not pageout a page that has not)
+86 W( been)87 W
+8 SS 
+12337 62043 MT
+(1)SH
+10 SS 
+8280 62394 MT
+(modified.)SH
+13368 XM
+(The server accepts four input message types \050requests\051, which the scheduler handles in)
+15 W( three)14 W
+8280 63820 MT
+(procedures:)SH
+10800 50 8280 66476 UL
+6 SS 
+9170 67871 MT
+(1)SH
+8 SS 
+9504 68184 MT
+(Security issues)
+69 W( have not been addressed directly in the server.  Rather, it is assumed that other servers, for example a name)68 W
+8280 69138 MT
+(service integrated with an authentication service,)
+31 W( will do the necessary verifications before handing a memory object port to a user.)32 W
+8280 70092 MT
+(An object might then have different ports associated with it,)
+22 W( one for read-only access and one for read-write access.  Note then that)21 W
+8280 71046 MT
+(it is possible to)
+65 W( prevent a user from impersonating a kernel by having a secure server handle the object's port directly, and never)66 W
+8280 72000 MT
+(permitting to unsecure tasks direct access to the port.  These and other issues are addressed in a forthcoming document [14])SH
+ES
+%%Page: 4 6 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(4)SH
+/Symbol SF
+8162 8000 MT
+(\267)SH
+/Helvetica-Oblique SF
+8900 XM
+(read_fault\050\051)SH
+/Helvetica SF
+(: a kernel requests read access to a page \050memory_object_data_request\051.)SH
+/Symbol SF
+8162 9815 MT
+(\267)SH
+/Helvetica-Oblique SF
+8900 XM
+(write_fault\050\051)SH
+/Helvetica SF
+(: a kernel requests write access to a page and either needs a)
+83 W( fresh copy of the)84 W
+8900 10958 MT
+(page \050memory_object_data_request\051 or does not \050memory_object_data_unlock\051.)SH
+/Symbol SF
+8162 12773 MT
+(\267)SH
+/Helvetica-Oblique SF
+8900 XM
+(pageout\050\051)SH
+/Helvetica SF
+(: a kernel flushes out the page to the server)
+288 W( \050memory_object_data_write and)287 W
+8900 13916 MT
+(memory_object_lock_completed\051.)SH
+7232 16483 MT
+(These three functions do)
+33 W( all the necessary work.  A pseudo code description of how they operate on a)34 W
+6120 17909 MT
+(page appears)
+6 W( in Figures 2, 3 and 4.  It can be assumed that all procedures keep the page locked and that)5 W
+6120 19335 MT
+(messages are processed in)
+8 W( the order of arrival.  This pseudo code will be used again later to describe the)9 W
+6120 20761 MT
+(distributed algorithm.  The)
+44 W( remaining procedures are either for initialization, termination, or recovery from)43 W
+6120 22187 MT
+(kernel crashes.  The pseudo code indicates that writers are queued in FIFO order, while readers do not)72 W
+6120 23613 MT
+(need to be ordered.)
+101 W( Writers)
+479 W( take precedence over readers.  Other, possibly more complicated policies)100 W
+6120 25039 MT
+(might be needed. It is possible, for example, to introduce a simple test)
+111 W( to prevent writers from causing)112 W
+6120 26465 MT
+(starvation of readers.  Sections 3.1 will expand on)
+56 W( the queueing strategies.  If we ignored fault tolerance)55 W
+6120 27891 MT
+(issues the algorithms would differ only in a minor way: the server can dispose of a page once)
+29 W( it is sent to)30 W
+6120 29317 MT
+(a writer.  This and other optimizations can be easily applied in the)
+21 W( case the server runs without the \050local\051)20 W
+6120 30743 MT
+(support of a permanent storage server, which is the case of a diskless workstation.)SH
+8 /Courier-Bold AF
+9480 32425 MT
+(read_fault\050page, kernel\051)SH
+11880 33370 MT
+(switch \050 page->state \051 {)SH
+11880 34315 MT
+(case Read:)SH
+15720 35260 MT
+(memory_object_data_provided\050kernel\051)SH
+15720 36205 MT
+(break)SH
+11880 37150 MT
+(case Write:)SH
+15720 38095 MT
+(page->state = ReadWait)SH
+15720 39040 MT
+(memory_object_lock_request\050page->owner, FLUSH\050page\051, owner_self\051)SH
+15720 39985 MT
+(break)SH
+11880 40930 MT
+(default: /* just enqueue */)SH
+11880 41875 MT
+(})SH
+11880 42820 MT
+(set_add\050page->readers, kernel\051)SH
+10 /Helvetica-Bold AF
+21628 45448 MT
+(Figure 2:)SH
+/Helvetica SF
+26685 XM
+(Handling of Read Faults)SH
+7232 48015 MT
+(An example will help clarify the following)
+18 W( discussion.  Since all the tasks on one machine use the same)19 W
+6120 49441 MT
+(copy of the memory object's pages \050cached copy, possibly mapped)
+45 W( into the various address spaces with)44 W
+6120 50867 MT
+(different protections\051,)
+104 W( we can pretend there is a single task per machine.  Let us assume that a thread)105 W
+6120 52293 MT
+(makes a read access to a page.)
+410 W( The)
+1097 W( page is not in the cache, hence the kernel sends a)409 W
+/Helvetica-Oblique SF
+6120 53719 MT
+(memory_object_data_request\050\051)SH
+/Helvetica SF
+20351 XM
+(message to the pager.  If the page is in)59 W
+/Helvetica-Oblique SF
+38507 XM
+(Read)SH
+/Helvetica SF
+41234 XM
+(state \050the initial state\051, the)59 W
+6120 55145 MT
+(server immediately sends the page in a)362 W
+/Helvetica-Oblique SF
+26328 XM
+(memory_object_data_provided\050\051)SH
+/Helvetica SF
+41361 XM
+(message, with read-only)361 W
+6120 56571 MT
+(protection. If)
+2158 W( the thread makes a)
+940 W( subsequent write access, the kernel sends a)941 W
+/Helvetica-Oblique SF
+6120 57997 MT
+(memory_object_data_unlock\050\051)SH
+/Helvetica SF
+20130 XM
+(message to request a protection upgrade which will)
+283 W( be granted in a)282 W
+/Helvetica-Oblique SF
+6120 59423 MT
+(memory_object_lock_request\050\051)SH
+/Helvetica SF
+20295 XM
+(message, unless the page has changed state in the meantime.  If the)171 W
+6120 60849 MT
+(page is not in)115 W
+/Helvetica-Oblique SF
+12806 XM
+(Read)SH
+/Helvetica SF
+15588 XM
+(state, the kernel's request is enqueued and possibly the current writer is asked to)114 W
+6120 62275 MT
+(page out the page via a)48 W
+/Helvetica-Oblique SF
+17138 XM
+(memory_object_lock_request\050\051)SH
+/Helvetica SF
+31190 XM
+(message. When)
+374 W( the page is actually paged)
+48 W( out,)49 W
+6120 63701 MT
+(the)SH
+/Helvetica-Oblique SF
+8011 XM
+(pageout)SH
+/Helvetica SF
+12126 XM
+(procedure dequeues the)
+223 W( next write access request and satisfies it, or satisfies all read)222 W
+6120 65127 MT
+(requests at once.)SH
+ES
+%%Page: 5 7 
+BS
+0 SI
+10 /Helvetica-Bold AF
+54524 4329 MT
+(5)SH
+8 /Courier-Bold AF
+11640 7739 MT
+(write_fault\050page, kernel\051)SH
+14040 8684 MT
+(switch \050 page->state \051 {)SH
+14040 9629 MT
+(case Read:)SH
+17880 10574 MT
+(set_remove\050 page->readers, kernel\051)SH
+17880 11519 MT
+(forall\050 readers \051)SH
+10200 12464 MT
+(\0501\051 memory_object_lock_request\050)
+9600 W( reader, FLUSH\050page\051, owner_self \051)SH
+17880 13409 MT
+(page->readers = empty_set)SH
+10200 14354 MT
+(\0502\051)SH
+17880 15299 MT
+(page->state = Write)SH
+17880 16244 MT
+(page->owner = kernel)SH
+17880 17189 MT
+(if \050needs_data\051)SH
+21720 18134 MT
+(memory_object_data_provided\050 page->owner \051)SH
+17880 19079 MT
+(else)SH
+21720 20024 MT
+(memory_object_data_unlock\050 page->owner \051)SH
+17880 20969 MT
+(break)SH
+14040 21914 MT
+(case Write:)SH
+17880 22859 MT
+(memory_object_lock_request\050 page->owner, FLUSH\050page\051, owner_self \051)SH
+17880 23804 MT
+(/* fall through */)SH
+14040 24749 MT
+(case WriteWait:)SH
+14040 25694 MT
+(case ReadWait:)SH
+17880 26639 MT
+(page->state = WriteWait)SH
+17880 27584 MT
+(enqueue\050 kernel, page->writers \051)SH
+14040 28529 MT
+(})SH
+10 /Helvetica-Bold AF
+23816 30212 MT
+(Figure 3:)SH
+/Helvetica SF
+28873 XM
+(Handling of Write Faults)SH
+8 /Courier-Bold AF
+11640 31894 MT
+(pageout\050page, kernel, data\051)SH
+10200 32839 MT
+(\0503\051 switch\050)
+1920 W( page->state \051 {)SH
+14040 33784 MT
+(case Read:)SH
+17880 34729 MT
+(return /*)
+480 W( never happens */)SH
+14040 35674 MT
+(case Write:)SH
+17880 36619 MT
+(save\050data\051 /*)
+480 W( true pageout */)SH
+17880 37564 MT
+(page->state = Read)SH
+17880 38509 MT
+(page->owner = owner_self)SH
+17880 39454 MT
+(break)SH
+14040 40399 MT
+(case WriteWait:)SH
+10200 41344 MT
+(\0504\051)SH
+17880 42289 MT
+(save\050data\051)SH
+17880 43234 MT
+(page->owner = dequeue\050 page->writers \051)SH
+17880 44179 MT
+(memory_object_data_provided\050 page->owner\051)SH
+17880 45124 MT
+(if \050!page->writers\051)SH
+21720 46069 MT
+(if \050page->readers\051)SH
+25560 47014 MT
+(page->state = ReadWait)SH
+21720 47959 MT
+(else)SH
+25560 48904 MT
+(page->state = Write)SH
+17880 49849 MT
+(if \050page->readers || page->writers\051 {)SH
+21720 50794 MT
+(deschedule_myself\050\051)SH
+21720 51739 MT
+(memory_object_lock_request\050 page->owner, FLUSH\050page\051, owner_self\051)SH
+10200 52684 MT
+(\0505\051)SH
+17880 53629 MT
+(})SH
+17880 54574 MT
+(break;)SH
+14040 55519 MT
+(case ReadWait:)SH
+17880 56464 MT
+(save\050data\051)SH
+17880 57409 MT
+(forall\050readers\051)SH
+21720 58354 MT
+(memory_object_data_provided\050reader\051)SH
+17880 59299 MT
+(page->state = Read)SH
+10200 60244 MT
+(\0506\051 page->owner)
+5760 W( = owner_self)SH
+14040 61189 MT
+(})SH
+10 /Helvetica-Bold AF
+22370 63817 MT
+(Figure 4:)SH
+/Helvetica SF
+27427 XM
+(Handling of Pageout Requests)SH
+ES
+%%Page: 6 8 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(6)SH
+12 SS 
+6120 8075 MT
+(3.1. Multiple Page Sizes)SH
+10 /Helvetica AF
+7232 9501 MT
+(The simple scheduler described above can only be used)
+135 W( by machines with the same page size, an)136 W
+6120 10927 MT
+(unpleasant restriction.  Moreover, in Mach the size of a virtual page can be changed and set even on)
+76 W( a)75 W
+6120 12353 MT
+(per-machine basis.  Transforming a single page size scheduler into a)
+45 W( multiple page size scheduler is not)46 W
+6120 13779 MT
+(immediate. Our)
+332 W( multiple page)
+27 W( size scheduler uses internally an arbitrary page size \050scheduler page size\051)26 W
+6120 15205 MT
+(and solves the problem by two means:)SH
+/Symbol SF
+8162 16677 MT
+(\267)SH
+/Helvetica SF
+8900 XM
+(for requests)7 W
+/Helvetica-Oblique SF
+14472 XM
+(smaller)SH
+/Helvetica SF
+17979 XM
+(than the scheduler page size, the request is rounded up)
+7 W( to the scheduler)8 W
+8900 17820 MT
+(page size, and)SH
+/Symbol SF
+8162 19635 MT
+(\267)SH
+/Helvetica SF
+8900 XM
+(for requests)32 W
+/Helvetica-Oblique SF
+14522 XM
+(larger)SH
+/Helvetica SF
+17388 XM
+(than the scheduler page size, the request is)
+32 W( fulfilled by multiple scheduler)31 W
+8900 20778 MT
+(pages \050shipped all at once\051, after appropriate synchronization.)SH
+7232 23345 MT
+(Synchronization is accomplished via a queueing mechanism.  It is necessary)
+242 W( to avoid both false)243 W
+6120 24771 MT
+(contention and descheduling of kernels until)
+84 W( absolutely necessary, and to satisfy requests as quickly as)83 W
+6120 26197 MT
+(possible while)
+107 W( maintaining fairness.  When the scheduler receives a request from a kernel, it may take)108 W
+6120 27623 MT
+(one of the following actions:)SH
+8344 29024 MT
+(1.)SH
+9456 XM
+(Satisfy the request immediately.)SH
+8344 30839 MT
+(2.)SH
+9456 XM
+(Deschedule some writers and enqueue the request.)SH
+8344 32654 MT
+(3.)SH
+9456 XM
+(Simply enqueue the request.)SH
+7232 35221 MT
+(The first is the case when there are no writers)
+46 W( on any of the data that the kernel requests.  For a read)45 W
+6120 36647 MT
+(request, the scheduler can)
+156 W( simply add the kernel to the set of readers of each scheduler-page; if the)157 W
+6120 38073 MT
+(request is a write request, then the scheduler)
+208 W( deschedules all readers of any scheduler-page in the)207 W
+6120 39499 MT
+(writer's request range before scheduling the writer.  In the second case, the scheduler finds that there)
+13 W( are)14 W
+6120 40925 MT
+(writers on some of the requested data, but none of)
+160 W( them have yet been descheduled. The scheduler)159 W
+6120 42351 MT
+(deschedules the writers, and the request is queued.)SH
+7232 44918 MT
+(In the third case, the scheduler finds descheduled writers on some of the requested)
+122 W( data, indicating)123 W
+6120 46344 MT
+(that other requests are already waiting for those scheduler-pages.  In this case,)
+87 W( the scheduler does not)86 W
+6120 47770 MT
+(deschedule the rest of the writers)
+64 W( because the requesting kernel is not yet ready to use their pages; the)65 W
+6120 49196 MT
+(request is simply enqueued.)
+918 W( When)
+2112 W( a descheduled writer sends a confirmation \050a)917 W
+/Helvetica-Oblique SF
+6120 50622 MT
+(memory_object_lock_completed\050\051)SH
+/Helvetica SF
+21518 XM
+(message\051, the scheduler finds the request that was awaiting it. If the)116 W
+6120 52048 MT
+(confirmation was the last one that the request was waiting)
+7 W( for, then the scheduler satisfies the request \050as)6 W
+6120 53474 MT
+(in case 1 above\051 and checks to see if there are any more requests that might be satisfied as well.)SH
+7232 56041 MT
+(The data structures used for queueing readers and writers)
+70 W( allow most operations to occur in constant)71 W
+6120 57467 MT
+(time, while some \050such as determining whether an incoming request)
+96 W( can be immediately satisfied\051 take)95 W
+6120 58893 MT
+(time proportional to the number)
+45 W( of scheduler pages in the request.  Each waiting client is represented by)46 W
+6120 60319 MT
+(a record containing the identity of the)
+158 W( requestor, a reference counter, and a pointer to a linked list of)157 W
+6120 61745 MT
+(requests that follow.  The reference counter is)
+52 W( used to quickly test if the request can be satisfied.  When)53 W
+6120 63171 MT
+(the request follows other requests the counter represents the number)
+30 W( of requests pointing to it; otherwise)29 W
+6120 64597 MT
+(it is used to represent the number of outstanding)
+67 W( descheduling acknowledgements.  For each scheduler)68 W
+6120 66023 MT
+(page there is also a pointer to the)
+87 W( request waiting for an acknowledgement from the writer of the page,)86 W
+6120 67449 MT
+(and a pointer to the last request waiting)
+113 W( for the page.  These pointers are set to nil if no such request)114 W
+6120 68875 MT
+(exists.)SH
+ES
+%%Page: 7 9 
+BS
+0 SI
+10 /Helvetica-Bold AF
+54524 4329 MT
+(7)SH
+12 SS 
+8280 8075 MT
+(3.2. Heterogeneous Processors)SH
+10 /Helvetica AF
+9392 9501 MT
+(Parallel programs that use a distributed shared memory facility)
+77 W( should not be constrained to run on a)76 W
+8280 10927 MT
+(uniform set of processors.  Such a constraint is undesirable because as the number of machines)278 W
+8280 12353 MT
+(available at a given)
+133 W( site increases one typically observes an increased variation in their types as well.)132 W
+8280 13779 MT
+(Unfortunately, interfacing heterogeneous)
+80 W( processors not only creates the problem of potentially different)81 W
+8280 15205 MT
+(page sizes, but also raises the issue of different)
+70 W( machine representations of data objects.  This problem)69 W
+8280 16631 MT
+(goes beyond the)62 W
+/Helvetica-Oblique SF
+16138 XM
+(byte order)62 W
+/Helvetica SF
+21042 XM
+(problem, since different processors)
+62 W( are free to assign any given meaning to)63 W
+8280 18057 MT
+(any given sequence of bits.  A clear example is the case of floating point numbers.)SH
+9392 20624 MT
+(A more difficult set of problems arises from)179 W
+/Helvetica-Oblique SF
+30052 XM
+(software)SH
+/Helvetica SF
+34288 XM
+(data types.  Modern programming)
+179 W( languages)178 W
+8280 22050 MT
+(allow higher level types to be built on top of hardware)
+52 W( types, for instance in composing record structures)53 W
+8280 23476 MT
+(with diverse component types.  Quite often, the language definition does not)
+152 W( specify how these types)151 W
+8280 24902 MT
+(should be mapped to the hardware types, and the compiler is)
+42 W( free to define this mapping as appropriate.)43 W
+8280 26328 MT
+(A well known consequence is that the different fields of a record in the C language may be)
+79 W( allocated at)78 W
+8280 27754 MT
+(different offsets by different compilers, sometimes even among compilers for the)
+380 W( same machine)381 W
+8280 29180 MT
+(architecture. Finally,)
+292 W( some languages use types that do not have any correspondent hardware type.)
+7 W( Lisp)290 W
+8280 30606 MT
+(systems, for instance, often use runtime data tags to)
+127 W( mark a collection of bits as the representative of)128 W
+8280 32032 MT
+(some data type \050see)
+135 W( [12])
+SH( for)
+135 W( a recent analysis\051.  Only a few processors implement some form of data)134 W
+8280 33458 MT
+(tagging in hardware.)SH
+9392 36025 MT
+(Solving the heterogeneity problem is difficult)
+66 W( because it requires that the server has knowledge of the)67 W
+8280 37451 MT
+(application's data types.  This leads to undesirable close links)
+71 W( with the application's runtime system and)70 W
+8280 38877 MT
+(programming language)
+206 W( [2].)
+SH( On)
+690 W( the other hand, the problem can)
+206 W( be separated in two sub-problems:)207 W
+8280 40303 MT
+(hardware data types \050e.g. integers\051 and software data types \050e.g.)
+70 W( C records\051.  A general purpose server)69 W
+8280 41729 MT
+(solves the)
+116 W( problems for the first class of types, and can be extended to cope with the second class of)117 W
+8280 43155 MT
+(types. Quite)
+490 W( simply, our server)
+106 W( assigns a type tag to each segment of a paging object and makes the)105 W
+8280 44581 MT
+(appropriate translation \050if necessary\051 when)
+129 W( sending data from that segment to a kernel.  The interface)130 W
+8280 46007 MT
+(with the application program is defined by the)199 W
+/Helvetica-Oblique SF
+30215 XM
+(memory_object_tag_data\050\051)SH
+/Helvetica SF
+42641 XM
+(RPC from the client to the)198 W
+8280 47433 MT
+(pager that assigns a type tag to a segment.  This)
+188 W( operation is typically used by a dynamic memory)189 W
+8280 48859 MT
+(allocator to fragment shared memory in typed segments, each segment containing only)
+41 W( data of the given)40 W
+8280 50285 MT
+(type. The)
+428 W( standard Unix BSD malloc\0502\051 memory allocator for)
+75 W( C was modified to allocate typed data, as)76 W
+8280 51711 MT
+(exemplified in Figure 5.  Although different types cannot be mixed)
+19 W( in a structure, one can always resort to)18 W
+8280 53137 MT
+(a level of indirection, building records that only contain pointers to data.)SH
+/Courier-Bold SF
+10680 54954 MT
+(extern char)SH
+15480 56085 MT
+(*tmalloc\050 type_tag, num_elements \051)SH
+10680 57216 MT
+(enum { t_int8, t_int16, t_int32, t_float32, ... } type_tag;)SH
+10680 58347 MT
+(unsigned long int num_elements;)SH
+10680 60609 MT
+(#define malloc_short\050n\051 \050short*\051tmalloc\050 t_int16, n\051)SH
+10680 61740 MT
+(...)SH
+/Helvetica-Bold SF
+25373 64849 MT
+(Figure 5:)SH
+/Helvetica SF
+30430 XM
+(A Typed)SH
+/Helvetica-Oblique SF
+34432 XM
+(malloc\050\051)SH
+/Helvetica SF
+9392 67416 MT
+(All type tags and machine types must be known to the server in advance, hence each)
+29 W( server is able to)30 W
+8280 68842 MT
+(deal with a limited set of machine and data types.  The server)
+56 W( refuses type tags or machine types that it)55 W
+8280 70268 MT
+(does not know how to handle.  This limitation is not very restrictive:)
+161 W( since)
+602 W( the server is a user level)162 W
+8280 71694 MT
+(process it can be modified quite easily to)
+118 W( account for new data or machine types.  A dynamic solution)117 W
+ES
+%%Page: 8 10 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(8)SH
+/Helvetica SF
+6120 7929 MT
+(requires the use of runtime type)
+104 W( descriptors that the server uses for data translation.  This approach is)105 W
+6120 9355 MT
+(described in)
+56 W( [5],)
+SH( and solves the problem of software data types as well.)
+56 W( It)
+388 W( is certainly possible to extend)55 W
+6120 10781 MT
+(our server in this way.)SH
+7232 13348 MT
+(Finally, note that an approach similar)
+179 W( to the one used for data translation might be used for other)180 W
+6120 14774 MT
+(problems. Some approaches)
+27 W( to the implementation of shared libraries require the use of a dinamic linker.)26 W
+6120 16200 MT
+(Dinamic linking could be done using lazy-evaluation,)
+118 W( only linking those pages of code that are actually)119 W
+6120 17626 MT
+(accessed by)
+66 W( the program when they are faulted in.  A similar case arises with a secure program loader,)65 W
+6120 19052 MT
+(which must check that the executable image has not been tampered with.  A)
+111 W( distributed object system)112 W
+6120 20478 MT
+(might also use similar techniques while mapping objects into the program's address space.)SH
+14 /Helvetica-Bold AF
+6120 24379 MT
+(4. A Distributed Algorithm)SH
+10 /Helvetica AF
+7232 25805 MT
+(The motivations for a distributed algorithm are manyfold.  A centralized server is a solution that does)87 W
+6120 27231 MT
+(not scale up.  When many kernels share many memory objects serviced by the same pager the)292 W
+6120 28657 MT
+(availability of each object decreases, because the pager)
+64 W( becomes the bottleneck where all requests pile)63 W
+6120 30083 MT
+(up. Even)
+302 W( when few kernels are involved, the location of the)
+12 W( server is important because local and remote)13 W
+6120 31509 MT
+(messages might have very different costs.)
+32 W( A)
+341 W( distributed solution that can allocate any number of servers)31 W
+6120 32935 MT
+(on any number of machines is more usable.)
+17 W( In)
+314 W( this way the sharing of memory between tasks located on)18 W
+6120 34361 MT
+(the same \050multi\051processor is decoupled from)
+75 W( unrelated events on other machines.  A careful analysis of)74 W
+6120 35787 MT
+(the external pager)
+51 W( protocol)
+52 W( [13])
+SH( also reveals one inefficiency:  transferring ownership of a page from one)52 W
+6120 37213 MT
+(kernel to another requires four)
+52 W( messages \050requesting the page, obtaining it, receiving the end-of-transfer)51 W
+6120 38639 MT
+(message, shipping it to the right kernel\051, while only two messages are strictly needed \050request the)
+73 W( page)74 W
+6120 40065 MT
+(transfer, ship it from one kernel to)
+187 W( the other\051.  Rather than modifying the external pager interface to)186 W
+6120 41491 MT
+(handle this case, we have designed and implemented a)
+44 W( distributed paging server which exploits this and)45 W
+6120 42917 MT
+(various other opportunities for reducing network traffic.)SH
+7232 45484 MT
+(The approach)
+290 W( taken is simple:)289 W
+/Helvetica-Oblique SF
+22295 XM
+(treat each remote server just like another kernel, and apply the)289 W
+6120 46910 MT
+(algorithm of)
+52 W( the centralized case)53 W
+/Helvetica SF
+(. The)
+384 W( reader may wish to go back to Figures 2, 3 and 4 and review the)53 W
+6120 48336 MT
+(algorithm substituting the word "kernel" with "client", which now means either a kernel or \050more)
+82 W( likely\051 a)81 W
+6120 49762 MT
+(fellow server.  A)
+33 W( pager will now accept a)34 W
+/Helvetica-Oblique SF
+24485 XM
+(memory_object_lock_request\050\051)SH
+/Helvetica SF
+38523 XM
+(message just like a Mach kernel)34 W
+6120 51188 MT
+(does and treat it as a fault)
+386 W( notification, invoking read_fault\050\051 or write_fault\050\051 as appropriate.  A)385 W
+/Helvetica-Oblique SF
+6120 52614 MT
+(memory_object_data_provided\050\051)SH
+/Helvetica SF
+20792 XM
+(message is handled by the pageout\050\051 procedure.)SH
+7232 55181 MT
+(Note now that the notion of the "owner" that each pager has does not need to be)
+SH( exact at all times.  It is)1 W
+6120 56607 MT
+(quite possible, actually highly desirable, that a pager be able to ask a second)
+102 W( pager to transfer a page)101 W
+6120 58033 MT
+(directly to a third one who)
+274 W( needs it, without handling the page directly.  We call this optimization)275 W
+/Helvetica-Bold SF
+6120 59459 MT
+(forwarding)SH
+/Helvetica SF
+(, to catch both the positive effect)
+171 W( of avoiding one message hop, and the \050minor\051 negative)170 W
+6120 60885 MT
+(effect of producing a new type of activity:)
+58 W( the act of forwarding a mis-directed page fault message to the)59 W
+6120 62311 MT
+(correct destination.  Implementing forwarding requires relatively simple changes to)
+329 W( the centralized)328 W
+6120 63737 MT
+(algorithm.)SH
+7232 66304 MT
+(Figures 6 and 7 illustrate the changes and additions to the pseudo code of Figures 2, 3 and)
+181 W( 4 to)182 W
+6120 67730 MT
+(implement forwarding.  A pager creates a local copy of a memory)
+109 W( object when a user asks for it.  The)108 W
+6120 69156 MT
+(initial state of all pages in this case is the)74 W
+/Helvetica-Oblique SF
+25202 XM
+(Write)SH
+/Helvetica SF
+27887 XM
+(state, and the owner is the pager from)
+74 W( which the object)75 W
+6120 70582 MT
+(has been copied. Of course, no real copy is actually done.  Note that)
+67 W( it is possible to copy from another)66 W
+ES
+%%Page: 9 11 
+BS
+0 SI
+10 /Helvetica-Bold AF
+54524 4329 MT
+(9)SH
+8 /Courier-Bold AF
+10200 7739 MT
+(\0501\051 memory_object_lock_request\050)
+1920 W( reader, FLUSH\050page\051,)SH
+17880 8684 MT
+(is_server\050page->owner\051 ? kernel : owner_self\051)SH
+10200 10574 MT
+(\0502\051 if)
+1920 W( \050page->owner != owner_self\051 {)SH
+17880 11519 MT
+(memory_object_lock_request\050 page->owner, WRITE_FAULT\050page\051, owner_self\051)SH
+17880 12464 MT
+(enqueue\050page->writers, kernel\051)SH
+17880 13409 MT
+(page->state = WriteWait)SH
+17880 14354 MT
+(return)SH
+14040 15299 MT
+(})SH
+10200 17189 MT
+(\0503\051 if)
+1920 W( \050kernel != page->owner && !hinted\050page\051\051)SH
+17880 18134 MT
+(page->owner = kernel)SH
+14040 19079 MT
+(hinted\050page\051 = FALSE)SH
+10200 20969 MT
+(\0504\051 if)
+1920 W( \050!page->writers\051 {)SH
+17880 21914 MT
+(page->owner = owner_self)SH
+17880 22859 MT
+(goto ReadWait)SH
+14040 23804 MT
+(})SH
+10200 25694 MT
+(\0505\051 if)
+1920 W( \050is_server\050page->owner\051\051)SH
+17880 26639 MT
+(page_state = WriteWait  /* pretend */)SH
+10200 28529 MT
+(\0506\051 if)
+1920 W( \050!is_server\050kernel\051\051)SH
+17880 29474 MT
+(page->owner = owner_self)SH
+10 /Helvetica-Bold AF
+19925 32102 MT
+(Figure 6:)SH
+/Helvetica SF
+24982 XM
+(Modifications to the Distributed Scheduler)SH
+25177 33245 MT
+(to Implement Forwarding of Page Faults)SH
+8280 35117 MT
+(copy, and that the pager does not need to)
+132 W( have complete knowledge of all the kernels involved.  The)133 W
+8280 36543 MT
+(handling of read faults does not change.  While handling write faults, at line \0501\051 all)
+9 W( readers are informed of)8 W
+8280 37969 MT
+(who the new owner is, if it is a different)
+4 W( pager.  At line \0502\051, a check is added to see whether the true owner)5 W
+8280 39395 MT
+(actually is another pager, in which case the fault)
+324 W( is queued and the state of the page modified)323 W
+8280 40821 MT
+(accordingly. In)
+294 W( the pageout\050\051 procedure)
+8 W( at line \0503\051 it is necessary to handle the case where the pager has)9 W
+8280 42247 MT
+(incorrect information about the true owner.  Note that the pager might)
+22 W( have received a)21 W
+/Helvetica-Oblique SF
+46847 XM
+(hint)SH
+/Helvetica SF
+48758 XM
+(about who will)21 W
+8280 43673 MT
+(eventually become the owner because it forwarded a write fault.  At)
+151 W( line \0505\051 it is necessary to handle)152 W
+8280 45099 MT
+(specially the case when)
+4 W( a page is given to a server queued for writing, while having other readers waiting.)3 W
+8280 46525 MT
+(The immediate request to have the page)
+34 W( back pretends that there are writers queued anyway, to prevent)35 W
+8280 47951 MT
+(the race that would otherwise arise.  Line \0504\051 jumps to the correct code in case the)
+17 W( last writer had actually)16 W
+8280 49377 MT
+(been serviced.  Line \0506\051 handles the fact that if)
+93 W( the pager only receives read-only access to the page it)94 W
+8280 50803 MT
+(does not become the owner of the page.)SH
+9392 53370 MT
+(Two new procedures, described in Figure 7, are used to check whether a page fault)
+10 W( must be forwarded)9 W
+8280 54796 MT
+(and to handle invalidations of)
+143 W( read-only pages.  A)144 W
+/Helvetica-Oblique SF
+31751 XM
+(memory_object_lock_request\050\051)SH
+/Helvetica SF
+45899 XM
+(message is handled)144 W
+8280 56222 MT
+(first by the page_fault\050\051 procedure, which)
+63 W( forwards it if necessary.  The fault is definitely not forwarded if)62 W
+8280 57648 MT
+(the pager has ownership of the page, or the pager has)
+52 W( already asked the current owner for write access)53 W
+8280 59074 MT
+(to the page \050state WriteWait\051, or if the pager has \050state Read\051 or)
+135 W( is about to have \050state ReadWait\051 a)134 W
+8280 60500 MT
+(read-only copy of the page and the fault is)
+166 W( a read fault.  In other words, a fault is only forwarded to)167 W
+8280 61926 MT
+(another server when the pager has no current interest in the page whatsoever.)
+180 W( An)
+636 W( invalidation of a)179 W
+8280 63352 MT
+(read-only page is generated at lines \0501\051 and \0507\051 if the reader is)
+298 W( a server, and is handled in the)299 W
+8280 64778 MT
+(invalidate_page\050\051 procedure.  This is the only new message type needed.)SH
+9392 67345 MT
+(Forwarding creates problems for a closed form analysis, since the effect of forwarding)
+130 W( of both page)129 W
+8280 68771 MT
+(locations \050page faults\051 and invalidations \050page flush\051 are difficult to model.  Our claim is that in actual use)31 W
+8280 70197 MT
+(one will typically see only)
+99 W( the two extreme cases: pages that are frequently accessed in write mode by)98 W
+8280 71623 MT
+(many parties, and pages that are accessed infrequently, most likely in read mode.  Even)
+148 W( if a page is)149 W
+ES
+%%Page: 10 12 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(10)SH
+8 /Courier-Bold AF
+9480 7739 MT
+(invalidate_page\050page, owner\051)SH
+11880 8684 MT
+(if \050page->state != Read\051)SH
+15720 9629 MT
+(return /*)
+480 W( sanity check */)SH
+11880 10574 MT
+(forall \050readers\051)SH
+8040 11519 MT
+(\0507\051 memory_object_lock_request\050reader,)
+5760 W( FLUSH\050page\051, owner\051)SH
+11880 12464 MT
+(page->state = Write;)SH
+11880 13409 MT
+(page->owner = owner;)SH
+9480 15299 MT
+(page_fault\050 page, who, fault_type\051)SH
+11880 16244 MT
+(if \050\050page->owner == owner_self\051 ||)SH
+13800 17189 MT
+(!is_server\050page->owner\051 ||)SH
+13800 18134 MT
+(\050page->state == WriteWait\051 ||)SH
+13800 19079 MT
+(\050\050fault_type == READ\051 && \050page->state != Write\051\051\051 {)SH
+15720 20024 MT
+(if \050fault_type == READ\051 read_fault\050page, who\051)SH
+15720 20969 MT
+(else write_fault\050page, who\051)SH
+15720 21914 MT
+(return)SH
+11880 22859 MT
+(})SH
+11880 23804 MT
+(/* Forward */)SH
+11880 24749 MT
+(send_page_fault\050owner,who,page\051)SH
+11880 25694 MT
+(if \050fault_type == WRITE\051 {)SH
+15720 26639 MT
+(page->owner = who)SH
+15720 27584 MT
+(hinted\050page\051 = TRUE)SH
+11880 28529 MT
+(})SH
+10 /Helvetica-Bold AF
+18626 31157 MT
+(Figure 7:)SH
+/Helvetica SF
+23683 XM
+(Additions to the Distributed Scheduler)SH
+23017 32300 MT
+(to Implement Forwarding of Page Faults)SH
+6120 34172 MT
+(accessed infrequently, it is)
+347 W( hard to generate a faulting sequence that produces many forwarding)346 W
+6120 35598 MT
+(messages. This)
+619 W( claim is supported by the experience with actual application programs.  Infrequently)171 W
+6120 37024 MT
+(accessed pages do not affect performance.  The bottlenecks derive very easily from the opposite)
+89 W( case.)88 W
+6120 38450 MT
+(Our analysis shows that the)
+118 W( expected number of remote messages required to service a N-party page)119 W
+6120 39876 MT
+(fault for the distributed pager is)SH
+/Symbol SF
+8162 41348 MT
+(\267)SH
+/Helvetica SF
+8900 XM
+(3N-4 initially, and)SH
+/Symbol SF
+8162 43163 MT
+(\267)SH
+/Helvetica SF
+8900 XM
+(2N-1 or)SH
+/Symbol SF
+8162 44978 MT
+(\267)SH
+/Helvetica SF
+8900 XM
+(2N at steady state)SH
+6120 46404 MT
+(depending on boundary conditions.  To get the total number of messages)
+14 W( in the distributed scheduler one)13 W
+6120 47830 MT
+(must add a)
+45 W( total of 2N-2 local messages between pagers and the kernels they service.  For comparison,)46 W
+6120 49256 MT
+(any centralized algorithm that)
+25 W( maintains strict memory coherence must use at least 4N remote messages)24 W
+6120 50682 MT
+(and no local messages. In the case)
+16 W( of the simple scheduler this figure is 5N messages.  Since the cost of)17 W
+6120 52108 MT
+(local messages is often much less than the cost of remote messages, the distributed)
+230 W( pager clearly)229 W
+6120 53534 MT
+(outperforms the centralized one.  The performance)
+75 W( evaluation results, reported in Section 7 confirm this)76 W
+6120 54960 MT
+(analysis.)SH
+12 /Helvetica-Bold AF
+6120 58715 MT
+(4.1. Example)SH
+10 /Helvetica AF
+7232 60141 MT
+(When a thread first maps a memory object in)
+13 W( its address space the kernel contacts the server but does)12 W
+6120 61567 MT
+(not require it to send any data yet.  It is only when a thread touches a memory)
+13 W( location within the address)14 W
+6120 62993 MT
+(range where the object is mapped that a fault is generated.  The faulting thread is stopped, and a)219 W
+6120 64419 MT
+(message is sent to the pager to request data to service the fault.  When the scheduling algorithm)
+70 W( in the)71 W
+6120 65845 MT
+(server has the necessary data available the page is sent to the kernel which maps it for)
+173 W( the faulting)172 W
+6120 67271 MT
+(thread which can then continue execution.  In case the page is not immediately available at the server,)
+40 W( a)41 W
+6120 68697 MT
+(message is sent to the kernel that currently owns)
+109 W( the page, asking to page it out to the server.  In the)108 W
+6120 70123 MT
+(case of the distributed algorithm, this may imply)
+160 W( some more processing, since the "kernel" is actually)161 W
+6120 71549 MT
+(another server.)SH
+ES
+%%Page: 11 13 
+BS
+0 SI
+10 /Helvetica-Bold AF
+53968 4329 MT
+(11)SH
+/Helvetica SF
+9392 7929 MT
+(It is)
+238 W( interesting to consider one example that shows the effects of forwarding page faults among)237 W
+8280 9355 MT
+(distributed servers.  Let us)
+212 W( assume that N servers \050each one serving one or more kernels\051 all take)213 W
+8280 10781 MT
+(repeated page faults on the)
+25 W( same page, which is the)24 W
+/Helvetica-Oblique SF
+31982 XM
+(hotspot)SH
+/Helvetica SF
+35564 XM
+(case that makes distributed shared memory)24 W
+8280 12207 MT
+(perform the worst.  Initially, all servers refer to the memory object's pages from the same)
+28 W( one \050say server)29 W
+8280 13633 MT
+(1\051. Therefore)
+346 W( N-1 requests are sent to server 1.  The server)
+34 W( first services its local fault\050s\051, then ships the)33 W
+8280 15059 MT
+(page to server 2 \050say\051)
+93 W( which becomes \050in server's 1 opinion\051 the new owner.  The next fault request is)94 W
+8280 16485 MT
+(then forwarded by server 1 to server 2, the next to server 3 and so on,)
+109 W( to server N-1.  When all faults)108 W
+8280 17911 MT
+(have been forwarded and served, the situation is such that servers 1, N-1)
+19 W( and N all know that the page is)20 W
+8280 19337 MT
+(located at server N, while every other)
+69 W( server)68 W
+/Helvetica-Oblique SF
+28670 XM
+(i)SH
+/Helvetica SF
+29238 XM
+(believes the page is at server)68 W
+/Helvetica-Oblique SF
+42930 XM
+(i+1)SH
+/Helvetica SF
+(. When)
+414 W( all servers take)68 W
+8280 20763 MT
+(the next page fault only 2 requests are sent to the owner, and any other request)30 W
+/Helvetica-Oblique SF
+44281 XM
+(i)SH
+/Helvetica SF
+44812 XM
+(is queued at server)31 W
+/Helvetica-Oblique SF
+53718 XM
+(i+1)SH
+/Helvetica SF
+8280 22189 MT
+(waiting for)SH
+/Helvetica-Oblique SF
+13115 XM
+(i+1)SH
+/Helvetica SF
+14755 XM
+(itself to be served first.)SH
+/Courier-Bold SF
+13080 24006 MT
+(S1 S2)
+3000 W( ->)
+SH( S3)
+1200 W( ->)
+SH( S4)
+1200 W( ->)
+SH( ...)
+1200 W( Sn-1)
+2400 W( -> Sn)SH
+13080 25137 MT
+(| ^)27600 W
+13080 26268 MT
+(-------------------------------------------------)SH
+/Helvetica-Bold SF
+18036 28128 MT
+(Figure 8:)SH
+/Helvetica SF
+23093 XM
+(Steady State Behavior for a N-Party Write Hotspot)SH
+9392 30695 MT
+(This situation is depicted in Figure 8 and can repeat itself.  Our experiments show that indeed in)
+139 W( a)138 W
+8280 32121 MT
+(write-hotspot the system)
+31 W( oscillates between two configurations of this type, never entering the initial state)32 W
+8280 33547 MT
+(again. There)
+420 W( is a)
+71 W( worst case that could surface:  an isolated page fault triggers a number of forwarding)70 W
+8280 34973 MT
+(messages. This number is N-2, since always at least two servers know exactly where the page is: the)118 W
+8280 36399 MT
+(owner and the one who sent the page to it.  In the example, this would happen if server 2 alone)
+58 W( takes a)57 W
+8280 37825 MT
+(fault after the first N faults are served.  After a worst case)
+5 W( fault all servers know exactly where the page is,)6 W
+8280 39251 MT
+(and therefore the system goes back to the initial state.)SH
+14 /Helvetica-Bold AF
+8280 43152 MT
+(5. Fault Tolerance)SH
+10 /Helvetica AF
+9392 44578 MT
+(A network memory server must be)
+236 W( prepared to handle machine crashes and network partitioning)235 W
+8280 46004 MT
+(without deadlocking.  Once a crash has been)
+3 W( detected, the server must either make user programs aware)4 W
+8280 47430 MT
+(of the problem \050for example signaling a memory error\051, or)
+7 W( attempt to recover from the problem one way or)6 W
+8280 48856 MT
+(another. Whatever)
+284 W( action the server takes will not provide)4 W
+/Helvetica-Oblique SF
+34329 XM
+(application-level)SH
+/Helvetica SF
+41780 XM
+(fault tolerance since the crash)4 W
+8280 50282 MT
+(could leave memory inconsistent from the application's point)
+25 W( of view.  This happens, for instance, when a)24 W
+8280 51708 MT
+(kernel crashes and some shared memory lock was held by a thread running on that processor.)SH
+9392 54275 MT
+(The centralized schedulers provide a mechanism for surviving kernel crashes whereby memory)324 W
+8280 55701 MT
+(availability is preserved)
+109 W( despite a failure of the current owner of a page.  This avoids the alternative of)108 W
+8280 57127 MT
+(making the whole object permanently unavailable.  Assuming the current writer crashes)
+SH( \050or for any reason)1 W
+8280 58553 MT
+(is not capable of communicating with the server any)
+68 W( more\051 the server reverts to the latest copy it has of)67 W
+8280 59979 MT
+(the page, which is the one that was sent to the writer when it asked for write)
+36 W( permission.  Fault tolerance)37 W
+8280 61405 MT
+(mechanisms for)
+53 W( the distributed scheduler have not yet been implemented, and they will need to face the)52 W
+8280 62831 MT
+(problems of network partitioning as well.)SH
+9392 65398 MT
+(Failure of a kernel only needs to be detected when the server needs a page back)
+222 W( from it.  The)223 W
+8280 66824 MT
+(overhead of a)
+112 W( fault tolerance guard can therefore be quite limited, about 1% of our servers' time when)111 W
+8280 68250 MT
+(heavily used.)SH
+ES
+%%Page: 12 14 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(12)SH
+14 SS 
+6120 8221 MT
+(6. Related Work)SH
+10 /Helvetica AF
+7232 9647 MT
+(Forwarding creates a new need:)
+40 W( the need of forwarding page faults to the current owner of a page.  Li)41 W
+6398 11073 MT
+([7] looked)
+112 W( at the problem of locating a page and provided various algorithms to solve it, and analyzed)111 W
+6120 12499 MT
+(their costs.  Our distributed algorithm must be compared against the "Distributed Manager Algorithm 2.6",)21 W
+6120 13925 MT
+(with the optimizations indicated at)
+84 W( pages 61-63 that page invalidations are sent in a divide-and-conquer)83 W
+6120 15351 MT
+(fashion. Note)
+590 W( however that in Li's algorithms)
+156 W( all operations are RPC, hence requiring twice as many)157 W
+6120 16777 MT
+(messages and unnecessary serialization.  Li also)
+80 W( evaluates the use of broadcast messages and proves)79 W
+6120 18203 MT
+(that they could benefit some of his algorithms, under the assumption that their cost is the same as a direct)SH
+6120 19629 MT
+(message. Note)
+358 W( that in our)
+40 W( algorithm the use of broadcasts would be detrimental to performance, since it)39 W
+6120 21055 MT
+(brings back the system to the)
+200 W( initial state and away from the most favorable situation.  The idea of)201 W
+6120 22481 MT
+(propagating invalidations in)
+172 W( a divide-and-conquer fashion is, in our system, much more effective than)171 W
+6120 23907 MT
+(broadcasts. In)
+352 W( this paper it was only assumed that the underlying architecture provides)
+37 W( efficient point-to-)38 W
+6120 25333 MT
+(point communication, with quasi-uniform cost.  The cost of sending a)
+11 W( message to N recipients is therefore)10 W
+6120 26759 MT
+(greater than or equal to N times the cost of a message to a single recipient.)SH
+7232 29326 MT
+(Cheriton [3])
+SH( has recently extended the V kernel to)
+67 W( support user-level data and caching servers, which)68 W
+6120 30752 MT
+(can be used to provide distributed)
+22 W( shared memory.  His facility has many similarities with Mach's external)21 W
+6120 32178 MT
+(pager facility, although it is described in terms of)
+22 W( file abstractions rather than memory object abstractions.)23 W
+6120 33604 MT
+(The implementation uses a scheme)
+88 W( analogous to the simple scheduler presented above, but might add)87 W
+6120 35030 MT
+(considerable extra message traffic by polling and forcing page)
+141 W( flushes every T-milliseconds to provide)142 W
+/Helvetica-Oblique SF
+6120 36456 MT
+(T-consistent)SH
+/Helvetica SF
+11844 XM
+(files for transaction support.)SH
+7232 39023 MT
+(Fleisch [4])
+SH( has extended the Locus kernel to provide distributed shared memory, with a SystemV)231 W
+6120 40449 MT
+(interface. The)
+284 W( scheme he)
+3 W( describes seems geared to maintaining consistency at the segment rather than)4 W
+6120 41875 MT
+(page level.  A report on the implementation work will be necessary to better evaluate his approach.)SH
+7232 44442 MT
+(Our work is concerned with Operating)
+450 W( System level distributed shared memory, where it is)449 W
+6120 45868 MT
+(implemented as shared pages of)16 W
+/Helvetica-Oblique SF
+20985 XM
+(virtual memory)16 W
+/Helvetica SF
+(. Other)
+310 W( approaches to user-level)
+16 W( shared memory objects)17 W
+6120 47294 MT
+(are possible, for example providing shared)60 W
+/Helvetica-Oblique SF
+25599 XM
+(data structures)59 W
+/Helvetica SF
+32609 XM
+(as in the Agora)
+59 W( [2])
+SH( system.  Other references)59 W
+6120 48720 MT
+(can be found in [2].)SH
+14 /Helvetica-Bold AF
+6120 52621 MT
+(7. Performance Evaluation)SH
+10 /Helvetica AF
+7232 54047 MT
+(The performance of the server was evaluated along a number of dimensions.)
+122 W( Fundamental)
+524 W( are the)123 W
+6120 55473 MT
+(average times to service a)
+53 W( fault, in both cases of single machine and multi-machine applications.  These)52 W
+6120 56899 MT
+(are affected by the various special features of)
+128 W( the server.  The centralized and distributed cases were)129 W
+6120 58325 MT
+(compared, using ad-hoc programs that exercise the)
+104 W( hotspot behavior.  Our measures show two overall)103 W
+6120 59751 MT
+(results: the distributed algorithm is more efficient than the centralized)
+233 W( one, and none of the special)234 W
+6120 61177 MT
+(features we introduced has an unacceptable impact on performance.  The major bottleneck in the)
+126 W( test)125 W
+6120 62603 MT
+(configuration \050token ring workstations\051 is the network latency, which accounts for)
+238 W( about 98% of the)239 W
+6120 64029 MT
+(elapsed times.  The server was instrumented in two ways:  keeping track)
+18 W( of the number and type of faults)17 W
+6120 65455 MT
+(it services)
+22 W( \050per object and per page\051, and collecting extensive traces of the message activity.  These data)23 W
+6120 66881 MT
+(were obtained via a remote procedure call by other processes, with minimum perturbation.)SH
+ES
+%%Page: 13 15 
+BS
+0 SI
+10 /Helvetica-Bold AF
+53968 4329 MT
+(13)SH
+12 SS 
+8280 8075 MT
+(7.1. Basic Costs)SH
+10 /Helvetica AF
+9392 9501 MT
+(The most common use of the server is in sharing memory within a single)
+20 W( machine.  In this case, a fault)19 W
+8280 10927 MT
+(on a missing page \050cache-fill\051 requires two local messages,)
+8 W( for a total cost of 1.5ms on a IBM RT-APC.  A)9 W
+8280 12353 MT
+(protection fault also requires two messages but)
+138 W( no memory mapping, for a cost of 1.1ms.  A pageout)137 W
+8280 13779 MT
+(operation requires two receive messages and the deallocation of data, which is not a system call)
+98 W( but a)99 W
+8 SS 
+28733 14854 MT
+(2)SH
+10 SS 
+8280 15205 MT
+(RPC to the kernel and involves two messages)8 W
+29178 XM
+(. The)
+294 W( total cost is then 2.5ms.  Since system time is)
+8 W( by far)9 W
+8280 16631 MT
+(the dominant factor \05093%\051 in all cases, schedulers)
+77 W( do not show significant differences in the handling of)76 W
+8280 18057 MT
+(local faults.  Table 1 summarizes the most important costs.)SH
+9392 20624 MT
+(Memory use is an important factor for)
+214 W( characterizing the performance of a program, although our)215 W
+8280 22050 MT
+(primary concern was speed rather than)
+126 W( space.  The server allocates memory in a sparse fashion only)125 W
+8280 23476 MT
+(when a kernel demands it, and then replaces each page as it is paged out)
+116 W( by a kernel.  This not only)117 W
+8280 24902 MT
+(reduces the memory usage for a large and sparse object, but also removes from)
+154 W( the critical path the)153 W
+8280 26328 MT
+(copying of data \050just switch a pointer\051)
+6 W( and the deallocation of memory \050two messages\051 which can be done)7 W
+8280 27754 MT
+(in batches.  To quantify these improvements, the)
+17 W( hotspot cycle time for the distributed case for the simple)16 W
+8280 29180 MT
+(scheduler was reduced by this)
+83 W( strategy from 7.8ms/fault to 5.5ms/fault, including memory deallocations.)84 W
+8280 30606 MT
+(Memory deallocation can be devoted to a separate)
+45 W( thread, which reduces the fault time to approximately)44 W
+8280 32032 MT
+(4.2ms/fault. Memory)
+278 W( saving depends on the actual use, and is very effective for some applications.)SH
+46800 50 8280 33375 UL
+8 /Helvetica-Bold AF
+8280 35296 MT
+(Parameter)SH
+31680 XM
+(Measured Cost)SH
+3913 50 8280 35496 UL
+3735 50 31680 35496 UL
+1778 50 35637 35496 UL
+8280 36758 MT
+(Zero-fill Fault)SH
+31680 XM
+(1.5ms/fault)SH
+8280 38220 MT
+(Protection Fault)SH
+31680 XM
+(1.1ms/fault)SH
+8280 39682 MT
+(Hotspot Cycle)SH
+31680 XM
+(4.2ms/cycle)SH
+8280 41144 MT
+(Multiple Page Size Overhead)SH
+31680 XM
+(0.2ms/fault max)SH
+8280 42606 MT
+(Avg Messages, centralized hotspot case)SH
+31902 XM
+(5.0/fault \050all remote\051)SH
+8280 44068 MT
+(Avg Messages, distributed hotspot case)SH
+31902 XM
+(4.1/fault \0502.0 remote\051)SH
+8280 45530 MT
+(Forwarded Faults)SH
+31902 XM
+(10% \050hotspot\051)SH
+8280 46992 MT
+(System Time)SH
+31902 XM
+(93%)SH
+46800 50 8280 48654 UL
+10 SS 
+24677 50796 MT
+(Table 1:)SH
+/Helvetica SF
+29290 XM
+(Costs Of The Server.)SH
+12 /Helvetica-Bold AF
+8280 54551 MT
+(7.2. Costs of The Algorithms)SH
+10 /Helvetica AF
+9392 55977 MT
+(The multiple page size scheduler adds)
+206 W( some overhead to the fault times, primarily because more)207 W
+8280 57403 MT
+(server pages might be needed to cover a kernel's page fault.  In most cases, a small range of page sizes)25 W
+8280 58829 MT
+(will be used, but even with an unlikely ratio maximum/minimum page size of eight)
+49 W( the overhead over the)50 W
+8280 60255 MT
+(basic fault)
+35 W( times is only 0.2ms.  If necessary, however, the algorithm can be tuned further for larger page)34 W
+8280 61681 MT
+(size ranges.)SH
+9392 64248 MT
+(Various experiments were performed on the distributed)
+85 W( scheduler, the most interesting one being the)86 W
+8280 65674 MT
+(case of an)
+14 W( hotspot page.  This is demonstrated by a simple program that repeatedly increments the same)13 W
+8280 67100 MT
+(memory location, replicated)
+182 W( on various machines.  The measures show that on average each server)183 W
+10800 50 8280 69338 UL
+6 SS 
+9170 70733 MT
+(2)SH
+8 SS 
+9504 71046 MT
+(As noted later, deallocation of memory is)
+21 W( done by a separate thread, which means that for evaluating the)20 W
+/Helvetica-Oblique SF
+47131 XM
+(latency)SH
+/Helvetica SF
+49908 XM
+(of the server a)20 W
+8280 72000 MT
+(value of 1.5ms must be used)SH
+ES
+%%Page: 14 16 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(14)SH
+/Helvetica SF
+6120 7929 MT
+(received requests for read/write/protection faults in an equal)
+45 W( amount, as expected.  This also means that)44 W
+6120 9355 MT
+(the user program was)
+246 W( interrupted 60% of the times when attempting to write the location \050write or)247 W
+6120 10781 MT
+(protection fault\051,)
+1 W( and 30% when reading from it \050read fault\051.  The average number of messages per fault is)SH
+6120 12207 MT
+(the single most important figure:  on average, each server handled 4.1 messages per fault.  Half)
+98 W( these)99 W
+6120 13633 MT
+(messages are received and half)
+112 W( sent.  On average, 2.1 messages are local \050interactions with the local)111 W
+6120 15059 MT
+(kernel\051 and 2.0 are remote \050interactions with other servers\051.  This nicely confirms)
+15 W( the estimates presented)16 W
+6120 16485 MT
+(in Section 4. Remote messages are extremely more expensive than local ones: an)
+298 W( average 98%)297 W
+6120 17911 MT
+(overhead was)
+140 W( observed in the test system, equally divided among the local Mach network server, the)141 W
+6120 19337 MT
+(remote one, and the TCP/IP transfer protocol.)SH
+7232 21904 MT
+(The results indicate that the distributed algorithm makes the page available in a fair)
+153 W( fashion, in the)152 W
+6120 23330 MT
+(sense that among homogeneous processors the page is made available for an equal amount of)
+3 W( time to all)4 W
+6120 24756 MT
+(kernels: the number of operations for all programs were the same within a factor of 2%.  If processors)
+47 W( of)46 W
+6120 26182 MT
+(different speed are used, the time during)
+84 W( which a page is available does not change \050it is bound by the)85 W
+6120 27608 MT
+(network latency\051:  using a processor two times as fast on our)
+249 W( RTs exactly doubles the number of)248 W
+6120 29034 MT
+(operations in the user programs.  Other measures indicate that during the)
+254 W( experiment each server)255 W
+6120 30460 MT
+(handled about 58% local faults and 42% remote faults, including a 10%)
+87 W( of requests that are forwarded.)86 W
+6120 31886 MT
+(The total number of faults was the same \050within 2%\051 on all)
+77 W( servers.  Each server requested or provided)78 W
+6120 33312 MT
+(the page the same number of times \050within 3%\051, including the case of a mix of slow and fast processors.)SH
+46800 50 6120 34655 UL
+8 /Helvetica-Bold AF
+6120 36576 MT
+(Machine)SH
+17820 XM
+(Int16/32)SH
+29520 XM
+(Float32)SH
+41220 XM
+(Float64)SH
+3201 50 6120 36776 UL
+2979 50 17820 36776 UL
+2801 50 29520 36776 UL
+2801 50 41220 36776 UL
+6120 38038 MT
+(Sun 4/260 \050*\051)SH
+17820 XM
+(0.8)SH
+29520 XM
+(1.0)SH
+41220 XM
+(1.1)SH
+6120 39500 MT
+(Vax 8800)SH
+17820 XM
+(1.5)SH
+29520 XM
+(2.3)SH
+41220 XM
+(3.7)SH
+6120 40962 MT
+(IBM RT)SH
+17820 XM
+(1.9)SH
+29520 XM
+(2.4)SH
+41220 XM
+(2.5)SH
+6120 42424 MT
+(Sun 3/280)SH
+17820 XM
+(1.9)SH
+29520 XM
+(2.5)SH
+41220 XM
+(2.9)SH
+/Symbol SF
+6120 43886 MT
+(m)SH
+/Helvetica-Bold SF
+(Vax-III)SH
+17820 XM
+(2.8)SH
+29520 XM
+(4.6)SH
+41220 XM
+(6.8)SH
+6120 45348 MT
+(Sun 3/160)SH
+17820 XM
+(3.0)SH
+29520 XM
+(4.8)SH
+41220 XM
+(4.6)SH
+6120 46810 MT
+(Vax 785)SH
+17820 XM
+(4.4)SH
+29520 XM
+(7.6)SH
+41220 XM
+(10.9)SH
+6120 48272 MT
+(Encore \050*\051)SH
+17820 XM
+(4.9)SH
+29520 XM
+(12.5)SH
+41220 XM
+(14.3)SH
+/Symbol SF
+6120 49734 MT
+(m)SH
+/Helvetica-Bold SF
+(VaxII)SH
+17820 XM
+(6.1)SH
+29520 XM
+(10.4)SH
+41220 XM
+(14.5)SH
+6120 51196 MT
+(Vax 8200)SH
+17820 XM
+(9.1)SH
+29520 XM
+(15.3)SH
+41220 XM
+(27.9)SH
+46800 50 6120 52858 UL
+10 SS 
+20405 55000 MT
+(Table 2:)SH
+/Helvetica SF
+25018 XM
+(Overhead of Data Translations)SH
+25241 56143 MT
+(\050in milliseconds per 4kbytes\051.)SH
+7232 58710 MT
+(For the heterogeneity problem, only those machine types)
+18 W( that are more or less implied by the definition)17 W
+6120 60136 MT
+(of the C language were chosen for implementation,)
+107 W( which means integers of various sizes and floating)108 W
+6120 61562 MT
+(point numbers.  Many other data types map)
+16 W( obviously onto these types.  Support for software types is not)15 W
+6120 62988 MT
+(provided. For)
+395 W( floating point numbers, the two formats that are most often used on our machines \050Vax-D)59 W
+6120 64414 MT
+(and IEEE-754\051 were selected.)
+109 W( Both)
+494 W( short \05032 bits\051 and long \05064 bits\051 forms were considered.  Table 2)108 W
+6120 65840 MT
+(shows the overheads measured on the server on a wide variety of)
+124 W( machines.  The times reported are)125 W
+6120 67266 MT
+(those necessary to convert 4kbyte of data, but note that some machines use larger page sizes.  There is)37 W
+6120 68692 MT
+(no other basic overhead beyond a simple test of whether)
+29 W( conversion is necessary or not.  Starred entries)30 W
+6120 70118 MT
+(in the table indicate machines for which a Mach External Pager kernel is not yet)
+167 W( available.  In these)166 W
+6120 71544 MT
+(cases, a synthetic test was run to time the critical code.  Note that the translation process is very)
+82 W( much)83 W
+ES
+%%Page: 15 17 
+BS
+0 SI
+10 /Helvetica-Bold AF
+53968 4329 MT
+(15)SH
+/Helvetica SF
+8280 7929 MT
+(dependent on the processor type because the availability of special byteswap instructions can speed it up)11 W
+8280 9355 MT
+(considerably. This is demonstrated by the entry for the IBM RT.)SH
+9392 11922 MT
+(Assuming that the server's \050multi\051processor has spare cycles,)
+250 W( it is possible to eliminate the type)251 W
+8280 13348 MT
+(conversion overhead at the expense of increased memory usage.  The server can keep multiple copies of)7 W
+8280 14774 MT
+(each segment,)
+35 W( one per machine type, and pre-translates it when a page is received.  Translation is done)36 W
+8280 16200 MT
+(in parallel by a separate thread, which works in a pipelined fashion with the main thread)
+131 W( that services)130 W
+8280 17626 MT
+(faults. We)
+278 W( have not yet implemented this optimization.)SH
+9392 20193 MT
+(In the centralized servers, the indicated overhead)
+166 W( is paid each time a page is sent to a kernel, as)167 W
+8280 21619 MT
+(added time for executing)
+52 W( the)51 W
+/Helvetica-Oblique SF
+21434 XM
+(memory_object_data_provided\050\051)SH
+/Helvetica SF
+36157 XM
+(operation. This)
+380 W( means that both read and)51 W
+8280 23045 MT
+(write faults are)
+2 W( affected, for machines that are not of the same general type as the object's creator.  There)3 W
+8280 24471 MT
+(is no overhead for protection)
+41 W( faults, or for identical or compatible machines like the case of two Vaxen or)40 W
+8280 25897 MT
+(the case of a Sun and an IBM RT.)
+131 W( Note,)
+541 W( however, that in some configurations the overhead of byte-)132 W
+8280 27323 MT
+(swapping and floating point conversion sum up: In the worst case of a)
+82 W( centralized server running on an)81 W
+8280 28749 MT
+(IBM RT and serving a Vax and an Encore, swapping is required both before and after)
+80 W( the floating point)81 W
+8280 30175 MT
+(conversion. Again,)
+480 W( the)
+101 W( distributed server performs much better since translation is merged in the page)100 W
+8280 31601 MT
+(replication process:  The server that)16 W
+/Helvetica-Oblique SF
+24549 XM
+(receives)SH
+/Helvetica SF
+28566 XM
+(a page from a machine-incompatible)
+16 W( other server translates)17 W
+8280 33027 MT
+(it before forwarding it to the Mach kernel.  In)
+20 W( this case, no more than one translation is ever required, and)19 W
+8280 34453 MT
+(read or write faults do not require any translation at all when the server has a valid local copy of the page.)SH
+12 /Helvetica-Bold AF
+8280 38208 MT
+(7.3. Application Programs)SH
+10 /Helvetica AF
+9392 39634 MT
+(Intuitively, the)
+166 W( performance gain from the use of memory sharing techniques comes from the large)167 W
+8280 41060 MT
+(amounts of)
+398 W( information that can be transferred with no cost between parallel activities in each)397 W
+8280 42486 MT
+(synchronization operation.)
+7 W( Below)
+293 W( a certain threshold, on a uniprocessor the integration of scheduling and)8 W
+8280 43912 MT
+(data transfer provided by a kernel optimized for message)
+84 W( passing is apparent and wins over the simple)83 W
+8280 45338 MT
+(busy-waiting scheme of spin-locks.  The)
+96 W( effect must be visible in the networked case, where spin-locks)97 W
+8280 46764 MT
+(are more expensive.  This was)
+30 W( the idea that guided the choice of applications for testing the server.  This)29 W
+8280 48190 MT
+(hypothesis only partially contradicts the suggestion that the)273 W
+/Helvetica-Oblique SF
+36867 XM
+(locality)SH
+/Helvetica SF
+40475 XM
+(of references would completely)274 W
+8280 49616 MT
+(dominate performance of a distributed shared memory program.)SH
+9392 52183 MT
+(In the networked shared)
+112 W( memory case, all the tasks running on the same machine produce a single)111 W
+8280 53609 MT
+(load on the pager, and the advantage of one of)
+113 W( them obtaining a page that will then be used by other)114 W
+8280 55035 MT
+(tasks is not apparent.  This non-measurable)
+32 W( gain was eliminated from the experiments and only one task)31 W
+8280 56461 MT
+(was allocated per machine even if this is clearly unfair to the pager.)SH
+9392 59028 MT
+(All programs have been developed for a uniform shared memory multiprocessor, and were)
+308 W( not)309 W
+8280 60454 MT
+(modified in any way)
+1 W( to get better distributed performance.  In the matrix multiplication case, the problem is)SH
+8280 61880 MT
+(decomposed so that each machine computes all the elements of some row in the output)
+77 W( matrix.  In this)78 W
+8280 63306 MT
+(way it is)
+100 W( easy to compute large matrices with few processors.  The Shortest Path program is a parallel)99 W
+8280 64732 MT
+(version of a sequential algorithm which shows Nlog\050N\051 complexity for)
+139 W( planar graphs)
+140 W( [6].)
+SH( The)
+558 W( program)140 W
+8280 66158 MT
+(evaluates in parallel)
+60 W( the possible extensions to the most promising paths, and each activity only looks in)59 W
+8280 67584 MT
+(the neighborhood)
+61 W( of a point and queues the new extensions to other activities.  The other two programs)62 W
+8280 69010 MT
+(have been)
+75 W( used for architectural simulations, on the assumption that they are representatives of a large)74 W
+8280 70436 MT
+(class of parallel programs.  Mp3d is a particle simulator [8] and LocusRoute is a parallel VLSI router [9].)SH
+ES
+%%Page: 16 18 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(16)SH
+/Helvetica SF
+7232 7929 MT
+(The experiments were)
+383 W( performed on machines under standard multi-user operating conditions,)384 W
+6120 9355 MT
+(including any necessary disk paging.  Measures were taken)
+18 W( of elapsed and per-thread CPU times.  Table)17 W
+6120 10781 MT
+(3 shows the results of executing the programs)
+10 W( on a small group of IBM RTs on a token ring.  The network)11 W
+6120 12207 MT
+(latency dominates performance, and only the matrix multiplication case)
+270 W( shows linear speedup.  All)269 W
+6120 13633 MT
+(programs are known to demonstrate linear speedups on a bus-based shared memory)
+13 W( multiprocessor with)14 W
+6120 15059 MT
+(a small number of processors.)SH
+46800 50 6120 16402 UL
+8 /Helvetica-Bold AF
+6120 18323 MT
+(Program)SH
+17820 XM
+(1 Machine)SH
+29520 XM
+(2 Machines)SH
+41220 XM
+(3 Machines)SH
+3290 50 6120 18523 UL
+445 50 17820 18523 UL
+3201 50 18487 18523 UL
+445 50 29520 18523 UL
+3646 50 30187 18523 UL
+445 50 41220 18523 UL
+3646 50 41887 18523 UL
+6120 19785 MT
+(Matrix 128x128)SH
+17820 XM
+(29)SH
+29520 XM
+(15)SH
+41220 XM
+(10)SH
+6120 21247 MT
+(Matrix 256x256)SH
+17820 XM
+(241)SH
+29520 XM
+(122)SH
+41220 XM
+(80)SH
+6120 22709 MT
+(ShortestPath)SH
+17820 XM
+(60)SH
+29520 XM
+(60)SH
+41220 XM
+(40)SH
+6120 24171 MT
+(LocusRoute)SH
+17820 XM
+(277)SH
+29520 XM
+(333)SH
+41220 XM
+(397)SH
+6120 25633 MT
+(Mp3d)SH
+17820 XM
+(8.6)SH
+29520 XM
+(16.1)SH
+41220 XM
+(23.0)SH
+46800 50 6120 27295 UL
+10 SS 
+16293 29437 MT
+(Table 3:)SH
+/Helvetica SF
+20906 XM
+(Execution Times For Some Application Programs)SH
+7232 32004 MT
+(One important factor affecting the)
+260 W( performance of an application that uses dynamically managed)259 W
+6120 33430 MT
+(shared memory is the memory allocation)
+85 W( algorithm used.  Li described a scheme for memory allocation)86 W
+6120 34856 MT
+(derived from Knuth's FirstFit scheme.)
+53 W( A)
+383 W( quick comparison was made with a different one, a descendant)52 W
+6120 36282 MT
+(of Knuth's FreeList algorithm.  Such an allocator is currently used, in a sequential version, by the)
+SH( standard)1 W
+6120 37708 MT
+(Berkeley BSD Unix distribution.  A parallel version was easily created by associating a semaphore)
+156 W( to)155 W
+6120 39134 MT
+(each free list, whereby requests for memory blocks of different sizes proceed completely in parallel.  It)
+46 W( is)47 W
+6120 40560 MT
+(much more difficult to make the FirstFit scheme more parallel.)SH
+7232 43127 MT
+(The measurements show that not only does the)
+60 W( FreeList algorithm use less memory \0501/4 on average\051)59 W
+6120 44553 MT
+(than the FirstFit one, but that it is about 20-30% faster)
+18 W( even in the sequential case.  Other measurements)19 W
+6120 45979 MT
+(indicate that a two level memory allocation strategy is very effective in reducing)
+330 W( shared memory)329 W
+6120 47405 MT
+(contention. The)
+410 W( simple solution of allocating and deallocating memory in batches for blocks of the)
+66 W( most)67 W
+6120 48831 MT
+(frequently used size often suffices to eliminate the most obvious bottlenecks.)SH
+14 /Helvetica-Bold AF
+6120 52732 MT
+(8. Conclusions)SH
+10 /Helvetica AF
+7232 54158 MT
+(A user-level)
+383 W( memory server for Mach and the algorithms it uses for dealing with issues like)382 W
+6120 55584 MT
+(heterogeneity, multiple page sizes, distributed service and fault)
+175 W( tolerance was described.  The server)176 W
+6120 57010 MT
+(shows very good performance)
+255 W( under all tests, and the distributed algorithm is effective in reducing)254 W
+6120 58436 MT
+(communication over)
+9 W( the \050potentially slow\051 communication medium.  Results with application programs are)10 W
+6120 59862 MT
+(dominated by the network latency, but still optimal in some cases.  It is conjectured that the amount of)105 W
+6120 61288 MT
+(data exchanged between)
+29 W( synchronization points is the main indicator to consider when deciding between)30 W
+6120 62714 MT
+(the use)
+74 W( of distributed shared memory and message passing in a parallel application.  There is definitely)73 W
+6120 64140 MT
+(space for more research work: a number of extensions and optimizations can be attempted using)
+89 W( more)90 W
+6120 65566 MT
+(sophisticated caching strategies and heuristics in servicing fault requests.)SH
+7232 68133 MT
+(Besides final user)
+31 W( applications \050e.g. scientific applications, window managers, etc.\051 there are a number)30 W
+6120 69559 MT
+(of operating system)
+27 W( utilities that can be built using shared memory, knowing that it is now a resource that)28 W
+6120 70985 MT
+(is available network-wise.  I/O)
+53 W( between processes can be modeled as the transfer of ownership of some)52 W
+ES
+%%Page: 17 19 
+BS
+0 SI
+10 /Helvetica-Bold AF
+53968 4329 MT
+(17)SH
+/Helvetica SF
+8280 7929 MT
+(shared memory buffer.  In this way, a process \050the producer\051)
+102 W( can allocate a buffer, fill it with data, and)103 W
+8280 9355 MT
+(then notify the other process \050consumer\051 that the buffer)
+128 W( is available by enqueuing it in, for example, a)127 W
+8280 10781 MT
+(circular queue.  A good case in point)
+176 W( is implementation of the Streams abstraction at the user level.)177 W
+8280 12207 MT
+(Supporting distributed databases with)
+316 W( distributed shared memory also becomes more simple.  An)315 W
+8280 13633 MT
+(example of how to structure a file system using the)
+65 W( external pager facility was illustrated in)
+66 W( [13],)
+SH( and the)66 W
+8280 15059 MT
+(Camelot system)
+257 W( [11])
+SH( uses the facility to provide distributed atomic transactions.  Finally, all)
+257 W( parallel)256 W
+8280 16485 MT
+(languages that)
+55 W( assume a shared memory model will port easily on a distributed shared memory system,)56 W
+8280 17911 MT
+(although they will require some tuning to obtain the best performance.)SH
+ES
+%%Page: 18 20 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(18)SH
+ES
+%%Page: 19 21 
+BS
+0 SI
+10 /Helvetica-Bold AF
+53968 4329 MT
+(19)SH
+16 SS 
+8280 8366 MT
+(Acknowledgements)SH
+10 /Helvetica AF
+9392 9792 MT
+(We would like to thank David Black)
+119 W( and Roberto Bisiani for their invaluable help in reviewing earlier)118 W
+8280 11218 MT
+(drafts of this paper.)SH
+ES
+%%Page: 20 22 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(20)SH
+ES
+%%Page: 21 23 
+BS
+0 SI
+10 /Helvetica-Bold AF
+53968 4329 MT
+(21)SH
+16 SS 
+8280 8366 MT
+(References)SH
+10 /Helvetica AF
+8280 10238 MT
+([1])SH
+11616 XM
+(Arnould, E. A., Bitz, F. J., Cooper, E. C., Kung, H. T., Sansom, R. D., Steenkiste, P. A.)SH
+11616 11381 MT
+(The Design of Nectar: A Network Backplane for Heterogeneous Multicomputers.)SH
+11616 12524 MT
+(April, 1989.)SH
+11616 13667 MT
+(To appear in the)SH
+/Helvetica-Oblique SF
+19176 XM
+(Proceedings of the Third International Conference on Architectural Support for)SH
+13284 14810 MT
+(Programming Languages and Operating Systems \050ASPLOS-III\051)SH
+/Helvetica SF
+(.)SH
+8280 16682 MT
+([2])SH
+11616 XM
+(Bisiani, R. and Forin, A.)SH
+11616 17825 MT
+(Multilanguage Parallel Programming of Heterogeneous Machines.)SH
+/Helvetica-Oblique SF
+11616 18968 MT
+(IEEE Transactions on Computers)SH
+/Helvetica SF
+26733 XM
+(, August, 1988.)SH
+8280 20840 MT
+([3])SH
+11616 XM
+(Cheriton, D.)SH
+/Helvetica-Oblique SF
+11616 21983 MT
+(Unified Management of Memory and File Caching Using the V Virtual Memory System)SH
+/Helvetica SF
+(.)SH
+11616 23126 MT
+(Tech. Report STAN-CS-88-1192, Stanford University, Computer Science Department, 1988.)SH
+8280 24998 MT
+([4])SH
+11616 XM
+(Fleisch, B. D.)SH
+11616 26141 MT
+(Distributed Shared Memory in a Loosely Coupled Distributed System.)SH
+11616 27284 MT
+(In)SH
+/Helvetica-Oblique SF
+12728 XM
+(Compcon Spring 1988)SH
+/Helvetica SF
+(. IEEE,)
+278 W( San Francisco, CA, February, 1988.)SH
+8280 29156 MT
+([5])SH
+11616 XM
+(Forin, A., Bisiani, R., Correrini, F.)SH
+/Helvetica-Oblique SF
+11616 30299 MT
+(Parallel Processing with Agora)SH
+/Helvetica SF
+(.)SH
+11616 31442 MT
+(Tech. Report CMU-CS-87-183, Carnegie-Mellon University, Computer Science Department,)SH
+13284 32585 MT
+(December, 1987.)SH
+8280 34457 MT
+([6])SH
+11616 XM
+(Johnson, D.B.)SH
+11616 35600 MT
+(Efficient Algorithms For Shortest Path Is Sparse Networks.)SH
+/Helvetica-Oblique SF
+11616 36743 MT
+(JACM)SH
+/Helvetica SF
+14616 XM
+(24\0501\051:1-13, January, 1977.)SH
+8280 38615 MT
+([7])SH
+11616 XM
+(Kai Li.)SH
+/Helvetica-Oblique SF
+11616 39758 MT
+(Shared Virtual Memory on Loosely Coupled Multiprocessors)SH
+/Helvetica SF
+(.)SH
+11616 40901 MT
+(PhD thesis, Yale, September, 1986.)SH
+8280 42773 MT
+([8])SH
+11616 XM
+(McDonald, J.)SH
+/Helvetica-Oblique SF
+11616 43916 MT
+(A Direct Particle Simulation Method for Hypersonic Rarified Flow on a Shared Memory)SH
+13284 45059 MT
+(Multiprocessor)SH
+/Helvetica SF
+(.)SH
+11616 46202 MT
+(Final Project Report CS411, Stanford University, Computer Science Department, March, 1988.)SH
+8280 48074 MT
+([9])SH
+11616 XM
+(Rose, J..)SH
+11616 49217 MT
+(LocusRoute: A Parallel Global Router for Standard Cells.)SH
+11616 50360 MT
+(In)SH
+/Helvetica-Oblique SF
+12728 XM
+(Conf. on Design Automation)SH
+/Helvetica SF
+(, pages 189-195.  June, 1988.)SH
+8280 52232 MT
+([10])SH
+11616 XM
+(Sobek, S., Azam, M., Browne, J.C.)SH
+11616 53375 MT
+(Architectural and Language Independent Parallel Programming:  A Feasibility Demonstration.)SH
+11616 54518 MT
+(In)SH
+/Helvetica-Oblique SF
+12728 XM
+(International Conference on Parallel Programming)SH
+/Helvetica SF
+(. IEEE,)
+278 W( Chicago, August, 1988.)SH
+8280 56390 MT
+([11])SH
+11616 XM
+(Spector, A.)SH
+11616 57533 MT
+(Distributed Transaction Processing and the Camelot System.)SH
+/Helvetica-Oblique SF
+11616 58676 MT
+(Distributed Operating Systems: Theory and Practice.)SH
+/Helvetica SF
+11616 59819 MT
+(Springer-Verlag., 1987.)SH
+8280 61691 MT
+([12])SH
+11616 XM
+(Steenkiste, P.)SH
+11616 62834 MT
+(Tags and Type Checking in LISP: Hardware and Software Approaches.)SH
+11616 63977 MT
+(In)SH
+/Helvetica-Oblique SF
+12728 XM
+(Second Intl. Conference on Architectural Support for Programming Languages and Operating)SH
+13284 65120 MT
+(Systems ASPLOS-II)SH
+/Helvetica SF
+(. ACM-SIGPLAN,)
+278 W( Palo Alto, CA, October, 1987.)SH
+8280 66992 MT
+([13])SH
+11616 XM
+(Young, M., Tevenian, A., Rashid, R., Golub, D., Eppinger, J., Chew, J., Bolosky, W., Black, D.,)SH
+11616 68135 MT
+(Baron, R.)SH
+11616 69278 MT
+(The Duality of Memory and Communication in the Implementation of a Multiprocessor Operating)SH
+13284 70421 MT
+(System.)SH
+11616 71564 MT
+(In)SH
+/Helvetica-Oblique SF
+12728 XM
+(11th Symposium on Operating Systems Principles)SH
+/Helvetica SF
+(. ACM,)
+278 W( November, 1987.)SH
+ES
+%%Page: 22 24 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(22)SH
+/Helvetica SF
+6120 7929 MT
+([14])SH
+9456 XM
+(Young, M.)SH
+/Helvetica-Oblique SF
+9456 9072 MT
+(Exporting a User Interface to Memory Management from a Communication-Oriented Operating)SH
+11124 10215 MT
+(System)SH
+/Helvetica SF
+(.)SH
+9456 11358 MT
+(PhD thesis, Carnegie-Mellon University, 1989.)SH
+9456 12501 MT
+(In preparation.)SH
+ES
+%%Page: i 25 
+BS
+0 SI
+10 /Helvetica-Bold AF
+54802 4329 MT
+(i)SH
+16 SS 
+24921 8366 MT
+(Table of Contents)SH
+10 SS 
+9948 9515 MT
+(1. Introduction)SH
+54524 XM
+(1)SH
+9948 10664 MT
+(2. Shared Memory Within a Machine)SH
+54524 XM
+(1)SH
+9948 11813 MT
+(3. A Simple Algorithm)SH
+54524 XM
+(3)SH
+12172 12962 MT
+(3.1. Multiple Page Sizes)SH
+54524 XM
+(6)SH
+12172 14111 MT
+(3.2. Heterogeneous Processors)SH
+54524 XM
+(7)SH
+9948 15260 MT
+(4. A Distributed Algorithm)SH
+54524 XM
+(8)SH
+12172 16409 MT
+(4.1. Example)SH
+53968 XM
+(10)SH
+9948 17558 MT
+(5. Fault Tolerance)SH
+53968 XM
+(11)SH
+9948 18707 MT
+(6. Related Work)SH
+53968 XM
+(12)SH
+9948 19856 MT
+(7. Performance Evaluation)SH
+53968 XM
+(12)SH
+12172 21005 MT
+(7.1. Basic Costs)SH
+53968 XM
+(13)SH
+12172 22154 MT
+(7.2. Costs of The Algorithms)SH
+53968 XM
+(13)SH
+12172 23303 MT
+(7.3. Application Programs)SH
+53968 XM
+(15)SH
+9948 24452 MT
+(8. Conclusions)SH
+53968 XM
+(16)SH
+12 SS 
+8280 26047 MT
+(Acknowledgements)SH
+53746 XM
+(19)SH
+8280 27642 MT
+(References)SH
+53746 XM
+(21)SH
+ES
+%%Page: ii 26 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(ii)SH
+ES
+%%Page: iii 27 
+BS
+0 SI
+10 /Helvetica-Bold AF
+54246 4329 MT
+(iii)SH
+16 SS 
+26166 8366 MT
+(List of Figures)SH
+10 SS 
+9948 9515 MT
+(Figure 1:)
+SH( Summary)
+556 W( Of The External Pager Interface)SH
+54524 XM
+(2)SH
+9948 10664 MT
+(Figure 2:)
+SH( Handling)
+556 W( of Read Faults)SH
+54524 XM
+(4)SH
+9948 11813 MT
+(Figure 3:)
+SH( Handling)
+556 W( of Write Faults)SH
+54524 XM
+(5)SH
+9948 12962 MT
+(Figure 4:)
+SH( Handling)
+556 W( of Pageout Requests)SH
+54524 XM
+(5)SH
+9948 14111 MT
+(Figure 5:)
+SH( A)
+556 W( Typed)SH
+/Helvetica-BoldOblique SF
+19228 XM
+(malloc\050\051)SH
+/Helvetica-Bold SF
+54524 XM
+(7)SH
+9948 15260 MT
+(Figure 6:)
+SH( Modifications)
+556 W( to the Distributed Scheduler to Implement Forwarding of Page)SH
+54524 XM
+(9)SH
+15005 16409 MT
+(Faults)SH
+9948 17558 MT
+(Figure 7:)
+SH( Additions)
+556 W( to the Distributed Scheduler to Implement Forwarding of Page)SH
+53968 XM
+(10)SH
+15005 18707 MT
+(Faults)SH
+9948 19856 MT
+(Figure 8:)
+SH( Steady)
+556 W( State Behavior for a N-Party Write Hotspot)SH
+53968 XM
+(11)SH
+ES
+%%Page: iv 28 
+BS
+0 SI
+10 /Helvetica-Bold AF
+6120 4329 MT
+(iv)SH
+ES
+%%Page: v 29 
+BS
+0 SI
+10 /Helvetica-Bold AF
+54524 4329 MT
+(v)SH
+16 SS 
+26521 8366 MT
+(List of Tables)SH
+10 SS 
+9948 9515 MT
+(Table 1:)
+SH( Costs)
+556 W( Of The Server.)SH
+53968 XM
+(13)SH
+9948 10664 MT
+(Table 2:)
+SH( Overhead)
+556 W( of Data Translations \050in milliseconds per 4kbytes\051.)SH
+53968 XM
+(14)SH
+9948 11813 MT
+(Table 3:)
+SH( Execution)
+556 W( Times For Some Application Programs)SH
+53968 XM
+(16)SH
+ES
+%%Trailer
+%%Pages: 29 
+%%DocumentFonts: Helvetica Helvetica-Bold Helvetica-Oblique Symbol Courier-Bold Helvetica-BoldOblique
