@@ -1,36 +1,64 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="OpenMach Project">
+    <meta name="keywords" content="kernel,operating system, os, mach, unix">
+    <meta name="copyright" content="Copyright &copy; 2014 The OpenMach Project. All rights reserved.">
+    <title>OpenMach Documentation</title>
+    <link rel="icon" href="/images/favicon.ico" />
 
-<head>
-  <title>OpenMach</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="icon" href="/images/favicon.ico" />
-</head>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-<body>
+    <!-- Custom styles for this template -->
+    <link href="css/openmach.css" rel="stylesheet">
 
-<div id="nav" style="clear: both; text-align: left">
-  <p>&lt;  <a href="/index.html">OpenMach Home</a></p>
-</div>
-<hr />
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="js/ie-emulation-modes-warning.js"></script>
 
-<!-- Nav -->
-<div style="clear: both; text-align: center">
-  <p><h1>Mach Documentation Library</h1></p>
-  <p style="text-align:center">
-    [<a href="#mach_papers">Mach Papers</a>]
-    [<a href="#rt_mach_papers">Real Time Mach Papers</a>]
-    [<a href="#osf_manuals">OSF Kernel and Server Manuals</a>]
-    [<a href="#machus_docs">Mach US (Multiserver) Docs</a>]
-    [<a href="#mach4_docs">Mach 4 Docs</a>]
-  </p>
-</div>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+  
+      <div class="header">
+        <ul class="nav nav-pills pull-right" role="tablist">
+          <li role="presentation"><a href="index.html">Home</a></li>
+          <li role="presentation" class="active"><a href="#">Docs</a></li>
+        </ul>
+        <img src="/images/hummingbird.jpg" alt="OpenMach" style="float: left;
+        padding-right: 10px; width:10em; max-width:50px"/> 
+        <h3 class="text-muted">OpenMach</h3>
+      </div>
+
+      <div class="row marketing" id="nav">
+        <div class="col-lg-12">
+ 
+        <!-- Nav -->
+        <h3>Mach Documentation Library</h3>
+        <ul>
+          <li><a href="#mach_papers">Mach Papers</a></li>
+          <li><a href="#rt_mach_papers">Real Time Mach Papers</a></li>
+          <li><a href="#osf_manuals">OSF Kernel and Server Manuals</a></li>
+          <li><a href="#machus_docs">Mach US (Multiserver) Docs</a></li>
+          <li><a href="#mach4_docs">Mach 4 Docs</a></li>
+        </ul>
 
 
+        <br />
 
 <!--  Mach Papers -->
-<h2 id="mach_papers" style="clear: both">Mach Papers</h2>
+<h4 id="mach_papers" style="clear: both">Mach Papers</h4>
 <ul>
 <li>
 Robert  V.  Baron,  David  Black,  William  Bolosky,  Jonathan Chew,
@@ -484,7 +512,7 @@ Proceedings of the 1994 Winter USENIX Conference, January 1994.
 <br /><br /><br />
 
 <!-- Real Time Mach Papers -->
-<h2 id="rt_mach_papers" style="clear: both">Real Time Mach Papers</h2>
+<h4 id="rt_mach_papers" style="clear: both">Real Time Mach Papers</h4>
 <ul>
 <li>
 Stefan Savage, Hideyuki Tokuda.
@@ -515,7 +543,7 @@ Workshop, October 1991.
 <br /><br /><br />
 
 <!--  OSF Kernel and Server Manuals -->
-<h2 id="osf_manuals" style="clear: both">OSF Kernel and Server Manuals</h2>
+<h4 id="osf_manuals" style="clear: both">OSF Kernel and Server Manuals</h4>
 <ul>
 <li>
 Keith Loepere.
@@ -573,7 +601,7 @@ pages)</i>
 <br /><br /><br />
 
 <!--  Mach US Documentation -->
-<h2 id="machus_docs" style="clear: both">Mach US (Multiserver) Documentation</h2>
+<h4 id="machus_docs" style="clear: both">Mach US (Multiserver) Documentation</h4>
 <ul>
 <li>
 <b>What is Mach US.</b>
@@ -687,7 +715,7 @@ the Multiserver given on April 9, 1992.
 <br /><br /><br />
 
 <!--  Mach 4 Documentation --> 
-<h2 id="mach4_docs" style="clear: both">Mach 4 Documentation </h2>
+<h4 id="mach4_docs" style="clear: both">Mach 4 Documentation </h4>
 <ul>
 <li>
 <b>Fast and Flexible Mach-based Systems</b>.
@@ -700,8 +728,17 @@ the Mach 4.
 <em><a href="#nav">back to top</a></em>
 
 
-<br /><br /><br />
-<hr/>
-<em>Copyright &copy; 2014 The OpenMach Project. All rights reserved.</em>
-</body>
+       </div>
+      </div>
+    
+      <div class="footer">
+        <p><em>Copyright &copy; 2014, The OpenMach Project. All rights reserved.</em></p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>
+

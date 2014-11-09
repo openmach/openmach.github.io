@@ -1,118 +1,143 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="OpenMach Project">
+    <meta name="keywords" content="kernel,operating system, os, mach, unix">
+    <meta name="copyright" content="Copyright &copy; 2014 The OpenMach Project. All rights reserved.">
+    <title>OpenMach</title>
+    <link rel="icon" href="/images/favicon.ico" />
 
-<head>
-  <title>OpenMach</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="icon" href="/images/favicon.ico" />
-</head>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-<body>
+    <!-- Custom styles for this template -->
+    <link href="css/openmach.css" rel="stylesheet">
 
-<div style="float:left; margin:15px">
-  <img src="/images/hummingbird.jpg" alt="OpenMach"
-      style="float:left; width:10em; max-width:160px"/>
-</div>
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="js/ie-emulation-modes-warning.js"></script>
 
-<div>
-  <div style="text-align:center;">
-    <h1>The OpenMach Operating System</h1>
-  </div>
-  <p>
-    OpenMach is an experimental operating system developed with the goal of
-    advancing operating system research. It is based on the UK22 release of Mach 4
-    released on March 29, 1996. This project builds on the ideas from the original
-    Mach kernel at Carnegie Mellon University, the later Mach 4 kernel from
-    University of Utah, and design philosophies from systems that have emerged in
-    recent years that show considerable promise. The result will be a very small,
-    privileged kernel coupled with tightly knit user mode servers and user level
-    libraries to provide applications a highly secure, robust and performant
-    environment in which to execute.
-  </p>
-</div>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container">
+  
+      <div class="header">
+        <ul class="nav nav-pills pull-right" role="tablist">
+          <li role="presentation" class="active"><a href="#">Home</a></li>
+          <li role="presentation"><a href="docs.html">Docs</a></li>
+        </ul>
+        <img src="/images/hummingbird.jpg" alt="OpenMach" style="float: left;
+        padding-right: 10px; width:10em; max-width:50px"/> 
+        <h3 class="text-muted">OpenMach</h3>
+      </div>
+
+      <!--
+      <div class="jumbotron">
+        <p>
+            Lorem ipsum...
+        </p>
+      </div>
+      -->
+      <div class="row marketing">
+        <div class="col-lg-12">
+            <p>
+                OpenMach is an experimental operating system developed with the goal of
+                advancing operating system research. It is based on the UK22 release of Mach 4
+                released on March 29, 1996. This project builds on the ideas from the original
+                Mach kernel at Carnegie Mellon University, the later Mach 4 kernel from
+                University of Utah, and design philosophies from systems that have emerged in
+                recent years that show considerable promise. The result will be a very small,
+                privileged kernel coupled with tightly knit user mode servers and user level
+                libraries to provide applications a highly secure, robust and performant
+                environment in which to execute.
+            </p>
+                
+            <!--  Source -->
+            <h4>Source</h4>
+            <p>
+            OpenMach is released under the 
+            <a href="http://opensource.org/licenses/BSD-2-Clause">BSD 2-Clause License</a>.
+            </p>
+            
+            <p>
+            The latest copy of the sources for OpenMach can be obtained using 
+            <a href="http://git-scm.com/">Git</a> from
+            <a href="https://github.com/openmach/openmach">
+            https://github.com/openmach/openmach</a>.
+            Additionally, the latest snapshot of the code is available as a zip file from
+            <a href="https://github.com/openmach/openmach/archive/master.zip">
+            https://github.com/openmach/openmach/archive/master.zip</a>.
+            </p>
+            
+            <!--  Bugs -->
+            <h4>Bug Reporting</h4>
+            <p>
+            We will be tracking all our bugs, features, etc with JetBrains's YouTrack OnDemand service
+            available at <a href="http://bugs.openmach.org">bugs.openmach.org</a>.
+            </p>
+            
+            
+            
+            <!--  IRC -->
+            <h4>IRC</h4>
+            <p>
+            For technical or general discussions about the project, join us at
+            <strong>irc.freenode.net</strong> in the <strong>#openmach</strong> channel.
+            </p>
+            
+            
+            <!--  Mailing Lists -->
+            <h4>Mailing Lists</h4>
+            <p>
+            <strong>openmach-dev</strong>
+            Technical discussions related to OpenMach development.
+            <a href="http://www.openmach.org/lists/listinfo/openmach-dev">[subscribe]</a>
+            <a href="http://www.openmach.org/pipermail/openmach-dev/">[archives]</a>
+            </p>
+            
+            <!--  Maintainers -->
+            <h4>Maintainers</h4>
+            <p>
+            <li><a href="http://openmach.org/~sd/">Shawn Debnath</a></li>
+            </ul>
+            </p>
+            
+            
+            <!--  Documentation -->
+            <h4>Documentation</h4>
+            <p>
+            <li><a href="/docs.html">Mach Documentation Library</a></li>
+            </p>
+            
+            
+            <!--  Credits -->
+            <h4>Credits</h4>
+            <p>
+            The hummingbird logo was derived from a <a href="https://www.flickr.com/photos/8479924@N08/3447215470/">photo</a> taken by <a href="http://aerodesign.pl/"></a>Tomasz Poznanski distributed under the <a href="https://creativecommons.org/licenses/by-sa/2.0/">Creative Commons Attribution-ShareAlike 2.0</a> license.
+            </p>
 
 
-<!-- Nav -->
-<div style="clear: both">
-  <p style="text-align:center">
-    [<a href="#source">Source</a>]
-    [<a href="#bugs">Bugs</a>]
-    [<a href="#irc">IRC</a>]
-    [<a href="#mailing_lists">Mailing Lists</a>]
-    [<a href="#maintainers">Maintainers</a>]
-    [<a href="#documentation">Documentation</a>]
-    [<a href="#credits">Credits</a>]
-  </p>
-</div>
+       </div>
+      </div>
+    
+      <div class="footer">
+        <p><em>Copyright &copy; 2014, The OpenMach Project. All rights reserved.</em></p>
+      </div>
 
+    </div> <!-- /container -->
 
-<!--  Source -->
-<h2 id="source" style="clear: both">Source</h2>
-<p>
-  OpenMach is released under the 
-  <a href="http://opensource.org/licenses/BSD-2-Clause">BSD 2-Clause License</a>.
-</p>
-
-<p>
-  The latest copy of the sources for OpenMach can be obtained using 
-  <a href="http://git-scm.com/">Git</a> from
-  <a href="https://github.com/openmach/openmach">
-  https://github.com/openmach/openmach</a>.
-  Additionally, the latest snapshot of the code is available as a zip file from
-  <a href="https://github.com/openmach/openmach/archive/master.zip">
-  https://github.com/openmach/openmach/archive/master.zip</a>.
-</p>
-
-<!--  Bugs -->
-<h2 id="bugs" style="clear: both">Bug Reporting</h2>
-<p>
-  We will be tracking all our bugs, features, etc with JetBrains's YouTrack OnDemand service
-  available at <a href="http://bugs.openmach.org">bugs.openmach.org</a>.
-</p>
-
-
-
-<!--  IRC -->
-<h2 id="irc" style="clear: both">IRC</h2>
-<p>
-  For technical or general discussions about the project, join us at
-  <strong>irc.freenode.net</strong> in the <strong>#openmach</strong> channel.
-</p>
-
-
-<!--  Mailing Lists -->
-<h2 id="mailing_lists" style="clear: both">Mailing Lists</h2>
-<ul>
-  <li>
-    <strong>openmach-dev</strong>
-    Technical discussions related to OpenMach development.
-    <a href="http://www.openmach.org/lists/listinfo/openmach-dev">[subscribe]</a>
-    <a href="http://www.openmach.org/pipermail/openmach-dev/">[archives]</a>
-  </li>
-</ul>
-
-<!--  Maintainers -->
-<h2 id="people" style="clear:both">Maintainers</h2>
-<ul>
-<li><a href="http://openmach.org/~sd/">Shawn Debnath</a></li>
-</ul>
-
-
-<!--  Documentation -->
-<h2 id="documentation" style="clear: both">Documentation</h2>
-<ul>
-<li><a href="/docs_mach.html">Mach Documentation Library</a></li>
-</ul>
-
-
-<!--  Credits -->
-<h2 id="credits" style="clear: both">Credits</h2>
-The hummingbird logo was derived from a <a href="https://www.flickr.com/photos/8479924@N08/3447215470/">photo</a> taken by <a href="http://aerodesign.pl/"></a>Tomasz Poznanski distributed under the <a href="https://creativecommons.org/licenses/by-sa/2.0/">Creative Commons Attribution-ShareAlike 2.0</a> license.
-
-
-<br/><br/>
-<hr/>
-<em>Copyright &copy; 2014 The OpenMach Project. All rights reserved.</em>
-</body>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>
+
