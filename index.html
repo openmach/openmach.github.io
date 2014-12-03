@@ -74,13 +74,32 @@
             <p>
             The latest copy of the sources for OpenMach can be obtained using 
             <a href="http://git-scm.com/">Git</a> from
-            <a href="https://github.com/openmach/openmach">
-                https://github.com/openmach/openmach</a>
-            [<a href="https://github.com/openmach/openmach.git">Browse Code</a> | <a 
+            <a href="https://github.com/openmach/openmach.git">
+                https://github.com/openmach/openmach.git</a>
+            [<a href="https://github.com/openmach/openmach">Browse Code</a> | <a 
                 href="https://github.com/openmach/openmach/archive/master.zip">
                 Download zip</a> | <a
                 href="https://github.com/openmach/openmach/archive/master.tar.gz">
                 Donwload tar.gz</a>]
+
+            </p>
+            <p>
+                <b>Building</b><br />
+              <blockquote>
+                <font size="2em">
+                git clone https://github.com/openmach/openmach.git openmach <br />
+                cd openmach &&  mkdir obj && cd obj <br />
+                ../i386/configure --with-elf --enable-debug <br />
+                make <em>(or gmake in the case of FreeBSD)</em>
+              </font>
+              </blockquote>
+              On successful build, you can use the sample (<a
+              href="https://raw.githubusercontent.com/openmach/www/master/samples/buildimg_fbsd.sh">freebsd</a>) script to copy the binaries to the right location in the disk
+              image. <br /> 
+              <br />
+              Sample <a
+                  href="https://raw.githubusercontent.com/openmach/www/master/samples/bochsrc">
+                  bochsrc</a> for those using bochs to debug.
             </p>
             
             <!--  Bugs -->
